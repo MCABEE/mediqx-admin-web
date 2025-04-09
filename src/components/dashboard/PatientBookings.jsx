@@ -76,7 +76,7 @@ const PatientBookings = () => {
   return (
     <div className=" bg-white py-10 rounded-2xl">
       {/* Header */}
-      <div className="px-[71px] w-full flex justify-between border-b border-[#888888]">
+      <div className="px-[71px] w-full flex justify-between border-b border-[#8888888c]">
         <div className="flex flex-col gap-5 text-[#333333] font-semibold">
           <p className="text-2xl">Patient Bookings</p>
           <p className="text-[32px]">{data.total}</p>

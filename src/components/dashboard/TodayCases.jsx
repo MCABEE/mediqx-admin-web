@@ -3,7 +3,7 @@ import React from 'react'
 const TodayCases = () => {
   return (
    <div className=' bg-white py-7 rounded-2xl'>
-    <div className=' w-full flex justify-between  border-b border-[#888888]' >
+    <div className=' w-full flex justify-between  border-b border-[#8888888c]' >
      
       <p className='px-[71px] text-2xl text-[#333333] font-semibold pb-4'>Todays Cases</p>
        
