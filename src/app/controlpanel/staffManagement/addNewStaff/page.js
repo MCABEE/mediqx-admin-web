@@ -7,7 +7,13 @@ function page() {
         <Navlink/>
 
         <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 pb-4 rounded-[15px] mt-4">
-        <span>Add New Staff</span>
+        <div className="flex text-black font-semibold gap-[48px]">
+         
+          <p>Nurse</p>
+          <p>Paramedical</p>
+          <p>Doctor</p>
+          <p>Supervisor</p>
+        </div>
 
         {/* <span className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4">
           Referral

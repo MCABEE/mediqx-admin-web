@@ -8,12 +8,12 @@ const page = () => {
       <Navlink />
       <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between  px-6  rounded-[15px] mt-2  ">
         <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
-          <p>Direct</p>
-          <p>Referral</p>
-          <p>Active</p>
-          <p>Non-Active / Resigned</p>
-
           <p>All</p>
+          <p>Nurse</p>
+          <p>Paramedical</p>
+          <p>Doctor</p>
+
+          <p>Supervisor</p>
         </div>
         <div className="flex gap-2 justify-center items-center">
           <p className=" text-black font-semibold pt-[23px] pb-[19px]">Clear</p>
@@ -31,7 +31,6 @@ const page = () => {
           >
             <option value="volvo">Location</option>
             <option value="saab">Location</option>
-           
           </select>
           <select
             name="cars"
@@ -40,7 +39,6 @@ const page = () => {
           >
             <option value="volvo">Category</option>
             <option value="saab">Category</option>
-            
           </select>
         </div>
       </div>
