@@ -1,11 +1,13 @@
 import api from "./axiosInstance"; // assuming api.js is in the same folder
 
-export const login = async (email, password) => {
+export const login = async (mobileNumber, password) => {
   try {
-    const response = await api.post("/auth/email/login", {
-      email,
+    const response = await api.post("/auth/login", {
+      mobileNumber,
       password,
     });
+    console.log(response);
+    
 
     return response.data; // Contains token, refreshToken, user, etc.
   } catch (error) {

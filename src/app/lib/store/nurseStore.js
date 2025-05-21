@@ -18,13 +18,14 @@ const useNurseStore = create(
         set({ isLoading: true, error: null });
         try {
           const response = await getNurses(page, limit);
-          const nurseData = response?.data?.data || [];
+          const nurseData = response?.data?.data?.users || [];
           set({
             users: nurseData,
-            page,
+            page, 
             limit,
-            totalPages: response?.data?.totalPages || 0,
-            totalUsers: response?.data?.total || 0,
+            totalPages: response?.data?.data?.totalPages || 0,
+            totalUsers: response?.data?.data?.total || 0,
+          
           });
           console.log("Fetched nurses:", nurseData);
         } catch (error) {

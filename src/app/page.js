@@ -100,7 +100,7 @@ import { useAuthStore } from "./lib/store/authStore"; // adjust path if needed
 import { login } from "@/api/auth"; // adjust path if needed
 
 export default function Home() {
-  const [email, setEmail] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
@@ -114,7 +114,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const data = await login(email, password);
+      const data = await login(mobileNumber, password);
       const token = data.token;
 
       if (token) {
@@ -152,11 +152,11 @@ export default function Home() {
               <div className="flex flex-col gap-5 mt-3">
                 <input
                   id="email"
-                  type="email"
+                  type="text"
                   className="px-4 py-3.5 w-full bg-white border border-neutral-400 rounded-xl text-[#333333]"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Mobile Number"
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
                   required
                 />
                 <input

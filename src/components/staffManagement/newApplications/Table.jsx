@@ -1,111 +1,59 @@
-// import React from 'react'
-// import Link from 'next/link'
-// const Table = () => {
-//   return (
-//     <div>
 
-//       <table className="w-full border-spacing-y-2 border-separate text-black">
-//         <thead className="bg-[#C0D8F6]">
-//           <tr className="p-2 bg-[#C0D8F6]">
-//             <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">No</th>
-//             <th className="text-base border-l-4 border-[#F0F4F9] p-2"> Name</th>
-//             <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-//               {" "}
-//               Location
-//             </th>
-//             <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-//               {" "}
-//               Gender
-//             </th>
-
-//             <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
-//               Qualification
-//             </th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           <tr>
-//             <td
-//               className="rounded-t-2xl p-2 bg-[#C0D8F6] text-[16px] font-semibold"
-//               colSpan="5"
-//             >
-//               2024 September 01, Sunday
-//             </td>
-//           </tr>
-
-//           <tr className="bg-white">
-//             <td className="p-2">03</td>
-//             <Link href={"/controlpanel/staffManagement/staffDetails"}>
-//               <td className="border-l-4 border-[#C0D8F6] p-2">
-//                 Pradeep Kumar N
-//               </td>
-//             </Link>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">Bengaluru</td>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">M</td>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">Bsc Science</td>
-//           </tr>
-//           <tr className="bg-white">
-//             <td className="p-2">03</td>
-//             <Link href={"/controlpanel/staffManagement/staffDetails"}>
-//               <td className="border-l-4 border-[#C0D8F6] p-2">Sai Krishna G</td>
-//             </Link>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">Kannur</td>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">M</td>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">GNM</td>
-//           </tr>
-//           <tr className="bg-white">
-//             <td className="p-2">03</td>
-//             <Link href={"/controlpanel/staffManagement/staffDetails"}>
-//               <td className="border-l-4 border-[#C0D8F6] p-2">
-//                 Sruthi Lakshmi N
-//               </td>
-//             </Link>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">Wayanad</td>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">M</td>
-//             <td className="border-l-4 border-[#C0D8F6] p-2">ANM</td>
-//           </tr>
-//         </tbody>
-//       </table>
-//     </div>
-//   )
-// }
-
-// export default Table
 
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import nurseStore from "@/app/lib/store/nurseStore";
 
 const Table = () => {
-  const { users, fetchNurses, fetchNurseById, isLoading, error } = nurseStore();
+  const {
+    users,
+    fetchNurses,
+    fetchNurseById,
+    isLoading,
+    error,
+    page, 
+    limit,
+    totalPages,
+    totalUsers,
+  } = nurseStore();
   const router = useRouter();
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
-    fetchNurses();
-  }, [fetchNurses]);
+    fetchNurses(currentPage, limit);
+  }, [currentPage, fetchNurses, limit]);
 
   const handleNameClick = async (userId) => {
     await fetchNurseById(userId);
-    router.push(`/controlpanel/staffManagement/staffDetails`);
+    router.push(`/controlpanel/staffManagement/staffDetails/${userId}`);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="overflow-x-auto">
+    <>
+    <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px]  px-6 text-black font-semibold text-[32px]">
+        <p>{totalUsers}</p>
+      </div>
+     <div className="overflow-x-auto">
       <table className="w-full border-spacing-y-2 border-separate text-black">
         <thead className="bg-[#C0D8F6]">
           <tr className="p-2 bg-[#C0D8F6]">
             <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">No</th>
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">Name</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-              Location
-            </th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-              Gender
-            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Location</th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Gender</th>
             <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
               Qualification
             </th>
@@ -128,33 +76,56 @@ const Table = () => {
             </tr>
           )}
           {users?.map((nurse, index) => {
-            const name = `${nurse.firstName || ""} ${nurse.lastName || ""}`;
-            const location = nurse.addresses?.[0]?.city || "N/A";
-            const gender = nurse.gender || "N/A";
-            const qualification =
-              nurse.nurse?.[0]?.qualifications?.[0]?.qualification_details
-                ?.qualification || "N/A";
+            const name = nurse.fullName || "";
+            const location = nurse.location || "";
+            const gender = nurse.gender || "";
+            const qualification = nurse.educationQualifications || "";
 
             return (
-              <tr key={nurse.user_id} className="bg-white">
-                <td className="p-2">{index + 1}</td>
+              <tr key={nurse.user_id || index} className="bg-white">
+                <td className="p-2">
+                  {(currentPage - 1) * limit + index + 1}
+                </td>
                 <td
                   className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline"
-                  onClick={() => handleNameClick(nurse.user_id)}
+                  onClick={() => handleNameClick(nurse.userId)}
                 >
                   {name}
                 </td>
                 <td className="border-l-4 border-[#C0D8F6] p-2">{location}</td>
                 <td className="border-l-4 border-[#C0D8F6] p-2">{gender}</td>
-                <td className="border-l-4 border-[#C0D8F6] p-2">
-                  {qualification}
-                </td>
+                <td className="border-l-4 border-[#C0D8F6] p-2">{qualification}</td>
               </tr>
             );
           })}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-between my-4 gap-4">
+          <button
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+            className="px-4 py-1 rounded bg-blue-500 text-white disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <span className="text-sm font-medium self-center">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="px-4 py-1 rounded bg-blue-500 text-white disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
+    </>
+   
   );
 };
 
