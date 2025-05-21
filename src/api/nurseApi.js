@@ -10,14 +10,14 @@ export const getNurses = async (page = 1, limit = 10) => {
         error.response?.data?.message || "Failed to fetch users.";
       throw new Error(errorMessage);
     }
-  };
+  }; 
  
   export const getNurseById = async (userId) => {
     try {
-      const response = await api.get(`/users/${userId}`);
+      const response = await api.get(`/nurses/${userId}`);
       console.log(".....................",response);
       
-      return response.data;
+      return response.data.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Failed to fetch nurse details.";
       throw new Error(errorMessage);
