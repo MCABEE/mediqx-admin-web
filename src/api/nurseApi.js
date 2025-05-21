@@ -24,3 +24,14 @@ export const getNurses = async (page = 1, limit = 10) => {
     }
   };
   
+  export const verifyNurseStatus = async (nurseId, status) => {
+    try {
+      const response = await api.post(`/nurses/${nurseId}/verify`, {
+        verificationStatus: status,
+      });
+      return response.data;
+    } catch (error) {
+      const message = error.response?.data?.message || "Verification update failed.";
+      throw new Error(message);
+    }
+  };

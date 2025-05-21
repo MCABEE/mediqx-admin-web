@@ -1,7 +1,62 @@
+"use client";
 import Navlink from "@/components/staffManagement/Navlink";
-import React from "react";
+import React, { useState } from "react";
 
 function page() {
+  const [selectedState, setSelectedState] = useState("");
+  const [districts, setDistricts] = useState([]);
+
+  const districtMap = {
+    Kerala: ["Thiruvananthapuram", "Kochi", "Kozhikode"],
+    Karnataka: ["Bengaluru", "Mysuru", "Mangaluru"],
+  };
+
+  const handleStateChange = (e) => {
+    const state = e.target.value;
+    setSelectedState(state);
+    setDistricts(districtMap[state] || []);
+  };
+
+  const nursingSkills = [
+    "Vital signs monitoring",
+    "Medication administration",
+    "Patient hygiene & grooming",
+    "Wound dressing & basic procedures",
+    "Injections (IM, IV, SC)",
+    "Catheterization",
+    "IV cannulation & fluid management",
+    "Feeding (oral, NG tube, PEG)",
+    "Positioning & mobility support",
+    "Emergency response (CPR, BLS)",
+    "Bed making (sterile/occupied)",
+    "Post-operative care",
+    "Infection control practices",
+    "Oxygen therapy management",
+    "Record keeping & nursing documentation",
+    "Assist in minor procedures",
+    "Baby care / Mother care (Obstetric)",
+    "Elderly care",
+    "Communication skills",
+    "Empathy and patience",
+    "Time management",
+    "Teamwork and collaboration",
+    "Documentation accuracy",
+    "Adaptability and problem-solving",
+    "Cultural sensitivity",
+    "Physical stamina and alertness",
+    "Professional ethics and confidentiality",
+    "Punctuality and responsibility",
+    "Basic Life Support (BLS)",
+    "Advanced Cardiac Life Support (ACLS)",
+    "Infection Control Training",
+    "Home Nursing Training",
+    "First Aid Certification",
+  ];
+
+  const half = Math.ceil(nursingSkills.length / 2);
+  const firstColumn = nursingSkills.slice(0, half);
+  const secondColumn = nursingSkills.slice(half);
+
   return (
     <div>
       <Navlink />
@@ -28,7 +83,7 @@ function page() {
             <select
               name=""
               id=""
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2 outline-none"
             >
               <option
                 value="Current Location"
@@ -36,7 +91,18 @@ function page() {
                 disabled
                 className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none"
               >
-                Current Location
+                Qualification
+              </option>
+
+              <option value="ANM">ANM (Auxiliary Nurse Midwife)</option>
+              <option value="GNM">GNM (General Nursing and Midwifery)</option>
+              <option value="B.Sc. Nursing">B.Sc. Nursing</option>
+              <option value="Post Basic B.Sc. Nursing">
+                Post Basic B.Sc. Nursing
+              </option>
+              <option value="M.Sc. Nursing">M.Sc. Nursing</option>
+              <option value="Nurse Practitioner (NP)">
+                Nurse Practitioner (NP)
               </option>
             </select>
             <select
@@ -50,7 +116,44 @@ function page() {
                 disabled
                 className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none"
               >
-                Qualification
+                Specialization
+              </option>
+              <option value="Staff Nurse / Ward Nurse">
+                Staff Nurse / Ward Nurse
+              </option>
+              <option value="ICU Nurse / Critical Care Nurse">
+                ICU Nurse / Critical Care Nurse
+              </option>
+              <option value="ER Nurse / Trauma Nurse">
+                ER Nurse / Trauma Nurse
+              </option>
+              <option value="Pediatric Nurse">Pediatric Nurse</option>
+              <option value="Ortho Nurse">Ortho Nurse</option>
+              <option value="Cardiac Nurse">Cardiac Nurse</option>
+              <option value="Neuro Nurse">Neuro Nurse</option>
+              <option value="Oncology Nurse">Oncology Nurse</option>
+              <option value="OT Nurse / Surgical Nurse">
+                OT Nurse / Surgical Nurse
+              </option>
+              <option value="Maternity Nurse / Midwife">
+                Maternity Nurse / Midwife
+              </option>
+              <option value="NICU Nurse (Neonatal)">
+                NICU Nurse (Neonatal)
+              </option>
+              <option value="Dialysis Nurse">Dialysis Nurse</option>
+              <option value="OT Nurse / Scrub Nurse">
+                OT Nurse / Scrub Nurse
+              </option>
+              <option value="Anesthesia Nurse">Anesthesia Nurse</option>
+              <option value="Psychiatric Nurse">Psychiatric Nurse</option>
+              <option value="ENT Nurse">ENT Nurse</option>
+              <option value="Radiology Assistant Nurse">
+                Radiology Assistant Nurse
+              </option>
+              <option value="GI Nurse">GI Nurse</option>
+              <option value="Infection Control Nurse">
+                Infection Control Nurse
               </option>
             </select>
             <select
@@ -66,6 +169,8 @@ function page() {
               >
                 Looking for (Fulltime / Part Time)
               </option>
+              <option value="FULL_TIME">Full time</option>
+              <option value="PART_TIME">Part time</option>
             </select>
           </div>
 
@@ -180,115 +285,185 @@ function page() {
             Please provide your experience details
           </h1>
           <div className="flex flex-col gap-5">
-            <select
-              name=""
-              id=""
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2"
-            >
-              <option
-                value="Current Location"
-                selected
-                disabled
-                className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none"
+            <h1 className="text-[16px] font-semibold text-black py-[18px]">
+              Total Experience in Y/M
+            </h1>
+
+            <div className="flex gap-3">
+              {/* Year Dropdown */}
+              <select
+                name="experienceYear"
+                id="experienceYear"
+                className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+                defaultValue=""
               >
-                Total Experience in years
-              </option>
-            </select>
-            <select
-              name=""
-              id=""
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2"
-            >
-              <option
-                value="Current Location"
-                selected
-                disabled
-                className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none"
+                <option value="" disabled>
+                  Year
+                </option>
+                {Array.from({ length: 31 }, (_, i) => (
+                  <option key={i} value={i}>
+                    {i} {i === 1 ? "Year" : "Years"}
+                  </option>
+                ))}
+              </select>
+
+              {/* Month Dropdown */}
+              <select
+                name="experienceMonth"
+                id="experienceMonth"
+                className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+                defaultValue=""
               >
-                Hospital (Last working)
-              </option>
-            </select>
+                <option value="" disabled>
+                  Months
+                </option>
+                {Array.from({ length: 12 }, (_, i) => (
+                  <option key={i} value={i}>
+                    {i} {i === 1 ? "Month" : "Months"}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <input
+              type="text"
+              name="lastHospital"
+              id="lastHospital"
+              placeholder="Hospital (Last working)"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+            />
+
             <select
-              name=""
-              id=""
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2"
+              name="state"
+              id="state"
+              value={selectedState}
+              onChange={handleStateChange}
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
             >
-              <option
-                value="Current Location"
-                selected
-                disabled
-                className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none"
-              >
-                Department / Specialty
+              <option value="" disabled>
+                State
               </option>
+              <option value="Kerala">Kerala</option>
+              <option value="Karnataka">Karnataka</option>
             </select>
+
+            {/* District Dropdown */}
+            <select
+              name="district"
+              id="district"
+              disabled={!selectedState}
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+            >
+              <option value="" disabled selected>
+                District
+              </option>
+              {districts.map((district, index) => (
+                <option key={index} value={district}>
+                  {district}
+                </option>
+              ))}
+            </select>
+
+            <input
+              type="text"
+              name="area"
+              id="area"
+              placeholder="Area"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+            />
+            <select
+              name="department"
+              id="department"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Department
+              </option>
+              <option value="General Medicine">General Medicine</option>
+              <option value="ICU / Critical Care">ICU / Critical Care</option>
+              <option value="Emergency Department">Emergency Department</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Orthopedics">Orthopedics</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Oncology">Oncology</option>
+              <option value="Surgical Wards">Surgical Wards</option>
+              <option value="Gynecology & Obstetrics">
+                Gynecology & Obstetrics
+              </option>
+              <option value="Neonatal ICU (NICU)">Neonatal ICU (NICU)</option>
+              <option value="Dialysis Unit">Dialysis Unit</option>
+              <option value="Operation Theatre (OT)">
+                Operation Theatre (OT)
+              </option>
+              <option value="Anesthesia Unit">Anesthesia Unit</option>
+              <option value="Psychiatry">Psychiatry</option>
+              <option value="ENT">ENT</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="Radiology">Radiology</option>
+              <option value="Gastroenterology">Gastroenterology</option>
+              <option value="Infection Control">Infection Control</option>
+            </select>
+            <h1 className="text-[16px] font-semibold text-black py-[18px]">
+              Working Duration{" "}
+              <span className="font-light">(On this Hospital)</span>
+            </h1>
+            <div className="flex gap-3">
+              {/* Year Dropdown */}
+              <select
+                name="experienceYear"
+                id="experienceYear"
+                className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Year
+                </option>
+                {Array.from({ length: 31 }, (_, i) => (
+                  <option key={i} value={i}>
+                    {i} {i === 1 ? "Year" : "Years"}
+                  </option>
+                ))}
+              </select>
+
+              {/* Month Dropdown */}
+              <select
+                name="experienceMonth"
+                id="experienceMonth"
+                className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Months
+                </option>
+                {Array.from({ length: 12 }, (_, i) => (
+                  <option key={i} value={i}>
+                    {i} {i === 1 ? "Month" : "Months"}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
             Mention your Expertise / Skills
           </h1>
-          <div className="flex gap-10">
-            <div className="flex flex-col text-[16px]  text-black font-light gap-[18px]">
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">
-                  Emergency & Trauma (Casualty)
-                </span>
-              </span>
-              <span className="flex gap-[5px]  items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">
-                  Obstetrics & Gynecology (OB/GYN)
-                </span>
-              </span>
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">Intensive Care Unit (ICU)</span>
-              </span>
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">Cardiology</span>
-              </span>
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">Orthopedics</span>
-              </span>
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">Psychiatry & Mental Health</span>
-              </span>
-            </div>
 
-            <div className="flex flex-col text-[16px]  text-black font-light gap-[18px]">
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">
-                  Emergency & Trauma (Casualty)
-                </span>
-              </span>
-              <span className="flex gap-[5px]  items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">
-                  Obstetrics & Gynecology (OB/GYN)
-                </span>
-              </span>
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">Intensive Care Unit (ICU)</span>
-              </span>
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">Cardiology</span>
-              </span>
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">Orthopedics</span>
-              </span>
-              <span className="flex gap-[5px] items-center">
-                <input type="checkbox" className="size-[20px]" />
-                <span className="text-[16px]">Psychiatry & Mental Health</span>
-              </span>
-            </div>
+          <div className="flex gap-10">
+            {[firstColumn, secondColumn].map((column, colIndex) => (
+              <div
+                key={colIndex}
+                className="flex flex-col text-[16px] text-black font-light gap-[18px]"
+              >
+                {column.map((skill, index) => (
+                  <label key={index} className="flex gap-[5px] items-center">
+                    <input type="checkbox" className="size-[20px]" />
+                    <span className="text-[16px]">{skill}</span>
+                  </label>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
 
@@ -300,7 +475,7 @@ function page() {
             for="cv-upload"
             className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] ps-8 pe-4 flex items-center justify-between cursor-pointer"
           >
-            Upload CV <img src="/upload-btn.svg" alt="" />
+            Nursing Certificate <img src="/upload-btn.svg" alt="" />
             <input type="file" id="cv-upload" className="hidden" />
           </label>
           <label
@@ -360,11 +535,42 @@ function page() {
             className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
             placeholder="Phone Number"
           />
+                      <select
+              name="state"
+              id="state"
+              value={selectedState}
+              onChange={handleStateChange}
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2 ps-8"
+            >
+              <option value="" disabled>
+                State
+              </option>
+              <option value="Kerala">Kerala</option>
+              <option value="Karnataka">Karnataka</option>
+            </select>
 
-          <textarea
-            className="w-[328px] h-[89px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 pt-2 "
-            placeholder="Address"
-          ></textarea>
+            {/* District Dropdown */}
+            <select
+              name="district"
+              id="district"
+              disabled={!selectedState}
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2 ps-8"
+            >
+              <option value="" disabled selected>
+                District
+              </option>
+              {districts.map((district, index) => (
+                <option key={index} value={district}>
+                  {district}
+                </option>
+              ))}
+            </select>
+ <input
+            type="text"
+            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
+            placeholder="City"
+          />
+        
           <input
             type="number"
             className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "

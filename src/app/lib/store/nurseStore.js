@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { getNurses, getNurseById } from "@/api/nurseApi"; // Make sure this path is correct
+import { getNurses, getNurseById, verifyNurseStatus } from "@/api/nurseApi"; // Make sure this path is correct
 
 const useNurseStore = create(
   persist(
@@ -44,6 +44,22 @@ const useNurseStore = create(
         } catch (error) {
           set({ error: error.message });
           console.error("Error fetching nurse details:", error);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      verifyNurse: async (nurseId, status) => {
+        set({ isLoading: true, error: null });
+        try {
+          const result = await verifyNurseStatus(nurseId, status);
+          console.log(`Nurse ${status}:`, result);
+
+          // Optional: refresh nurse list or details after update
+          await get().fetchNurses(get().page, get().limit);
+        } catch (error) {
+          set({ error: error.message });
+          console.error("Verification error:", error.message);
         } finally {
           set({ isLoading: false });
         }
