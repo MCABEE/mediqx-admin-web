@@ -51,20 +51,21 @@ const useNurseStore = create(
       },
 
       verifyNurse: async (nurseId, status) => {
-        set({ isLoading: true, error: null });
-        try {
-          const result = await verifyNurseStatus(nurseId, status);
-          console.log(`Nurse ${status}:`, result);
+  set({ isLoading: true, error: null });
+  try {
+    const result = await verifyNurseStatus(nurseId, status);
+    console.log(`Nurse status updated to ${status}:`, result);
 
-          // Optional: refresh nurse list or details after update
-          await get().fetchNurses(get().page, get().limit);
-        } catch (error) {
-          set({ error: error.message });
-          console.error("Verification error:", error.message);
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+    // Optional: refresh nurse list or details after update
+    await get().fetchNurses(get().page, get().limit);
+  } catch (error) {
+    set({ error: error.message });
+    console.error("Verification error:", error.message);
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
 
       setPage: (newPage) => set({ page: newPage }),
       setLimit: (newLimit) => set({ limit: newLimit }),
