@@ -13,7 +13,7 @@ const Navlink = () => {
         href="/controlpanel/staffManagement"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
           pathname === "/controlpanel/staffManagement" ||
-          pathname === "/controlpanel/staffManagement/staffDetails"
+          pathname.includes(`/controlpanel/staffManagement/staffDetails/`)
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}

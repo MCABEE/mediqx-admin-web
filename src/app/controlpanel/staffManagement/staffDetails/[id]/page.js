@@ -22,7 +22,7 @@ const { verifyNurse } = nurseStore();
   
 
   if (!selectedNurse) return <div>Loading...</div>;
-
+  const url = "https://dev-nurse-docs.s3.ap-south-1.amazonaws.com/"
   const nurseData = selectedNurse.nurse || {};
   const address = selectedNurse.address || {};
   const education = nurseData.educationQualifications || [];
@@ -63,9 +63,9 @@ const { verifyNurse } = nurseStore();
               <span>Experience Level</span>
             </div>
             <div className="flex flex-col gap-[10px] text-[16px] text-black">
-              <span>{nurseData.currentLocation || address.city || "N/A"}</span>
-              <span>{education[0] || "N/A"}</span>
-              <span>{nurseData.experienceLevel || "N/A"}</span>
+              <span>{nurseData.currentLocation || address.city || "Nil"}</span>
+              <span>{education[0] || "Nil"}</span>
+              <span>{nurseData.experienceLevel || "Nil"}</span>
             </div>
           </div>
 
@@ -80,107 +80,72 @@ const { verifyNurse } = nurseStore();
             </div>
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Last Hospital</span>
-              <span>{nurseData.lastWorkedHospital || "N/A"}</span>
+              <span>{nurseData.lastWorkedHospital || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Specializations</span>
-              <span>{nurseData.specializations || "N/A"}</span>
+              <span>{nurseData.specializations || "Nil"}</span>
             </div>
           </div>
 
           {/* Skills Section */}
           <h1 className="text-[16px] font-semibold text-black py-[18px]">Skills</h1>
-          <div className="flex flex-col text-[16px] text-black font-light gap-[10px]">
+          <div className="flex flex-col text-[16px] text-black font-light gap-[10px] mb-4">
             {nurseData.skills?.length ? (
               nurseData.skills.map((skill, idx) => <span key={idx}>{skill}</span>)
             ) : (
-              <span>N/A</span>
+              <span>Nil</span>
             )}
           </div>
         </div>
 
-        {/* Files Section */}
-        {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
-          Registration / Certificates
-        </h1>
-        <div className="flex flex-col gap-y-4 text-black">
-          {[
-            { label: "Resume", type: "RESUME" },
-            { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
-            { label: "Experience Certificate", type: "EXPERIENCE_CERTIFICATE" },
-            { label: "Photo", type: "PHOTO" },
-          ].map(({ label, type }) => {
-            const file = getFile(type);
-            return (
-              <div key={type} className="flex bg-[#EBF2F8] px-[39px] py-4 items-center gap-4">
-                <span className="w-[300px]">{label}</span>
-                <img src="/pdf.svg" alt="" />
-                {file ? (
-                  <>
-                    <a
-                      href={file.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[14px] text-[#1982FE] ps-10"
-                    >
-                      View
-                    </a>
-                    <a
-                      href={file.fileUrl}
-                      download
-                      className="text-[14px] text-[#1982FE] ps-10"
-                    >
-                      Download
-                    </a>
-                  </>
-                ) : (
-                  <span className="text-[14px] text-[#FF0000] ps-10">Not Uploaded</span>
-                )}
-              </div>
-            );
-          })}
-        </div> */}
 
-                <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
-          Registration / Experience Certificates
-        </h1>
 
-        <div className="flex flex-col gap-y-4 text-black">
-          <div className="flex bg-[#EBF2F8] px-[39px] py-4">
-            <span className="w-[300px]">Resume</span>
-            <span>
-              <img src="/pdf.svg" alt="" />
-            </span>
-            <span className="text-[14px] text-[#1982FE] ps-20">View</span>
-            <span className="text-[14px] text-[#1982FE] ps-20">Download</span>
-          </div>
-          <div className="flex bg-[#EBF2F8] px-[39px] py-4">
-            <span className="w-[300px]">Council Registration</span>
-            <span>
-              <img src="/pdf.svg" alt="" />
-            </span>
-            <span className="text-[14px] text-[#1982FE] ps-20">View
-            </span>
-            
-            <span className="text-[14px] text-[#1982FE] ps-20">Download</span>
-          </div>
-          <div className="flex bg-[#EBF2F8] px-[39px] py-4">
-            <span className="w-[300px]">Experience Certificates</span>
-            <span>
-              <img src="/pdf.svg" alt="" />
-            </span>
-            <span className="text-[14px] text-[#1982FE] ps-20">View</span>
-            <span className="text-[14px] text-[#1982FE] ps-20">Download</span>
-          </div>
-          <div className="flex bg-[#EBF2F8] px-[39px] py-4">
-            <span className="w-[300px]">Photo</span>
-            <span>
-              <img src="/pdf.svg" alt="" />
-            </span>
-            <span className="text-[14px] text-[#1982FE] ps-20">View</span>
-            <span className="text-[14px] text-[#1982FE] ps-20">Download</span>
-          </div>
+
+{[
+  { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
+  { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
+  { label: "Experience Certificate", type: "AVATAR" },
+  { label: "Photo", type: "PASSPORT_IMAGE" },
+].map(({ label, type }) => {
+  const file = files.find((f) => f.type === type); // find the first file matching the type
+
+  return (
+    <div key={type} className="flex flex-col bg-[#EBF2F8] px-[39px] py-6 gap-2">
+      <div className="flex items-center gap-4">
+        <span className="w-[300px]">{label}</span>
+      </div>
+
+      {file ? (
+        <div className="flex items-center gap-4 ps-[52px]">
+          <span className="text-[14px] text-gray-700 truncate w-[300px]">{file.fileName}</span>
+
+        <img src="/pdf.svg" alt="PDF Icon" />
+
+          <a
+            href={`${url}${file.key}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[14px] text-[#1982FE]"
+          >
+            View
+          </a>
+          <a
+            href={`${url}${file.key}`}
+            download
+            className="text-[14px] text-[#1982FE]"
+          >
+            Download
+          </a>
         </div>
+      ) : (
+        <span className="text-[14px] text-[#FF0000] ps-10">Not Uploaded</span>
+      )}
+    </div>
+  );
+})}
+
+
 
         {/* Contact Details */}
         <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
@@ -193,11 +158,11 @@ const { verifyNurse } = nurseStore();
           </div>
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Email</span>
-            <span>{selectedNurse.email || "N/A"}</span>
+            <span>{selectedNurse.email || "Nil"}</span>
           </div>
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Phone</span>
-            <span>{selectedNurse.mobileNumber || "N/A"}</span>
+            <span>{selectedNurse.mobileNumber || "Nil"}</span>
           </div>
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Address</span>

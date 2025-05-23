@@ -7,7 +7,7 @@ import { login } from "@/api/auth"; // adjust path if needed
 
 export default function Home() {
   const [mobileNumber, setMobileNumber] = useState("");
-  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const router = useRouter();
 
   const { login: loginToStore, loadToken } = useAuthStore();
@@ -20,18 +20,20 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const data = await login(mobileNumber, password);
-      const token = data.token;
+      const data = await login(mobileNumber, otp);
+      const accessToken = data?.data.accessToken;
 
-      if (token) {
-        loginToStore(token); // Store in Zustand
+      if (accessToken) {
+        loginToStore(accessToken); // Store in Zustand
         router.push("/controlpanel/dashboard");
       } else {
         alert("Login failed: No token received.");
       }
     } catch (error) {
       console.error("Login failed", error);
-      alert(error || "Invalid email or password");
+      // alert(error || "Invalid email or password");
+      alert("Invalid email or password");
+
     }
   };
 
@@ -66,12 +68,12 @@ export default function Home() {
                   required
                 />
                 <input
-                  id="password"
-                  type="password"
+                  id="otp"
+                  type="text"
                   className="px-4 py-3.5 w-full bg-white border border-neutral-400 rounded-xl text-[#333333]"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
                   required
                 />
               </div>
