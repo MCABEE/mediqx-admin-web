@@ -13,7 +13,9 @@ export default function RootLayout({ children }) {
           <div className=" w-[28%] pr-[26px]">
             <Sidebar />
           </div>
-          <div className="h-full w-[72%]"> {children} </div>
+          <div className="h-full w-[72%]">
+             {children}
+           </div>
         </div>
       </div>
     </>

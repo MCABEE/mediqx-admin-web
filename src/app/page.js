@@ -1,37 +1,39 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import Link from "next/link";
+import { useAuthStore } from "./lib/store/authStore"; // adjust path if needed
+import { login } from "@/api/auth"; // adjust path if needed
 
 export default function Home() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [otp, setOtp] = useState("");
   const router = useRouter();
+
+  const { login: loginToStore, loadToken } = useAuthStore();
+
+  useEffect(() => {
+    loadToken(); // Load token if already present (optional)
+  }, [loadToken]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/login", {
-        username,
-        password,
-      });
+      const data = await login(mobileNumber, otp);
+      const accessToken = data?.data.accessToken;
 
-      if (response.status === 200) {
-        const token = response.data.token;
-
-        // Save token in localStorage or cookie
-        localStorage.setItem("token", token);
-        // or use cookies:
-        // document.cookie = `token=${token}; path=/`;
-
-        console.log("Login successful", token);
-        router.push("/dashboard"); // Redirect to a protected route
+      if (accessToken) {
+        loginToStore(accessToken); // Store in Zustand
+        router.push("/controlpanel/dashboard");
+      } else {
+        alert("Login failed: No token received.");
       }
     } catch (error) {
       console.error("Login failed", error);
-      alert("Invalid username or password");
+      // alert(error || "Invalid email or password");
+      alert("Invalid email or password");
+
     }
   };
 
@@ -57,31 +59,31 @@ export default function Home() {
               </h2>
               <div className="flex flex-col gap-5 mt-3">
                 <input
-                  id="username"
+                  id="email"
                   type="text"
                   className="px-4 py-3.5 w-full bg-white border border-neutral-400 rounded-xl text-[#333333]"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Mobile Number"
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
+                  required
                 />
                 <input
-                  id="password"
-                  type="password"
+                  id="otp"
+                  type="text"
                   className="px-4 py-3.5 w-full bg-white border border-neutral-400 rounded-xl text-[#333333]"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  required
                 />
               </div>
               <div className="flex justify-center md:justify-end mt-5">
-               <Link href={"/controlpanel/dashboard"}>
-               <button
+                <button
                   type="submit"
                   className="px-10 py-2 text-white rounded-3xl bg-[#3674B5] cursor-pointer"
                 >
                   Login
                 </button>
-               </Link>
               </div>
             </form>
           </div>

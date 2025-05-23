@@ -60,18 +60,7 @@ const PatientBookings = () => {
     month: "",
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/patient-bookings");
-        setData(response.data);
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+ 
 
   return (
     <div className=" bg-white py-10 rounded-2xl">
