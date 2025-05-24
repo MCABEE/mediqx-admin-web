@@ -9,6 +9,9 @@ export default function Home() {
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   const { login: loginToStore, loadToken } = useAuthStore();
 
@@ -18,22 +21,30 @@ export default function Home() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMessage(""); // Clear any previous error
+    setLoading(true); // Start loading
 
     try {
       const data = await login(mobileNumber, otp);
       const accessToken = data?.data.accessToken;
 
       if (accessToken) {
-        loginToStore(accessToken); // Store in Zustand
+        loginToStore(accessToken);
         router.push("/controlpanel/dashboard");
       } else {
-        alert("Login failed: No token received.");
+        setErrorMessage("Login failed: No token received.");
       }
     } catch (error) {
       console.error("Login failed", error);
-      // alert(error || "Invalid email or password");
-      alert("Invalid email or password");
 
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Login failed. Please try again.";
+
+      setErrorMessage(message);
+    } finally {
+      setLoading(false); // Stop loading in any case
     }
   };
 
@@ -77,12 +88,22 @@ export default function Home() {
                   required
                 />
               </div>
+              <div className="h-4">
+                {errorMessage && (
+                  <div className=" text-red-600 text-sm mt-2 ">
+                    {errorMessage}
+                  </div>
+                )}
+              </div>
               <div className="flex justify-center md:justify-end mt-5">
                 <button
                   type="submit"
-                  className="px-10 py-2 text-white rounded-3xl bg-[#3674B5] cursor-pointer"
+                  className={`w-[120px] py-2 text-white rounded-3xl ${
+                    loading ? "bg-blue-400 cursor-not-allowed" : "bg-[#3674B5] cursor-pointer"
+                  }`}
+                  disabled={loading}
                 >
-                  Login
+                  {loading ? "Logging in..." : "Login"}
                 </button>
               </div>
             </form>
