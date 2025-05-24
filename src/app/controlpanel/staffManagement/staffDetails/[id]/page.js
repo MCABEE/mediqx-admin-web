@@ -101,7 +101,7 @@ function StaffDetailPage() {
           return (
             <div key={type} className="flex flex-col bg-[#EBF2F8] px-[39px] py-6 gap-2">
               <div className="flex items-center gap-4">
-                <span className="w-[300px]">{label}</span>
+                <span className="w-[300px] text-black">{label}</span>
               </div>
              {file ? (
   <div className="flex items-center gap-4 ps-[52px]">
@@ -204,7 +204,7 @@ function StaffDetailPage() {
       {preview.show && (
         <div className="fixed inset-0 bg-[#8b898976] backdrop-blur-xs z-50 flex items-center justify-center">
           <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
-            <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl font-semibold cursor-pointer" onClick={() => setPreview({ show: false, fileUrl: "", isImage: false })}>✕</button>
+            <button className="w-7  h-7 absolute top-0 -right-8 bg-[#ffff] rounded-full text-gray-500 hover:text-black text-xl font-semibold cursor-pointer" onClick={() => setPreview({ show: false, fileUrl: "", isImage: false })}>✕</button>
             {preview.isImage ? (
               <img src={preview.fileUrl} alt="Preview" className="max-w-full max-h-[80vh] object-contain mx-auto" />
             ) : (
