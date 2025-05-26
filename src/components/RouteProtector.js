@@ -2,7 +2,13 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import api from "@/api/axiosInstance"; // your configured Axios instance
+import api from "@/api/axiosInstance";
+
+const isValidJWT = (token) => {
+  if (!token || typeof token !== "string") return false;
+  const parts = token.split(".");
+  return parts.length === 3;
+};
 
 const RouteProtector = ({ children }) => {
   const router = useRouter();
@@ -10,24 +16,23 @@ const RouteProtector = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 
-    if (!token) {
-      router.push("/");
+    if (!token || token.trim() === "" || !isValidJWT(token)) {
+      localStorage.clear();
+      router.push("/"); 
       return;
     }
 
-    // Add Axios interceptor to catch 401 errors
     const interceptor = api.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
           localStorage.clear();
-          router.push("/");
+          router.push("/"); 
         }
         return Promise.reject(error);
       }
     );
 
-    // Cleanup interceptor when component unmounts
     return () => {
       api.interceptors.response.eject(interceptor);
     };

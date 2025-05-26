@@ -179,7 +179,7 @@ function StaffDetailPage() {
 
       {modalData.show && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#9b989876] backdrop-blur-xs z-50">
-          <div className="bg-white rounded-xl p-6 w-[400px] text-center shadow-lg">
+          <div className="bg-white rounded-xl p-6 w-[400px] text-center text-black shadow-lg">
             <h2 className="text-lg font-semibold mb-4">Confirm {modalData.action === "APPROVED" ? "Approve" : "Reject"}</h2>
             <p className="mb-6">
               Are you sure you want to <strong>{modalData.action === "APPROVED" ? "approve" : "reject"}</strong> nurse <strong>{selectedNurse.fullName}</strong>?
