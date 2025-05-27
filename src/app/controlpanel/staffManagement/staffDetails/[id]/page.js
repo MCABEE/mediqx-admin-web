@@ -5,6 +5,7 @@ import Navlink from "@/components/staffManagement/Navlink";
 import nurseStore from "@/app/lib/store/nurseStore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AvailabilitySchedule from "@/components/staffManagement/AvailabilitySchedule";
 
 function StaffDetailPage() {
   const router = useRouter();
@@ -32,6 +33,8 @@ function StaffDetailPage() {
   const address = selectedNurse.address || {};
   const education = nurseData.educationQualifications || [];
   const files = selectedNurse.files || [];
+  const availabilities = selectedNurse.availabilities || [];
+
 
   const isImage = (fileName) => /\.(jpe?g|png|webp|gif)$/i.test(fileName);
 
@@ -68,6 +71,10 @@ function StaffDetailPage() {
               <span>{nurseData.experienceLevel || "Nil"}</span>
             </div>
           </div>
+        
+
+{/* Availability component */}
+    <AvailabilitySchedule availabilities={availabilities} />
 
           <h1 className="text-[16px] font-semibold text-black py-[18px]">Experience details</h1>
           <div className="flex flex-col text-[16px] text-black font-light gap-[18px]">
@@ -152,6 +159,11 @@ function StaffDetailPage() {
         <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Contact Details</h1>
         <div className="flex flex-col text-[16px] text-black font-light gap-[18px] px-[39px] pb-[18px] border-b-[1px] border-b-[#BBBBBB]">
           <div className="flex gap-[18px]">
+             <span className="w-[280px]">Gender</span>
+            <span>{selectedNurse.gender}</span>
+            </div>
+          <div className="flex gap-[18px]">
+
             <span className="w-[280px]">Full Name</span>
             <span>{selectedNurse.fullName}</span>
           </div>
@@ -160,12 +172,26 @@ function StaffDetailPage() {
             <span>{selectedNurse.email || "Nil"}</span>
           </div>
           <div className="flex gap-[18px]">
-            <span className="w-[280px]">Phone</span>
+            <span className="w-[280px]">Phone Number</span>
             <span>{selectedNurse.mobileNumber || "Nil"}</span>
           </div>
           <div className="flex gap-[18px]">
+            <span className="w-[280px]">State</span>
+            <span>{address.state || "Nil"}</span>
+          </div><div className="flex gap-[18px]">
+            <span className="w-[280px]">District</span>
+            <span>{address.district || "Nil"}</span>
+          </div><div className="flex gap-[18px]">
+            <span className="w-[280px]">City</span>
+            <span>{address.city || "Nil"}</span>
+          </div>
+          <div className="flex gap-[18px]">
             <span className="w-[280px]">Address</span>
-            <span>{address.city}, {address.district}, {address.state}, {address.pincode}</span>
+            <span>{address.lineFirst},{address.lineSecond} </span>
+          </div>
+          <div className="flex gap-[18px]">
+            <span className="w-[280px]">Pin Code</span>
+            <span>{address.pincode || "Nil"}</span>
           </div>
         </div>
 
