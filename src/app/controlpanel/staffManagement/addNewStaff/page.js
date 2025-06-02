@@ -1,4 +1,6 @@
 "use client";
+import AddNurseAvailability from "@/components/staffManagement/addNewStaff/AddNurseAvailability";
+import NurseBasicInformation from "@/components/staffManagement/addNewStaff/NurseBasicInformation";
 import Navlink from "@/components/staffManagement/Navlink";
 import React, { useState } from "react";
 
@@ -108,95 +110,7 @@ function page() {
       </div>
 
       <div className="bg-white border-[1px] border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
-        <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
-          Basic Information
-        </h1>
-        <div className="flex flex-col gap-5 px-[39px] mb-12">
-          <select
-            name=""
-            id=""
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2 ps-8"
-          >
-            <option
-              value=""
-              selected
-              disabled
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none ps-8"
-            >
-              Gender
-            </option>
-          </select>
-
-          <input
-            type="text"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Full Name"
-          />
-          <input
-            type="email"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Email ID"
-          />
-          <input
-            type="number"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Phone Number"
-          />
-          <select
-            name="state"
-            id="state"
-            value={selectedState}
-            onChange={handleStateChange}
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2 ps-8"
-          >
-            <option value="" disabled>
-              State
-            </option>
-            <option value="Kerala">Kerala</option>
-            <option value="Karnataka">Karnataka</option>
-          </select>
-
-          {/* District Dropdown */}
-          <select
-            name="district"
-            id="district"
-            disabled={!selectedState}
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2 ps-8"
-          >
-            <option value="" disabled selected>
-              District
-            </option>
-            {districts.map((district, index) => (
-              <option key={index} value={district}>
-                {district}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="City"
-          />
-
-          <input
-            type="number"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Pin Code"
-          />
-          <input
-            type="number"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Referral Code "
-          />
-
-          <button className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center">
-            Next
-          </button>
-
-          <span className=" text-[14px] text-[#3674B5] font-semibold ps-4 ">
-            The Entry has been successfully submitted !
-          </span>
-        </div>
+        <NurseBasicInformation/>
 
         <div className="px-[39px] pt-[15px]">
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
@@ -408,157 +322,17 @@ function page() {
             </label>
           </div>
 
-          <h1 className="text-[16px] font-semibold text-black pb-[18px]">
-            Qualification & work Schedule
-          </h1>
-          <div className="flex flex-col gap-5">
-            <select
-              name=""
-              id=""
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2 outline-none"
-            >
-              <option
-                value="Current Location"
-                selected
-                disabled
-                className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none"
-              >
-                Qualification
-              </option>
-
-              <option value="ANM">ANM (Auxiliary Nurse Midwife)</option>
-              <option value="GNM">GNM (General Nursing and Midwifery)</option>
-              <option value="B.Sc. Nursing">B.Sc. Nursing</option>
-              <option value="Post Basic B.Sc. Nursing">
-                Post Basic B.Sc. Nursing
-              </option>
-              <option value="M.Sc. Nursing">M.Sc. Nursing</option>
-              <option value="Nurse Practitioner (NP)">
-                Nurse Practitioner (NP)
-              </option>
-            </select>
-            <select
-              name=""
-              id=""
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2"
-            >
-              <option
-                value="Current Location"
-                selected
-                disabled
-                className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none"
-              >
-                Specialization
-              </option>
-              <option value="Staff Nurse / Ward Nurse">
-                Staff Nurse / Ward Nurse
-              </option>
-              <option value="ICU Nurse / Critical Care Nurse">
-                ICU Nurse / Critical Care Nurse
-              </option>
-              <option value="ER Nurse / Trauma Nurse">
-                ER Nurse / Trauma Nurse
-              </option>
-              <option value="Pediatric Nurse">Pediatric Nurse</option>
-              <option value="Ortho Nurse">Ortho Nurse</option>
-              <option value="Cardiac Nurse">Cardiac Nurse</option>
-              <option value="Neuro Nurse">Neuro Nurse</option>
-              <option value="Oncology Nurse">Oncology Nurse</option>
-              <option value="OT Nurse / Surgical Nurse">
-                OT Nurse / Surgical Nurse
-              </option>
-              <option value="Maternity Nurse / Midwife">
-                Maternity Nurse / Midwife
-              </option>
-              <option value="NICU Nurse (Neonatal)">
-                NICU Nurse (Neonatal)
-              </option>
-              <option value="Dialysis Nurse">Dialysis Nurse</option>
-              <option value="OT Nurse / Scrub Nurse">
-                OT Nurse / Scrub Nurse
-              </option>
-              <option value="Anesthesia Nurse">Anesthesia Nurse</option>
-              <option value="Psychiatric Nurse">Psychiatric Nurse</option>
-              <option value="ENT Nurse">ENT Nurse</option>
-              <option value="Radiology Assistant Nurse">
-                Radiology Assistant Nurse
-              </option>
-              <option value="GI Nurse">GI Nurse</option>
-              <option value="Infection Control Nurse">
-                Infection Control Nurse
-              </option>
-            </select>
-            <select
-              name=""
-              id=""
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2"
-            >
-              <option
-                value="Current Location"
-                selected
-                disabled
-                className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB]  rounded-[15px] px-2 outline-none"
-              >
-                Looking for (Fulltime / Part Time)
-              </option>
-              <option value="FULL_TIME">Full time</option>
-              <option value="PART_TIME">Part time</option>
-            </select>
-          </div>
-          <h1 className="text-[16px] font-semibold text-black py-[18px]">
-            Part time jobs, Mention avialable Schedules
-          </h1>
+         
          <div className="flex gap-x-[20px]">
-  {/* Days */}
-  <div className="flex flex-col text-[16px] text-black font-light gap-[18px]">
-    {schedule.map(({ day }) => (
-      <span key={day}>{day}</span>
-    ))}
-  </div>
+  
 
-  {/* Availability */}
-  <div className="flex flex-col text-[16px] text-black font-light gap-[18px]">
-    {schedule.map(({ day, available }) => (
-      <span key={day} className="flex gap-4 items-center">
-        <img
-          src={available ? "/available-btn.svg" : "/not-available-btn.svg"}
-          alt=""
-        />
-        <span className={available ? "text-[#09B438]" : "text-[#FE1940]"}>
-          {available ? "Available" : "NA"}
-        </span>
-      </span>
-    ))}
-  </div>
+    <AddNurseAvailability/>
 
-  {/* Start Time */}
-  <div className="flex flex-col text-[16px] text-black font-light gap-[18px] ps-8">
-    {schedule.map(({ day, start }) => (
-      <span
-        key={day}
-        className="border-b-[1px] border-b-[#BBBBBB] min-h-[22px]"
-      >
-        {start}
-      </span>
-    ))}
-  </div>
 
-  {/* End Time */}
-  <div className="flex flex-col text-[16px] text-black font-light gap-[18px] ps-8">
-    {schedule.map(({ day, end }) => (
-      <span
-        key={day}
-        className="border-b-[1px] border-b-[#BBBBBB] min-h-[22px]"
-      >
-        {end}
-      </span>
-    ))}
-  </div>
+
 </div>
 
-          <button className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center my-6">
-            Next
-          </button>
+        
         </div>
       </div>
     </div>
