@@ -363,6 +363,8 @@ function StaffDetailPage() {
   const education = nurseData.educationQualifications || [];
   const files = selectedNurse.files || [];
   const availabilities = selectedNurse.availabilities || [];
+  const qualifications = selectedNurse.qualifications[0] || {};
+
 
   const isImage = (fileName) => /\.(jpe?g|png|webp|gif)$/i.test(fileName);
 
@@ -410,7 +412,7 @@ function StaffDetailPage() {
           <div className="flex flex-col text-black font-light gap-[18px]">
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Total Experience in years</span>
-              <span>{nurseData.yearsOfExperience || "0"}</span>
+              <span>{nurseData.yearsOfExperience}Yr {nurseData.monthsOfExperience}Mo </span>
             </div>
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Last Hospital</span>
@@ -420,8 +422,16 @@ function StaffDetailPage() {
               <span className="w-[280px]">Specializations</span>
               <span>{nurseData.specializations || "Nil"}</span>
             </div>
+            <div className="flex gap-[18px]">
+              <span className="w-[280px]">Location</span>
+              <span>{qualifications.providerLocation}, {qualifications.providerState}</span>
+            </div>
+            {/* <div className="flex gap-[18px]">
+              <span className="w-[280px]">Working Duration</span>
+              <span>{nurseData.specializations || "Nil"}</span>
+            </div> */}
           </div>
-
+            
           {/* Skills */}
           <h1 className="text-[16px] font-semibold text-black py-[18px]">Skills</h1>
           <div className="flex flex-col text-black font-light gap-[10px] mb-4">
@@ -482,7 +492,7 @@ function StaffDetailPage() {
           <div className="flex gap-[18px]"><span className="w-[280px]">State</span><span>{address.state}</span></div>
           <div className="flex gap-[18px]"><span className="w-[280px]">District</span><span>{address.district}</span></div>
           <div className="flex gap-[18px]"><span className="w-[280px]">City</span><span>{address.city}</span></div>
-          <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div>
+          {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
           <div className="flex gap-[18px]"><span className="w-[280px]">Pin Code</span><span>{address.pincode}</span></div>
         </div>
 
@@ -527,27 +537,7 @@ function StaffDetailPage() {
         </div>
       )}
 
-      {/* Edit Contact Modal */}
-      {/* {isEditModalOpen && (
-        <div className="fixed inset-0 bg-[#00000066] z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-xl w-[600px] space-y-4 shadow-xl">
-            <h2 className="text-lg font-semibold">Edit Contact Details</h2>
-            {["gender", "fullName", "email", "mobileNumber"].map((field) => (
-              <input key={field} type="text" value={editedContact[field]} onChange={(e) => setEditedContact({ ...editedContact, [field]: e.target.value })} placeholder={field} className="w-full border rounded p-2" />
-            ))}
-            {["state", "district", "city", "lineFirst", "lineSecond", "pincode"].map((field) => (
-              <input key={field} type="text" value={editedContact.address[field]} onChange={(e) => setEditedContact({ ...editedContact, address: { ...editedContact.address, [field]: e.target.value } })} placeholder={field} className="w-full border rounded p-2" />
-            ))}
-            <div className="flex justify-end gap-4 pt-2">
-              <button className="px-4 py-2 bg-gray-300 rounded" onClick={() => setIsEditModalOpen(false)}>Cancel</button>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={() => {
-                // TODO: Call API to update nurse contact info
-                setIsEditModalOpen(false);
-              }}>Save</button>
-            </div>
-          </div>
-        </div>
-      )} */}
+    
 
         <EditContactModal
         show={isEditModalOpen}
