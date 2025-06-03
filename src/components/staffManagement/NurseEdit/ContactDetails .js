@@ -147,7 +147,7 @@ export default function EditContactModal({
             </div>
 
             {/* City, LineFirst, LineSecond, Pincode */}
-            {["city", "lineFirst", "lineSecond", "pincode"].map((field) => (
+            {["city", "pincode"].map((field) => (
               <div key={field} className="flex flex-col mb-4">
                 <label className="mb-1 text-gray-700 font-medium capitalize">
                   {field.replace(/([A-Z])/g, " $1")}

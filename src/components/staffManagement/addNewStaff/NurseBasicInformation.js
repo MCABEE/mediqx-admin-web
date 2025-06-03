@@ -155,30 +155,6 @@ const [isSubmitted, setIsSubmitted] = useState(false);
     setDistricts(stateDistrictMap[state] || []);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   if (formData.mobileNumber.length !== 10) {
-  //     alert("Mobile number must be 10 digits");
-  //     return;
-  //   }
-  //   if (formData.pincode.length !== 6) {
-  //     alert("Pincode must be 6 digits");
-  //     return;
-  //   }
-
-  //   const finalData = {
-  //     ...formData,
-  //     mobileNumber: `+91${formData.mobileNumber}`,
-  //   };
-
-  //   try {
-  //     await registerNurse(finalData);
-  //   } catch (err) {
-  //     // error handled in store
-  //   }
-  // };
-
 
   const handleSubmit = async (e) => {
   e.preventDefault();

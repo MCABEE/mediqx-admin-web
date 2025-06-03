@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
-import { submitNursePageTwo } from "@/api/addStaffNurseApi";
+import { submitNursePageThree } from "@/api/addStaffNurseApi";
 
 const daysOfWeek = [
   "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
@@ -80,7 +80,7 @@ export default function NurseAvailability() {
 
     try {
       setLoading(true);
-      const result = await submitNursePageTwo(payload);
+      const result = await submitNursePageThree(payload);
       console.log("Success:", result);
       setErrorMessage(""); 
       window.location.reload();
@@ -131,7 +131,7 @@ export default function NurseAvailability() {
           onChange={(e) => setWorkSchedule(e.target.value)}
           className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black"
         >
-          <option disabled selected value="FULL_TIME">Full Time / Part Time</option>
+          <option selected   value="FULL_TIME">Full Time / Part Time</option>
           <option value="FULL_TIME">Full Time</option>
           <option value="PART_TIME">Part Time</option>
         </select>

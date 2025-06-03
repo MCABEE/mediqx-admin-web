@@ -13,7 +13,23 @@ export const registerNurse = async (nurseData) => {
 
 
 
+
 export const submitNursePageTwo = async (data) => {
+  try {
+    const response = await api.post("/auth/admin/registration/page-2", data);
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Page 2 submission failed.";
+    throw new Error(errorMessage);
+  }
+};
+
+
+
+
+
+export const submitNursePageThree = async (data) => {
   try {
     const response = await api.post("/auth/admin/registration/page-3", data);
     return response.data;
