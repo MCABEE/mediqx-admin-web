@@ -768,18 +768,18 @@ const handleSubmit = async () => {
       <h1 className="text-[16px] font-semibold text-black py-[18px]">
         Do you have Work Experience?
       </h1>
-      <div className="flex flex-col text-[16px]  text-black font-light gap-[18px]">
+      <div className="flex flex-col text-[16px]  text-black font-light gap-[18px] ">
         <select
-          className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2"
+          className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
           defaultValue=""
         >
-          <option value="" selected >
+          <option value="" selected disabled >
             Previous Work Experience
-          </option>
-          <option value="" >
+          </option> 
+          <option value="yes" >
             Yes
           </option>
-          <option value="" >
+          <option value="no" >
             No
           </option>
         </select>
@@ -795,7 +795,7 @@ const handleSubmit = async () => {
         <div className="flex gap-3">
           <select
             name="yearsOfExperience"
-            className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+            className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
             value={formData.yearsOfExperience}
             onChange={handleChange}
           >
@@ -807,7 +807,7 @@ const handleSubmit = async () => {
 
           <select
             name="monthsOfExperience"
-            className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+            className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
             value={formData.monthsOfExperience}
             onChange={handleChange}
           >
@@ -822,7 +822,7 @@ const handleSubmit = async () => {
           type="text"
           name="providerName"
           placeholder="Hospital (Last working)"
-          className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+          className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
           value={formData.providerName}
           onChange={handleChange}
         />
@@ -831,7 +831,7 @@ const handleSubmit = async () => {
           name="providerState"
           value={selectedState}
           onChange={handleStateChange}
-          className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+          className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
         >
           <option value="" disabled>State</option>
           <option value="Kerala">Kerala</option>
@@ -842,14 +842,14 @@ const handleSubmit = async () => {
           type="text"
           name="providerLocation"
           placeholder="Area"
-          className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+          className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
           value={formData.providerLocation}
           onChange={handleChange}
         />
 
         <select
           name="department"
-          className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+          className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
           value={formData.department}
           onChange={handleChange}
         >
@@ -871,7 +871,7 @@ const handleSubmit = async () => {
               name="startDate"
               value={formData.startDate}
               onChange={handleChange}
-              className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+              className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
             />
           </div>
           <div>
@@ -881,7 +881,7 @@ const handleSubmit = async () => {
               name="endDate"
               value={formData.endDate}
               onChange={handleChange}
-              className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2"
+              className="w-[129px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2  outline-none placeholder:text-black"
             />
           </div>
           <div className="text-[16px] text-black font-light flex justify-center items-center gap-2 ms-10 mt-8">
@@ -923,7 +923,7 @@ const handleSubmit = async () => {
   onClick={handleSubmit}
   disabled={isSubmitted}
   className={`mt-10 w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center opacity-100  ${
-    isSubmitted ? "disabled:opacity-50 cursor-not-allowed" : "bg-blue-600 text-white"
+    isSubmitted ? "disabled:opacity-50 cursor-not-allowed" : "bg-[#3674B5] text-white"
   }`}
 >
   {isSubmitted ? "Submitted" : "Next"}
