@@ -455,7 +455,7 @@ function StaffDetailPage() {
                   <div className="flex items-center gap-4 ps-[52px]">
                     <span className="text-gray-700 truncate w-[300px]">{file.fileName}</span>
                     <img src="/pdf.svg" alt="PDF Icon" />
-                    <button onClick={() => setPreview({ show: true, fileUrl: `${url}${file.key}`, isImage: isImage(file.fileName) })} className="text-[#1982FE]">View</button>
+                    <button onClick={() => setPreview({ show: true, fileUrl: `${url}${file.key}`, isImage: isImage(file.fileName) })} className="text-[#1982FE] cursor-pointer">View</button>
                     <button onClick={async () => {
                       try {
                         const response = await fetch(`${url}${file.key}`);
@@ -470,7 +470,7 @@ function StaffDetailPage() {
                       } catch {
                         alert("Download failed.");
                       }
-                    }} className="text-[#1982FE]">Download</button>
+                    }} className="text-[#1982FE] cursor-pointer">Download</button>
                   </div>
                 ) : <span className="text-[#FF0000] ps-10">Not Uploaded</span>}
               </div>
@@ -499,9 +499,9 @@ function StaffDetailPage() {
         {/* Actions */}
         <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Actions</h1>
         <div className="flex gap-8 px-[39px] pb-20">
-          <button className="w-[192px] h-[40px] bg-[#F93827] text-white rounded-[15px]" onClick={() => setModalData({ show: true, action: "REJECTED" })}>Reject</button>
+          <button className="w-[192px] h-[40px] bg-[#F93827] text-white rounded-[15px] cursor-pointer" onClick={() => setModalData({ show: true, action: "REJECTED" })}>Reject</button>
           <button className="w-[192px] h-[40px] bg-[#999999] text-white rounded-[15px] cursor-not-allowed">Modify</button>
-          <button className="w-[192px] h-[40px] bg-[#09B438] text-white rounded-[15px]" onClick={() => setModalData({ show: true, action: "APPROVED" })}>Approve</button>
+          <button className="w-[192px] h-[40px] bg-[#09B438] text-white rounded-[15px] cursor-pointer" onClick={() => setModalData({ show: true, action: "APPROVED" })}>Approve</button>
         </div>
       </div>
 
@@ -516,8 +516,8 @@ function StaffDetailPage() {
                 await verifyNurse(userId, modalData.action);
                 setModalData({ show: false, action: "" });
                 router.push("/controlpanel/staffManagement");
-              }} className="px-4 py-2 bg-[#3674B5] text-white rounded-md">Yes, Confirm</button>
-              <button onClick={() => setModalData({ show: false, action: "" })} className="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
+              }} className="px-4 py-2 bg-[#3674B5] text-white rounded-md cursor-pointer">Yes, Confirm</button>
+              <button onClick={() => setModalData({ show: false, action: "" })} className="px-4 py-2 bg-gray-300 rounded-md cursor-pointer">Cancel</button>
             </div>
           </div>
         </div>
@@ -527,7 +527,7 @@ function StaffDetailPage() {
       {preview.show && (
         <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center">
           <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
-            <button onClick={() => setPreview({ show: false, fileUrl: "", isImage: false })} className="absolute top-2 right-2">✕</button>
+            <button onClick={() => setPreview({ show: false, fileUrl: "", isImage: false })} className=" w-7  h-7 absolute top-0 -right-8 bg-[#ffff] rounded-full text-gray-500 hover:text-black text-xl font-semibold cursor-pointer">✕</button>
             {preview.isImage ? (
               <img src={preview.fileUrl} alt="Preview" className="max-w-full max-h-[80vh] mx-auto" />
             ) : (

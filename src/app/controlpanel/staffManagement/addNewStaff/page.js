@@ -2,6 +2,7 @@
 import AddNurseAvailability from "@/components/staffManagement/addNewStaff/AddNurseAvailability";
 import NurseBasicInformation from "@/components/staffManagement/addNewStaff/NurseBasicInformation";
 import NurseExperinceDetails from "@/components/staffManagement/addNewStaff/NurseExperinceDetails";
+import UploadCertificate from "@/components/staffManagement/addNewStaff/UploadCertificate";
 import Navlink from "@/components/staffManagement/Navlink";
 import React, { useState } from "react";
 
@@ -35,39 +36,7 @@ function page() {
        </div>
 
         <div className="px-[39px] pt-[15px]">
-          <h1 className="text-[16px] font-semibold text-black py-[18px]">
-            Upload your Registration / Experience Certificates
-          </h1>
-          <div className="flex flex-col gap-5 mb-4">
-            <label
-              for="cv-upload"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] ps-8 pe-4 flex items-center justify-between cursor-pointer"
-            >
-              Nursing Certificate <img src="/upload-btn.svg" alt="" />
-              <input type="file" id="cv-upload" className="hidden" />
-            </label>
-            <label
-              for="cv-upload"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] ps-8 pe-4 flex items-center justify-between cursor-pointer"
-            >
-              Council Registration <img src="/upload-btn.svg" alt="" />
-              <input type="file" id="cv-upload" className="hidden" />
-            </label>
-            <label
-              for="cv-upload"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] ps-8 pe-4 flex items-center justify-between cursor-pointer"
-            >
-              Experience Certificates <img src="/upload-btn.svg" alt="" />
-              <input type="file" id="cv-upload" className="hidden" />
-            </label>
-            <label
-              for="cv-upload"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] ps-8 pe-4 flex items-center justify-between cursor-pointer"
-            >
-              Photo <img src="/upload-btn.svg" alt="" />
-              <input type="file" id="cv-upload" className="hidden" />
-            </label>
-          </div>
+       <UploadCertificate/>
 
          
          <div className="flex gap-x-[20px]">

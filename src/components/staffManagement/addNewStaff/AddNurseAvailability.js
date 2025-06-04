@@ -103,7 +103,7 @@ export default function NurseAvailability() {
         <select
           value={qualification}
           onChange={(e) => setQualification(e.target.value)}
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black"
+          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
         >
           <option disabled value="">Qualification</option>
           <option value="ANM">ANM</option>
@@ -117,7 +117,7 @@ export default function NurseAvailability() {
         <select
           value={specialization}
           onChange={(e) => setSpecialization(e.target.value)}
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black"
+          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
         >
           <option disabled value="">Specialization</option>
           <option value="Staff Nurse / Ward Nurse">Staff Nurse / Ward Nurse</option>
@@ -129,7 +129,7 @@ export default function NurseAvailability() {
         <select
           value={workSchedule}
           onChange={(e) => setWorkSchedule(e.target.value)}
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black"
+          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
         >
           <option selected   value="FULL_TIME">Full Time / Part Time</option>
           <option value="FULL_TIME">Full Time</option>

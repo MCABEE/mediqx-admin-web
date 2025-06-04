@@ -38,3 +38,56 @@ export const submitNursePageThree = async (data) => {
     throw new Error(errorMessage);
   }
 };
+
+
+
+
+/**
+ * File Upload: Generate S3 Upload URL
+ */
+export const generateFileUploadUrlAPI = async ({
+  userId,
+  fileName,
+  contentType,
+  type,
+}) => {
+  try {
+    const response = await api.post("/files/upload/generate", {
+      userId,
+      fileName,
+      contentType,
+      type,
+    });
+
+    console.log(response);
+
+    return {
+      success: true,
+      data: response.data.data,
+    };
+  } catch (error) {
+    console.error("❌ Failed to generate upload URL:", error);
+    return {
+      success: false,
+      error: error.response?.data || "Upload URL generation failed",
+    };
+  }
+};
+
+export const confirmFileUploadAPI = async (fileId) => {
+  try {
+    const response = await api.patch("/files/upload/confirm", { fileId }); // correct shape
+    console.log(response, "confirm upload");
+
+    return {
+      success: true,
+      data: response.data.data,
+    };
+  } catch (error) {
+    console.error("❌ File upload confirmation failed:", error);
+    return {
+      success: false,
+      error: error.response?.data || "Upload confirmation failed",
+    };
+  }
+};

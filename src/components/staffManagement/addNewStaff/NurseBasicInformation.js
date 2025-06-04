@@ -201,7 +201,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
             value={formData.gender}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
           >
             <option value="" disabled>
               Gender
@@ -218,7 +218,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
             onChange={handleChange}
             placeholder="Full Name"
             required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none placeholder:text-black "
           />
 
           <input
@@ -228,7 +228,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
             onChange={handleChange}
             placeholder="Email ID"
             required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
           />
 {/* 
           <input
@@ -250,7 +250,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
   placeholder="Phone Number"
   maxLength={10}
   required
-  className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+  className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
 />
 {validationErrors.mobileNumber && (
   <span className="text-[13px] text-red-500 ps-2">
@@ -264,7 +264,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
             value={formData.state}
             onChange={handleStateChange}
             required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
           >
             <option value="" disabled>
               State
@@ -279,7 +279,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
             onChange={handleChange}
             disabled={!selectedState}
             required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
           >
             <option value="" disabled>
               District
@@ -298,7 +298,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
             onChange={handleChange}
             placeholder="City"
             required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
           />
 
           {/* <input
@@ -320,7 +320,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
   placeholder="Pin Code"
   maxLength={6}
   required
-  className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+  className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
 />
 {validationErrors.pincode && (
   <span className="text-[13px] text-red-500 ps-2">
@@ -335,7 +335,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
             value={formData.referralCode}
             onChange={handleChange}
             placeholder="Referral Code"
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
           />
 
           {/* <button
