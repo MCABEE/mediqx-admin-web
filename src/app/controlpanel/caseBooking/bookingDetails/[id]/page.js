@@ -1,160 +1,253 @@
-"use client"
-import ConfirmPopup from "@/components/caseBooking/ConfirmPopup";
+"use client";
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Navlink from "@/components/caseBooking/NavLink";
-import React, {useState} from "react";
+import useBookingStore from "@/app/lib/store/bookingStore";
+import ConfirmPopup from "@/components/caseBooking/ConfirmPopup";
+import Link from "next/link";
 
-const page = () => {
+const formatDate = (isoString) => {
+  if (!isoString) return "-";
+  const date = new Date(isoString);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
 
-    const [showPopup, setShowPopup] = useState(false);
+const formatTime = (isoString) => {
+  if (!isoString) return "-";
+  const date = new Date(isoString);
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
 
-  const handleConfirmClick = () => {
-    setShowPopup(true);
-  };
+const BookingDetailsPage = () => {
+  const { id } = useParams();
+  const {
+    fetchBookingById,
+    selectedBooking,
+    isLoading,
+    error,
+  } = useBookingStore();
 
-  const handlePopupClose = () => {
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    if (id) fetchBookingById(id);
+  }, [id]);
+
+  const handleConfirmClick = () => setShowPopup(true);
+  const handlePopupClose = () => setShowPopup(false);
+ const handlePopupConfirm = (userId) => {
     setShowPopup(false);
+    alert(`Booking confirmed for user ID: ${userId}`);
+    // TODO: add actual booking confirmation API call
   };
 
-  const handlePopupConfirm = () => {
-    setShowPopup(false);
-    alert("Booking Confirmed!");
-    // TODO: Trigger API call or logic to confirm the booking
-  };
+  if (isLoading) return <p className="p-8">Loading...</p>;
+  if (error) return <p className="p-8 text-red-500">Error: {error}</p>;
+  if (!selectedBooking) return <p className="p-8">No booking found.</p>;
+
+  const booking = selectedBooking;
+
   return (
     <div>
       <Navlink />
+      {/* HEADER */}
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
-        <div className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]">Back</div>
-        <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px] ">
-        <p className="font-semibold">Pradeep Kumar N</p>
-       <div className="flex justify-center items-center gap-[92px]">
-       <p>12 April</p>
-       <p>Direct</p>
-       </div>
-
+        <Link href={"/controlpanel/caseBooking/newBooking"} className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]">Back</Link>
+        <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px]">
+          <p className="font-semibold">{booking?.fullName || "Patient Name"}</p>
+          <div className="flex justify-center items-center gap-[92px]">
+            <p>{formatDate(booking?.requestedAt)}</p>
+            {/* <p>Direct</p> */}
+          </div>
         </div>
       </div>
-      <div className=" w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
+
+      {/* PATIENT DETAILS */}
+      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
         <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">
-            Patient Details
-          </h1>
+          <h1 className="text-[16px] font-semibold text-black">Patient Details</h1>
+        </div>
+        {/* <div className="grid grid-cols-2 gap-x-8 p-8 text-[16px] text-black">
+  <div className="flex flex-col gap-[10px]">
+    <span>Patient Name</span>
+    <span>Gender</span>
+    <span>Age</span>
+    <span>Height, Weight</span>
+    <span>Diagnosis</span>
+    <span>Current Health Status / Activity</span>
+    <span>Now Patient at</span>
+    <span>Residential Address</span>
+    <span>Contact person</span>
+    <span>Relationship with patient</span>
+    <span>Email ID</span>
+  </div>
+  <div className="flex flex-col gap-[10px]">
+    <span>{booking.fullName}</span>
+    <span>{booking.gender}</span>
+    <span>{booking.age}</span>
+    <span>{booking.height} cm, {booking.weight} kg</span>
+    <span>{booking.diagnosis}</span>
+    <span>{booking.healthStatus}</span>
+    <span>{booking.stayAt}</span>
+    <span>{booking.city} - {booking.pincode}</span>
+    <span>{booking.contactPersonName}</span>
+    <span>{booking.contactPersonRelation}</span>
+    <span>{booking.contactPersonEmail}</span>
+  </div>
+</div> */}
+<div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
+  <div className="flex">
+    <span className="w-[250px] font-medium">Patient Name</span>
+    <span>{booking.fullName}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Gender</span>
+    <span>{booking.gender}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Age</span>
+    <span>{booking.age}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Height, Weight</span>
+    <span>{booking.height} cm, {booking.weight} kg</span>
+  </div>
+  
+  <div className="flex">
+    <span className="w-[250px] font-medium">Current Health Status / Activity</span>
+    <span>{booking.healthStatus}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Now Patient stayed at</span>
+    <span>{booking.stayAt}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Residential Address</span>
+    <span>{booking.city} </span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Pincode</span>
+    <span>{booking.pincode}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Contact person</span>
+    <span>{booking.contactPersonName}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Relationship with patient</span>
+    <span>{booking.contactPersonRelation}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[250px] font-medium">Email ID</span>
+    <span>{booking.contactPersonEmail}</span>
+  </div>
+</div>
+
+
+
+      
+      </div>
+
+      {/* SERVICE DETAILS */}
+      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
+        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
+          <h1 className="text-[16px] font-semibold text-black">Service Required</h1>
+        </div>
+        <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
+          <div className="flex">
+    <span className="w-[200px] font-medium">Diagnosis</span>
+    <span>{booking.diagnosis}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[200px] font-medium">Service Period from</span>
+    <span>{formatDate(booking.startDate)}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[200px] font-medium">Service Type</span>
+    <span>{booking.serviceType}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[200px] font-medium">Duration</span>
+    <span>{booking.durationType} ({booking.durationValue} weeks)</span>
+  </div>
+  
+  
+  {/* <div className="flex">
+    <span className="w-[200px] font-medium">End Time</span>
+    <span>{formatTime(booking.endTime)}</span>
+  </div> */}
+  <div className="flex">
+    <span className="w-[200px] font-medium">Frequency</span>
+    <span>{booking.weekdays?.join(", ")}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[200px] font-medium">Flexibility</span>
+    <span>{booking.flexibility}</span>
+  </div>
+  <div className="flex">
+    <span className="w-[200px] font-medium"> Time</span>
+    <span>{formatTime(booking.startTime)}</span> &nbsp; - &nbsp; <span>{formatTime(booking.endTime)}</span>
+  </div>
+</div>
+
+      </div>
+
+      {/* STAFF PREFERENCE */}
+      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
+        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
+          <h1 className="text-[16px] font-semibold text-black">Staff Preference</h1>
         </div>
         <div className="flex gap-10 p-8">
-          <div className="flex flex-col gap-[10px] text-[16px]  text-black">
-            <span className="text-[16px]  text-black">Patient Name</span>
-            <span className="text-[16px]  text-black">Gender</span>
-            <span className="text-[16px]  text-black">Age</span>
-            <span className="text-[16px]  text-black">Height, Weight</span>
-            <span className="text-[16px]  text-black">Diagnosis</span>
-            <span className="text-[16px]  text-black">
-              Current Health Status / Activity
-            </span>
-            <span className="text-[16px]  text-black">Now Patient at</span>
-            <span className="text-[16px]  text-black">Residential Address</span>
-            <span className="text-[16px]  text-black">Contact person</span>
-            <span className="text-[16px]  text-black">
-              Relationship with patient
-            </span>
-            <span className="text-[16px]  text-black">Email ID</span>
-            <span className="text-[16px]  text-black">Mobile Number</span>
+          <div className="flex flex-col gap-[10px] text-[16px] text-black">
+            <span>Preferred Gender</span>
+            <span>Preferred Language</span>
           </div>
-          <div className="flex flex-col gap-[10px] text-[16px]  text-black">
-            <span className="text-[16px]  text-black">Krishnakumar P</span>
-            <span className="text-[16px]  text-black">Male</span>
-            <span className="text-[16px]  text-black">56</span>
-            <span className="text-[16px]  text-black">175cm, 64 Kg</span>
-            <span className="text-[16px]  text-black">Osteoarthritis</span>
-            <span className="text-[16px]  text-black">Walk with Support</span>
-            <span className="text-[16px]  text-black">Residence</span>
-            <span className="text-[16px]  text-black">
-              325A, Lane B, Rajaji Road SN Puram, North Sector, Bengaluru Pin -
-              650 005
-            </span>
-            <span className="text-[16px]  text-black">Ajith Krishnakumar</span>
-            <span className="text-[16px]  text-black">Son</span>
-            <span className="text-[16px]  text-black">
-              ajithk1996@gmail.com
-            </span>
-            <span className="text-[16px]  text-black">8989056458</span>
-          </div>
-        </div>
-        <div className=" text-black text-[16px] ">
-          <p className=" px-8 font-semibold border-b-1 border-[#BBBBBB] pb-[18px]">
-            Preferred Languages
-          </p>
-          <div className="flex  gap-[180px] text-[16px]  text-black pt-[15px] pb-[19px] px-8">
-            <span className="text-[16px]  text-black">Languages</span>
-            <span className="text-[16px]  text-black">Kannada, English</span>
+          <div className="flex flex-col gap-[10px] text-[16px] text-black">
+            <span>{booking.preferredGender || "-"}</span>
+            <span>{booking.preferredLanguages?.join(", ") || "-"}</span>
           </div>
         </div>
       </div>
 
-      <div className=" w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
-        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">
-            Service Required
-          </h1>
-        </div>
-        <div className="flex gap-10 p-8">
-          <div className="flex flex-col gap-[10px] text-[16px]  text-black">
-            <span className="text-[16px]  text-black">Service Required</span>
-            <span className="text-[16px]  text-black">Daily Schedule</span>
-            <span className="text-[16px]  text-black">
-              Service period (From)
-            </span>
-            <span className="text-[16px]  text-black">Service period (To)</span>
-          </div>
-          <div className="flex flex-col gap-[10px] text-[16px]  text-black">
-            <span className="text-[16px]  text-black">Nursing Assistant</span>
-
-            <span className="text-[16px]  text-black">24 hrs</span>
-
-            <span className="text-[16px]  text-black">02 April 2025</span>
-            <span className="text-[16px]  text-black">17 April 2025</span>
-          </div>
-        </div>
-      </div>
-      <div className=" w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
-        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">
-            Service Required
-          </h1>
-        </div>
-        <div className="flex gap-10 p-8">
-          <div className="flex flex-col gap-[10px] text-[16px]  text-black">
-            <span className="text-[16px]  text-black">Staff Preference</span>
-            <span className="text-[16px]  text-black">Preferred Language</span>
-
-          </div>
-          <div className="flex flex-col gap-[10px] text-[16px]  text-black">
-            <span className="text-[16px]  text-black">Male</span>
-            <span className="text-[16px]  text-black">Hindi,Malayalam</span>
-
-          </div>
-        </div>
-      </div>
-      <div className=" w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB] mb-5">
+      {/* ACTION BUTTONS */}
+      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB] mb-5">
         <div className="w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px] border-b-2">
           <h1 className="text-[16px] font-semibold text-black">Action</h1>
         </div>
-        <div className="flex gap-8 px-[39px] py-[24px] ">
+        <div className="flex gap-8 px-[39px] py-[24px]">
           <button className="w-[192px] h-[40px] bg-[#FFD1D9] text-[#333333] flex justify-center items-center rounded-[15px]">
             Cancel Service
           </button>
-          <button className="w-[192px] h-[40px] bg-white text-[#333333] border flex justify-center items-center rounded-[15px]">
+          {/* <button className="w-[192px] h-[40px] bg-white text-[#333333] border flex justify-center items-center rounded-[15px]">
             Edit Service
-          </button>
-          <button  onClick={handleConfirmClick} className="w-[192px] h-[40px] bg-[#09B438] text-white flex justify-center items-center rounded-[15px]">
+          </button> */}
+          <button
+            onClick={handleConfirmClick}
+            className="w-[192px] h-[40px] bg-[#09B438] text-white flex justify-center items-center rounded-[15px]"
+          >
             Confirm
           </button>
         </div>
       </div>
-        {showPopup && (
-        <ConfirmPopup onClose={handlePopupClose} onConfirm={handlePopupConfirm} />
+
+     {showPopup && (
+        <ConfirmPopup
+          userId={booking.userId}
+          onClose={handlePopupClose}
+          onConfirm={handlePopupConfirm}
+        />
       )}
     </div>
+   
   );
 };
 
-export default page;
+export default BookingDetailsPage;
