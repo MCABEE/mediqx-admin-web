@@ -1,9 +1,11 @@
-// src/store/useBookingStore.js
+// src/lib/store/bookingStore.js
+
 import { create } from "zustand";
-import { getBookingDetails } from "@/api/bookingApi";
+import { getBookingDetails, createBooking, getBookingById } from "@/api/bookingApi";
 
 const useBookingStore = create((set) => ({
   bookings: [],
+  selectedBooking: null,     // New state to hold single booking details
   page: 1,
   limit: 10,
   totalPages: 0,
@@ -11,6 +13,7 @@ const useBookingStore = create((set) => ({
   isLoading: false,
   error: null,
 
+  // Fetch all bookings (existing)
   fetchBookings: async (page = 1, limit = 10) => {
     set({ isLoading: true });
     try {
@@ -30,7 +33,39 @@ const useBookingStore = create((set) => ({
     }
   },
 
+  // Fetch a single booking by ID
+  fetchBookingById: async (id) => {
+    set({ isLoading: true, selectedBooking: null, error: null });
+    try {
+      const data = await getBookingById(id);
+      set({ selectedBooking: data });
+    } catch (err) {
+      set({ error: err.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  // Set page
   setPage: (page) => set({ page }),
+
+  // Create a new booking
+  submitBooking: async (formData) => {
+    set({ isLoading: true, error: null });
+    try {
+      const data = await createBooking(formData);
+      set((state) => ({
+        bookings: [data, ...state.bookings],
+        totalBookings: state.totalBookings + 1,
+        error: null,
+        isLoading: false,
+      }));
+      return { success: true, data };
+    } catch (err) {
+      set({ error: err.message, isLoading: false });
+      return { success: false, error: err.message };
+    }
+  },
 }));
 
 export default useBookingStore;
