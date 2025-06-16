@@ -34,3 +34,14 @@ export const getBookingById = async (id) => {
   });
   return response.data.data; // Assuming `data` is the nested object
 };
+
+
+
+
+
+
+
+export const confirmBookingApi = async (bookingId, payload) => {
+  const response = await api.put(`/admin/bookings/${bookingId}/confirm`, payload);
+  return response.data;
+};

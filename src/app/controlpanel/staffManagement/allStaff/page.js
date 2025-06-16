@@ -10,7 +10,7 @@ const page = () => {
         <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
           <p>All</p>
           <p>Nurse</p>
-          <p>Paramedical</p>
+          <p>Paramedical</p> 
           <p>Doctor</p>
 
           <p>Supervisor</p>

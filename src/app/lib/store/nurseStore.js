@@ -6,7 +6,7 @@ const useNurseStore = create(
   persist(
     (set, get) => ({
       users: [],
-      isLoading: false,
+      isLoading: false, 
       error: null,
       page: 1,
       limit: 10,
@@ -14,10 +14,10 @@ const useNurseStore = create(
       totalUsers: 0,
       selectedNurse: null,
 
-      fetchNurses: async (page = 1, limit = 10) => {
+      fetchNurses: async (page = 1, limit = 10,status) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await getNurses(page, limit);
+          const response = await getNurses(page, limit,status);
           const nurseData = response?.data?.data?.users || [];
           set({
             users: nurseData,

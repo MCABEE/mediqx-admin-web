@@ -1,16 +1,17 @@
 import api from "./axiosInstance";
-export const getNurses = async (page = 1, limit = 10) => {
+export const getNurses = async (page = 1, limit = 10,status) => {
     try {
-      const response = await api.get(`/admin/users?page=${page}&limit=${limit}&filter=NEW`);
+      const response = await api.get(`/admin/users?page=${page}&limit=${limit}&filter=${status}`);
       console.log(response);
       
       return response;
-    } catch (error) {
+    } catch (error) { 
       const errorMessage =
         error.response?.data?.message || "Failed to fetch users.";
       throw new Error(errorMessage);
     }
   }; 
+  
  
   export const getNurseById = async (userId) => {
     try {

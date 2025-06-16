@@ -9,7 +9,7 @@ const Table = () => {
     fetchNurses,
     fetchNurseById,
     isLoading,
-    error,
+    error, 
     limit,
     totalPages,
     totalUsers,
@@ -18,7 +18,7 @@ const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchNurses(currentPage, limit);
+    fetchNurses(currentPage, limit,"NEW");
   }, [currentPage, fetchNurses, limit]);
 
   const handleNameClick = async (userId) => {
