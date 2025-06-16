@@ -1,7 +1,7 @@
 // src/lib/store/bookingStore.js
 
 import { create } from "zustand";
-import { getBookingDetails, createBooking, getBookingById } from "@/api/bookingApi";
+import { getBookingDetails, createBooking, getBookingById,confirmBookingApi } from "@/api/bookingApi";
 
 const useBookingStore = create((set) => ({
   bookings: [],
@@ -66,6 +66,27 @@ const useBookingStore = create((set) => ({
       return { success: false, error: err.message };
     }
   },
+
+
+
+
+
+
+ confirmBooking: async (bookingId, payload) => {
+    try {
+      set({ isLoading: true });
+      const res = await confirmBookingApi(bookingId, payload);
+      set({ isLoading: false });
+      return res;
+    } catch (err) {
+      set({ error: err.message, isLoading: false });
+      throw err;
+    }
+  },
+
+
+
+
 }));
 
 export default useBookingStore;

@@ -183,7 +183,7 @@ const Page = () => {
                     </Link>
                     <td className="border-l-4 border-[#C0D8F6] p-2">{booking.location}</td>
                     <td className="border-l-4 border-[#C0D8F6] p-2">
-                      {new Date(booking.requestedAt || booking.startDate).toLocaleDateString("en-IN", {
+                      {new Date( booking.startDate).toLocaleDateString("en-IN", {
                         day: "numeric",
                         month: "short",
                       })}
