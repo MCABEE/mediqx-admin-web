@@ -411,10 +411,10 @@ const handleEditSave = (updatedData) => {
     <span className="w-[250px] font-medium">Email ID</span>
     <span>{booking.contactPersonEmail}</span>
   </div>
-    {/* <div className="flex">
-    <span className="w-[250px] font-medium">Email ID</span>
-    <span>{booking.contactPersonEmail}</span>
-  </div> */}
+    <div className="flex">
+    <span className="w-[250px] font-medium">Mobile Number</span>
+    <span>{booking.contactPersonMobileNumber}</span>
+  </div>
 </div>
 
 
@@ -509,6 +509,7 @@ const handleEditSave = (updatedData) => {
 
      {showPopup && (
         <ConfirmPopup
+        scheduleType={booking.scheduleType}
   bookingId={id}
   onClose={handlePopupClose}
   onConfirm={handlePopupConfirm}
