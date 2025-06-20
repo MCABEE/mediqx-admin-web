@@ -118,10 +118,11 @@ const Page = () => {
     error,
     setPage,
     totalBookings
+  
   } = useBookingStore();
 
   useEffect(() => {
-    fetchBookings(page);
+    fetchBookings(1, 10, "PENDING");
   }, [page]);
 
   const groupedBookings = groupBookingsByDate(bookings);

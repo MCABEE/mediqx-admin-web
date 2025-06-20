@@ -14,10 +14,10 @@ const useBookingStore = create((set) => ({
   error: null,
 
   // Fetch all bookings (existing)
-  fetchBookings: async (page = 1, limit = 10) => {
+  fetchBookings: async (page = 1, limit = 10,status) => {
     set({ isLoading: true });
     try {
-      const data = await getBookingDetails(page, limit);
+      const data = await getBookingDetails(page, limit,status);
       set({
         bookings: data.bookings || [],
         totalPages: data.totalPages || 0,

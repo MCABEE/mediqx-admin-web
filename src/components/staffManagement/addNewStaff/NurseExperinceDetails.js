@@ -727,12 +727,12 @@ const handleSubmit = async () => {
   setIsSubmitted(false); // reset in case of re-tries
 
   if (
-    !formData.yearsOfExperience ||
-    !formData.monthsOfExperience ||
-    !formData.providerName ||
-    !formData.providerState ||
-    !formData.providerLocation ||
-    !formData.department ||
+    // !formData.yearsOfExperience ||
+    // !formData.monthsOfExperience ||
+    // !formData.providerName ||
+    // !formData.providerState ||
+    // !formData.providerLocation ||
+    // !formData.department ||
     !formData.startDate ||
     (!formData.onGoing && !formData.endDate) ||
     formData.skills.length === 0

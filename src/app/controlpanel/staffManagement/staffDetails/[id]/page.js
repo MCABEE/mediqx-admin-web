@@ -387,25 +387,40 @@ function StaffDetailPage() {
             <button><img src="/delete-btn.svg" alt="delete" /></button>
           </div>
         </div>
+    <div className="flex justify-between px-[39px]">
+          <h1 className="text-[16px] font-semibold text-black py-[18px]">Basics</h1>
+          <button onClick={() => setIsEditModalOpen(true)}>
+            <img src="/edit-btn.svg" className="size-6" alt="edit" />
+          </button>
+        </div>
+        <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
+          <div className="flex gap-[18px]"><span className="w-[280px]">Full Name</span><span>{selectedNurse.fullName}</span></div>
 
+          <div className="flex gap-[18px]"><span className="w-[280px]">Gender</span><span>{selectedNurse.gender}</span></div>
+          <div className="flex gap-[18px]"><span className="w-[280px]">State</span><span>{address.state}</span></div>
+          <div className="flex gap-[18px]"><span className="w-[280px]">District</span><span>{address.district}</span></div>
+          <div className="flex gap-[18px]"><span className="w-[280px]">City</span><span>{address.city}</span></div>
+          <div className="flex gap-[18px]"><span className="w-[280px]">Pin Code</span><span>{address.pincode}</span></div>
+
+          <div className="flex gap-[18px]"><span className="w-[280px]">Email</span><span>{selectedNurse.email}</span></div>
+          <div className="flex gap-[18px]"><span className="w-[280px]">Phone Number</span><span>{selectedNurse.mobileNumber}</span></div>
+          <div className="flex gap-[18px]"><span className="w-[280px]">Qualification</span><span>{nurseData.educationQualifications}</span></div>
+          <div className="flex gap-[18px]"><span className="w-[280px]">Specialization</span><span>{nurseData.specializations[0]}</span></div>
+          <div className="flex gap-[18px]"><span className="w-[280px]">Fulltime / Part time</span><span>{nurseData.workSchedule}</span></div>
+
+          {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
+        </div>
         {/* Basic Details */}
         <div className="px-[39px] pt-[15px]">
-          <h1 className="text-[16px] font-semibold text-black pb-[18px]">Basics</h1>
-          <div className="flex gap-10">
-            <div className="flex flex-col gap-[10px] text-black">
-              <span>Current Location</span>
-              <span>Qualification</span>
-              <span>Experience Level</span>
-            </div>
-            <div className="flex flex-col gap-[10px] text-black">
-              <span>{nurseData.currentLocation || address.city || "Nil"}</span>
-              <span>{education[0] || "Nil"}</span>
-              <span>{nurseData.experienceLevel || "Nil"}</span>
-            </div>
-          </div>
+         
 
           {/* Availability */}
           <AvailabilitySchedule availabilities={availabilities} />
+          <h1 className="text-[16px] font-semibold text-black py-[18px]">Work Experience?</h1>
+          <div className="flex gap-[18px]">
+              <span className="w-[280px]">Previous Work Experience </span>
+              <span>{nurseData.experienceLevel || "Nil"}</span>
+            </div>
 
           {/* Experience */}
           <h1 className="text-[16px] font-semibold text-black py-[18px]">Experience details</h1>
@@ -415,16 +430,63 @@ function StaffDetailPage() {
               <span>{nurseData.yearsOfExperience}Yr {nurseData.monthsOfExperience}Mo </span>
             </div>
             <div className="flex gap-[18px]">
-              <span className="w-[280px]">Last Hospital</span>
-              <span>{nurseData.lastWorkedHospital || "Nil"}</span>
+              <span className="w-[280px]">Last Hospital(Last Worked)</span>
+              <span>{qualifications.providerName || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Specializations</span>
-              <span>{nurseData.specializations || "Nil"}</span>
+              <span>{qualifications.department || "Nil"}</span>
+            </div>
+            <div className="flex gap-[18px]">
+              <span className="w-[280px]">State</span>
+              <span>{qualifications.providerState || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Location</span>
-              <span>{qualifications.providerLocation}, {qualifications.providerState}</span>
+              <span>{qualifications.providerLocation || "Nil"}</span>
+            </div>
+            
+            <div className="flex gap-[18px]">
+              <span className="w-[280px]">Working Duration</span>
+              {/* <span>{qualifications.startDate}, {qualifications.endDate}</span> */}
+
+      {/* <span>
+  {new Date(qualifications.startDate).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  })}
+  {" - "}
+  {qualifications.onGoing
+    ? "Present"
+    : new Date(qualifications.endDate).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })}
+</span> */}
+
+
+<span>
+  {qualifications.startDate && !isNaN(Date.parse(qualifications.startDate))
+    ? new Date(qualifications.startDate).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : ""}
+  {" - "}
+  {qualifications.onGoing
+    ? "Present"
+    : qualifications.endDate && !isNaN(Date.parse(qualifications.endDate))
+    ? new Date(qualifications.endDate).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : ""}
+</span>
+
             </div>
             {/* <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
@@ -478,23 +540,18 @@ function StaffDetailPage() {
         })}
 
         {/* Contact Details with edit */}
-        <div className="flex justify-between px-[39px]">
-          <h1 className="text-[16px] font-semibold text-black py-[18px]">Contact Details</h1>
-          <button onClick={() => setIsEditModalOpen(true)}>
-            <img src="/edit-btn.svg" className="size-6" alt="edit" />
-          </button>
-        </div>
-        <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
-          <div className="flex gap-[18px]"><span className="w-[280px]">Gender</span><span>{selectedNurse.gender}</span></div>
-          <div className="flex gap-[18px]"><span className="w-[280px]">Full Name</span><span>{selectedNurse.fullName}</span></div>
-          <div className="flex gap-[18px]"><span className="w-[280px]">Email</span><span>{selectedNurse.email}</span></div>
-          <div className="flex gap-[18px]"><span className="w-[280px]">Phone Number</span><span>{selectedNurse.mobileNumber}</span></div>
-          <div className="flex gap-[18px]"><span className="w-[280px]">State</span><span>{address.state}</span></div>
-          <div className="flex gap-[18px]"><span className="w-[280px]">District</span><span>{address.district}</span></div>
-          <div className="flex gap-[18px]"><span className="w-[280px]">City</span><span>{address.city}</span></div>
-          {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
-          <div className="flex gap-[18px]"><span className="w-[280px]">Pin Code</span><span>{address.pincode}</span></div>
-        </div>
+    
+ {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
+          <div className="flex flex-col text-black font-light gap-[18px] px-[39px]">
+            {/* <div className="flex gap-[18px]">
+              <span className="w-[280px]">Any refferal you have?</span>
+             <span>{selectedNurse.referredById ? "Yes" : "No"}</span>
+            </div> */}
+            {/* <div className="flex gap-[18px]">
+              <span className="w-[280px]">Code</span>
+              <span></span>
+            </div> */}
+            </div>
 
         {/* Actions */}
         <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Actions</h1>

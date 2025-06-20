@@ -509,6 +509,7 @@ const handleEditSave = (updatedData) => {
 
      {showPopup && (
         <ConfirmPopup
+        fullName={booking.fullName}
         scheduleType={booking.scheduleType}
   bookingId={id}
   onClose={handlePopupClose}
