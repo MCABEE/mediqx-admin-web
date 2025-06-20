@@ -59,7 +59,7 @@
 import React, { useState } from "react";
 import useBookingStore from "@/app/lib/store/bookingStore";
 
-const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType }) => {
+const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) => {
   const [assignedDuty, setAssignedDuty] = useState("");
   const [assignedMaterials, setAssignedMaterials] = useState("");
   const [assignedRemarks, setAssignedRemarks] = useState("");
@@ -136,7 +136,7 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType }) => {
         </div>
 
         <h2 className="text-xl text-center font-semibold text-[#333333] py-6 border-b-[1px] border-b-[#BBBBBB]">
-          Pradeep Kumar N
+          {fullName}
         </h2>
 
         <div className="px-[140px] h-[450px] overflow-y-scroll mb-4">
