@@ -18,7 +18,7 @@ const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchNurses(currentPage, limit,"ALL");
+    fetchNurses(currentPage, limit,"APPROVED");
   }, [currentPage, fetchNurses, limit]);
 
   const handleNameClick = async (userId) => {

@@ -29,7 +29,8 @@ const Navlink = () => {
             : "border-b-2 border-transparent"
         }`}
       >
-        All Staff (Available)
+        {/* All Staff (Available) */}
+        Confirmed Staff
       </Link>
       <Link
         href="/controlpanel/staffManagement/availabilityCalendar"

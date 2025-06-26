@@ -1,7 +1,7 @@
 // src/lib/store/bookingStore.js
 
 import { create } from "zustand";
-import { getBookingDetails, createBooking, getBookingById,confirmBookingApi } from "@/api/bookingApi";
+import { getBookingDetails, createBooking, getBookingById,confirmBookingApi,assignNurseToBooking } from "@/api/bookingApi";
 
 const useBookingStore = create((set) => ({
   bookings: [],
@@ -37,7 +37,7 @@ const useBookingStore = create((set) => ({
   fetchBookingById: async (id) => {
     set({ isLoading: true, selectedBooking: null, error: null });
     try {
-      const data = await getBookingById(id);
+      const data = await getBookingById(id); 
       set({ selectedBooking: data });
     } catch (err) {
       set({ error: err.message });
@@ -85,6 +85,25 @@ const useBookingStore = create((set) => ({
   },
 
 
+
+  assignNurse: async (bookingId, nurseId) => {
+  try {
+    
+    set({ isLoading: true });
+    const response = await assignNurseToBooking(bookingId, nurseId);
+    console.log(response);
+
+    set({ isLoading: false });
+
+    return { success: true, data: response };
+    
+  } catch (err) {
+    set({ error: err.message, isLoading: false });
+    console.log(err);
+
+    return { success: false, error: err.message };
+  }
+},
 
 
 }));

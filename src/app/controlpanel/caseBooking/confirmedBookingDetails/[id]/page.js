@@ -106,10 +106,10 @@ const BookingDetailsPage = () => {
     <span className="w-[250px] font-medium">Residential Address</span>
     <span>{booking.city} </span>
   </div>
-  <div className="flex">
+  {/* <div className="flex">
     <span className="w-[250px] font-medium">Pincode</span>
     <span>{booking.pincode}</span>
-  </div>
+  </div> */}
   <div className="flex">
     <span className="w-[250px] font-medium">Contact person</span>
     <span>{booking.contactPersonName}</span>
@@ -200,11 +200,26 @@ const BookingDetailsPage = () => {
           <h1 className="text-[16px] font-semibold text-black">Action</h1>
         </div>
           <div className="flex gap-8 px-[39px] py-[24px] ">
-          <Link href={"/controlpanel/caseBooking/assignStaff"}>
-          <button className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer">
-          Assign Staff
-          </button>
-          </Link>
+         
+              <Link
+  href={{
+    pathname: "/controlpanel/caseBooking/assignStaff",
+    query: {
+      bookingId:booking.id,
+      fullName:booking.fullName,
+      from: booking.startDate,
+      to: booking.endDate,
+      service: booking.serviceType,
+      schedule: booking.durationValue,
+      gender: booking.preferredGender,
+      language: booking.preferredLanguages?.join(", "),
+      location: `${booking.city}`,
+    },
+  }}
+>
+  <button className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer">
+    Assign Staff</button>
+</Link>
           <button className="w-[192px] h-[40px] bg-white text-black border flex justify-center items-center rounded-[15px]">
             Edit Service
           </button>
