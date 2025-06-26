@@ -38,7 +38,8 @@ function allStaffDetailPage() {
       <Navlink />
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
-        <Link href="/controlpanel/staffManagement/allStaff">Back</Link>
+        {/* <Link href="/controlpanel/staffManagement/allStaff">Back</Link> */}
+         <button onClick={() => router.back()}>Back</button>
       </div>
 
       {/* <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 rounded-[15px] mt-4">

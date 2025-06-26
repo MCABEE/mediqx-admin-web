@@ -45,3 +45,20 @@ export const confirmBookingApi = async (bookingId, payload) => {
   const response = await api.put(`/admin/bookings/${bookingId}/confirm`, payload);
   return response.data;
 };
+
+
+
+
+export const assignNurseToBooking = async (bookingId, nurseId) => {
+  const response = await api.post(
+    `/admin/nurse-assignment/${bookingId}/nurses`,
+    { nurseId },
+    {
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};

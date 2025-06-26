@@ -395,10 +395,10 @@ const handleEditSave = (updatedData) => {
     <span className="w-[250px] font-medium">Residential Address</span>
     <span>{booking.city} </span>
   </div>
-  <div className="flex">
+  {/* <div className="flex">
     <span className="w-[250px] font-medium">Pincode</span>
     <span>{booking.pincode}</span>
-  </div>
+  </div> */}
   <div className="flex">
     <span className="w-[250px] font-medium">Contact person</span>
     <span>{booking.contactPersonName}</span>
@@ -500,7 +500,7 @@ const handleEditSave = (updatedData) => {
 </button>
           <button
             onClick={handleConfirmClick}
-            className="w-[192px] h-[40px] bg-[#09B438] text-white flex justify-center items-center rounded-[15px]"
+            className="w-[192px] h-[40px] bg-[#09B438] text-white flex justify-center items-center rounded-[15px] cursor-pointer"
           >
             Confirm
           </button>

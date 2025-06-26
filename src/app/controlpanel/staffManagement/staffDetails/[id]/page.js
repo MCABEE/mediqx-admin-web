@@ -564,7 +564,7 @@ function StaffDetailPage() {
 
       {/* Confirm Modal */}
       {modalData.show && (
-        <div className="fixed inset-0 flex items-center justify-center bg-[#9b989876] z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-[#9b989876] backdrop-blur-xs z-50">
           <div className="bg-white rounded-xl p-6 w-[400px] text-center shadow-lg">
             <h2 className="text-lg font-semibold mb-4">Confirm {modalData.action}</h2>
             <p>Are you sure you want to <strong>{modalData.action.toLowerCase()}</strong> nurse <strong>{selectedNurse.fullName}</strong>?</p>
@@ -582,7 +582,7 @@ function StaffDetailPage() {
 
       {/* Preview Modal */}
       {preview.show && (
-        <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
           <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
             <button onClick={() => setPreview({ show: false, fileUrl: "", isImage: false })} className=" w-7  h-7 absolute top-0 -right-8 bg-[#ffff] rounded-full text-gray-500 hover:text-black text-xl font-semibold cursor-pointer">✕</button>
             {preview.isImage ? (

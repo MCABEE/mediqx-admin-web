@@ -101,7 +101,7 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
       assignedRemarks,
       assignedLocation,
       // ✅ Add to payload only if CUSTOM
-      ...(scheduleType === "CUSTOM" && {
+      ...(scheduleType === "CUSTOM_HOURS" && {
         assignedDurationHours: parseInt(assignedDurationHours || "0"),
         assignedDurationMinutes: parseInt(assignedDurationMinutes || "0"),
       }),
@@ -194,7 +194,7 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
           </div>
 
           {/* ✅ Duration if CUSTOM */}
-          {scheduleType === "CUSTOM" && (
+          {scheduleType === "CUSTOM_HOURS" && (
             <div className="mt-4">
               <div className="flex items-center gap-8">
                 <h3 className="text-xl font-semibold text-[#333333] mb-2">Duration</h3>
@@ -232,10 +232,10 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
           )}
 
           {/* Submit */}
-          <div className="flex justify-center items-center mt-8 mb-10">
+          <div className="flex justify-center items-center mt-8 mb-10 ">
             <button
               onClick={handleSubmit}
-              className="w-[192px] h-[40px] bg-[#3674B5] text-white rounded-[15px]"
+              className="w-[192px] h-[40px] bg-[#3674B5] text-white rounded-[15px] cursor-pointer"
             >
               Submit
             </button>
