@@ -7,7 +7,7 @@ import { login } from "@/api/auth"; // adjust path if needed
 
 export default function Home() {
   const [mobileNumber, setMobileNumber] = useState("");
-  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ export default function Home() {
     setLoading(true); // Start loading
 
     try {
-      const data = await login(mobileNumber, otp);
+      const data = await login(mobileNumber, password);
       const accessToken = data?.data.accessToken;
 
       if (accessToken) {
@@ -79,12 +79,12 @@ export default function Home() {
                   required
                 />
                 <input
-                  id="otp"
+                  id="password"
                   type="text"
                   className="px-4 py-3.5 w-full bg-white border border-neutral-400 rounded-xl text-[#333333]"
-                  placeholder="Otp"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>

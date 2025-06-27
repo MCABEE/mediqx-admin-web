@@ -509,7 +509,13 @@ const AssignStaffTable = ({ onSelectNurse }) => {
     setSelectedNurse(nurse);
     setShowConfirm(true);
   };
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
   // const handleConfirm = () => {
   //   if (selectedNurse) {
   //     onSelectNurse?.(selectedNurse.userId);
