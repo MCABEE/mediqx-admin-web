@@ -7,10 +7,6 @@ import Navlink from "@/components/staffManagement/Navlink";
 import React, { useState } from "react";
 
 function page() {
-
-
-
-
   return (
     <div>
       <Navlink />
@@ -29,26 +25,18 @@ function page() {
       </div>
 
       <div className="bg-white border-[1px] border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
-        <NurseBasicInformation/>
+        <NurseBasicInformation />
 
-       <div>
-        <NurseExperinceDetails/>
-       </div>
+        <div>
+          <NurseExperinceDetails />
+        </div>
 
         <div className="px-[39px] pt-[15px]">
-       <UploadCertificate/>
+          <UploadCertificate />
 
-         
-         <div className="flex gap-x-[20px]">
-  
-
-    <AddNurseAvailability/>
-
-
-
-</div>
-
-        
+          <div className="flex gap-x-[20px]">
+            <AddNurseAvailability />
+          </div>
         </div>
       </div>
     </div>

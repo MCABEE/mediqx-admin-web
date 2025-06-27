@@ -1,16 +1,17 @@
-// src/api/bookingApi.js
 import api from "./axiosInstance";
 
-export const getBookingDetails = async (page = 1, limit = 10,status) => {
-  const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&status=${status}`, {
-  // const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&filter=${status}`, {
+export const getBookingDetails = async (page = 1, limit = 10, status) => {
+  const response = await api.get(
+    `/admin/bookings?page=${page}&limit=${limit}&status=${status}`,
+    {
+      // const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&filter=${status}`, {
 
-    headers: { accept: "application/json" },
-  });
+      headers: { accept: "application/json" },
+    }
+  );
 
-  return response.data.data; // directly return the data object
+  return response.data.data;
 };
-
 
 export const createBooking = async (payload) => {
   const response = await api.post("/admin/bookings", payload, {
@@ -23,11 +24,6 @@ export const createBooking = async (payload) => {
   return response.data.data;
 };
 
-
-
-
-
-
 export const getBookingById = async (id) => {
   const response = await api.get(`/service-requests/${id}`, {
     headers: {
@@ -37,19 +33,13 @@ export const getBookingById = async (id) => {
   return response.data.data; // Assuming `data` is the nested object
 };
 
-
-
-
-
-
-
 export const confirmBookingApi = async (bookingId, payload) => {
-  const response = await api.put(`/admin/bookings/${bookingId}/confirm`, payload);
+  const response = await api.put(
+    `/admin/bookings/${bookingId}/confirm`,
+    payload
+  );
   return response.data;
 };
-
-
-
 
 export const assignNurseToBooking = async (bookingId, nurseId) => {
   const response = await api.post(
