@@ -158,9 +158,9 @@ function StaffDetailPage() {
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
             Work Experience?
           </h1>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">Previous Work Experience </span>
-            <span>{nurseData.experienceLevel || "Nil"}</span>
+          <div className="flex gap-[18px] text-black">
+            <span className="w-[280px]  text-black">Previous Work Experience </span>
+            <span className=" text-black">{nurseData.experienceLevel || "Nil"}</span>
           </div>
 
           {/* Experience */}
@@ -360,11 +360,11 @@ function StaffDetailPage() {
       {/* Confirm Modal */}
       {modalData.show && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#9b989876] backdrop-blur-xs z-50">
-          <div className="bg-white rounded-xl p-6 w-[400px] text-center shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">
+          <div className="bg-white rounded-xl p-6 w-[400px] text-center shadow-lg text-black">
+            <h2 className="text-lg font-semibold mb-4 text-black">
               Confirm {modalData.action}
             </h2>
-            <p>
+            <p className="text-black">
               Are you sure you want to{" "}
               <strong>{modalData.action.toLowerCase()}</strong> nurse{" "}
               <strong>{selectedNurse.fullName}</strong>?

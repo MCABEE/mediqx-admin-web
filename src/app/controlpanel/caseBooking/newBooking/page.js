@@ -18,7 +18,7 @@ const Page = () => {
   } = useBookingStore();
 
   useEffect(() => {
-    fetchBookings(1, 10, "PENDING");
+    fetchBookings(1, 10, "NEW");
   }, [page]);
 
   const groupedBookings = groupBookingsByDate(bookings);

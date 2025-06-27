@@ -553,8 +553,8 @@ const AssignStaffTable = ({ onSelectNurse }) => {
       {showConfirm && (
         <div className="fixed inset-0 z-50 bg-[#1a191959] backdrop-blur-xs flex items-center justify-center">
           <div className="bg-white p-8 rounded-xl shadow-md w-[300px] text-center">
-            <p className=" font-thin  mb-4">
-            Are You Sure that you want to assign nurse <span className="font-semibold">"{selectedNurse?.fullName}"</span>?
+            <p className=" font-thin  mb-4  text-black">
+            Are You Sure that you want to assign nurse <span className="font-semibold  text-black">"{selectedNurse?.fullName}"</span>?
             </p>
             <div className="flex justify-center gap-4 mt-6">
               <button
@@ -565,7 +565,7 @@ const AssignStaffTable = ({ onSelectNurse }) => {
               </button>
               <button
                 onClick={handleCancel}
-                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 cursor-pointer"
+                className="bg-gray-300 px-4 py-2 rounded text-black hover:bg-gray-400 cursor-pointer"
               >
                 No
               </button>
@@ -591,56 +591,37 @@ const AssignStaffTable = ({ onSelectNurse }) => {
               <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">Action</th>
             </tr>
           </thead>
+<tbody>
+  {groupedUsers &&
+    Object.values(groupedUsers).flat().map((nurse, index) => {
+      const name = nurse.fullName || "";
+      const location = nurse.location || "";
+      const gender = nurse.gender || "";
+      const qualification = nurse.educationQualifications || "";
 
-          <tbody>
-            {groupedUsers &&
-              Object.entries(groupedUsers).map(([date, nurses]) => (
-                <React.Fragment key={date}>
-                  <tr>
-                    <td
-                      colSpan="6"
-                      className="rounded-t-2xl p-2 bg-[#C0D8F6] text-[16px] font-semibold"
-                    >
-                      {new Date(date).toLocaleDateString("en-GB", {
-                        year: "numeric",
-                        month: "long",
-                        day: "2-digit",
-                        weekday: "long",
-                      })}
-                    </td>
-                  </tr>
-                  {nurses.map((nurse, index) => {
-                    const name = nurse.fullName || "";
-                    const location = nurse.location || "";
-                    const gender = nurse.gender || "";
-                    const qualification = nurse.educationQualifications || "";
+      return (
+        <tr key={nurse.userId || index} className="bg-white">
+          <td className="p-2">{index + 1}</td>
+          <td
+            className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline"
+            onClick={() => handleNameClick(nurse.userId)}
+          >
+            {name}
+          </td>
+          <td className="border-l-4 border-[#C0D8F6] p-2">{location}</td>
+          <td className="border-l-4 border-[#C0D8F6] p-2">{gender}</td>
+          <td className="border-l-4 border-[#C0D8F6] p-2">{qualification}</td>
+          <td
+            className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer text-blue-600 hover:underline"
+            onClick={() => handleAssignClick(nurse)}
+          >
+            Assign
+          </td>
+        </tr>
+      );
+    })}
+</tbody>
 
-                    return (
-                      <tr key={nurse.userId || index} className="bg-white">
-                        <td className="p-2">
-                          {(currentPage - 1) * limit + index + 1}
-                        </td>
-                        <td
-                          className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline"
-                          onClick={() => handleNameClick(nurse.userId)}
-                        >
-                          {name}
-                        </td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{location}</td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{gender}</td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{qualification}</td>
-                        <td
-                          className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer text-blue-600 hover:underline"
-                          onClick={() => handleAssignClick(nurse)}
-                        >
-                          Assign
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </React.Fragment>
-              ))}
-          </tbody>
         </table>
 
         {totalPages > 1 && (

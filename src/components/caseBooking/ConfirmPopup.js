@@ -146,7 +146,7 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
             <textarea
               value={assignedDuty}
               onChange={(e) => setAssignedDuty(e.target.value)}
-              className="border-[1px] border-[#BBBBBB] w-full h-[140px] rounded-[10px] p-3 outline-none"
+              className="border-[1px] border-[#BBBBBB]  text-black w-full h-[140px] rounded-[10px] p-3 outline-none"
             />
             {errors.assignedDuty && (
               <p className="text-red-500 text-sm mt-1">{errors.assignedDuty}</p>
@@ -159,7 +159,7 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
             <textarea
               value={assignedMaterials}
               onChange={(e) => setAssignedMaterials(e.target.value)}
-              className="border-[1px] border-[#BBBBBB] w-full h-[140px] rounded-[10px] p-3 outline-none"
+              className="border-[1px] border-[#BBBBBB]  text-black w-full h-[140px] rounded-[10px] p-3 outline-none"
               placeholder="Comma separated list"
             />
             {errors.assignedMaterials && (
@@ -173,7 +173,7 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
             <textarea
               value={assignedRemarks}
               onChange={(e) => setAssignedRemarks(e.target.value)}
-              className="border-[1px] border-[#BBBBBB] w-full h-[140px] rounded-[10px] p-3 outline-none"
+              className="border-[1px] border-[#BBBBBB]  text-black w-full h-[140px] rounded-[10px] p-3 outline-none"
             />
             {errors.assignedRemarks && (
               <p className="text-red-500 text-sm mt-1">{errors.assignedRemarks}</p>
@@ -186,7 +186,7 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
             <textarea
               value={assignedLocation}
               onChange={(e) => setAssignedLocation(e.target.value)}
-              className="border-[1px] border-[#BBBBBB] w-full h-[140px] rounded-[10px] p-3 outline-none"
+              className="border-[1px] border-[#BBBBBB]  text-black w-full h-[140px] rounded-[10px] p-3 outline-none"
             />
             {errors.assignedLocation && (
               <p className="text-red-500 text-sm mt-1">{errors.assignedLocation}</p>
@@ -197,12 +197,12 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
           {scheduleType === "CUSTOM_HOURS" && (
             <div className="mt-4">
               <div className="flex items-center gap-8">
-                <h3 className="text-xl font-semibold text-[#333333] mb-2">Duration</h3>
+                <h3 className="text-xl font-semibold  text-[#333333] mb-2">Duration</h3>
                 <div className="space-x-2">
                   <select
                     value={assignedDurationHours}
                     onChange={(e) => setAssignedDurationHours(e.target.value)}
-                    className="border-[1px] border-[#BBBBBB] rounded-[10px] p-3 outline-none"
+                    className="border-[1px] border-[#BBBBBB]  text-black rounded-[10px] p-3 outline-none"
                   >
                     <option value="">00</option>
                     {hourOptions.map((h) => (
@@ -215,7 +215,7 @@ const ConfirmPopup = ({ bookingId, onClose, onConfirm, scheduleType,fullName }) 
                   <select
                     value={assignedDurationMinutes}
                     onChange={(e) => setAssignedDurationMinutes(e.target.value)}
-                    className="border-[1px] border-[#BBBBBB] rounded-[10px] p-3 outline-none"
+                    className="border-[1px] border-[#BBBBBB]  text-black rounded-[10px] p-3 outline-none"
                   >
                     <option value="">00</option>
                     {minuteOptions.map((m) => (
