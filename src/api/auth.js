@@ -9,7 +9,7 @@ export const login = async (mobileNumber, password) => {
     console.log(response);
     
 
-    return response.data; // Contains token, refreshToken, user, etc.
+    return response.data; 
   } catch (error) {
     const errorMessage =
       error.response?.data?.message || "Login failed. Please try again.";
