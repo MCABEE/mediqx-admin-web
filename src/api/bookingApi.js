@@ -3,6 +3,8 @@ import api from "./axiosInstance";
 
 export const getBookingDetails = async (page = 1, limit = 10,status) => {
   const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&status=${status}`, {
+  // const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&filter=${status}`, {
+
     headers: { accept: "application/json" },
   });
 
