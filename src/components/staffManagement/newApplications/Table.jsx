@@ -87,20 +87,36 @@ const Table = () => {
                     const qualification = nurse.educationQualifications || "";
 
                     return (
-                      <tr key={nurse.userId || index} className="bg-white">
-                        <td className="p-2">
-                          {(currentPage - 1) * limit + index + 1}
-                        </td>
-                        <td
-                          className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline"
-                          onClick={() => handleNameClick(nurse.userId)}
-                        >
-                          {name}
-                        </td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{location}</td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{gender}</td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{qualification}</td>
-                      </tr>
+                      // <tr key={nurse.userId || index} className="bg-white">
+                      //   <td className="p-2">
+                      //     {(currentPage - 1) * limit + index + 1}
+                      //   </td>
+                      //   <td
+                      //     className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline"
+                      //     onClick={() => handleNameClick(nurse.userId)}
+                      //   >
+                      //     {name}
+                      //   </td>
+                      //   <td className="border-l-4 border-[#C0D8F6] p-2">{location}</td>
+                      //   <td className="border-l-4 border-[#C0D8F6] p-2">{gender}</td>
+                      //   <td className="border-l-4 border-[#C0D8F6] p-2">{qualification}</td>
+                      // </tr>
+                      <tr
+  key={nurse.userId || index}
+  className="bg-white cursor-pointer hover:bg-gray-100"
+  onClick={() => handleNameClick(nurse.userId)}
+>
+  <td className="p-2">
+    {(currentPage - 1) * limit + index + 1}
+  </td>
+  <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
+    {name}
+  </td>
+  <td className="border-l-4 border-[#C0D8F6] p-2">{location}</td>
+  <td className="border-l-4 border-[#C0D8F6] p-2">{gender}</td>
+  <td className="border-l-4 border-[#C0D8F6] p-2">{qualification}</td>
+</tr>
+
                     );
                   })}
                 </React.Fragment>

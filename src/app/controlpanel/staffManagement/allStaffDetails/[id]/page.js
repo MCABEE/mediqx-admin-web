@@ -39,7 +39,7 @@ function allStaffDetailPage() {
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
         {/* <Link href="/controlpanel/staffManagement/allStaff">Back</Link> */}
-         <button onClick={() => router.back()}>Back</button>
+         <button onClick={() => router.back()} className="cursor-pointer">Back</button>
       </div>
 
       {/* <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 rounded-[15px] mt-4">
@@ -60,12 +60,12 @@ function allStaffDetailPage() {
             <button className="w-[192px] h-[40px] bg-[#3674B5] text-white text-[16px] flex justify-center items-center rounded-[15px]">
               Check Calendar
             </button>
-            <button>
+            {/* <button>
               <img src="/edit-btn.svg" alt="edit" />
             </button>
             <button>
               <img src="/delete-btn.svg" alt="delete" />
-            </button>
+            </button> */}
           </div>
         </div>
 

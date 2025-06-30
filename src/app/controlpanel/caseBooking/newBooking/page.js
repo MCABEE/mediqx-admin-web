@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 import Navlink from "@/components/caseBooking/NavLink";
 import useBookingStore from "@/app/lib/store/bookingStore";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const {
@@ -22,7 +23,7 @@ const Page = () => {
   }, [page]);
 
   const groupedBookings = groupBookingsByDate(bookings);
-
+const router = useRouter()
   return (
     <div>
       <Navlink />
@@ -71,22 +72,40 @@ const Page = () => {
                   </td>
                 </tr>
                 {bookingsList.map((booking, i) => (
-                  <tr className="bg-white" key={booking.id}>
-                    <td className="p-2">{i + 1}</td>
-                    <Link href={`/controlpanel/caseBooking/bookingDetails/${booking.id}`}>
-                      <td className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline">
-                        {booking.fullName}
-                      </td>
-                    </Link>
-                    <td className="border-l-4 border-[#C0D8F6] p-2">{booking.location}</td>
-                    <td className="border-l-4 border-[#C0D8F6] p-2">
-                      {new Date( booking.startDate).toLocaleDateString("en-IN", {
-                        day: "numeric",
-                        month: "short",
-                      })}
-                    </td>
-                    <td className="border-l-4 border-[#C0D8F6] p-2">{booking.referralSource}</td>
-                  </tr>
+                  // <tr className="bg-white" key={booking.id}>
+                  //   <td className="p-2">{i + 1}</td>
+                  //   <Link href={`/controlpanel/caseBooking/bookingDetails/${booking.id}`}>
+                  //     <td className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline">
+                  //       {booking.fullName}
+                  //     </td>
+                  //   </Link>
+                  //   <td className="border-l-4 border-[#C0D8F6] p-2">{booking.location}</td>
+                  //   <td className="border-l-4 border-[#C0D8F6] p-2">
+                  //     {new Date( booking.startDate).toLocaleDateString("en-IN", {
+                  //       day: "numeric",
+                  //       month: "short",
+                  //     })}
+                  //   </td>
+                  //   <td className="border-l-4 border-[#C0D8F6] p-2">{booking.referralSource}</td>
+                  // </tr>
+                  <tr
+  key={booking.id}
+  className="bg-white cursor-pointer hover:bg-gray-100"
+  onClick={() => router.push(`/controlpanel/caseBooking/bookingDetails/${booking.id}`)}
+>
+  <td className="p-2">{i + 1}</td>
+  <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
+    {booking.fullName}
+  </td>
+  <td className="border-l-4 border-[#C0D8F6] p-2">{booking.location}</td>
+  <td className="border-l-4 border-[#C0D8F6] p-2">
+    {new Date(booking.startDate).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+    })}
+  </td>
+  <td className="border-l-4 border-[#C0D8F6] p-2">{booking.referralSource}</td>
+</tr>
                 ))}
               </React.Fragment>
             ))
