@@ -75,7 +75,7 @@ function StaffDetailPage() {
       <Navlink />
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
-        <Link href="/controlpanel/staffManagement">Back</Link>
+        <Link href="/controlpanel/staffManagement" className="cursor-pointer">Back</Link>
       </div>
 
       <div className="bg-white border border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
@@ -84,22 +84,22 @@ function StaffDetailPage() {
           <span className="text-[20px] font-semibold text-[#333333]">
             {selectedNurse.fullName}
           </span>
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4">
             <button>
               <img src="/edit-btn.svg" alt="edit" />
             </button>
             <button>
               <img src="/delete-btn.svg" alt="delete" />
             </button>
-          </div>
+          </div> */}
         </div>
         <div className="flex justify-between px-[39px]">
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
             Basics
           </h1>
-          <button onClick={() => setIsEditModalOpen(true)}>
+          {/* <button onClick={() => setIsEditModalOpen(true)}>
             <img src="/edit-btn.svg" className="size-6" alt="edit" />
-          </button>
+          </button> */}
         </div>
         <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
           <div className="flex gap-[18px]">
@@ -345,9 +345,9 @@ function StaffDetailPage() {
           >
             Reject
           </button>
-          <button className="w-[192px] h-[40px] bg-[#999999] text-white rounded-[15px] cursor-not-allowed">
+          {/* <button className="w-[192px] h-[40px] bg-[#999999] text-white rounded-[15px] cursor-not-allowed">
             Modify
-          </button>
+          </button> */}
           <button
             className="w-[192px] h-[40px] bg-[#09B438] text-white rounded-[15px] cursor-pointer"
             onClick={() => setModalData({ show: true, action: "APPROVED" })}

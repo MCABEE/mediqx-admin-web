@@ -417,6 +417,9 @@ import useBookingStore from "@/app/lib/store/bookingStore";
 
 const CaseBookingPage = () => {
   const { submitBooking } = useBookingStore();
+  const [langError, setLangError] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
 
   const [form, setForm] = useState({
     patientName: "",
@@ -461,38 +464,111 @@ const CaseBookingPage = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+//   const handleSubmit = async (e) => {
+   
+//     e.preventDefault();
+//  if (preferredLanguages.length === 0) {
+//       setLangError(true);
+//       return;
+//     } else {
+//       setLangError(false);
+//     }
+//     const payload = {
+//       ...form,
+//       contactPersonMobileNumber: form.contactPersonMobileNumber.startsWith(
+//         "+91"
+//       )
+//         ? form.contactPersonMobileNumber
+//         : `+91${form.contactPersonMobileNumber}`,
+//       age: Number(form.age),
+//       height: Number(form.height || 0),
+//       weight: Number(form.weight || 0),
+//       startDate: new Date(form.startDate).toISOString(),
+//       durationType: visitType,
+//       durationValue:
+//         visitType === "ONE_TIME_VISIT" ? "0" : Number(form.durationValue),
+//       weekdays,
+//       flexibility,
+//       preferredLanguages,
+//       preferredGender,
+//       serviceType: "OTHER",
+//       durationValue: (form.durationValue || 1),
+//     };
 
-    const payload = {
-      ...form,
-      contactPersonMobileNumber: form.contactPersonMobileNumber.startsWith(
-        "+91"
-      )
-        ? form.contactPersonMobileNumber
-        : `+91${form.contactPersonMobileNumber}`,
-      age: Number(form.age),
-      height: Number(form.height || 0),
-      weight: Number(form.weight || 0),
-      startDate: new Date(form.startDate).toISOString(),
-      durationType: visitType,
-      durationValue:
-       visitType === "ONE_TIME_VISIT" ? "0" : Number(form.durationValue),
-      weekdays,
-      flexibility,
-      preferredLanguages,
-      preferredGender,
-      serviceType: "OTHER",
-      durationValue: form.durationValue,
-    };
+//     const result = await submitBooking(payload);
+//     if (result.success) {
+//       alert("Booking created!");
+//     } else {
+//       alert("Error: " + result.error);
+//     }
+//   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const result = await submitBooking(payload);
-    if (result.success) {
-      alert("Booking created!");
-    } else {
-      alert("Error: " + result.error);
-    }
+  if (preferredLanguages.length === 0) {
+    setLangError(true);
+    return;
+  } else {
+    setLangError(false);
+  }
+
+  const payload = {
+    ...form,
+    contactPersonMobileNumber: form.contactPersonMobileNumber.startsWith("+91")
+      ? form.contactPersonMobileNumber
+      : `+91${form.contactPersonMobileNumber}`,
+    age: Number(form.age),
+    height: Number(form.height || 0),
+    weight: Number(form.weight || 0),
+    startDate: new Date(form.startDate).toISOString(),
+    durationType: visitType,
+    durationValue: visitType === "ONE_TIME_VISIT" ? "0" : Number(form.durationValue),
+    weekdays,
+    flexibility,
+    preferredLanguages,
+    preferredGender,
+    serviceType: "OTHER",
+    durationValue: form.durationValue || 1,
   };
+
+  const result = await submitBooking(payload);
+
+  if (result.success) {
+    setSuccessMessage("Booking successfully created.");
+    // Reset form
+    setForm({
+      patientName: "",
+      gender: "",
+      age: "",
+      height: "",
+      weight: "",
+      diagnosis: "",
+      healthStatus: "",
+      stayAt: "",
+      serviceType: "",
+      location: "",
+      pincode: "",
+      contactPersonName: "",
+      contactPersonRelation: "",
+      contactPersonEmail: "",
+      contactPersonMobileNumber: "",
+      scheduleType: "",
+      startDate: "",
+      durationType: "",
+      durationValue: "",
+      startTime: "",
+      endTime: "",
+    });
+    setVisitType("");
+    setWeekdays([]);
+    setFlexibility("");
+    setPreferredGender("");
+    setPreferredLanguages([]);
+  } else {
+    setSuccessMessage(" Failed to create booking. Please try again.");
+  }
+};
+
 
   const durationLabel = {
     FEW_DAYS: "Days",
@@ -506,7 +582,7 @@ const CaseBookingPage = () => {
       <Navlink />
       <form
         onSubmit={handleSubmit}
-        className="w-full mt-2 bg-white rounded-[15px] border-[1px] border-[#BBBBBB]"
+        className="w-full mt-2 bg-white rounded-[15px] border-[1px] border-[#BBBBBB] mb-4"
       >
         <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-[#BBBBBB] border-b-[1px] ">
           <h1 className="text-[16px] font-semibold text-black">
@@ -514,25 +590,25 @@ const CaseBookingPage = () => {
           </h1>
         </div>
 
-        <div className="w-[324px] px-8 text-[14px] text-black font-light flex flex-col gap-4 mt-4">
+        <div className="w-[328px] px-8 text-[14px] text-black font-light flex flex-col gap-4 mt-4">
           <input
             name="patientName"
             value={form.patientName}
             onChange={handleChange}
             placeholder="Patient Name"
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           />
 
-          <div className="flex gap-4">
+          <div className="w-[328px] flex justify-between gap-4 ">
             <select
               name="gender"
               value={form.gender}
               onChange={handleChange}
               required
-              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+              className="w-1/2 h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
             >
-              <option value="">Gender</option>
+              <option value=""disabled selected>Gender</option>
               <option value="MALE">Male</option>
               <option value="FEMALE">Female</option>
               <option value="OTHER">Other</option>
@@ -544,7 +620,7 @@ const CaseBookingPage = () => {
               onChange={handleChange}
               placeholder="Age"
               required
-              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+              className="w-1/2 h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
             />
           </div>
 
@@ -555,7 +631,7 @@ const CaseBookingPage = () => {
               value={form.height}
               onChange={handleChange}
               placeholder="Height (cm)"
-              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
             />
             <input
               name="weight"
@@ -563,7 +639,7 @@ const CaseBookingPage = () => {
               value={form.weight}
               onChange={handleChange}
               placeholder="Weight (kg)"
-              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
             />
           </div>
 
@@ -572,23 +648,26 @@ const CaseBookingPage = () => {
             value={form.serviceType}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300  outline-none"
           >
-            <option value="">Service Required</option>
+            <option value="" selected disabled>Service Required</option>
+
+            <option value="DOCTOR_VISIT">Doctor Visit</option>
             <option value="NURSING_SERVICE_AT_HOME">
-              Nursing Service At Home
+              Nursing service at home
             </option>
             <option value="NURSING_ASSISTANCE_AT_HOME">
-              Nursing Assistance At Home
+              Nursing Assistance at home
             </option>
             <option value="NURSING_ASSISTANCE_VISIT">
-              Nursing Assistance Visit
+              Nursing assistance Visit
             </option>
-            <option value="NURSING_VISIT">Nursing Visit</option>
+            <option value="NURSING_VISIT">Nursing visit</option>
             <option value="THERAPY">Therapy</option>
-            <option value="DIAGNOSTIC_SERVICE">
-              Diagnostic Services at Home
+            <option value="DIAGNOSTIC_SERVICES_AT_HOME">
+              Diagnostic services at home
             </option>
+            <option value="OTHER">Other</option>
           </select>
 
           <select
@@ -596,14 +675,19 @@ const CaseBookingPage = () => {
             value={form.healthStatus}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="">Health Status</option>
-            <option value="BEDRIDDEN">Bedridden Patients</option>
-            <option value="LIMITED_MOBILITY">
-              Patients with Limited Mobility
-            </option>
-            <option value="TUBE_FED">Tube-fed Patients</option>
+            <option value="" selected disabled>Current HealthStatus / Activity</option>
+            <option value="Bedridden Patients">Bedridden Patients</option>
+            <option value="Patients with Limited Mobility"> Patients with Limited Mobility </option>
+            <option value="Tube-fed Patients">Tube-fed Patients</option>
+            <option value="Patients with Indwelling Catheters">Patients with Indwelling Catheters</option>
+            <option value="Patients with Tracheostomy / Ventilator">Patients with Tracheostomy / Ventilator</option>
+            <option value="Post-Surgical Recovery Patients">Post-Surgical Recovery Patients</option>
+            <option value="Elderly with Chronic Conditions (Geriatric Care)">Elderly with Chronic Conditions (Geriatric Care)</option>
+            <option value="Patients Requiring Palliative / Hospice Care">Patients Requiring Palliative / Hospice Care</option>
+            <option value="Patients on IV Therapy / Home Infusion">Patients on IV Therapy / Home Infusion</option>
+            <option value="Post-COVID or Respiratory Rehab Patients">Post-COVID or Respiratory Rehab Patients</option>
           </select>
 
           <select
@@ -611,9 +695,9 @@ const CaseBookingPage = () => {
             value={form.stayAt}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="">Now Patient stayed at</option>
+            <option value="" selected disabled>Now Patient stayed at</option>
             <option value="HOSPITAL">Hospital</option>
             <option value="RESIDENCE">Residence</option>
             <option value="CARE_HOME">Care Home</option>
@@ -626,16 +710,25 @@ const CaseBookingPage = () => {
             onChange={handleChange}
             placeholder="Residential Address"
             required
-            className="w-[328px] h-[80px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[80px] rounded-[15px] px-4 border border-gray-300 pt-2 placeholder:text-black outline-none"
           />
 
           <input
+            type="text"
             name="pincode"
             value={form.pincode}
-            onChange={handleChange}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (/^\d{0,6}$/.test(val)) {
+                handleChange(e);
+              }
+            }}
             placeholder="Pincode"
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            inputMode="numeric"
+            pattern="\d{6}"
+            maxLength={6}
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           />
 
           <input
@@ -644,7 +737,7 @@ const CaseBookingPage = () => {
             onChange={handleChange}
             placeholder="Contact Person Name"
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           />
 
           <select
@@ -652,16 +745,35 @@ const CaseBookingPage = () => {
             value={form.contactPersonRelation}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="">Relationship</option>
+            <option value="">Relationship with patient</option>
             <option value="SELF">Self</option>
-            <option value="WIFE">Wife</option>
-            <option value="HUSBAND">Husband</option>
-            <option value="CHILD">Child</option>
-            <option value="PARENT">Parent</option>
-            <option value="OTHER">Other</option>
-          </select>
+            <option value="Wife">Wife</option>
+            <option value="Husband">Husband</option>
+            <option value="Father">Father</option>
+            <option value="Mother">Mother</option>
+            <option value="Son">Son</option>
+            <option value="Daughter">Daughter</option>
+            <option value="Brother">Brother</option>
+            <option value="Sister">Sister</option>
+            <option value="Son-in-law">Son-in-law</option>
+            <option value="Daughter-in-law">Daughter-in-law</option>
+            <option value="Father-in-law">Father-in-law</option>
+            <option value="Mother-in-law">Mother-in-law</option>
+            <option value="Grandfather">Grandfather</option>
+            <option value="Grandmother">Grandmother</option>
+            <option value="Grandson">Grandson</option>
+            <option value="Granddaughter">Granddaughter</option>
+            <option value="Uncle">Uncle</option>
+            <option value="Aunt">Aunt</option>
+            <option value="Nephew">Nephew</option>
+            <option value="Niece">Niece</option>
+            <option value="Cousin">Cousin</option>
+            <option value="Relative (Other)">Relative (Other)</option>
+            <option value="Caretaker / Attendant">Caretaker / Attendant</option>
+            <option value="Legal Guardian">Legal Guardian</option>
+            <option value="Friend ">Friend </option>  </select>
 
           <input
             name="contactPersonEmail"
@@ -670,15 +782,24 @@ const CaseBookingPage = () => {
             onChange={handleChange}
             placeholder="Email ID"
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           />
           <input
+            type="text"
             name="contactPersonMobileNumber"
             value={form.contactPersonMobileNumber}
-            onChange={handleChange}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (/^\d{0,10}$/.test(val)) {
+                handleChange(e);
+              }
+            }}
             placeholder="Mobile Number"
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            inputMode="numeric"
+            pattern="\d{10}"
+            maxLength={10}
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           />
         </div>
 
@@ -695,7 +816,7 @@ const CaseBookingPage = () => {
             value={form.diagnosis}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] text-[14px] border border-[#BBBBBB] ps-[32px] text-black"
+            className="w-[328px] h-[40px] rounded-[15px] text-[14px] border border-[#BBBBBB] px-4 text-black outline-none"
           >
             <option value="" disabled selected>
               Diagnosis
@@ -741,22 +862,40 @@ const CaseBookingPage = () => {
             <option value="Cardiovascular">Cardiovascular</option>
           </select>
 
-          <input
+          {/* <input
             name="startDate"
             type="date"
             value={form.startDate}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
-          />
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+          /> */}
+
+<input
+  name="startDate"
+  type={form.startDateInputType || "text"}
+  value={form.startDate}
+  placeholder="Service Period From"
+  onFocus={() =>
+    setForm((prev) => ({
+      ...prev,
+      startDateInputType: "date",
+    }))
+  }
+  onChange={handleChange}
+  required
+  className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+/>
 
           <select
             value={visitType}
             onChange={(e) => setVisitType(e.target.value)}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           >
-            <option value="">Single Visit / Periodically</option>
+            <option value="" disabled>
+              Single Visit / Periodically
+            </option>
             <option value="ONE_TIME_VISIT">One-time visit</option>
             <option value="FEW_DAYS">Few Days</option>
             <option value="FEW_WEEKS">Few Weeks</option>
@@ -773,15 +912,15 @@ const CaseBookingPage = () => {
 
           {visitType && visitType !== "ONE_TIME_VISIT" && (
             <div>
-              <p className="mb-[10px]">Duration</p>
               <div className="flex gap-2 items-center">
                 <select
-                  className="bg-white rounded-[15px] text-[#8B8B8B] ps-[22px] py-[12px] outline-none"
+                  className="h-[40px] w-[200px] bg-white rounded-[15px] px-4 border border-gray-300 outline-none "
                   name="durationValue"
                   value={form.durationValue}
                   onChange={handleChange}
                 >
-                  {[1, 2, 3, 4, 5].map((val) => (
+                  <option value=""selected disabled> Duration</option>
+                  {[1, 2, 3, 4, 5,6].map((val) => (
                     <option key={val} value={val}>
                       {val}
                     </option>
@@ -805,35 +944,37 @@ const CaseBookingPage = () => {
             value={form.scheduleType}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="">Daily Schedule Type</option>
-            <option value="FULL_TIME">Full Time</option>
-            <option value="DAY_SHIFT">Day Shift</option>
-            <option value="NIGHT_SHIFT">Night Shift</option>
-            <option value="CUSTOM">Custom</option>
+            <option value="" selected disabled>Daily Schedule Type</option>
+            <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
+            <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
+            <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option>
+            <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
+            <option value="CUSTOM_HOURS">Custom Hours</option>
           </select>
-
-          <div className="grid grid-cols-4 gap-2 mb-4">
-            {[
-              "MONDAY",
-              "TUESDAY",
-              "WEDNESDAY",
-              "THURSDAY",
-              "FRIDAY",
-              "SATURDAY",
-              "SUNDAY",
-            ].map((day) => (
-              <label key={day} className="inline-flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={weekdays.includes(day)}
-                  onChange={() => toggleArray(day, weekdays, setWeekdays)}
-                />
-                {day.slice(0, 3)}
-              </label>
-            ))}
-          </div>
+          {visitType && visitType !== "ONE_TIME_VISIT" && (
+            <div className="grid grid-cols-4 gap-2 mb-4">
+              {[
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY",
+              ].map((day) => (
+                <label key={day} className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={weekdays.includes(day)}
+                    onChange={() => toggleArray(day, weekdays, setWeekdays)}
+                  />
+                  {day.slice(0, 3)}
+                </label>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-center gap-4 mb-4">
             {["FIXED", "FLEXIBLE"].map((option) => (
@@ -842,6 +983,7 @@ const CaseBookingPage = () => {
                   type="radio"
                   name="flexibility"
                   checked={flexibility === option}
+                  required
                   onChange={() => setFlexibility(option)}
                 />
                 {option.charAt(0) + option.slice(1).toLowerCase()}
@@ -855,27 +997,26 @@ const CaseBookingPage = () => {
             <input name="endTime" type="time" value={form.endTime} onChange={handleChange} required className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300" />
           </div> */}
 
-          {form.scheduleType === "CUSTOM" && (
-            <div className="flex gap-4 mb-4 mt-2">
-              <input
-                name="startTime"
-                type="time"
-                value={form.startTime}
-                onChange={handleChange}
-                required
-                className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300"
-              />
-              <span className="flex items-center">To</span>
-              <input
-                name="endTime"
-                type="time"
-                value={form.endTime}
-                onChange={handleChange}
-                required
-                className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300"
-              />
-            </div>
-          )}
+          <div className="flex gap-4 mb-4 mt-2">
+            <input
+              name="startTime"
+              type="time"
+              value={form.startTime}
+              onChange={handleChange}
+              required
+              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+            />
+            <span className="flex items-center pe-4">From</span>
+            <input
+              name="endTime"
+              type="time"
+              value={form.endTime}
+              onChange={handleChange}
+              required
+              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+            />
+            <span className="flex items-center">To</span>
+          </div>
         </div>
 
         {/* Staff Preferences */}
@@ -888,14 +1029,14 @@ const CaseBookingPage = () => {
             value={preferredGender}
             onChange={(e) => setPreferredGender(e.target.value)}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none" 
           >
             <option value="">Preferred Gender</option>
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
           </select>
 
-          <div className="grid grid-cols-3 gap-2 mb-6">
+          {/* <div className="grid grid-cols-3 gap-2 mb-6">
             {[
               "Hindi",
               "Kannada",
@@ -915,15 +1056,55 @@ const CaseBookingPage = () => {
                 {lang}
               </label>
             ))}
+          </div> */}
+          <h1 className="text-[16px] font-semibold text-black">
+            Preferred Languages
+          </h1>
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            {[
+              "Hindi",
+              "Kannada",
+              "English",
+              "Malayalam",
+              "Tamil",
+              "Telugu",
+            ].map((lang) => (
+              <label key={lang} className="inline-flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={preferredLanguages.includes(lang)}
+                  onChange={() => {
+                    toggleArray(
+                      lang,
+                      preferredLanguages,
+                      setPreferredLanguages
+                    );
+                    if (preferredLanguages.length > 0) setLangError(false); // clear error on change
+                  }}
+                />
+                {lang}
+              </label>
+            ))}
           </div>
+          {langError && (
+            <span className="text-red-500 text-sm mb-2">
+              Please select at least one preferred language.
+            </span>
+          )}
         </div>
 
         <button
           type="submit"
-          className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] mx-8 mb-6"
+          className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] mx-8 mb-4"
         >
           Submit
         </button>
+<div className="h-[48px] mb-10">
+  
+        {successMessage && (
+  <p className=" text-[#3674B5] font-medium px-8  ">{successMessage}</p>
+)}
+</div>
       </form>
     </>
   );
