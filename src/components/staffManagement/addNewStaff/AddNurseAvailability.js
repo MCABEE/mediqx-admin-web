@@ -15,6 +15,7 @@ export default function NurseAvailability() {
   const [specialization, setSpecialization] = useState("");
   const [workSchedule, setWorkSchedule] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isRegisteredNurse, setIsRegisteredNurse] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [schedule, setSchedule] = useState(
@@ -69,12 +70,16 @@ export default function NurseAvailability() {
       setErrorMessage("Please complete the  above fields first.");
       return;
     }
-
+ if (!workSchedule) {
+    setErrorMessage("Please select your work schedule Part Time or Full Time.");
+    return;
+  }
     const payload = {
       userId,
       educationQualifications: [qualification],
       specializations: [specialization],
       workSchedule,
+      isRegisteredNurse,
       availabilities: generateAvailabilityPayload(),
     };
 
@@ -106,14 +111,28 @@ export default function NurseAvailability() {
           className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
         >
           <option disabled value="">Qualification</option>
-          <option value="ANM">ANM</option>
+          <option value="MSc Nursing">MSc Nursing</option>
+          <option value="BSc Nursing">BSc Nursing</option>
+          <option value="BSc Nursing Pursuing">GNM</option>
+          <option value="Post BSc Nursing">Post BSc Nursing</option>
           <option value="GNM">GNM</option>
-          <option value="B.Sc. Nursing">B.Sc. Nursing</option>
-          <option value="Post Basic B.Sc. Nursing">Post Basic B.Sc. Nursing</option>
-          <option value="M.Sc. Nursing">M.Sc. Nursing</option>
-          <option value="Nurse Practitioner (NP)">Nurse Practitioner (NP)</option>
-        </select>
+          <option value="GNM Pursuing">GNM Pursuing</option>
+          <option value="ANM">ANM</option>
+          <option value="GDA (General Duty Assistant)">GDA (General Duty Assistant)</option>
+          <option value="PCA (Personal Care Assistant)">PCA (Personal Care Assistant)</option>
+          <option value="DHA (Diploma in Health Assistant)">DHA (Diploma in Health Assistant)</option>
+    
 
+        </select>
+<div className="flex items-center gap-2 ps-2">
+  <input
+    type="checkbox"
+    className="size-4"
+    checked={isRegisteredNurse}
+    onChange={(e) => setIsRegisteredNurse(e.target.checked)}
+  />
+  I have a valid Council Registration
+</div>
         <select
           value={specialization}
           onChange={(e) => setSpecialization(e.target.value)}
@@ -131,7 +150,7 @@ export default function NurseAvailability() {
           onChange={(e) => setWorkSchedule(e.target.value)}
           className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
         >
-          <option selected   value="FULL_TIME">Full Time / Part Time</option>
+          <option   value="" selected  disabled>Full Time / Part Time</option>
           <option value="FULL_TIME">Full Time</option>
           <option value="PART_TIME">Part Time</option>
         </select>
