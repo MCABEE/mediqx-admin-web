@@ -89,8 +89,8 @@ const useNurseRegistrationStore = create((set, get) => ({
     return result.data;
   },
 
-  confirmFileUpload: async (fileId) => {
-    const result = await confirmFileUploadAPI(fileId);
+  confirmFileUpload: async (fileId,type) => {
+    const result = await confirmFileUploadAPI(fileId,type);
     if (!result.success) throw new Error(result.error);
     return result.data;
   },

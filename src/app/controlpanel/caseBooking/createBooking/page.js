@@ -117,7 +117,7 @@ const handleSubmit = async (e) => {
     flexibility,
     preferredLanguages,
     preferredGender,
-    serviceType: "OTHER",
+    serviceType:form.serviceType,
     durationValue: form.durationValue || 1,
   };
 

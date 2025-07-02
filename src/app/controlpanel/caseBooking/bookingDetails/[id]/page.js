@@ -18,14 +18,28 @@ const formatDate = (isoString) => {
   });
 };
 
+// const formatTime = (isoString) => {
+//   if (!isoString) return "-";
+//   const date = new Date(isoString);
+//   return date.toLocaleTimeString("en-US", {
+//     hour: "2-digit",
+//     minute: "2-digit",
+//     hour12: true,
+//   });
+// };
 const formatTime = (isoString) => {
   if (!isoString) return "-";
+
   const date = new Date(isoString);
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
+
+  const hours = date.getUTCHours(); // Use UTC hours
+  const minutes = date.getUTCMinutes(); // Use UTC minutes
+
+  const hours12 = hours % 12 || 12; // Convert 0 to 12
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const paddedMinutes = minutes.toString().padStart(2, "0");
+
+  return `${hours12}:${paddedMinutes} ${ampm}`;
 };
 
 const BookingDetailsPage = () => {

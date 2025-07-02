@@ -68,9 +68,9 @@ export const generateFileUploadUrlAPI = async ({
   }
 };
 
-export const confirmFileUploadAPI = async (fileId) => {
+export const confirmFileUploadAPI = async (fileId,type) => {
   try {
-    const response = await api.patch("/files/upload/confirm", { fileId }); // correct shape
+    const response = await api.patch("/files/upload/confirm", { fileId,type }); // correct shape
     console.log(response, "confirm upload");
 
     return {
