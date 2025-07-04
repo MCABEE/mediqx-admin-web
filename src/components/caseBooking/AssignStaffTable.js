@@ -77,23 +77,23 @@ const AssignStaffTable = ({ onSelectNurse }) => {
     <>
       {/* Confirmation Popup */}
       {showConfirm && (
-        <div className="fixed inset-0 z-50 bg-[#1a191959] backdrop-blur-xs flex items-center justify-center">
-          <div className="bg-white p-8 rounded-xl shadow-md w-[300px] text-center">
-            <p className=" font-thin  mb-4  text-black">
-            Are You Sure that you want to assign nurse <span className="font-semibold  text-black">"{selectedNurse?.fullName}"</span>?
+        <div className="fixed inset-0 z-50  bg-[#1a191959] backdrop-blur-xs flex items-center justify-center">
+          <div className="bg-white w-[500px] h-[200px] p-8 rounded-xl shadow-md  text-center flex justify-center items-center flex-col">
+            <p className=" font-thin  text-black">
+            Are You Sure that you want to assign nurse <br/> <span className="font-semibold  text-black">"{selectedNurse?.fullName}"</span>?
             </p>
-            <div className="flex justify-center gap-4 mt-6">
+            <div className="flex justify-center gap-4 mt-8 ">
               <button
                 onClick={handleConfirm}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+                className=" text-white font-semibold text-[16px] w-[152px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer"
               >
-                Yes
+                Assign
               </button>
               <button
                 onClick={handleCancel}
-                className="bg-gray-300 px-4 py-2 rounded text-black hover:bg-gray-400 cursor-pointer"
+                className=" text-black font-semibold text-[16px] w-[152px] h-[40px] bg-gray-300 rounded-[15px] cursor-pointer"
               >
-                No
+                Cancel
               </button>
             </div>
           </div>
