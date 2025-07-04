@@ -71,7 +71,7 @@ function UploadCertificate() {
     try {
       for (const { key, type } of inputs) {
         const file = files[key];
-        if (!file) continue; // ✅ skip if file not selected
+        if (!file) continue; // skip if file not selected
 
         const { signedUrl, fileId } = await generateUploadUrl({
           fileName: file.name,

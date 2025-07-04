@@ -21,12 +21,17 @@ const formatDate = (isoString) => {
 
 const formatTime = (isoString) => {
   if (!isoString) return "-";
+
   const date = new Date(isoString);
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
+
+  const hours = date.getUTCHours(); // Use UTC hours
+  const minutes = date.getUTCMinutes(); // Use UTC minutes
+
+  const hours12 = hours % 12 || 12; // Convert 0 to 12
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const paddedMinutes = minutes.toString().padStart(2, "0");
+
+  return `${hours12}:${paddedMinutes} ${ampm}`;
 };
 
 const BookingDetailsPage = () => {
@@ -217,9 +222,9 @@ const BookingDetailsPage = () => {
   <button className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer">
     Assign Staff</button>
 </Link>
-          <button className="w-[192px] h-[40px] bg-white text-black border flex justify-center items-center rounded-[15px]">
+          {/* <button className="w-[192px] h-[40px] bg-white text-black border flex justify-center items-center rounded-[15px]">
             Edit Service
-          </button>
+          </button> */}
           <button className="w-[192px] h-[40px] bg-[#FFD1D9] text-black flex justify-center items-center rounded-[15px]">
           Cancel Service
           </button>

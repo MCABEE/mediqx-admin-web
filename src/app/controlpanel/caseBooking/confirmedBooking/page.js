@@ -36,6 +36,7 @@ const Page = () => {
       staffName: booking.assignedNurseName,
       startDate: booking.startDate,
       scheduleType: booking.scheduleType,
+      actionResponse: booking.actionResponse,
     });
   };
 
@@ -218,6 +219,7 @@ const Page = () => {
           subHeading={`Reason`}
           startDate={selectedBooking.startDate}
           scheduleType={selectedBooking.scheduleType}
+          actionResponse={selectedBooking.actionResponse}
           onClose={closePopup}
           onProceed={proceedToDetails}
           bgClass="bg-[#FE1940]"
@@ -284,9 +286,10 @@ const StatusPopup = ({
   subHeading,
   startDate,
   scheduleType,
+  actionResponse,
 }) => (
   <div className="fixed inset-0 bg-[#03030347] backdrop-blur-xs flex items-center justify-center z-50">
-    <div className={`rounded-[15px]   w-[822px] h-[416px] shadow-xl bg-white`}>
+    <div className={`rounded-[15px]   w-[762px] h-[416px] shadow-xl bg-white`}>
       <div className={`rounded-t-[15px] h-[100px] ${bgClass} relative`}>
         <div
           className="bg-white hover:bg-[#e2e0e0] size-[24px] flex justify-center items-center absolute rounded right-6 top-6 cursor-pointer "
@@ -298,33 +301,38 @@ const StatusPopup = ({
           {heading}
         </h1>
       </div>
-      <div className="flex items-center pl-64 gap-12 mt-[24px] border-b-[#BBBBBB] border-b-1 pb-[26px]">
+      <div className="flex items-center pl-52 gap-12 mt-[24px] border-b-[#BBBBBB] border-b-1 pb-[26px]">
         <p className="text-[16px] text-black w-32">Staff Name</p>
-        <h1 className="text-[20px] font-semibold w-32">{message}</h1>
+        <h1 className="text-[20px] font-semibold ">{message}</h1>
       </div>
-      <div className="flex items-center pl-64  gap-12 mt-[24px] border-b-[#BBBBBB] border-b-1 pb-[56px]">
-        <p className="text-[16px] text-black">{subHeading} </p>
-        <h1 className="text-[20px] font-normal text-black ">
-          {new Date(startDate).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          })}
-          &nbsp; &nbsp;&nbsp;&nbsp;
-          <span className="text-base font-normal">
-            {scheduleType === "FULL_TIME_24_HOURS"
-              ? "24 Hrs"
-              : scheduleType === "DAY_SHIFT_12_HOURS"
-              ? "12 Hrs day"
-              : scheduleType === "DAY_SHIFT_8_HOURS"
-              ? "8 Hrs day"
-              : scheduleType === "NIGHT_SHIFT_12_HOURS"
-              ? "12 Hrs night"
-              : scheduleType === "CUSTOM_HOURS "
-              ? "Custom Hrs"
-              : scheduleType}
-          </span>
-        </h1>
+      <div className="flex items-center pl-52  gap-12 mt-[24px] border-b-[#BBBBBB] border-b-1 pb-[56px]">
+        <p className="text-[16px] text-black w-32">{subHeading} </p>
+
+        {bgClass === "bg-[#FE1940]" ? (
+          <div>{actionResponse}</div>
+        ) : (
+          <h1 className="text-[20px] font-normal text-black">
+            {new Date(startDate).toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span className="text-base font-normal">
+              {scheduleType === "FULL_TIME_24_HOURS"
+                ? "24 Hrs"
+                : scheduleType === "DAY_SHIFT_12_HOURS"
+                ? "12 Hrs day"
+                : scheduleType === "DAY_SHIFT_8_HOURS"
+                ? "8 Hrs day"
+                : scheduleType === "NIGHT_SHIFT_12_HOURS"
+                ? "12 Hrs night"
+                : scheduleType === "CUSTOM_HOURS"
+                ? "Custom Hrs"
+                : scheduleType}
+            </span>
+          </h1>
+        )}
       </div>
       <div className="flex justify-center items-center">
         {bgClass === "bg-[#FE1940]" && ( // RED
@@ -351,27 +359,13 @@ const StatusPopup = ({
         {bgClass === "bg-[#3674B5]" && ( // BLUE
           <button
             onClick={onProceed}
-            className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
+            className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer "
           >
             Assign
           </button>
         )}
       </div>
-      {/* <p className={`text-lg font-semibold mb-4 ${textClass}`}>{message}</p> */}
-      {/* <div className="flex justify-end gap-3">
-        <button
-          onClick={onClose}
-          className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={onProceed}
-          className="px-4 py-2 bg-[#196BA5] text-white rounded hover:bg-blue-700"
-        >
-          Proceed
-        </button>
-      </div> */}
+   
     </div>
   </div>
 );
