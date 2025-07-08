@@ -7,6 +7,7 @@ import ConfirmPopup from "@/components/caseBooking/ConfirmPopup";
 import Link from "next/link";
 import EditBookingPopup from "@/components/caseBooking/EditBookingPopup";
 import { useRouter } from "next/navigation";
+import CancelPopup from "@/components/caseBooking/CancelPopup";
 
 const formatDate = (isoString) => {
   if (!isoString) return "-";
@@ -17,7 +18,6 @@ const formatDate = (isoString) => {
     year: "numeric",
   });
 };
-
 
 const formatTime = (isoString) => {
   if (!isoString) return "-";
@@ -40,6 +40,7 @@ const BookingDetailsPage = () => {
     useBookingStore();
 
   const [showPopup, setShowPopup] = useState(false);
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
 
   useEffect(() => {
     if (id) fetchBookingById(id);
@@ -51,7 +52,27 @@ const BookingDetailsPage = () => {
     setShowPopup(false);
     // alert(`Booking confirmed for booking ID: ${bookingId}`);
     router.push("/controlpanel/caseBooking/newBooking");
-    // TODO: Add actual confirmBooking(bookingId, payload) call here
+  };
+
+  const { cancelBooking } = useBookingStore(); // ✅ use the cancelBooking action
+
+  const handleCancelClick = () => {
+    setShowCancelPopup(true);
+  };
+
+  const handleCancelClose = () => {
+    setShowCancelPopup(false);
+  };
+
+  const handleCancelConfirm = async (bookingId) => {
+    try {
+      await cancelBooking(bookingId, { reason: "User cancelled from UI" }); // you can extend `payload` if needed
+      setShowCancelPopup(false);
+      router.push("/controlpanel/caseBooking/newBooking");
+    } catch (err) {
+      console.error("Cancel failed:", err.message);
+      // Optionally show an error toast or UI feedback
+    }
   };
 
   const [showEditPopup, setShowEditPopup] = useState(false);
@@ -229,15 +250,18 @@ const BookingDetailsPage = () => {
           <h1 className="text-[16px] font-semibold text-black">Action</h1>
         </div>
         <div className="flex gap-8 px-[39px] py-[24px]">
-          <button className="w-[192px] h-[40px] bg-[#FFD1D9] text-[#333333] flex justify-center items-center rounded-[15px]">
+          <button
+            onClick={handleCancelClick}
+            className="w-[192px] h-[40px] bg-[#FFD1D9] text-[#333333] flex justify-center items-center rounded-[15px] cursor-pointer"
+          >
             Cancel Service
           </button>
-          <button
+          {/* <button
             onClick={handleEditClick}
             className="w-[192px] h-[40px] bg-white text-[#333333] border flex justify-center items-center rounded-[15px]"
           >
             Edit Service
-          </button>
+          </button> */}
           <button
             onClick={handleConfirmClick}
             className="w-[192px] h-[40px] bg-[#09B438] text-white flex justify-center items-center rounded-[15px] cursor-pointer"
@@ -254,6 +278,13 @@ const BookingDetailsPage = () => {
           bookingId={id}
           onClose={handlePopupClose}
           onConfirm={handlePopupConfirm}
+        />
+      )}
+      {showCancelPopup && (
+        <CancelPopup
+          bookingId={id}
+          onClose={handleCancelClose}
+          onConfirm={handleCancelConfirm}
         />
       )}
 

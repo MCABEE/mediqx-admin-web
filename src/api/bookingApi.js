@@ -40,6 +40,13 @@ export const confirmBookingApi = async (bookingId, payload) => {
   );
   return response.data;
 };
+export const cancelBookingApi = async (bookingId, payload) => {
+  const response = await api.put(
+    `/admin/bookings/${bookingId}/cancel`,
+    payload
+  );
+  return response.data;
+};
 
 export const assignNurseToBooking = async (bookingId, nurseId) => {
   const response = await api.post(
@@ -49,6 +56,20 @@ export const assignNurseToBooking = async (bookingId, nurseId) => {
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+
+export const cancelNurseAssignment = async (assignmentId) => {
+  const response = await api.put(
+    `/admin/nurse-assignment/${assignmentId}/cancel`,
+    null,
+    {
+      headers: {
+        accept: "application/json",
       },
     }
   );

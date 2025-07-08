@@ -1,7 +1,7 @@
 // src/lib/store/bookingStore.js
 
 import { create } from "zustand";
-import { getBookingDetails, createBooking, getBookingById,confirmBookingApi,assignNurseToBooking } from "@/api/bookingApi";
+import { getBookingDetails, createBooking, getBookingById,confirmBookingApi,assignNurseToBooking,cancelBookingApi,cancelNurseAssignment } from "@/api/bookingApi";
 
 const useBookingStore = create((set) => ({
   bookings: [],
@@ -83,6 +83,18 @@ const useBookingStore = create((set) => ({
       throw err;
     }
   },
+  cancelBooking: async (bookingId, payload) => {
+    try {
+      set({ isLoading: true });
+      const res = await cancelBookingApi(bookingId, payload);
+      set({ isLoading: false });
+      return res;
+    } catch (err) {
+      set({ error: err.message, isLoading: false });
+      throw err;
+    }
+  },
+
 
 
 
@@ -101,6 +113,19 @@ const useBookingStore = create((set) => ({
     set({ error: err.message, isLoading: false });
     console.log(err);
 
+    return { success: false, error: err.message };
+  }
+},
+
+
+cancelAssignment: async (assignmentId) => {
+  try {
+    set({ isLoading: true });
+    const response = await cancelNurseAssignment(assignmentId);
+    set({ isLoading: false });
+    return { success: true, data: response };
+  } catch (err) {
+    set({ error: err.message, isLoading: false });
     return { success: false, error: err.message };
   }
 },

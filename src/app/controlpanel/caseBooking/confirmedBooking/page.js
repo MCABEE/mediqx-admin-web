@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import Navlink from "@/components/caseBooking/NavLink";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import { useRouter } from "next/navigation";
@@ -15,6 +14,7 @@ const Page = () => {
     error,
     setPage,
     totalBookings,
+    cancelAssignment 
   } = useBookingStore();
 
   const [popupStatus, setPopupStatus] = useState(null); // "GREEN", "RED", "YELLOW", "BLUE"
@@ -37,6 +37,7 @@ const Page = () => {
       startDate: booking.startDate,
       scheduleType: booking.scheduleType,
       actionResponse: booking.actionResponse,
+      assignmentId: booking.assignmentId,
     });
   };
 
@@ -51,6 +52,20 @@ const Page = () => {
     );
     closePopup();
   };
+
+
+const handleCancelOrReschedule = async () => {
+  if (!selectedBooking?.assignmentId) return;
+
+  const result = await cancelAssignment(selectedBooking.assignmentId);
+  if (result.success) {
+    fetchBookings(page, 10, "CONFIRMED"); // refresh bookings
+    proceedToDetails();
+    closePopup();
+  } else {
+    console.error("Cancel failed:", result.error);
+  }
+};
 
   return (
     <div>
@@ -208,6 +223,7 @@ const Page = () => {
           scheduleType={selectedBooking.scheduleType}
           onClose={closePopup}
           onProceed={proceedToDetails}
+          onCancel={handleCancelOrReschedule} 
           bgClass="bg-[#09B438]"
           textClass="text-[#09B438]"
         />
@@ -222,6 +238,7 @@ const Page = () => {
           actionResponse={selectedBooking.actionResponse}
           onClose={closePopup}
           onProceed={proceedToDetails}
+          onCancel={handleCancelOrReschedule} 
           bgClass="bg-[#FE1940]"
           textClass="text-[#FE1940]"
         />
@@ -235,6 +252,7 @@ const Page = () => {
           scheduleType={selectedBooking.scheduleType}
           onClose={closePopup}
           onProceed={proceedToDetails}
+          onCancel={handleCancelOrReschedule} 
           bgClass="bg-[#D4B200]"
           textClass="text-[#D4B200]"
         />
@@ -248,6 +266,7 @@ const Page = () => {
           scheduleType={selectedBooking.scheduleType}
           onClose={closePopup}
           onProceed={proceedToDetails}
+          onCancel={handleCancelOrReschedule} 
           bgClass="bg-[#3674B5]"
           textClass="text-[#3674B5]"
         />
@@ -287,6 +306,7 @@ const StatusPopup = ({
   startDate,
   scheduleType,
   actionResponse,
+  onCancel
 }) => (
   <div className="fixed inset-0 bg-[#03030347] backdrop-blur-xs flex items-center justify-center z-50">
     <div className={`rounded-[15px]   w-[762px] h-[416px] shadow-xl bg-white`}>
@@ -336,25 +356,31 @@ const StatusPopup = ({
       </div>
       <div className="flex justify-center items-center">
         {bgClass === "bg-[#FE1940]" && ( // RED
-          <button className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] ">
-            Re-Schedule
-          </button>
-        )}
+  <button
+    onClick={onProceed}
+    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
+  >
+    Assign
+  </button>
+)}
 
-        {bgClass === "bg-[#D4B200]" && ( // YELLOW
-          <button
-            // onClick={onProceed}
-            className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
-          >
-            Cancel
-          </button>
-        )}
+{bgClass === "bg-[#D4B200]" && ( // YELLOW
+  <button
+    onClick={onCancel}
+    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
+  >
+    Cancel
+  </button>
+)}
 
-        {bgClass === "bg-[#09B438]" && ( // GREEN
-          <button className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] ">
-            Re-Schedule
-          </button>
-        )}
+{bgClass === "bg-[#09B438]" && ( // GREEN
+  <button
+    onClick={onCancel}
+    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
+  >
+    Re-Schedule
+  </button>
+)}
 
         {bgClass === "bg-[#3674B5]" && ( // BLUE
           <button
