@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 
+
 function UploadCertificate() {
   const {
     userId,
     generateUploadUrl,
     confirmFileUpload,
     setUploadedFile,
+    qualificationId
   } = useNurseRegistrationStore();
 
   const [files, setFiles] = useState({
@@ -15,6 +17,7 @@ function UploadCertificate() {
     councilRegistration: null,
     experienceCertificate: null,
     photo: null,
+    qualificationId:null,
   });
 
   const [fileNames, setFileNames] = useState({
@@ -110,7 +113,7 @@ function UploadCertificate() {
         Upload your Registration / Experience Certificates
       </h1>
 
-      <div className="flex flex-col gap-5 mb-4">
+      {/* <div className="flex flex-col gap-5 mb-4">
         {inputs.map(({ label, key }) => (
           <label
             key={key}
@@ -128,7 +131,36 @@ function UploadCertificate() {
             />
           </label>
         ))}
-      </div>
+      </div> */}
+
+      <div className="flex flex-col gap-5 mb-4">
+  {inputs.map(({ label, key }) => {
+    const isExperience = key === "experienceCertificate";
+    const isDisabled = isExperience && qualificationId === null;
+
+    return (
+      <label
+        key={key}
+        htmlFor={key}
+        className={`w-[328px] h-[40px] text-black text-[14px] font-light border ${
+          isDisabled ? "border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed" : "border-[#BBBBBB] cursor-pointer"
+        } rounded-[15px] ps-8 pe-4 flex items-center justify-between`}
+      >
+        {fileNames[key] || label}
+        <img src="/upload-btn.svg" alt="upload" className={isDisabled ? "opacity-50" : ""} />
+        <input
+          type="file"
+          id={key}
+          accept=".pdf,.jpg,.jpeg,.png"
+          className="hidden"
+          onChange={!isDisabled ? handleFileSelect(key) : undefined}
+          disabled={isDisabled}
+        />
+      </label>
+    );
+  })}
+</div>
+
 
       <button
         onClick={handleSubmit}

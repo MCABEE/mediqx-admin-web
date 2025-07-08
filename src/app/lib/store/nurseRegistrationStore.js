@@ -12,7 +12,7 @@ const useNurseRegistrationStore = create((set, get) => ({
   error: null,
   successData: null,
   userId: null,
-
+  qualificationId:null,
   // Page 1 Registration
   registerNurse: async (nurseData) => {
     set({ isLoading: true, error: null, successData: null, userId: null });
@@ -31,17 +31,20 @@ const useNurseRegistrationStore = create((set, get) => ({
 
   // Page 2 Experience Submission
   submitNursePageTwo: async (pageTwoData) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null,qualificationId:null });
     try {
       const userId = get().userId;
       if (!userId) throw new Error("User ID is missing");
 
       const payload = { ...pageTwoData, userId };
       const result = await submitNursePageTwo(payload);
+      console.log(result);
+set({qualificationId:result.data.qualificationId})
       return result;
+      
     } catch (error) {
       set({ error: error.message });
-      throw error;
+      throw error; 
     } finally {
       set({ isLoading: false });
     }

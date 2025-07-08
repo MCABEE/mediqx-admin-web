@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import Navlink from "@/components/staffManagement/Navlink";
 import AvailabilitySchedule from "@/components/staffManagement/AvailabilitySchedule";
 import nurseStore from "@/app/lib/store/nurseStore";
@@ -39,7 +38,9 @@ function allStaffDetailPage() {
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
         {/* <Link href="/controlpanel/staffManagement/allStaff">Back</Link> */}
-         <button onClick={() => router.back()} className="cursor-pointer">Back</button>
+        <button onClick={() => router.back()} className="cursor-pointer">
+          Back
+        </button>
       </div>
 
       {/* <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 rounded-[15px] mt-4">
@@ -191,24 +192,32 @@ function allStaffDetailPage() {
                     )}
               </span> */}
               <span>
-  {qualifications.startDate && !isNaN(Date.parse(qualifications.startDate))
-    ? new Date(qualifications.startDate).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
-    : ""}
-  {" - "}
-  {qualifications.onGoing
-    ? "Present"
-    : qualifications.endDate && !isNaN(Date.parse(qualifications.endDate))
-    ? new Date(qualifications.endDate).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
-    : ""}
-</span>
+                {qualifications.startDate &&
+                !isNaN(Date.parse(qualifications.startDate))
+                  ? new Date(qualifications.startDate).toLocaleDateString(
+                      "en-GB",
+                      {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      }
+                    )
+                  : ""}
+                {" - "}
+                {qualifications.onGoing
+                  ? "Present"
+                  : qualifications.endDate &&
+                    !isNaN(Date.parse(qualifications.endDate))
+                  ? new Date(qualifications.endDate).toLocaleDateString(
+                      "en-GB",
+                      {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      }
+                    )
+                  : ""}
+              </span>
             </div>
             {/* <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
@@ -235,10 +244,24 @@ function allStaffDetailPage() {
         {[
           { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
           { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
-          { label: "Experience Certificate", type: "AVATAR" },
+          {
+            label: "Experience Certificate",
+            type: "EXPERIENCE_CERTIFICATE",
+            isQualificationFile: true,
+          },
           { label: "Photo", type: "PASSPORT_IMAGE" },
-        ].map(({ label, type }) => {
-          const file = files.find((f) => f.type === type);
+        ].map(({ label, type, isQualificationFile }) => {
+          let file;
+
+          if (isQualificationFile) {
+            // Get from qualifications[].files[]
+            const allQualificationFiles = qualifications?.files || [];
+            file = allQualificationFiles.find((f) => f.type === type);
+          } else {
+            // Get from top-level files[]
+            file = files.find((f) => f.type === type);
+          }
+
           return (
             <div
               key={type}

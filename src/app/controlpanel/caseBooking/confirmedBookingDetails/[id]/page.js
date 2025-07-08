@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Navlink from "@/components/caseBooking/NavLink";
 import useBookingStore from "@/app/lib/store/bookingStore";
-import ConfirmPopup from "@/components/caseBooking/ConfirmPopup";
 import Link from "next/link";
-import EditBookingPopip from "@/components/caseBooking/EditBookingPopup";
-import EditBookingPopup from "@/components/caseBooking/EditBookingPopup";
-import { useRouter } from 'next/navigation';
+
+import { useRouter } from "next/navigation";
+import CancelPopup from "@/components/caseBooking/CancelPopup";
 
 const formatDate = (isoString) => {
   if (!isoString) return "-";
@@ -36,20 +35,17 @@ const formatTime = (isoString) => {
 
 const BookingDetailsPage = () => {
   const { id } = useParams();
-  const {
-    fetchBookingById,
-    selectedBooking,
-    isLoading,
-    error,
-  } = useBookingStore();
+  const { fetchBookingById, selectedBooking, isLoading, error, cancelBooking } =
+    useBookingStore();
 
   const [showPopup, setShowPopup] = useState(false);
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
+
 
   useEffect(() => {
     if (id) fetchBookingById(id);
   }, [id]);
   const router = useRouter();
-
 
   if (isLoading) return <p className="p-8">Loading...</p>;
   if (error) return <p className="p-8 text-red-500">Error: {error}</p>;
@@ -57,12 +53,36 @@ const BookingDetailsPage = () => {
 
   const booking = selectedBooking;
 
+  const handleCancelClick = () => {
+    setShowCancelPopup(true);
+  };
+
+  const handleCancelClose = () => {
+    setShowCancelPopup(false);
+  };
+
+  const handleCancelConfirm = async (bookingId) => {
+    try {
+      await cancelBooking(bookingId, { reason: "User cancelled from UI" }); // adjust payload if needed
+      setShowCancelPopup(false);
+      router.push("/controlpanel/caseBooking/confirmedBooking");
+    } catch (err) {
+      console.error("Cancel failed:", err.message);
+      // Optionally show an error message
+    }
+  };
+
   return (
     <div>
       <Navlink />
       {/* HEADER */}
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
-        <Link href={"/controlpanel/caseBooking/confirmedBooking"} className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]">Back</Link>
+        <Link
+          href={"/controlpanel/caseBooking/confirmedBooking"}
+          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]"
+        >
+          Back
+        </Link>
         <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px]">
           <p className="font-semibold">{booking?.fullName || "Patient Name"}</p>
           <div className="flex justify-center items-center gap-[92px]">
@@ -75,114 +95,123 @@ const BookingDetailsPage = () => {
       {/* PATIENT DETAILS */}
       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
         <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">Patient Details</h1>
+          <h1 className="text-[16px] font-semibold text-black">
+            Patient Details
+          </h1>
         </div>
- 
-<div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
-  <div className="flex">
-    <span className="w-[250px] font-medium">Patient Name</span>
-    <span>{booking.fullName}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[250px] font-medium">Gender</span>
-    <span>{booking.gender}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[250px] font-medium">Age</span>
-    <span>{booking.age}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[250px] font-medium">Height, Weight</span>
-    <span>{booking.height} cm, {booking.weight} kg</span>
-  </div>
-  
-  <div className="flex">
-    <span className="w-[250px] font-medium">Current Health Status / Activity</span>
-    <span>{booking.healthStatus}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[250px] font-medium">Now Patient stayed at</span>
-    <span>{booking.stayAt}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[250px] font-medium">Residential Address</span>
-    <span>{booking.city} </span>
-  </div>
-  {/* <div className="flex">
+
+        <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
+          <div className="flex">
+            <span className="w-[250px] font-medium">Patient Name</span>
+            <span>{booking.fullName}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Gender</span>
+            <span>{booking.gender}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Age</span>
+            <span>{booking.age}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Height, Weight</span>
+            <span>
+              {booking.height} cm, {booking.weight} kg
+            </span>
+          </div>
+
+          <div className="flex">
+            <span className="w-[250px] font-medium">
+              Current Health Status / Activity
+            </span>
+            <span>{booking.healthStatus}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Now Patient stayed at</span>
+            <span>{booking.stayAt}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Residential Address</span>
+            <span>{booking.city} </span>
+          </div>
+          {/* <div className="flex">
     <span className="w-[250px] font-medium">Pincode</span>
     <span>{booking.pincode}</span>
   </div> */}
-  <div className="flex">
-    <span className="w-[250px] font-medium">Contact person</span>
-    <span>{booking.contactPersonName}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[250px] font-medium">Relationship with patient</span>
-    <span>{booking.contactPersonRelation}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[250px] font-medium">Email ID</span>
-    <span>{booking.contactPersonEmail}</span>
-  </div>
-    <div className="flex">
-    <span className="w-[250px] font-medium">Mobile Number</span>
-    <span>{booking.contactPersonMobileNumber}</span>
-  </div>
-</div>
-
-
-
-      
+          <div className="flex">
+            <span className="w-[250px] font-medium">Contact person</span>
+            <span>{booking.contactPersonName}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">
+              Relationship with patient
+            </span>
+            <span>{booking.contactPersonRelation}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Email ID</span>
+            <span>{booking.contactPersonEmail}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Mobile Number</span>
+            <span>{booking.contactPersonMobileNumber}</span>
+          </div>
+        </div>
       </div>
 
       {/* SERVICE DETAILS */}
       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
         <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">Service Required</h1>
+          <h1 className="text-[16px] font-semibold text-black">
+            Service Required
+          </h1>
         </div>
         <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
           <div className="flex">
-    <span className="w-[200px] font-medium">Diagnosis</span>
-    <span>{booking.diagnosis}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[200px] font-medium">Service Period from</span>
-    <span>{formatDate(booking.startDate)}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[200px] font-medium">Service Type</span>
-    <span>{booking.serviceType}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[200px] font-medium">Duration</span>
-    <span>{booking.durationType} ({booking.durationValue} weeks)</span>
-  </div>
-  
-  
-  {/* <div className="flex">
+            <span className="w-[200px] font-medium">Diagnosis</span>
+            <span>{booking.diagnosis}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[200px] font-medium">Service Period from</span>
+            <span>{formatDate(booking.startDate)}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[200px] font-medium">Service Type</span>
+            <span>{booking.serviceType}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[200px] font-medium">Duration</span>
+            <span>
+              {booking.durationType} ({booking.durationValue} weeks)
+            </span>
+          </div>
+
+          {/* <div className="flex">
     <span className="w-[200px] font-medium">End Time</span>
     <span>{formatTime(booking.endTime)}</span>
   </div> */}
-  <div className="flex">
-    <span className="w-[200px] font-medium">Frequency</span>
-    <span>{booking.weekdays?.join(", ")}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[200px] font-medium">Flexibility</span>
-    <span>{booking.flexibility}</span>
-  </div>
-  <div className="flex">
-    <span className="w-[200px] font-medium"> Time</span>
-    <span>{formatTime(booking.startTime)}</span> &nbsp; - &nbsp; <span>{formatTime(booking.endTime)}</span>
-  </div>
-</div>
-
+          <div className="flex">
+            <span className="w-[200px] font-medium">Frequency</span>
+            <span>{booking.weekdays?.join(", ")}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[200px] font-medium">Flexibility</span>
+            <span>{booking.flexibility}</span>
+          </div>
+          <div className="flex">
+            <span className="w-[200px] font-medium"> Time</span>
+            <span>{formatTime(booking.startTime)}</span> &nbsp; - &nbsp;{" "}
+            <span>{formatTime(booking.endTime)}</span>
+          </div>
+        </div>
       </div>
 
       {/* STAFF PREFERENCE */}
       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
         <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">Staff Preference</h1>
+          <h1 className="text-[16px] font-semibold text-black">
+            Staff Preference
+          </h1>
         </div>
         <div className="flex gap-10 p-8">
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
@@ -201,38 +230,47 @@ const BookingDetailsPage = () => {
         <div className="w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px] border-b-2">
           <h1 className="text-[16px] font-semibold text-black">Action</h1>
         </div>
-          <div className="flex gap-8 px-[39px] py-[24px] ">
-         
-              <Link
-  href={{
-    pathname: "/controlpanel/caseBooking/assignStaff",
-    query: {
-      bookingId:booking.id,
-      fullName:booking.fullName,
-      from: booking.startDate,
-      to: booking.endDate,
-      service: booking.serviceType,
-      schedule: booking.durationValue,
-      gender: booking.preferredGender,
-      language: booking.preferredLanguages?.join(", "),
-      location: `${booking.city}`,
-    },
-  }}
->
-  <button className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer">
-    Assign Staff</button>
-</Link>
+        <div className="flex gap-8 px-[39px] py-[24px] ">
+          <Link
+            href={{
+              pathname: "/controlpanel/caseBooking/assignStaff",
+              query: {
+                bookingId: booking.id,
+                fullName: booking.fullName,
+                from: booking.startDate,
+                to: booking.endDate,
+                service: booking.serviceType,
+                schedule: booking.durationValue,
+                gender: booking.preferredGender,
+                language: booking.preferredLanguages?.join(", "),
+                location: `${booking.city}`,
+              },
+            }}
+          >
+            <button className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer">
+              Assign Staff
+            </button>
+          </Link>
           {/* <button className="w-[192px] h-[40px] bg-white text-black border flex justify-center items-center rounded-[15px]">
             Edit Service
           </button> */}
-          <button className="w-[192px] h-[40px] bg-[#FFD1D9] text-black flex justify-center items-center rounded-[15px]">
-          Cancel Service
+          <button
+            onClick={handleCancelClick}
+            className="w-[192px] h-[40px] bg-[#FFD1D9] text-black flex justify-center items-center rounded-[15px] cursor-pointer"
+          >
+            Cancel Service
           </button>
         </div>
       </div>
 
+      {showCancelPopup && (
+        <CancelPopup
+          bookingId={booking.id}
+          onClose={handleCancelClose}
+          onConfirm={handleCancelConfirm}
+        />
+      )}
     </div>
-   
   );
 };
 

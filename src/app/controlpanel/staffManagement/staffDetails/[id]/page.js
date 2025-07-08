@@ -75,7 +75,9 @@ function StaffDetailPage() {
       <Navlink />
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
-        <Link href="/controlpanel/staffManagement" className="cursor-pointer">Back</Link>
+        <Link href="/controlpanel/staffManagement" className="cursor-pointer">
+          Back
+        </Link>
       </div>
 
       <div className="bg-white border border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
@@ -159,8 +161,12 @@ function StaffDetailPage() {
             Work Experience?
           </h1>
           <div className="flex gap-[18px] text-black">
-            <span className="w-[280px]  text-black">Previous Work Experience </span>
-            <span className=" text-black">{nurseData.experienceLevel || "Nil"}</span>
+            <span className="w-[280px]  text-black">
+              Previous Work Experience{" "}
+            </span>
+            <span className=" text-black">
+              {nurseData.experienceLevel || "Nil"}
+            </span>
           </div>
 
           {/* Experience */}
@@ -259,15 +265,28 @@ function StaffDetailPage() {
             )}
           </div>
         </div>
-
         {/* File Uploads */}
         {[
           { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
           { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
-          { label: "Experience Certificate", type: "AVATAR" },
+          {
+            label: "Experience Certificate",
+            type: "EXPERIENCE_CERTIFICATE",
+            isQualificationFile: true,
+          },
           { label: "Photo", type: "PASSPORT_IMAGE" },
-        ].map(({ label, type }) => {
-          const file = files.find((f) => f.type === type);
+        ].map(({ label, type, isQualificationFile }) => {
+          let file;
+
+          if (isQualificationFile) {
+            // Get from qualifications[].files[]
+            const allQualificationFiles = qualifications?.files || [];
+            file = allQualificationFiles.find((f) => f.type === type);
+          } else {
+            // Get from top-level files[]
+            file = files.find((f) => f.type === type);
+          }
+
           return (
             <div
               key={type}
@@ -319,9 +338,7 @@ function StaffDetailPage() {
             </div>
           );
         })}
-
-        {/* Contact Details with edit */}
-
+        ;{/* Contact Details with edit */}
         {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
         <div className="flex flex-col text-black font-light gap-[18px] px-[39px]">
           {/* <div className="flex gap-[18px]">
@@ -333,7 +350,6 @@ function StaffDetailPage() {
               <span></span>
             </div> */}
         </div>
-
         {/* Actions */}
         <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
           Actions

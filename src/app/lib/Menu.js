@@ -28,7 +28,7 @@ export const menus = [
       id: 4,
       name: "Cases",
       hasSubmenu: false,
-      //link: "profileReports",
+      link: "/controlpanel/cases",
     },
     {
       id: 5,
