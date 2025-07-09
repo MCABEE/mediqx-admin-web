@@ -290,7 +290,7 @@ const NurseBasicInformation = () => {
           <button
             type="submit"
             disabled={isLoading || isSubmitted}
-            className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center opacity-100 disabled:opacity-50"
+            className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center opacity-100 disabled:opacity-50 cursor-pointer"
           >
             {isLoading ? "Submitting..." : isSubmitted ? "Submitted" : "Next"}
           </button>

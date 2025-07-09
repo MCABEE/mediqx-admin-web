@@ -201,7 +201,8 @@ const BookingDetailsPage = () => {
           <div className="flex">
             <span className="w-[200px] font-medium">Duration</span>
             <span>
-              {booking.durationType} ({booking.durationValue} weeks)
+              {booking.durationType} 
+              {/* ({booking.durationValue} ) */}
             </span>
           </div>
 

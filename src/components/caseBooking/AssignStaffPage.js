@@ -51,9 +51,9 @@ const AssignStaffPage = () => {
         </div>
         <div className="grid grid-cols-2 gap-y-[10px] p-8 text-[16px] text-black">
           <span className="font-medium">Service Period (From)</span>
-          <span>{from}</span>
-          <span className="font-medium">Service Period (To)</span>
-          <span>{to}</span>
+          <span>{from?.split("T")[0]}</span>
+          {/* <span className="font-medium">Service Period (To)</span>
+          <span>{to}</span> */}
           <span className="font-medium">Service Required</span>
           <span>{service}</span>
           <span className="font-medium">Daily Schedule</span>
