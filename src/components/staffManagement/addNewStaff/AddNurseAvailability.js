@@ -225,7 +225,7 @@ export default function NurseAvailability() {
       <button
         disabled={loading}
         onClick={handleSubmit}
-        className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center my-6"
+        className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center my-6 cursor-pointer"
       >
         {loading ? "Submitting..." : "Submit"}
       </button>

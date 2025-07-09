@@ -165,7 +165,7 @@ function UploadCertificate() {
       <button
         onClick={handleSubmit}
         disabled={uploading || isSubmitted}
-        className={`mt-10 w-[328px] h-[40px] rounded-[15px] flex justify-center items-center ${
+        className={`mt-10 w-[328px] h-[40px] rounded-[15px] flex justify-center items-center cursor-pointer ${
           uploading || isSubmitted
             ? "bg-gray-400 cursor-not-allowed text-white"
             : "bg-[#3674B5] text-white"

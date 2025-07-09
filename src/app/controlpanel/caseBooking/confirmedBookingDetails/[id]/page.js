@@ -182,7 +182,8 @@ const BookingDetailsPage = () => {
           <div className="flex">
             <span className="w-[200px] font-medium">Duration</span>
             <span>
-              {booking.durationType} ({booking.durationValue} weeks)
+              {booking.durationType} 
+              {/* ({booking.durationValue} weeks) */}
             </span>
           </div>
 
@@ -240,7 +241,7 @@ const BookingDetailsPage = () => {
                 from: booking.startDate,
                 to: booking.endDate,
                 service: booking.serviceType,
-                schedule: booking.durationValue,
+                schedule: booking.durationType,
                 gender: booking.preferredGender,
                 language: booking.preferredLanguages?.join(", "),
                 location: `${booking.city}`,

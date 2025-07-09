@@ -347,7 +347,7 @@ function NurseExperienceDetails() {
       <button
         onClick={handleSubmit}
         disabled={isSubmitted}
-        className={`mt-10 w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center opacity-100  ${
+        className={`mt-10 w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center opacity-100 cursor-pointer ${
           isSubmitted
             ? "disabled:opacity-50 cursor-not-allowed"
             : "bg-[#3674B5] text-white"
