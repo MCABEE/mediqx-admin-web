@@ -135,7 +135,7 @@ function allStaffDetailPage() {
           </h1>
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Previous Work Experience </span>
-            <span>{nurseData.experienceLevel || "Nil"}</span>
+            <span>{qualifications.type || "Fresher"}</span>
           </div>
 
           {/* Experience */}
