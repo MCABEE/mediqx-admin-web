@@ -165,7 +165,7 @@ function StaffDetailPage() {
               Previous Work Experience{" "}
             </span>
             <span className=" text-black">
-              {nurseData.experienceLevel || "Nil"}
+              {nurseData.experienceLevel || "Fresher"}
             </span>
           </div>
 
