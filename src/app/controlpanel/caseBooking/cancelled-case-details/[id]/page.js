@@ -1,9 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import React, { useEffect } from "react";
 import Navlink from "@/components/caseBooking/NavLink";
 import useBookingStore from "@/app/lib/store/bookingStore";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const formatDate = (isoString) => {
   if (!isoString) return "-";
@@ -31,6 +30,8 @@ const formatTime = (isoString) => {
 };
 
 const BookingDetailsPage = () => {
+  const router = useRouter();
+
   const { id } = useParams();
   const { fetchBookingById, selectedBooking, isLoading, error } =
     useBookingStore();
@@ -47,19 +48,18 @@ const BookingDetailsPage = () => {
   if (!selectedBooking) return <p className="p-8">No booking found.</p>;
 
   const booking = selectedBooking;
-  const router = useRouter();
 
   return (
     <div>
       <Navlink />
       {/* HEADER */}
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
-        <div
+        <button
           onClick={() => router.back()}
           className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
         >
           Back
-        </div>
+        </button>
         <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px]">
           <p className="font-semibold">{booking?.fullName || "Patient Name"}</p>
           <div className="flex justify-center items-center gap-[92px]">

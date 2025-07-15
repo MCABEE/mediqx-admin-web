@@ -4,7 +4,7 @@ import NurseBasicInformation from "@/components/staffManagement/addNewStaff/Nurs
 import NurseExperinceDetails from "@/components/staffManagement/addNewStaff/NurseExperinceDetails";
 import UploadCertificate from "@/components/staffManagement/addNewStaff/UploadCertificate";
 import Navlink from "@/components/staffManagement/Navlink";
-import React, { useState } from "react";
+import React from "react";
 
 function page() {
   return (

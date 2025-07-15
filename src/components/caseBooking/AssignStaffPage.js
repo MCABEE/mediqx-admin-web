@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import AssignStaffTable from "./AssignStaffTable";
 import Navlink from "./NavLink";
+import LocationMap from "./LocationMap";
 
 const AssignStaffPage = () => {
   const router = useRouter();
@@ -66,7 +67,7 @@ const AssignStaffPage = () => {
           <span>{location}</span>
         </div>
       </div>
-
+      {/* <LocationMap/> */}
       <AssignStaffTable bookingId={bookingId} onSelectNurse={handleAssign} />
     </div>
   );
