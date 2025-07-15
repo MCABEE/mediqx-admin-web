@@ -1,11 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import Navlink from "@/components/caseBooking/NavLink";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import Link from "next/link";
 
-import { useRouter } from "next/navigation";
+import {useParams, useRouter } from "next/navigation";
 import CancelPopup from "@/components/caseBooking/CancelPopup";
 
 const formatDate = (isoString) => {

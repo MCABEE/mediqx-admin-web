@@ -34,7 +34,7 @@ export const menus = [
       id: 5,
       name: "Patient Management",
       hasSubmenu: false,
-      //link: "profileReports",
+      link: "/controlpanel/patient-management/ongoing-patients",
     },
     {
       id: 6,

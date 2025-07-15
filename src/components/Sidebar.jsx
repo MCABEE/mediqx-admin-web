@@ -23,6 +23,8 @@ function Sidebar() {
       setActive("Home");
     }  else if (pathname.includes("/controlpanel/cases")) {
       setActive("Cases");
+    }  else if (pathname.includes("/controlpanel/patient-management/ongoing-patients")) {
+      setActive("Patient Management");
     } else {
       // fallback: match from menu links if more are added later
       const matched = menus.find(

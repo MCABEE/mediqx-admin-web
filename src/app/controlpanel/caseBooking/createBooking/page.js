@@ -54,44 +54,7 @@ const CaseBookingPage = () => {
     }
   };
 
-//   const handleSubmit = async (e) => {
-   
-//     e.preventDefault();
-//  if (preferredLanguages.length === 0) {
-//       setLangError(true);
-//       return;
-//     } else {
-//       setLangError(false);
-//     }
-//     const payload = {
-//       ...form,
-//       contactPersonMobileNumber: form.contactPersonMobileNumber.startsWith(
-//         "+91"
-//       )
-//         ? form.contactPersonMobileNumber
-//         : `+91${form.contactPersonMobileNumber}`,
-//       age: Number(form.age),
-//       height: Number(form.height || 0),
-//       weight: Number(form.weight || 0),
-//       startDate: new Date(form.startDate).toISOString(),
-//       durationType: visitType,
-//       durationValue:
-//         visitType === "ONE_TIME_VISIT" ? "0" : Number(form.durationValue),
-//       weekdays,
-//       flexibility,
-//       preferredLanguages,
-//       preferredGender,
-//       serviceType: "OTHER",
-//       durationValue: (form.durationValue || 1),
-//     };
 
-//     const result = await submitBooking(payload);
-//     if (result.success) {
-//       alert("Booking created!");
-//     } else {
-//       alert("Error: " + result.error);
-//     }
-//   };
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -685,7 +648,7 @@ const handleSubmit = async (e) => {
 
         <button
           type="submit"
-          className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] mx-8 mb-4"
+          className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] mx-8 mb-4 cursor-pointer"
         >
           Submit
         </button>
