@@ -67,7 +67,7 @@ const AssignStaffPage = () => {
           <span>{location}</span>
         </div>
       </div>
-      {/* <LocationMap/> */}
+      <LocationMap/>
       <AssignStaffTable bookingId={bookingId} onSelectNurse={handleAssign} />
     </div>
   );
