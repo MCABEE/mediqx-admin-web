@@ -1,9 +1,9 @@
 // src/lib/store/bookingStore.js
 
 import { create } from "zustand";
-import { getBookingDetails, createBooking, getBookingById,confirmBookingApi,assignNurseToBooking,cancelBookingApi,cancelNurseAssignment } from "@/api/bookingApi";
+import { getBookingDetails, createBooking, getBookingById,confirmBookingApi,assignNurseToBooking,cancelBookingApi,cancelNurseAssignment ,searchCoordinatesByText} from "@/api/bookingApi";
 
-const useBookingStore = create((set) => ({
+const useBookingStore = create((set,get) => ({
   bookings: [],
   selectedBooking: null,     // New state to hold single booking details
   page: 1,
@@ -12,6 +12,7 @@ const useBookingStore = create((set) => ({
   totalBookings: 0,
   isLoading: false,
   error: null,
+  coordinates:null,
 
   // Fetch all bookings (existing)
   fetchBookings: async (page = 1, limit = 10,status) => {
@@ -83,6 +84,25 @@ const useBookingStore = create((set) => ({
       throw err;
     }
   },
+
+
+setCoordinates: (coords) => set({ coordinates: coords }),
+
+fetchCoordinatesByText: async (text) => {
+  set({  coordinates: null });
+  try {
+    const result = await searchCoordinatesByText(text);
+    set({ coordinates: result, error: null });
+    return result;
+  } catch (err) {
+    set({ error: err.message });
+    return null;
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
   cancelBooking: async (bookingId, payload) => {
     try {
       set({ isLoading: true });

@@ -75,3 +75,24 @@ export const cancelNurseAssignment = async (assignmentId) => {
   );
   return response.data;
 };
+
+
+
+
+export const searchCoordinatesByText = async (text) => {
+  try {
+    const response = await api.get(
+      `/admin/bookings/coordinates?text=${encodeURIComponent(text)}`,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
+
+    return response.data.data; // Adjust if the key is not `data`
+  } catch (error) {
+    console.error("Error fetching coordinates:", error);
+    return null;
+  }
+};
