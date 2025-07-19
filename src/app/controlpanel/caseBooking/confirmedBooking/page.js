@@ -367,7 +367,7 @@ const StatusPopup = ({
 {bgClass === "bg-[#D4B200]" && ( // YELLOW
   <button
     onClick={onCancel}
-    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
+    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer "
   >
     Cancel
   </button>
@@ -376,7 +376,7 @@ const StatusPopup = ({
 {bgClass === "bg-[#09B438]" && ( // GREEN
   <button
     onClick={onCancel}
-    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
+    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer "
   >
     Re-Schedule
   </button>

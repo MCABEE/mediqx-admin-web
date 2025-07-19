@@ -9,7 +9,7 @@ import Navlink from "./NavLink";
 import LocationMap from "./LocationMap";
 
 const AssignStaffPage = () => {
-  const router = useRouter();
+  const router = useRouter(); 
   const searchParams = useSearchParams();
 
   const bookingId = searchParams.get("bookingId");
@@ -21,6 +21,8 @@ const AssignStaffPage = () => {
   const gender = searchParams.get("gender");
   const language = searchParams.get("language");
   const location = searchParams.get("location");
+  const latitude =searchParams.get("latitude");
+  const longitude =searchParams.get("longitude");
 
   const { assignNurse } = useBookingStore();
 
@@ -67,7 +69,7 @@ const AssignStaffPage = () => {
           <span>{location}</span>
         </div>
       </div>
-      <LocationMap/>
+      <LocationMap latitude={latitude} longitude={longitude} fullName={fullName}/>
       <AssignStaffTable bookingId={bookingId} onSelectNurse={handleAssign} />
     </div>
   );
