@@ -235,7 +235,7 @@ const BookingDetailsPage = () => {
             href={{
               pathname: "/controlpanel/caseBooking/assignStaff",
               query: {
-                bookingId: booking.id,
+                bookingId: booking.id, 
                 fullName: booking.fullName,
                 from: booking.startDate,
                 to: booking.endDate,
@@ -244,6 +244,8 @@ const BookingDetailsPage = () => {
                 gender: booking.preferredGender,
                 language: booking.preferredLanguages?.join(", "),
                 location: `${booking.city}`,
+                latitude:booking.latitude,
+                longitude:booking.longitude,
               },
             }}
           >
