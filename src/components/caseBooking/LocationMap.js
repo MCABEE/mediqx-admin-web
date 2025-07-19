@@ -27,17 +27,20 @@ const LocationMap = ({ latitude, longitude, fullName }) => {
 
     window.mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
-    const latCenter = parseFloat(latitude) || 10.0;
-    const lngCenter = parseFloat(longitude) || 78.0;
+    const patientLat = parseFloat(latitude);
+    const patientLng = parseFloat(longitude);
 
     const map = new window.mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [lngCenter, latCenter],
-      zoom: 6,
+      center:
+        !isNaN(patientLat) && !isNaN(patientLng) && patientLat !== 0 && patientLng !== 0
+          ? [patientLng, patientLat]
+          : [78.0, 10.0],
+      zoom: 13, // Zoomed closer to patient area
     });
 
-    // ✅ Add nurse markers
+    //  Add nurse markers
     users.forEach((nurse) => {
       const lat = parseFloat(nurse.latitude);
       const lng = parseFloat(nurse.longitude);
@@ -48,22 +51,19 @@ const LocationMap = ({ latitude, longitude, fullName }) => {
         `<strong>${nurse.fullName}</strong><br/>${nurse.location || ""}`
       );
 
-      new window.mapboxgl.Marker({ color: "#1D4ED8" }) // blue marker
+      new window.mapboxgl.Marker({ color: "#1D4ED8" }) // blue
         .setLngLat([lng, lat])
         .setPopup(popup)
         .addTo(map);
     });
 
-    // ✅ Add patient marker
-    const patientLat = parseFloat(latitude);
-    const patientLng = parseFloat(longitude);
-
+    // ✅ Add red patient marker
     if (!isNaN(patientLat) && !isNaN(patientLng) && patientLat !== 0 && patientLng !== 0) {
       const popup = new window.mapboxgl.Popup({ offset: 25 }).setHTML(
         `<strong>${fullName || "Patient"}</strong><br/>Patient Location`
       );
 
-      new window.mapboxgl.Marker({ color: "#DC2626" }) // red marker
+      new window.mapboxgl.Marker({ color: "#DC2626" }) // red
         .setLngLat([patientLng, patientLat])
         .setPopup(popup)
         .addTo(map);
