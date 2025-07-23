@@ -14,7 +14,7 @@ const Page = () => {
     error,
     setPage,
     totalBookings,
-    cancelAssignment 
+    cancelAssignment,
   } = useBookingStore();
 
   const [popupStatus, setPopupStatus] = useState(null); // "GREEN", "RED", "YELLOW", "BLUE"
@@ -53,19 +53,18 @@ const Page = () => {
     closePopup();
   };
 
+  const handleCancelOrReschedule = async () => {
+    if (!selectedBooking?.assignmentId) return;
 
-const handleCancelOrReschedule = async () => {
-  if (!selectedBooking?.assignmentId) return;
-
-  const result = await cancelAssignment(selectedBooking.assignmentId);
-  if (result.success) {
-    fetchBookings(page, 10, "CONFIRMED"); // refresh bookings
-    proceedToDetails();
-    closePopup();
-  } else {
-    console.error("Cancel failed:", result.error);
-  }
-};
+    const result = await cancelAssignment(selectedBooking.assignmentId);
+    if (result.success) {
+      fetchBookings(page, 10, "CONFIRMED"); // refresh bookings
+      proceedToDetails();
+      closePopup();
+    } else {
+      console.error("Cancel failed:", result.error);
+    }
+  };
 
   return (
     <div>
@@ -223,7 +222,7 @@ const handleCancelOrReschedule = async () => {
           scheduleType={selectedBooking.scheduleType}
           onClose={closePopup}
           onProceed={proceedToDetails}
-          onCancel={handleCancelOrReschedule} 
+          onCancel={handleCancelOrReschedule}
           bgClass="bg-[#09B438]"
           textClass="text-[#09B438]"
         />
@@ -238,7 +237,7 @@ const handleCancelOrReschedule = async () => {
           actionResponse={selectedBooking.actionResponse}
           onClose={closePopup}
           onProceed={proceedToDetails}
-          onCancel={handleCancelOrReschedule} 
+          onCancel={handleCancelOrReschedule}
           bgClass="bg-[#FE1940]"
           textClass="text-[#FE1940]"
         />
@@ -252,7 +251,7 @@ const handleCancelOrReschedule = async () => {
           scheduleType={selectedBooking.scheduleType}
           onClose={closePopup}
           onProceed={proceedToDetails}
-          onCancel={handleCancelOrReschedule} 
+          onCancel={handleCancelOrReschedule}
           bgClass="bg-[#D4B200]"
           textClass="text-[#D4B200]"
         />
@@ -266,7 +265,7 @@ const handleCancelOrReschedule = async () => {
           scheduleType={selectedBooking.scheduleType}
           onClose={closePopup}
           onProceed={proceedToDetails}
-          onCancel={handleCancelOrReschedule} 
+          onCancel={handleCancelOrReschedule}
           bgClass="bg-[#3674B5]"
           textClass="text-[#3674B5]"
         />
@@ -306,7 +305,7 @@ const StatusPopup = ({
   startDate,
   scheduleType,
   actionResponse,
-  onCancel
+  onCancel,
 }) => (
   <div className="fixed inset-0 bg-[#03030347] backdrop-blur-xs flex items-center justify-center z-50">
     <div className={`rounded-[15px]   w-[762px] h-[416px] shadow-xl bg-white`}>
@@ -356,31 +355,31 @@ const StatusPopup = ({
       </div>
       <div className="flex justify-center items-center">
         {bgClass === "bg-[#FE1940]" && ( // RED
-  <button
-    onClick={onProceed}
-    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
-  >
-    Assign
-  </button>
-)}
+          <button
+            onClick={onProceed}
+            className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] "
+          >
+            Assign
+          </button>
+        )}
 
-{bgClass === "bg-[#D4B200]" && ( // YELLOW
-  <button
-    onClick={onCancel}
-    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer "
-  >
-    Cancel
-  </button>
-)}
+        {bgClass === "bg-[#D4B200]" && ( // YELLOW
+          <button
+            onClick={onCancel}
+            className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer "
+          >
+            Cancel
+          </button>
+        )}
 
-{bgClass === "bg-[#09B438]" && ( // GREEN
-  <button
-    onClick={onCancel}
-    className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer "
-  >
-    Re-Schedule
-  </button>
-)}
+        {bgClass === "bg-[#09B438]" && ( // GREEN
+          <button
+            onClick={onCancel}
+            className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer "
+          >
+            Re-Schedule
+          </button>
+        )}
 
         {bgClass === "bg-[#3674B5]" && ( // BLUE
           <button
@@ -391,7 +390,6 @@ const StatusPopup = ({
           </button>
         )}
       </div>
-   
     </div>
   </div>
 );

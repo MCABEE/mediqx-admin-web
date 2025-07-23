@@ -337,8 +337,8 @@ function StaffDetailPage() {
               )}
             </div>
           );
-        })}
-        ;{/* Contact Details with edit */}
+        })} 
+        {/* Contact Details with edit */}
         {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
         <div className="flex flex-col text-black font-light gap-[18px] px-[39px]">
           {/* <div className="flex gap-[18px]">

@@ -96,3 +96,34 @@ export const searchCoordinatesByText = async (text) => {
     return null;
   }
 };
+
+
+
+
+export const updateBooking = async (bookingId, payload) => {
+  const response = await api.put(`/admin/bookings/${bookingId}`, payload, {
+    headers: {
+      accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+  return response.data;
+};
+
+
+
+
+export const updateBookingLocation = async (bookingId, payload) => {
+  const response = await api.patch(
+    `/admin/bookings/update-current-location/${bookingId}`,
+    payload,
+    {
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+

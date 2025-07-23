@@ -7,6 +7,7 @@ import ConfirmPopup from "@/components/caseBooking/ConfirmPopup";
 import Link from "next/link";
 import EditBookingPopup from "@/components/caseBooking/EditBookingPopup";
 import CancelPopup from "@/components/caseBooking/CancelPopup";
+import UpdateLocationPopup from "@/components/caseBooking/UpdateLocationPopup";
 
 const formatDate = (isoString) => {
   if (!isoString) return "-";
@@ -35,11 +36,11 @@ const formatTime = (isoString) => {
 
 const BookingDetailsPage = () => {
   const { id } = useParams();
-  const { fetchBookingById, selectedBooking, isLoading, error } =
-    useBookingStore();
+  const { fetchBookingById, selectedBooking, isLoading, error } =  useBookingStore();
 
   const [showPopup, setShowPopup] = useState(false);
   const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const [showLocationPopup, setShowLocationPopup] = useState(false);
 
   useEffect(() => {
     if (id) fetchBookingById(id);
@@ -78,11 +79,10 @@ const BookingDetailsPage = () => {
   const handleEditClick = () => setShowEditPopup(true);
   const handleEditClose = () => setShowEditPopup(false);
 
-  const handleEditSave = (updatedData) => {
-    // Here, you can update Zustand store or call the API
-    console.log("Updated data:", updatedData);
-    setShowEditPopup(false);
-  };
+  const handleEditSave = async (updatedData) => {
+  setShowEditPopup(false); // Close the popup
+  await fetchBookingById(id); // Re-fetch the booking to reflect updates
+};
   if (isLoading) return <p className="p-8">Loading...</p>;
   if (error) return <p className="p-8 text-red-500">Error: {error}</p>;
   if (!selectedBooking) return <p className="p-8">No booking found.</p>;
@@ -197,6 +197,10 @@ const BookingDetailsPage = () => {
             <span>{booking.serviceType}</span>
           </div>
           <div className="flex">
+            <span className="w-[200px] font-medium">Schedule Type</span>
+            <span>{booking.scheduleType}</span>
+          </div>
+          <div className="flex">
             <span className="w-[200px] font-medium">Duration</span>
             <span>
               {booking.durationType} 
@@ -243,6 +247,36 @@ const BookingDetailsPage = () => {
         </div>
       </div>
 
+       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
+        <div className="w-full h-[72px] flex items-center justify-between bg-white px-8 rounded-t-[15px] border-b-2">
+          <h1 className="text-[16px] font-semibold text-black">
+            Location
+          </h1>
+          <button
+  onClick={() => setShowLocationPopup(true)}
+  className="bg-[#C0D8F6] text-black px-4 py-1 rounded-md mt-2 w-[150px] cursor-pointer"
+>
+  Update Location
+</button>
+        </div>
+        <div className="flex gap-12 p-8">
+  <div className="flex flex-col gap-[10px] text-[16px] text-black">
+    <span>Current Location</span>
+  </div>
+  <div className="flex flex-col gap-[10px] text-[16px] text-black">
+    {booking.latitude && booking.longitude ? (
+      <>
+        <span>Available</span>
+        
+      </>
+    ) : (
+      <span>NA</span>
+    )}
+  </div>
+</div>
+
+      </div>
+
       {/* ACTION BUTTONS */}
       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB] mb-5">
         <div className="w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px] border-b-2">
@@ -255,12 +289,12 @@ const BookingDetailsPage = () => {
           >
             Cancel Service
           </button>
-          {/* <button
+          <button
             onClick={handleEditClick}
-            className="w-[192px] h-[40px] bg-white text-[#333333] border flex justify-center items-center rounded-[15px]"
+            className="w-[192px] h-[40px] bg-white text-[#333333] border flex justify-center items-center rounded-[15px] cursor-pointer"
           >
             Edit Service
-          </button> */}
+          </button>
           <button
             onClick={handleConfirmClick}
             className="w-[192px] h-[40px] bg-[#09B438] text-white flex justify-center items-center rounded-[15px] cursor-pointer"
@@ -294,6 +328,16 @@ const BookingDetailsPage = () => {
           onSave={handleEditSave}
         />
       )}
+      {showLocationPopup && (
+  <UpdateLocationPopup
+  bookingId={selectedBooking?.id}
+  currentLat={selectedBooking?.latitude}
+  currentLng={selectedBooking?.longitude}
+  onClose={() => setShowLocationPopup(false)}
+  onUpdated={() => fetchBookingById(selectedBooking.id)}
+/>
+)}
+
     </div>
   );
 };
