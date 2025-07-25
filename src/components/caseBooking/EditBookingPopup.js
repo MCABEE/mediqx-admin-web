@@ -136,14 +136,6 @@
 
 // export default EditBookingPopup;
 
-
-
-
-
-
-
-
-
 "use client";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import React, { useState, useEffect } from "react";
@@ -163,7 +155,7 @@ const InputGroup = ({ label, type = "text", name, value, onChange }) => (
 );
 
 const EditBookingPopup = ({ initialData, onClose, onSave }) => {
-   const { updateExistingBooking } = useBookingStore();
+  const { updateExistingBooking } = useBookingStore();
   const [form, setForm] = useState({
     // Patient Details
     fullName: "",
@@ -189,7 +181,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
     flexibility: "",
     startTime: "",
     endTime: "",
-    scheduleType:"",
+    scheduleType: "",
 
     // Staff Preferences
     preferredGender: "",
@@ -212,10 +204,10 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
- const handleSave = async () => {
-  const bookingId =form.id;
-    const payload = { 
-      userId:form.userId,
+  const handleSave = async () => {
+    const bookingId = form.id;
+    const payload = {
+      userId: form.userId,
       patientName: form.fullName,
       gender: form.gender,
       age: Number(form.age),
@@ -225,7 +217,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
       healthStatus: form.healthStatus,
       stayAt: form.stayAt,
       serviceType: form.serviceType,
-      location: form.city, 
+      location: form.city,
       // pincode: "123456",
       contactPersonName: form.contactPersonName,
       contactPersonRelation: form.contactPersonRelation,
@@ -242,7 +234,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
       preferredGender: form.preferredGender,
       scheduleType: form.scheduleType,
     };
-    
+
     const result = await updateExistingBooking(bookingId, payload);
     if (result.success) {
       onSave(result.data); // close or update UI
@@ -250,7 +242,6 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
       console.log("Failed to update booking: " + result.error);
     }
   };
-
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-center items-center px-4 overflow-y-auto py-10">
@@ -262,7 +253,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-red-500 text-xl transition"
+            className="text-gray-500 hover:text-red-500 text-xl transition cursor-pointer"
             aria-label="Close"
           >
             &times;
@@ -319,7 +310,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               value={form.healthStatus}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none text-sm"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
             >
               <option value="" disabled>
                 Select Health Status / Activity
@@ -362,7 +353,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               value={form.stayAt}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none text-sm"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
             >
               <option value="" disabled>
                 Now Patient stayed at
@@ -396,7 +387,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               value={form.contactPersonRelation}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none text-sm"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
             >
               <option value="">Relationship with patient</option>
               <option value="SELF">Self</option>
@@ -458,7 +449,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               value={form.diagnosis}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] text-[14px] border border-[#BBBBBB] px-4 text-black outline-none"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
             >
               <option value="" disabled>
                 Select diagnosis
@@ -523,7 +514,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               value={form.serviceType}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
             >
               <option value="" disabled>
                 Service Required
@@ -599,7 +590,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               value={form.flexibility}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
             >
               <option value="" disabled>
                 Select flexibility
@@ -618,140 +609,135 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               value={form.scheduleType}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none text-sm"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
             >
-               <option value=""  disabled>Daily Schedule Type</option>
-            <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
-            <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
-            <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option>
-            <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
-            <option value="CUSTOM_HOURS">Custom Hours</option>
+              <option value="" disabled>
+                Daily Schedule Type
+              </option>
+              <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
+              <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
+              <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option>
+              <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
+              <option value="CUSTOM_HOURS">Custom Hours</option>
             </select>
           </div>
 
-        
           {/* Shows comma-separated selected weekdays */}
-        <div>
+          <div>
             <InputGroup
-            label="Weekdays (comma separated)"
-            name="weekdays"
-            value={form.weekdays?.join(", ")}
-            onChange={() => {}}
-            readOnly
-          />
+              label="Weekdays (comma separated)"
+              name="weekdays"
+              value={form.weekdays?.join(", ")}
+              onChange={() => {}}
+              readOnly
+            />
 
-          {/* Checkbox group for weekday selection */}
-          <div className="grid grid-cols-2 gap-2 my-4">
-            {[
-              "MONDAY",
-              "TUESDAY",
-              "WEDNESDAY",
-              "THURSDAY",
-              "FRIDAY",
-              "SATURDAY",
-              "SUNDAY",
-            ].map((day) => (
-              <label key={day} className="inline-flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={form.weekdays?.includes(day)}
-                  onChange={() => {
-                    const updated = form.weekdays?.includes(day)
-                      ? form.weekdays.filter((d) => d !== day) // Remove if already selected
-                      : [...(form.weekdays || []), day]; // Add if not selected
-                    setForm((prev) => ({ ...prev, weekdays: updated }));
-                  }}
-                />
-                {day}
-              </label>
-            ))}
+            {/* Checkbox group for weekday selection */}
+            <div className="grid grid-cols-2 gap-2 my-4">
+              {[
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY",
+              ].map((day) => (
+                <label key={day} className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.weekdays?.includes(day)}
+                    onChange={() => {
+                      const updated = form.weekdays?.includes(day)
+                        ? form.weekdays.filter((d) => d !== day) // Remove if already selected
+                        : [...(form.weekdays || []), day]; // Add if not selected
+                      setForm((prev) => ({ ...prev, weekdays: updated }));
+                    }}
+                  />
+                  {day}
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
         </div>
 
         {/* Staff Preference */}
         <h3 className="text-lg font-semibold mb-4">Staff Preferences</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-        
           <div>
-            <label className="text-sm font-medium text-[#1F2937] mb-1 block">Preferred Gender</label>
-<select
-  name="preferredGender"
-  value={form.preferredGender}
-  onChange={(e) =>
-    setForm((prev) => ({ ...prev, preferredGender: e.target.value }))
-  }
-  required
-  className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
->
-  <option value="">Select Gender</option>
-  <option value="MALE">Male</option>
-  <option value="FEMALE">Female</option>
-</select>
+            <label className="text-sm font-medium text-[#1F2937] mb-1 block">
+              Preferred Gender
+            </label>
+            <select
+              name="preferredGender"
+              value={form.preferredGender}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  preferredGender: e.target.value,
+                }))
+              }
+              required
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+            >
+              <option value="">Select Gender</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+            </select>
           </div>
-          {/* <InputGroup
-            label="Preferred Languages (comma separated)"
-            name="preferredLanguages"
-            value={form.preferredLanguages?.join(", ")}
-            onChange={(e) =>
-              setForm((prev) => ({
-                ...prev,
-                preferredLanguages: e.target.value
-                  .split(",")
-                  .map((lang) => lang.trim()),
-              }))
-            }
-          /> */}
+
           {/* Read-only Input showing comma-separated selected languages */}
           <div>
-<InputGroup
-  label="Preferred Languages (comma separated)"
-  name="preferredLanguages"
-  value={form.preferredLanguages?.join(", ")}
-  onChange={() => {}}
-  readOnly
-/>
+            <InputGroup
+              label="Preferred Languages (comma separated)"
+              name="preferredLanguages"
+              value={form.preferredLanguages?.join(", ")}
+              onChange={() => {}}
+              readOnly
+            />
 
-{/* Checkbox group for selecting preferred languages */}
-<div className="grid grid-cols-2 gap-2 my-4">
-  {[
-    "HINDI",
-    "KANNADA",
-    "ENGLISH",
-    "MALAYALAM",
-    "TAMIL",
-    "TELUGU",
-  ].map((lang) => (
-    <label key={lang} className="inline-flex items-center gap-2">
-      <input
-        type="checkbox"
-        checked={form.preferredLanguages?.includes(lang)}
-        onChange={() => {
-          const updated = form.preferredLanguages?.includes(lang)
-            ? form.preferredLanguages.filter((l) => l !== lang) // remove
-            : [...(form.preferredLanguages || []), lang];       // add
-          setForm((prev) => ({ ...prev, preferredLanguages: updated }));
-        }}
-      />
-      {lang}
-    </label>
-  ))}
-</div>
-</div>
-
+            {/* Checkbox group for selecting preferred languages */}
+            <div className="grid grid-cols-2 gap-2 my-4">
+              {[
+                "HINDI",
+                "KANNADA",
+                "ENGLISH",
+                "MALAYALAM",
+                "TAMIL",
+                "TELUGU",
+              ].map((lang) => (
+                <label key={lang} className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.preferredLanguages?.includes(lang)}
+                    onChange={() => {
+                      const updated = form.preferredLanguages?.includes(lang)
+                        ? form.preferredLanguages.filter((l) => l !== lang) // remove
+                        : [...(form.preferredLanguages || []), lang]; // add
+                      setForm((prev) => ({
+                        ...prev,
+                        preferredLanguages: updated,
+                      }));
+                    }}
+                  />
+                  {lang}
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Footer Buttons */}
         <div className="flex justify-end gap-3 mt-4">
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition"
+            className="px-5 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="px-6 py-2 rounded-md bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition"
+            className="px-6 py-2 rounded-md bg-[#2152bd] text-white hover:bg-[#1D4ED8] transition cursor-pointer"
           >
             Save Changes
           </button>

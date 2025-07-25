@@ -6,6 +6,8 @@ import Navlink from "@/components/staffManagement/Navlink";
 import AvailabilitySchedule from "@/components/staffManagement/AvailabilitySchedule";
 import nurseStore from "@/app/lib/store/nurseStore";
 import EditContactModal from "@/components/staffManagement/NurseEdit/ContactDetails ";
+import EditNurseAvailability from "@/components/staffManagement/NurseEdit/EditNurseAvailability";
+import EditExperincePopup from "@/components/staffManagement/NurseEdit/EditExperincePopup";
 
 function StaffDetailPage() {
   const router = useRouter();
@@ -25,6 +27,9 @@ function StaffDetailPage() {
     fullName: "",
     email: "",
     mobileNumber: "",
+    educationQualifications: "",
+    specializations: [], // array, assuming one or more values
+    workSchedule: "", // "FULLTIME" or "PARTTIME"
     address: {
       state: "",
       district: "",
@@ -34,6 +39,9 @@ function StaffDetailPage() {
       pincode: "",
     },
   });
+
+  const [editAvailabilityPopup, setEditAvailabilityPopup] = useState(false);
+  const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
 
   useEffect(() => {
     if (userId) fetchNurseById(userId);
@@ -46,7 +54,11 @@ function StaffDetailPage() {
         fullName: selectedNurse.fullName || "",
         email: selectedNurse.email || "",
         mobileNumber: selectedNurse.mobileNumber || "",
+        educationQualifications: nurseData.educationQualifications[0] || "",
+        specializations: nurseData.specializations || [],
+        workSchedule: nurseData.workSchedule || "",
         address: {
+          addressId: selectedNurse.address?.id || "",
           state: selectedNurse.address?.state || "",
           district: selectedNurse.address?.district || "",
           city: selectedNurse.address?.city || "",
@@ -86,22 +98,14 @@ function StaffDetailPage() {
           <span className="text-[20px] font-semibold text-[#333333]">
             {selectedNurse.fullName}
           </span>
-          {/* <div className="flex items-center gap-4">
-            <button>
-              <img src="/edit-btn.svg" alt="edit" />
-            </button>
-            <button>
-              <img src="/delete-btn.svg" alt="delete" />
-            </button>
-          </div> */}
         </div>
         <div className="flex justify-between px-[39px]">
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
             Basics
           </h1>
-          {/* <button onClick={() => setIsEditModalOpen(true)}>
+          <button onClick={() => setIsEditModalOpen(true)} className="cursor-pointer hover:scale-110">
             <img src="/edit-btn.svg" className="size-6" alt="edit" />
-          </button> */}
+          </button>
         </div>
         <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
           <div className="flex gap-[18px]">
@@ -155,14 +159,24 @@ function StaffDetailPage() {
         </div>
         {/* Basic Details */}
         <div className="px-[39px] pt-[15px]">
+          <div className="flex items-center justify-end">
+            <button onClick={() => setEditAvailabilityPopup(true)} className="cursor-pointer hover:scale-110">
+              <img src="/edit-btn.svg" className="size-6" alt="edit" />
+            </button>
+          </div>
           {/* Availability */}
           <AvailabilitySchedule availabilities={availabilities} />
+          <div className="flex items-center justify-end mt-6">
+            <button onClick={() => setIsExperincePopUp(true)} className="cursor-pointer hover:scale-110">
+              <img src="/edit-btn.svg" className="size-6" alt="edit" />
+            </button>
+          </div>
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
             Work Experience?
           </h1>
           <div className="flex gap-[18px] text-black">
             <span className="w-[280px]  text-black">
-              Previous Work Experience{" "}
+              Previous Work Experience
             </span>
             <span className=" text-black">
               {nurseData.experienceLevel || "Fresher"}
@@ -177,7 +191,7 @@ function StaffDetailPage() {
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Total Experience in years</span>
               <span>
-                {nurseData.yearsOfExperience}Yr {nurseData.monthsOfExperience}Mo{" "}
+                {nurseData.yearsOfExperience}Yr {nurseData.monthsOfExperience}Mo
               </span>
             </div>
             <div className="flex gap-[18px]">
@@ -185,7 +199,7 @@ function StaffDetailPage() {
               <span>{qualifications.providerName || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
-              <span className="w-[280px]">Specializations</span>
+              <span className="w-[280px]">Department</span>
               <span>{qualifications.department || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
@@ -199,23 +213,7 @@ function StaffDetailPage() {
 
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
-              {/* <span>{qualifications.startDate}, {qualifications.endDate}</span> */}
-
-              {/* <span>
-  {new Date(qualifications.startDate).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  })}
-  {" - "}
-  {qualifications.onGoing
-    ? "Present"
-    : new Date(qualifications.endDate).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })}
-</span> */}
+           
 
               <span>
                 {qualifications.startDate &&
@@ -337,19 +335,10 @@ function StaffDetailPage() {
               )}
             </div>
           );
-        })} 
+        })}
         {/* Contact Details with edit */}
         {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
-        <div className="flex flex-col text-black font-light gap-[18px] px-[39px]">
-          {/* <div className="flex gap-[18px]">
-              <span className="w-[280px]">Any refferal you have?</span>
-             <span>{selectedNurse.referredById ? "Yes" : "No"}</span>
-            </div> */}
-          {/* <div className="flex gap-[18px]">
-              <span className="w-[280px]">Code</span>
-              <span></span>
-            </div> */}
-        </div>
+
         {/* Actions */}
         <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
           Actions
@@ -435,14 +424,28 @@ function StaffDetailPage() {
       <EditContactModal
         show={isEditModalOpen}
         contact={editedContact}
+        userId={userId}
         onChange={setEditedContact}
+        initialContact={selectedNurse}
         onCancel={() => setIsEditModalOpen(false)}
-        onSave={() => {
-          // Call your API to save updated contact here
-          console.log("Saving contact:", editedContact);
-          setIsEditModalOpen(false);
-        }}
       />
+
+      {editAvailabilityPopup && (
+        <EditNurseAvailability
+          availabilities={availabilities}
+          userId={userId}
+          onClose={() => setEditAvailabilityPopup(false)}
+        />
+      )}
+
+      {isEditExperincePopUp && (
+        <EditExperincePopup
+          qualifications={qualifications}
+          nurseData={nurseData}
+          userId={userId}
+          onClose={() => setIsExperincePopUp(false)}
+        />
+      )}
     </div>
   );
 }

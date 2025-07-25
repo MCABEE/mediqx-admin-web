@@ -1,192 +1,146 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import useNurseStore from "@/app/lib/store/nurseStore";
+import React from "react";
+import { AiOutlineClose } from "react-icons/ai";
 
-export default function EditContactModal({
-  show,
-  contact,
-  onChange,
-  onCancel,
-  onSave,
-}) {
-  const [districts, setDistricts] = useState([]);
-  const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    const stateDistrictMap = {
-      Kerala: ["Ernakulam", "Trivandrum", "Kozhikode"],
-      Karnataka: ["Bangalore", "Mysore", "Mangalore"],
-    };
-
-    const selectedState = contact.address?.state;
-    if (selectedState && stateDistrictMap[selectedState]) {
-      setDistricts(stateDistrictMap[selectedState]);
-    } else {
-      setDistricts([]);
-    }
-  }, [contact.address?.state]);
+const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
+  const { updateNurseDetails } = useNurseStore();
+console.log(contact);
 
   if (!show) return null;
 
-  const handleFieldChange = (field, value) => {
+  const handleChange = (field, value) => {
     onChange({ ...contact, [field]: value });
-
-    // Validate mobileNumber
-    if (field === "mobileNumber") {
-      const isValid = /^[0-9]{10}$/.test(value);
-      setErrors((prev) => ({
-        ...prev,
-        mobileNumber: isValid ? null : "Mobile number must be 10 digits",
-      }));
-    }
   };
 
   const handleAddressChange = (field, value) => {
-    const updatedAddress = {
-      ...contact.address,
-      [field]: value,
-    };
-    onChange({ ...contact, address: updatedAddress });
+    onChange({
+      ...contact,
+      address: {
+        ...contact.address,
+        [field]: value,
+      },
+    });
+  };
 
-    // Validate pincode
-    if (field === "pincode") {
-      const isValid = /^[0-9]{6}$/.test(value);
-      setErrors((prev) => ({
-        ...prev,
-        pincode: isValid ? null : "Pincode must be 6 digits",
-      }));
+  const handleSave = async () => {
+    const payload = {
+      fullName: contact.fullName,
+      gender: contact.gender,
+      email: contact.email,
+      mobileNumber: contact.mobileNumber,
+      addressId: contact.address?.addressId,
+      state: contact.address?.state,
+      district: contact.address?.district,
+      city: contact.address?.city,
+      pincode: contact.address?.pincode,
+      educationQualifications: [contact.educationQualifications],
+      specializations: contact.specializations || [],
+      workSchedule: contact.workSchedule,
+    };
+
+    try {
+      await updateNurseDetails(userId, payload);
+      onCancel(); // Close modal
+    } catch (error) {
+      console.log(error.message || "Failed to update nurse");
+      
     }
   };
 
-  const handleSave = () => {
-    // Check if there are any validation errors before saving
-    if (errors.mobileNumber || errors.pincode) return;
-    onSave();
-  };
-
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#9f9e9e64] bg-opacity-50 backdrop-blur-xs animate-fadeIn"
-      aria-modal="true"
-      role="dialog"
-      aria-labelledby="edit-contact-title"
-    >
-      <div className="h-[600px] bg-white rounded-xl shadow-2xl max-w-xl w-full p-8 space-y-6">
-        <h2
-          id="edit-contact-title"
-          className="text-2xl font-semibold text-gray-900"
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+      <div className="relative bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 shadow-xl border border-gray-200">
+        <button
+          onClick={onCancel}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition cursor-pointer"
         >
-          Edit Contact Details
+          <AiOutlineClose className="w-5 h-5" />
+        </button>
+
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+          Edit Nurse Details
         </h2>
 
-        <div className="h-[420px] overflow-y-scroll pr-1">
-          {/* Gender */}
-          <div className="flex flex-col mb-4">
-            <label className="mb-1 text-gray-700 font-medium">Gender</label>
-            <select
-              value={contact.gender || ""}
-              onChange={(e) => handleFieldChange("gender", e.target.value)}
-              className="rounded-md border border-gray-300 px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="" disabled>Select Gender</option>
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-              <option value="OTHER">Other</option>
-            </select>
+        <div className="space-y-4">
+          <InputField label="Full Name" value={contact.fullName} onChange={(e) => handleChange("fullName", e.target.value)} />
+          <InputField label="Email" type="email" value={contact.email} onChange={(e) => handleChange("email", e.target.value)} />
+          <InputField label="Mobile Number" value={contact.mobileNumber} onChange={(e) => handleChange("mobileNumber", e.target.value)} />
+
+          <SelectField
+            label="Gender"
+            value={contact.gender}
+            options={[
+              { label: "Select gender", value: "" },
+              { label: "Male", value: "MALE" },
+              { label: "Female", value: "FEMALE" },
+              { label: "Other", value: "OTHER" },
+            ]}
+            onChange={(e) => handleChange("gender", e.target.value)}
+          />
+
+          <SelectField
+            label="Education Qualification"
+            value={contact.educationQualifications}
+            onChange={(e) => handleChange("educationQualifications", e.target.value)}
+            options={[
+              { label: "MSc Nursing", value: "MSc Nursing" },
+              { label: "BSc Nursing", value: "BSc Nursing" },
+              { label: "BSc Nursing Pursuing", value: "BSc Nursing Pursuing" },
+              { label: "Post BSc Nursing", value: "Post BSc Nursing" },
+              { label: "GNM", value: "GNM" },
+              { label: "GNM Pursuing", value: "GNM Pursuing" },
+              { label: "ANM", value: "ANM" },
+              { label: "GDA (General Duty Assistant)", value: "GDA (General Duty Assistant)" },
+              { label: "PCA (Personal Care Assistant)", value: "PCA (Personal Care Assistant)" },
+              { label: "DHA (Diploma in Health Assistant)", value: "DHA (Diploma in Health Assistant)" },
+            ]}
+          />
+
+          <SelectField
+            label="Specialization"
+            value={contact.specializations || ""}
+            onChange={(e) => handleChange("specializations", [e.target.value])}
+            options={[
+              { label: "Staff Nurse / Ward Nurse", value: "Staff Nurse / Ward Nurse" },
+              { label: "ICU Nurse", value: "ICU Nurse / Critical Care Nurse" },
+              { label: "ER Nurse", value: "ER Nurse / Trauma Nurse" },
+              { label: "Pediatric Nurse", value: "Pediatric Nurse" },
+            ]}
+          />
+
+          <SelectField
+            label="Work Schedule"
+            value={contact.workSchedule}
+            options={[
+              { label: "Select schedule", value: "" },
+              { label: "Full Time", value: "FULL_TIME" },
+              { label: "Part Time", value: "PART_TIME" },
+            ]}
+            onChange={(e) => handleChange("workSchedule", e.target.value)}
+          />
+
+          {/* Address Fields */}
+          <div className="grid grid-cols-2 gap-4">
+            <InputField label="State" value={contact.address?.state || ""} onChange={(e) => handleAddressChange("state", e.target.value)} />
+            <InputField label="District" value={contact.address?.district || ""} onChange={(e) => handleAddressChange("district", e.target.value)} />
+            <InputField label="City" value={contact.address?.city || ""} onChange={(e) => handleAddressChange("city", e.target.value)} />
+            <InputField label="Pincode" value={contact.address?.pincode || ""} onChange={(e) => handleAddressChange("pincode", e.target.value)} />
           </div>
-
-          {/* Full Name, Email, Mobile Number */}
-          {["fullName", "email", "mobileNumber"].map((field) => (
-            <div key={field} className="flex flex-col mb-4">
-              <label className="mb-1 text-gray-700 font-medium capitalize">
-                {field.replace(/([A-Z])/g, " $1")}
-              </label>
-              <input
-                type="text"
-                value={contact[field] || ""}
-                onChange={(e) => handleFieldChange(field, e.target.value)}
-                placeholder={`Enter ${field}`}
-                className="rounded-md border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors[field] && (
-                <p className="text-red-500 text-sm mt-1">{errors[field]}</p>
-              )}
-            </div>
-          ))}
-
-          <fieldset className="border-t border-gray-200 pt-4">
-            {/* State */}
-            <div className="flex flex-col mb-4">
-              <label className="mb-1 text-gray-700 font-medium">State</label>
-              <select
-                value={contact.address?.state || ""}
-                onChange={(e) => handleAddressChange("state", e.target.value)}
-                className="rounded-md border border-gray-300 px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>Select State</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Karnataka">Karnataka</option>
-              </select>
-            </div>
-
-            {/* District */}
-            <div className="flex flex-col mb-4">
-              <label className="mb-1 text-gray-700 font-medium">District</label>
-              <select
-                value={contact.address?.district || ""}
-                onChange={(e) => handleAddressChange("district", e.target.value)}
-                disabled={!contact.address?.state}
-                className="rounded-md border border-gray-300 px-4 py-2 text-gray-900 disabled:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>Select District</option>
-                {districts.map((d, i) => (
-                  <option key={i} value={d}>
-                    {d}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* City, LineFirst, LineSecond, Pincode */}
-            {["city", "pincode"].map((field) => (
-              <div key={field} className="flex flex-col mb-4">
-                <label className="mb-1 text-gray-700 font-medium capitalize">
-                  {field.replace(/([A-Z])/g, " $1")}
-                </label>
-                <input
-                  type="text"
-                  value={contact.address?.[field] || ""}
-                  onChange={(e) =>
-                    handleAddressChange(field, e.target.value)
-                  }
-                  placeholder={`Enter ${field}`}
-                  className="rounded-md border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {errors[field] && (
-                  <p className="text-red-500 text-sm mt-1">{errors[field]}</p>
-                )}
-              </div>
-            ))}
-          </fieldset>
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-end gap-4 pt-4">
+        <div className="flex justify-end gap-3 mt-8">
           <button
             onClick={onCancel}
-            type="button"
-            className="rounded-md border border-gray-300 px-5 py-2 text-gray-700 hover:bg-gray-100 transition"
+            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg font-medium transition cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            type="button"
-            className={`rounded-md px-5 py-2 text-white transition ${
-              errors.mobileNumber || errors.pincode
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-            }`}
-            disabled={!!(errors.mobileNumber || errors.pincode)}
+            className="px-4 py-2 bg-blue-800 hover:bg-blue-700 text-white rounded-lg font-semibold transition cursor-pointer"
           >
             Save
           </button>
@@ -194,4 +148,38 @@ export default function EditContactModal({
       </div>
     </div>
   );
-}
+};
+
+// Reusable Input Field
+const InputField = ({ label, value, onChange, type = "text" }) => (
+  <div className="flex flex-col">
+    <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <input
+      type={type}
+      value={value}
+      onChange={onChange}
+      className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder={`Enter ${label.toLowerCase()}`}
+    />
+  </div>
+);
+
+// Reusable Select Field
+const SelectField = ({ label, value, onChange, options }) => (
+  <div className="flex flex-col">
+    <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <select
+      value={value}
+      onChange={onChange}
+      className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      {options.map((opt) => (
+        <option key={opt.value} value={opt.value}>
+          {opt.label}
+        </option>
+      ))}
+    </select>
+  </div>
+);
+
+export default EditContactModal;

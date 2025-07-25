@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { getNurses, getNurseById, verifyNurseStatus } from "@/api/nurseApi"; // Make sure this path is correct
+import { getNurses, getNurseById, verifyNurseStatus,updateNurse,updateNurseAvailability ,updateNurseExperience } from "@/api/nurseApi"; 
 
 const useNurseStore = create(
   persist(
@@ -66,6 +66,67 @@ const useNurseStore = create(
   }
 },
 
+
+
+
+updateAvailability: async (userId, payload) => {
+  set({ isLoading: true, error: null });
+  try {
+    const result = await updateNurseAvailability(userId, payload.availabilities); // pass only the array
+    console.log("✅ Availability updated:", result);
+    await get().fetchNurseById(userId);
+    return result;
+  } catch (error) {
+    set({ error: error.message });
+    throw new Error(error.message);
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
+
+
+
+
+
+
+updateNurseDetails: async (userId, nurseData) => {
+  set({ isLoading: true, error: null });
+  try {
+    const result = await updateNurse(userId, nurseData);
+    console.log("Nurse updated successfully:", result);
+    
+    // Optionally refresh nurse details or list
+    await get().fetchNurseById(userId);
+    await get().fetchNurses(get().page, get().limit);
+
+    return result;
+  } catch (error) {
+    set({ error: error.message });
+    throw new Error(error.message);
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
+updateExperience: async (userId, payload) => {
+  set({ isLoading: true, error: null });
+  try {
+    const result = await updateNurseExperience(userId, payload);
+    console.log("Experience updated successfully:", result);
+
+    // Refresh nurse details if needed
+    await get().fetchNurseById(userId);
+    return result;
+  } catch (error) {
+    set({ error: error.message });
+    throw new Error(error.message);
+  } finally {
+    set({ isLoading: false });
+  }
+},
 
       setPage: (newPage) => set({ page: newPage }),
       setLimit: (newLimit) => set({ limit: newLimit }),
