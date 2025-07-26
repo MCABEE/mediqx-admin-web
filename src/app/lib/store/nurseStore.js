@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { getNurses, getNurseById, verifyNurseStatus,updateNurse,updateNurseAvailability ,updateNurseExperience } from "@/api/nurseApi"; 
+import { getNurses, getNurseById, verifyNurseStatus,updateNurse,updateNurseAvailability ,updateNurseExperience,getAssignableNurses } from "@/api/nurseApi"; 
 
 const useNurseStore = create(
   persist(
@@ -12,7 +12,7 @@ const useNurseStore = create(
       limit: 10,
       totalPages: 0,
       totalUsers: 0,
-      selectedNurse: null,
+      selectedNurse: null, 
 
       fetchNurses: async (page = 1, limit = 10,status) => {
         set({ isLoading: true, error: null });
@@ -127,6 +127,38 @@ updateExperience: async (userId, payload) => {
     set({ isLoading: false });
   }
 },
+
+
+
+
+
+
+
+
+
+
+
+fetchAssignableNurses: async (params) => {
+  set({ isLoading: true, error: null });
+  try {
+    const data = await getAssignableNurses(params);
+    set({
+      users: data?.data?.users || [],
+      totalPages: data?.data?.totalPages || 0,
+      totalUsers: data?.data?.total || 0
+    });
+  } catch (error) {
+    set({ error: error.message });
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
+
+
+
+
 
       setPage: (newPage) => set({ page: newPage }),
       setLimit: (newLimit) => set({ limit: newLimit }),

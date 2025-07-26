@@ -112,3 +112,25 @@ export const updateNurseExperience = async (userId, data) => {
     throw new Error(message);
   }
 };
+ 
+
+
+
+export const getAssignableNurses = async ({
+  page = 1,
+  limit = 10,
+  from,
+  to,
+  radius,
+  centerLatitude,
+  centerLongitude
+}) => {
+  try {
+    const response = await api.get(
+      `/admin/nurse-assignment/nurses?page=${page}&limit=${limit}&role=NURSE&from=${from}&to=${to}&radius=${radius}&centerLatitude=${centerLatitude}&centerLongitude=${centerLongitude}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to fetch assignable nurses");
+  }
+};

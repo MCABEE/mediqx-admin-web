@@ -96,7 +96,7 @@ const BookingDetailsPage = () => {
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
         <div
           onClick={() => router.back()}
-          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]"
+          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
         >
           Back
         </div>
