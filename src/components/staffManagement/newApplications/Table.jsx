@@ -18,7 +18,7 @@ const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchNurses(currentPage, limit);
+    fetchNurses(currentPage, limit, "NEW");
   }, [currentPage, fetchNurses, limit]);
 
   const handleNameClick = async (userId) => {
@@ -55,11 +55,21 @@ const Table = () => {
         <table className="w-full border-spacing-y-2 border-separate text-black">
           <thead className="bg-[#C0D8F6]">
             <tr className="p-2 bg-[#C0D8F6]">
-              <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">No</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] p-2">Name</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] p-2">Location</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] p-2">Gender</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">Qualification</th>
+              <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">
+                No
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+                Name
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+                Location
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+                Gender
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
+                Qualification
+              </th>
             </tr>
           </thead>
 
@@ -87,19 +97,27 @@ const Table = () => {
                     const qualification = nurse.educationQualifications || "";
 
                     return (
-                      <tr key={nurse.userId || index} className="bg-white">
+                    
+                      <tr
+                        key={nurse.userId || index}
+                        className="bg-white cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleNameClick(nurse.userId)}
+                      >
                         <td className="p-2">
                           {(currentPage - 1) * limit + index + 1}
                         </td>
-                        <td
-                          className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline"
-                          onClick={() => handleNameClick(nurse.userId)}
-                        >
+                        <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
                           {name}
                         </td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{location}</td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{gender}</td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">{qualification}</td>
+                        <td className="border-l-4 border-[#C0D8F6] p-2">
+                          {location}
+                        </td>
+                        <td className="border-l-4 border-[#C0D8F6] p-2">
+                          {gender}
+                        </td>
+                        <td className="border-l-4 border-[#C0D8F6] p-2">
+                          {qualification}
+                        </td>
                       </tr>
                     );
                   })}

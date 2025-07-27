@@ -21,6 +21,10 @@ function Sidebar() {
       setActive("Service Bookings");
     } else if (pathname.includes("/controlpanel/dashboard")) {
       setActive("Home");
+    }  else if (pathname.includes("/controlpanel/cases")) {
+      setActive("Cases");
+    }  else if (pathname.includes("/controlpanel/patient-management/ongoing-patients")) {
+      setActive("Patient Management");
     } else {
       // fallback: match from menu links if more are added later
       const matched = menus.find(
@@ -36,7 +40,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="h-full bg-white rounded-[16px] border-[#8888884d] border-[1px] ps-12 pe-8">
+    <div className="h-full bg-white rounded-[16px] border-[#8888884d] border-[1px] ps-12 pe-8 pb-8">
       <div className="h-[75%]">
         {menus.map((item) => (
           <div key={item.id}>

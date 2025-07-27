@@ -1,6 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import Navlink from "@/components/staffManagement/Navlink";
+import Table from "@/components/staffManagement/AllStaff/Table";
 
 const page = () => {
   return (
@@ -9,8 +9,8 @@ const page = () => {
       <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between  px-6  rounded-[15px] mt-2  ">
         <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
           <p>All</p>
-          <p>Nurse</p>
-          <p>Paramedical</p>
+          <p className="text-blue-800">Nurse</p>
+          <p>Paramedical</p> 
           <p>Doctor</p>
 
           <p>Supervisor</p>
@@ -20,7 +20,7 @@ const page = () => {
           <input type="checkbox" className="size-[20px] " />
         </div>
       </div>
-      <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px]  px-6 text-black font-semibold text-[32px] flex justify-between">
+      {/* <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px]  px-6 text-black font-semibold text-[32px] flex justify-between">
         <p>120</p>
         <div className="flex  items-center gap-[45px]">
           <p className="text-[16px] font-semibold">Sort by</p>
@@ -117,7 +117,8 @@ const page = () => {
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> */}
+      <Table/>
     </div>
   );
 };

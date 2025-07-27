@@ -1,0 +1,246 @@
+"use client";
+import Navlink from "@/components/patientManagement/Navlink";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
+
+function page() {
+  const router = useRouter();
+  return (
+    <div>
+      <Navlink />
+
+      <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
+        <div
+          onClick={() => router.back()}
+          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
+        >
+          Back
+        </div>
+        <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px]">
+          <p className="font-semibold">{"Patient Name"}</p>
+          <div className="flex justify-center items-center gap-[92px]">
+            <p className="font-semibold">Banglore</p>
+          </div>
+        </div>
+      </div>
+      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
+        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-1 border-[#BBBBBB]">
+          <h1 className="text-[16px] font-semibold text-black bg-[#C0D8F6] p-2 rounded-[4px]">
+            01
+          </h1>
+        </div>
+
+        <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
+          <div className="flex">
+            <span className="w-[250px] font-medium">Diagnosis</span>
+            <span>Nake uhuu</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Service Period from</span>
+            <span>Male</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">
+              Single visit / periodically
+            </span>
+            <span>72</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Duration</span>
+            <span>165cm, 72 kg</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Daily Schedule</span>
+            <span>Name of the service</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Frequency</span>
+            <span>uiu u yuyu</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Flexibility</span>
+            <span>iuui uihui</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Time</span>
+            <span>City</span>
+          </div>
+        </div>
+      </div>
+      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
+        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-1 border-[#BBBBBB]">
+          <h1 className="text-[16px] font-semibold text-black ">
+            Staff Details
+          </h1>
+        </div>
+
+        <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
+          <div className="flex">
+            <span className="w-[250px] font-medium">Staff Name</span>
+            <span>Nake uhuu</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Staff ID</span>
+            <span>Male</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Contact</span>
+            <span>72</span>
+          </div>
+          <div className="flex">
+            <span className="w-[250px] font-medium">Current Status</span>
+            <span>165cm, 72 kg</span>
+          </div>
+        </div>
+      </div>
+      <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] ">
+        <div className="w-full flex text-[16px] text-black ps-[112px] ">
+          <p className="font-semibold mt-3">Medical History</p>
+        </div>
+      </div>
+
+      <div className="w-full bg-[#FEF2FF] border-1 border-[#DDDDDD] rounded-[10px] mt-[40px] divide-y-1  divide-[#DDDDDD] ">
+        <div className="w-full flex justify-between px-[40px] py-[12px] text-[16px] font-semibold gap-4">
+          <div className="w-[70%] flex gap-8 ">
+            <p>2025 May 08, Thursday,</p>
+            <p>10.30AM</p>
+          </div>
+          <div className="w-[30%]">
+            <p>Releated Images</p>
+          </div>
+        </div>
+        <div className="w-full flex  px-[40px] py-[12px]  gap-4">
+          <div className="w-[70%]">
+            <h2 className="text-[16px] text-[#333333] font-semibold">
+              Patient Status
+            </h2>
+            <p className="text-[14px] text-[#333333]">
+              Wound dressing for post-surgical site on lower limb.
+            </p>
+          </div>
+          <div className="w-[30%] flex gap-2">
+            <img src="/agentphoto.png" alt="" className="size-14" />
+          </div>
+        </div>
+        <div className="w-full flex  px-[40px] py-[12px]  gap-4">
+          <div className="w-[70%]">
+            <h2 className="text-[16px] text-[#333333] font-semibold">
+              New Observations
+            </h2>
+            <p className="text-[14px] text-[#333333]">
+              Sterile dressing set (tray, forceps, scissors), Sterile gauze and
+              cotton....
+            </p>
+          </div>
+          <div className="w-[30%] flex gap-2 ">
+            <img src="/agentphoto.png" alt="" className="size-14" />
+
+            <img src="/agentphoto.png" alt="" className="size-14" />
+          </div>
+        </div>
+        <div className="w-full flex  px-[40px] py-[12px]  gap-4">
+          <div className="w-[70%]">
+            <h2 className="text-[16px] text-[#333333] font-semibold">
+              Procedures Performed
+            </h2>
+            <p className="text-[14px] text-[#333333]">
+              Ensure strict hand hygiene and aseptic technique; assess for signs
+              of infection or delayed healing before proceeding.
+            </p>
+          </div>
+          <div className="w-[30%] flex gap-2">
+            <img src="/agentphoto.png" alt="" className="size-14" />
+            <img src="/agentphoto.png" alt="" className="size-14" />
+            <img src="/agentphoto.png" alt="" className="size-14" />
+          </div>
+        </div>
+        <div className="w-full flex  px-[40px] py-[12px] gap-4">
+          <div className="w-[70%]">
+            <h2 className="text-[16px] text-[#333333] font-semibold">
+              Next Follow-Up
+            </h2>
+            <p className="text-[14px] text-[#333333]">
+              North Sector, Indiranagar, Bangalore
+            </p>
+          </div>
+          <div className="w-[30%] flex gap-2 ">
+            <img src="/agentphoto.png" alt="" className="size-14" />
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full bg-[#FEF2FF] border-1 border-[#DDDDDD] rounded-[10px] mt-[40px] divide-y-1  divide-[#DDDDDD] mb-[40px] ">
+        <div className="w-full flex justify-between px-[40px] py-[12px] text-[16px] font-semibold gap-4">
+          <div className="w-[70%] flex gap-8 ">
+            <p>2025 May 08, Thursday,</p>
+            <p>10.30AM</p>
+          </div>
+          <div className="w-[30%]">
+            <p>Releated Images</p>
+          </div>
+        </div>
+        <div className="w-full flex  px-[40px] py-[12px]  gap-4">
+          <div className="w-[70%]">
+            <h2 className="text-[16px] text-[#333333] font-semibold">
+              Patient Status
+            </h2>
+            <p className="text-[14px] text-[#333333]">
+              Wound dressing for post-surgical site on lower limb.
+            </p>
+          </div>
+          <div className="w-[30%] flex gap-2">
+            <img src="/agentphoto.png" alt="" className="size-14" />
+          </div>
+        </div>
+        <div className="w-full flex  px-[40px] py-[12px]  gap-4">
+          <div className="w-[70%]">
+            <h2 className="text-[16px] text-[#333333] font-semibold">
+              New Observations
+            </h2>
+            <p className="text-[14px] text-[#333333]">
+              Sterile dressing set (tray, forceps, scissors), Sterile gauze and
+              cotton....
+            </p>
+          </div>
+          <div className="w-[30%] flex gap-2 ">
+            <img src="/agentphoto.png" alt="" className="size-14" />
+
+            <img src="/agentphoto.png" alt="" className="size-14" />
+          </div>
+        </div>
+        <div className="w-full flex  px-[40px] py-[12px]  gap-4">
+          <div className="w-[70%]">
+            <h2 className="text-[16px] text-[#333333] font-semibold">
+              Procedures Performed
+            </h2>
+            <p className="text-[14px] text-[#333333]">
+              Ensure strict hand hygiene and aseptic technique; assess for signs
+              of infection or delayed healing before proceeding.
+            </p>
+          </div>
+          <div className="w-[30%] flex gap-2">
+            <img src="/agentphoto.png" alt="" className="size-14" />
+            <img src="/agentphoto.png" alt="" className="size-14" />
+            <img src="/agentphoto.png" alt="" className="size-14" />
+          </div>
+        </div>
+        <div className="w-full flex  px-[40px] py-[12px] gap-4">
+          <div className="w-[70%]">
+            <h2 className="text-[16px] text-[#333333] font-semibold">
+              Next Follow-Up
+            </h2>
+            <p className="text-[14px] text-[#333333]">
+              North Sector, Indiranagar, Bangalore
+            </p>
+          </div>
+          <div className="w-[30%] flex gap-2 ">
+            <img src="/agentphoto.png" alt="" className="size-14" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default page;

@@ -13,7 +13,7 @@ function page() {
           <p>Nurse</p>
           {/* <p>Paramedical</p>
           <p>Doctor</p>
-          <p>Supervisor</p> */}
+          <p>Supervisor</p> */} 
         </div>
         {/* <div className="flex gap-2 justify-center items-center">
           <p className=" text-black font-semibold pt-[23px] pb-[19px]">Clear</p>

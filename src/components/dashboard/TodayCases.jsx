@@ -11,15 +11,15 @@ const TodayCases = () => {
     <div className='px-[71px] pt-6 flex gap-[94px] font-semibold'>
       <div className='flex flex-col text-[#333333] gap-3.5'>
       <p className='text-base'>To Start</p>
-      <p className='text-[32px]'>420</p>
+      <p className='text-[32px]'>0</p>
       </div>
       <div className='flex flex-col text-[#333333] gap-3.5'>
       <p className='text-base'>Ongoing</p>
-      <p className='text-[32px]'>420</p>
+      <p className='text-[32px]'>0</p>
       </div>
       <div className='flex flex-col text-[#333333] gap-3.5'>
       <p className='text-base'>New</p>
-      <p className='text-[32px]'>420</p>
+      <p className='text-[32px]'>0</p>
       </div>
     
     </div>
