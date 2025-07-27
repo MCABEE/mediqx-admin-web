@@ -37,7 +37,7 @@ const AssignStaffPage = () => {
   useEffect(() => {
     const params = {
       page: currentPage,
-      limit: 10,
+      limit: 50,
       from,
       to,
       radius,
@@ -70,7 +70,7 @@ const AssignStaffPage = () => {
     setRadius(value); // Update state for UI
     const params = {
       page: currentPage,
-      limit: 10,
+      limit: 50,
       from,
       to,
       radius: value, // Use clicked value

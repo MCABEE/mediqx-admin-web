@@ -10,13 +10,13 @@ const AssignStaffTable = ({
   setRadius,
   currentPage,
   setCurrentPage,
-  onApplyRadius, // <-- new prop
+  onApplyRadius, 
 }) => {
   const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedNurse, setSelectedNurse] = useState(null);
 
-  const nursesPerPage = 10;
+  const nursesPerPage = 50;
   const totalPages = Math.ceil(nurses.length / nursesPerPage);
 
   const indexOfLastNurse = currentPage * nursesPerPage;
