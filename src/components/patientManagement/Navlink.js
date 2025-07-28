@@ -9,7 +9,7 @@ export default function Navlink({ tabs, selectedStatus, onStatusChange }) {
 
   return (
     <div className="flex gap-[48px] pt-[23px]">
-      {tabs.map((tab) => (
+      {tabs?.map((tab) => (
         <p
           key={tab.value}
           onClick={() => onStatusChange(tab.value)}
