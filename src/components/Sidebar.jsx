@@ -23,9 +23,10 @@ function Sidebar() {
       setActive("Home");
     }  else if (pathname.includes("/controlpanel/cases")) {
       setActive("Cases");
-    }  else if (pathname.includes("/controlpanel/patient-management/ongoing-patients")) {
+    }  else if (pathname.includes("/controlpanel/patient-management")) {
       setActive("Patient Management");
-    } else {
+    } 
+    else {
       // fallback: match from menu links if more are added later
       const matched = menus.find(
         (item) => item.link && pathname.startsWith(item.link)
