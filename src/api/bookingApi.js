@@ -137,3 +137,15 @@ export const getBookingsByPatientId = async (patientId, page = 1, limit = 10) =>
   );
   return response.data.data;
 };
+
+
+
+export const getDutyLogs = async (serviceId, page = 1, limit = 10) => {
+  const response = await api.get(
+    `/admin/duty-logs/${serviceId}/logs?page=${page}&limit=${limit}`,
+    {
+      headers: { accept: "application/json" },
+    }
+  );
+  return response.data.data;
+};
