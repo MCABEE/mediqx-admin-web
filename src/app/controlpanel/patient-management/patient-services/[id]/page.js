@@ -118,7 +118,7 @@ export default function Page() {
 
   return (
     <div>
-      <Navlink />
+      {/* <Navlink /> */}
 
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex">
         <div
@@ -132,7 +132,7 @@ export default function Page() {
         </div>
       </div>
 
-      {patientBookings.map((booking) => (
+      {patientBookings?.map((booking) => (
         <div
           key={booking.id}
           className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB] p-6"
@@ -143,7 +143,7 @@ export default function Page() {
           <p>Service Period: {booking.servicePeriod || "-"}</p>
           <p>Frequency: {booking.frequency || "-"}</p>
 
-          <button
+          {/* <button
             onClick={() =>
               router.push(
                 `/controlpanel/patient-management/patient-services/${booking.id}`
@@ -152,7 +152,7 @@ export default function Page() {
             className="mt-4 px-4 py-2 bg-[#3674B5] text-white rounded-[10px]"
           >
             View Services
-          </button>
+          </button> */}
         </div>
       ))}
     </div>
