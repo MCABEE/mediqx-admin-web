@@ -129,7 +129,23 @@ const BookingDetailsPage = () => {
           </div>
 
           <Link
-            href={`/controlpanel/patient-management/patient-services/${booking.id}`}
+            href={{
+              pathname: `/controlpanel/patient-management/case-history/${booking.id}`,
+              query: {
+                fullName: booking.fullName,
+                gender: booking.gender,
+                age: booking.age,
+                height: booking.height,
+                weight: booking.weight,
+                healthStatus: booking.healthStatus,
+                stayAt: booking.stayAt,
+                city: booking.city,
+                contactPersonName: booking.contactPersonName,
+                contactPersonRelation: booking.contactPersonRelation,
+                contactPersonEmail: booking.contactPersonEmail,
+                contactPersonMobileNumber: booking.contactPersonMobileNumber,
+              },
+            }}
             className="w-[192px] h-[40px] rounded-[15px] text-white bg-[#3674B5] mt-8 flex items-center justify-center cursor-pointer"
           >
             View Services
