@@ -12,6 +12,7 @@ import {
   searchCoordinatesByText,
   updateBooking,
   updateBookingLocation,
+  getBookingsByPatientId,
 } from "@/api/bookingApi";
 
 const useBookingStore = create((set, get) => ({
@@ -177,6 +178,30 @@ const useBookingStore = create((set, get) => ({
       return { success: false, error: err.message };
     }
   },
+  
+
+
+
+  fetchBookingsByPatient: async (patientId, page = 1, limit = 10) => {
+    set({ isLoading: true });
+    try {
+      const data = await getBookingsByPatientId(patientId, page, limit);
+      set({
+        patientBookings: data.bookings || [],
+        totalPages: data.totalPages || 0,
+        totalBookings: data.total || 0,
+        page: data.page,
+        limit: data.limit,
+        error: null,
+      });
+    } catch (err) {
+      set({ error: err.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+
 }));
 
 export default useBookingStore;

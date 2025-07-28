@@ -117,7 +117,7 @@ const AssignStaffTable = ({
                 >
                   {/* Dot */}
                   <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 z-10
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 z-10 cursor-pointer
             ${
               radius === value
                 ? "bg-blue-500 border-blue-500 scale-125 shadow-lg"

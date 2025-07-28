@@ -127,7 +127,7 @@ export const getAssignableNurses = async ({
 }) => {
   try {
     const response = await api.get(
-      `/admin/nurse-assignment/nurses?page=${page}&limit=${limit}&role=NURSE&from=${from}&to=${to}&radius=${radius}&centerLatitude=${centerLatitude}&centerLongitude=${centerLongitude}`
+      `/admin/nurse-assignment/nurses?page=${page}&limit=${limit}&role=NURSE&date=${from}&to=${to}&radius=${radius}&centerLatitude=${centerLatitude}&centerLongitude=${centerLongitude}`
     );
     return response.data;
   } catch (error) {

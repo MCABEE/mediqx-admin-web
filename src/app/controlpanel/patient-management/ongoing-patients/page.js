@@ -84,7 +84,7 @@ function page() {
                         </td>
                       </tr>
                      
-                        <tr  className="bg-white">
+                         <tr  className="bg-white">
                           <td className="p-2">03</td>
                             <Link href={"/controlpanel/patient-management/patient-details"}>
                           <td className="border-l-4 border-[#C0D8F6] p-2">Pradeep Kumar N</td>
