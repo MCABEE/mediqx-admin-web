@@ -12,8 +12,8 @@ const Calendar = () => {
         return "bg-red-300";
       case "available":
         return "bg-green-300";
-      case "on-duty":
-        return "bg-gray-300";
+      case "duty":
+        return "bg-yellow-300";
       default:
         return "bg-white";
     }

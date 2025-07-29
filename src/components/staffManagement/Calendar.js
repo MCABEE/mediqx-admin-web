@@ -76,14 +76,14 @@ const Calendar = () => {
 
   const getColor = (status) => {
     switch (status) {
-      case "leave":
+      case "empty":
         return "bg-red-300";
       case "available":
         return "bg-green-300";
-      case "on-duty":
+      case "duty":
         return "bg-gray-300";
       default:
-        return "bg-gray-200";
+        return "bg-gray-100";
     }
   };
 
@@ -144,7 +144,15 @@ const Calendar = () => {
 
           <div className="flex gap-3">
             <div className="flex gap-2 items-center">
-              <div className="w-6 h-6 rounded-[5px] bg-[#B6E9C4]"></div>
+              <div className="w-6 h-6 rounded-[5px] bg-gray-300"></div>
+              On Duty
+            </div>
+             <div className="flex gap-2 items-center">
+              <div className="w-6 h-6 rounded-[5px] bg-red-300"></div>
+              Leave
+            </div>
+            <div className="flex gap-2 items-center">
+              <div className="w-6 h-6 rounded-[5px] bg-green-300"></div>
               Available
             </div>
 
