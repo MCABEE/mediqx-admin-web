@@ -13,7 +13,7 @@ import {
   updateBooking,
   updateBookingLocation,
   getBookingsByPatientId,
-  getDutyLogs
+  getDutyLogs,
 } from "@/api/bookingApi";
 
 const useBookingStore = create((set, get) => ({
@@ -181,9 +181,6 @@ const useBookingStore = create((set, get) => ({
       return { success: false, error: err.message };
     }
   },
-   
-
-
 
   fetchBookingsByPatient: async (patientId, page = 1, limit = 10) => {
     set({ isLoading: true });
@@ -204,23 +201,16 @@ const useBookingStore = create((set, get) => ({
     }
   },
 
-
-
-
-
-
   dutyLogs: [],
   fetchDutyLogs: async (serviceId, page = 1, limit = 10) => {
     set({ isLoading: true, error: null });
     try {
       const data = await getDutyLogs(serviceId, page, limit);
-     set({ dutyLogs: data || [], isLoading: false }); 
+      set({ dutyLogs: data || [], isLoading: false });
     } catch (err) {
       set({ error: err.message, isLoading: false });
     }
   },
-
-
 }));
 
 export default useBookingStore;

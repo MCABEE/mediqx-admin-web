@@ -9,18 +9,35 @@ export default function Page() {
   const searchParams = useSearchParams();
 
   const booking = {
-    fullName: searchParams.get("fullName"),
-    gender: searchParams.get("gender"),
-    age: searchParams.get("age"),
-    height: searchParams.get("height"),
-    weight: searchParams.get("weight"),
-    healthStatus: searchParams.get("healthStatus"),
-    stayAt: searchParams.get("stayAt"),
-    city: searchParams.get("city"),
-    contactPersonName: searchParams.get("contactPersonName"),
-    contactPersonRelation: searchParams.get("contactPersonRelation"),
-    contactPersonEmail: searchParams.get("contactPersonEmail"),
-    contactPersonMobileNumber: searchParams.get("contactPersonMobileNumber"),
+    diagnosis: searchParams.get("diagnosis"),
+    startDate: searchParams.get("startDate"),
+    scheduleType: searchParams.get("scheduleType"),
+    durationType: searchParams.get("durationType"),
+    serviceType: searchParams.get("serviceType"),
+    weekdays: searchParams.get("weekdays")
+      ? searchParams.get("weekdays").split(", ")
+      : [],
+    flexibility: searchParams.get("flexibility"),
+    startTime: searchParams.get("startTime"),
+    endTime: searchParams.get("endTime"),
+  };
+
+  const formatTime12h = (timeStr) => {
+    if (!timeStr) return "-";
+    try {
+      const match = timeStr.match(/\d{2}:\d{2}:\d{2}/);
+      if (!match) return "-";
+      const [hours, minutes] = match[0].split(":");
+      const date = new Date();
+      date.setHours(Number(hours), Number(minutes));
+      return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+    } catch {
+      return "-";
+    }
   };
 
   const { dutyLogs = {}, fetchDutyLogs, isLoading, error } = useBookingStore();
@@ -34,9 +51,7 @@ export default function Page() {
   if (isLoading) return <p className="p-4">Loading duty logs...</p>;
   if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
 
-  const logsArray = Array.isArray(dutyLogs?.dutyLogs)
-    ? dutyLogs.dutyLogs
-    : [];
+  const logsArray = Array.isArray(dutyLogs?.dutyLogs) ? dutyLogs.dutyLogs : [];
 
   const staff = logsArray[0];
 
@@ -64,9 +79,9 @@ export default function Page() {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       {/* Always Show Header */}
-      <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex">
+      <div className="w-full h-[48px] bg-[#C0D8F6]  rounded-[15px] flex">
         <div
           onClick={() => router.back()}
           className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
@@ -85,62 +100,58 @@ export default function Page() {
         <>
           {/* Patient Details */}
           <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
-            <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-              <h1 className="text-[16px] font-semibold text-black">
-                Patient Details
-              </h1>
-            </div>
-
             <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
               <div className="flex">
-                <span className="w-[250px] font-medium">Patient Name</span>
-                <span>{booking.fullName}</span>
+                <span className="w-[250px] font-medium">Diagnosis</span>
+                <span>{booking.diagnosis || "-"}</span>
               </div>
+
               <div className="flex">
-                <span className="w-[250px] font-medium">Gender</span>
-                <span>{booking.gender}</span>
-              </div>
-              <div className="flex">
-                <span className="w-[250px] font-medium">Age</span>
-                <span>{booking.age}</span>
-              </div>
-              <div className="flex">
-                <span className="w-[250px] font-medium">Height, Weight</span>
+                <span className="w-[250px] font-medium">
+                  Service Period From
+                </span>
                 <span>
-                  {booking.height} cm, {booking.weight} kg
+                  {booking.startDate ? booking.startDate.split("T")[0] : "-"}
                 </span>
               </div>
+
               <div className="flex">
                 <span className="w-[250px] font-medium">
-                  Current Health Status / Activity
+                  Single visit / periodically
                 </span>
-                <span>{booking.healthStatus}</span>
+                <span>{booking.scheduleType || "-"}</span>
               </div>
+
               <div className="flex">
-                <span className="w-[250px] font-medium">Now Patient stayed at</span>
-                <span>{booking.stayAt}</span>
+                <span className="w-[250px] font-medium">Duration</span>
+                <span>{booking.durationType || "-"}</span>
               </div>
+
               <div className="flex">
-                <span className="w-[250px] font-medium">Residential Address</span>
-                <span>{booking.city}</span>
+                <span className="w-[250px] font-medium">Daily Schedule</span>
+                <span>{booking.serviceType || "-"}</span>
               </div>
+
               <div className="flex">
-                <span className="w-[250px] font-medium">Contact person</span>
-                <span>{booking.contactPersonName}</span>
-              </div>
-              <div className="flex">
-                <span className="w-[250px] font-medium">
-                  Relationship with patient
+                <span className="w-[250px] font-medium">Frequency</span>
+                <span>
+                  {Array.isArray(booking.weekdays)
+                    ? booking.weekdays.join(", ")
+                    : "-"}
                 </span>
-                <span>{booking.contactPersonRelation}</span>
               </div>
+
               <div className="flex">
-                <span className="w-[250px] font-medium">Email ID</span>
-                <span>{booking.contactPersonEmail}</span>
+                <span className="w-[250px] font-medium">Flexibility</span>
+                <span>{booking.flexibility || "-"}</span>
               </div>
+
               <div className="flex">
-                <span className="w-[250px] font-medium">Mobile Number</span>
-                <span>{booking.contactPersonMobileNumber}</span>
+                <span className="w-[250px] font-medium">Time</span>
+                <span>
+                  {formatTime12h(booking.startTime)} -{" "}
+                  {formatTime12h(booking.endTime)}
+                </span>
               </div>
             </div>
           </div>
@@ -148,7 +159,9 @@ export default function Page() {
           {/* Staff Details */}
           <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
             <div className="w-full h-[72px] flex items-center px-8 rounded-t-[15px] border-b border-[#BBBBBB]">
-              <h1 className="text-[16px] font-semibold text-black">Staff Details</h1>
+              <h1 className="text-[16px] font-semibold text-black">
+                Staff Details
+              </h1>
             </div>
 
             <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
@@ -192,11 +205,14 @@ export default function Page() {
                 <div className="flex px-[40px] py-[12px]">
                   <p className="w-[300px]">Arrival</p>
                   {log.reachedLocationAt
-                    ? new Date(log.reachedLocationAt).toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })
+                    ? new Date(log.reachedLocationAt).toLocaleTimeString(
+                        "en-US",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        }
+                      )
                     : "-"}
                 </div>
               </div>
@@ -214,7 +230,9 @@ export default function Page() {
               </div>
 
               <div className="px-[40px] py-[12px] gap-4">
-                <h2 className="text-[16px] font-semibold">Procedures Performed</h2>
+                <h2 className="text-[16px] font-semibold">
+                  Procedures Performed
+                </h2>
                 <p className="text-[14px]">{log.proceduresPerformed || "-"}</p>
                 {renderFiles(log.files, "PROCEDURE")}
               </div>

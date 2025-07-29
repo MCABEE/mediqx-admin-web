@@ -43,21 +43,17 @@ const Page = () => {
   ];
 
   const getTabClass = (status) =>
-    selectedStatus === status
-      ? "text-[#3674B5]"
-      : "text-black";
+    selectedStatus === status ? "text-[#3674B5]" : "text-black";
 
   return (
     <div>
       {/* Tabs Header */}
       <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 rounded-[15px]">
-            {/* New Bookings */}
-            <p
-              className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 border-b-8 border-[#3674B5]"
-            >
-              Assigned Cases
-            </p>
-            </div>
+        {/* New Bookings */}
+        <p className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 border-b-8 border-[#3674B5]">
+          Assigned Cases
+        </p>
+      </div>
       <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
         <div className="flex gap-[48px] pt-[23px] pb-[19px]">
           {statusTabs.map((tab) => (
@@ -86,34 +82,48 @@ const Page = () => {
         <thead className="bg-[#C0D8F6]">
           <tr className="p-2">
             <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">No</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Patient Name</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Location</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Service Date</th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+              Patient Name
+            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+              Location
+            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+              Service Date
+            </th>
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">Staff</th>
             <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
-                <img src="/detail-btn.svg" alt="arrow" />
+              <img src="/detail-btn.svg" alt="arrow" />
             </th>
-
           </tr>
         </thead>
         <tbody>
           {isLoading ? (
             <tr>
-              <td colSpan="6" className="text-center py-6">Loading...</td>
+              <td colSpan="6" className="text-center py-6">
+                Loading...
+              </td>
             </tr>
           ) : error ? (
             <tr>
-              <td colSpan="6" className="text-center py-6 text-red-500">{error}</td>
+              <td colSpan="6" className="text-center py-6 text-red-500">
+                {error}
+              </td>
             </tr>
           ) : bookings.length === 0 ? (
             <tr>
-              <td colSpan="6" className="text-center py-6">No bookings found</td>
+              <td colSpan="6" className="text-center py-6">
+                No bookings found
+              </td>
             </tr>
           ) : (
             Object.entries(groupedBookings).map(([date, bookingsList]) => (
               <React.Fragment key={date}>
                 <tr>
-                  <td colSpan="6" className="rounded-t-2xl p-2 bg-[#C0D8F6] text-[16px] font-semibold">
+                  <td
+                    colSpan="6"
+                    className="rounded-t-2xl p-2 bg-[#C0D8F6] text-[16px] font-semibold"
+                  >
                     {date}
                   </td>
                 </tr>
@@ -121,12 +131,18 @@ const Page = () => {
                   <tr
                     key={booking.id}
                     className={`bg-white ${
-                      booking.staffAssignmentStatus !== "GREEN" ? "hover:bg-gray-100" : "opacity-70"
+                      booking.staffAssignmentStatus !== "GREEN"
+                        ? "hover:bg-gray-100"
+                        : "opacity-70"
                     }`}
                   >
                     <td className="p-2">{i + 1}</td>
-                    <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">{booking.fullName}</td>
-                    <td className="border-l-4 border-[#C0D8F6] p-2">{booking.location}</td>
+                    <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
+                      {booking.fullName}
+                    </td>
+                    <td className="border-l-4 border-[#C0D8F6] p-2">
+                      {booking.location}
+                    </td>
                     <td className="border-l-4 border-[#C0D8F6] p-2">
                       {new Date(booking.startDate).toLocaleDateString("en-IN", {
                         day: "numeric",
@@ -156,13 +172,15 @@ const Page = () => {
                       <img src="/tick.svg" alt="tick" />
                     </td>
                     <td
-  className="border-l-4 border-[#C0D8F6] p-2 text-blue-600 underline cursor-pointer"
-  onClick={() =>
-    router.push(`/controlpanel/cases/case-list-details/${booking.id}`)
-  }
->
-<img src="/detail-btn.svg" alt="arrow" />
-</td>
+                      className="border-l-4 border-[#C0D8F6] p-2 text-blue-600 underline cursor-pointer"
+                      onClick={() =>
+                        router.push(
+                          `/controlpanel/cases/case-list-details/${booking.id}`
+                        )
+                      }
+                    >
+                      <img src="/detail-btn.svg" alt="arrow" />
+                    </td>
                   </tr>
                 ))}
               </React.Fragment>
@@ -200,7 +218,9 @@ export default Page;
 // Helper: Group bookings by formatted date
 const groupBookingsByDate = (bookings) => {
   return bookings.reduce((acc, booking) => {
-    const dateKey = new Date(booking.requestedAt || booking.startDate).toLocaleDateString("en-IN", {
+    const dateKey = new Date(
+      booking.requestedAt || booking.startDate
+    ).toLocaleDateString("en-IN", {
       year: "numeric",
       month: "long",
       day: "2-digit",

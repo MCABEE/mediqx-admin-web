@@ -1,5 +1,3 @@
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { GoArrowUp } from "react-icons/go";
@@ -15,8 +13,6 @@ const PatientBookings = () => {
     growth: 0,
     month: "",
   });
-
- 
 
   return (
     <div className=" bg-white py-10 rounded-2xl">
