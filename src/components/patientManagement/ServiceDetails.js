@@ -6,7 +6,9 @@ function ServiceDetails({ booking, formatDate, formatTime }) {
   return (
     <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
       <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-        <h1 className="text-[16px] font-semibold text-black">Service Required</h1>
+        <h1 className="text-[16px] font-semibold text-black">
+          Service Required
+        </h1>
       </div>
 
       <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">

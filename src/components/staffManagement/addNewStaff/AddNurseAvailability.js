@@ -4,7 +4,13 @@ import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 import { submitNursePageThree } from "@/api/addStaffNurseApi";
 
 const daysOfWeek = [
-  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 
 const defaultShift = { start: "", end: "" };
@@ -53,9 +59,11 @@ export default function NurseAvailability() {
       const isValidTime = (time) => /^\d{2}:\d{2}$/.test(time);
 
       if (available) {
-        if (isValidTime(shifts[0].start)) payload.slotOneStart = shifts[0].start;
+        if (isValidTime(shifts[0].start))
+          payload.slotOneStart = shifts[0].start;
         if (isValidTime(shifts[0].end)) payload.slotOneEnd = shifts[0].end;
-        if (isValidTime(shifts[1].start)) payload.slotTwoStart = shifts[1].start;
+        if (isValidTime(shifts[1].start))
+          payload.slotTwoStart = shifts[1].start;
         if (isValidTime(shifts[1].end)) payload.slotTwoEnd = shifts[1].end;
       }
 
@@ -70,10 +78,12 @@ export default function NurseAvailability() {
       setErrorMessage("Please complete the  above fields first.");
       return;
     }
- if (!workSchedule) {
-    setErrorMessage("Please select your work schedule Part Time or Full Time.");
-    return;
-  }
+    if (!workSchedule) {
+      setErrorMessage(
+        "Please select your work schedule Part Time or Full Time."
+      );
+      return;
+    }
     const payload = {
       userId,
       educationQualifications: [qualification],
@@ -87,9 +97,8 @@ export default function NurseAvailability() {
       setLoading(true);
       const result = await submitNursePageThree(payload);
       console.log("Success:", result);
-      setErrorMessage(""); 
+      setErrorMessage("");
       window.location.reload();
-
     } catch (err) {
       console.error(err);
       setErrorMessage(err.message || "Submission failed.");
@@ -110,7 +119,9 @@ export default function NurseAvailability() {
           onChange={(e) => setQualification(e.target.value)}
           className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
         >
-          <option disabled value="">Qualification</option>
+          <option disabled value="">
+            Qualification
+          </option>
           <option value="MSc Nursing">MSc Nursing</option>
           <option value="BSc Nursing">BSc Nursing</option>
           <option value="BSc Nursing Pursuing">GNM</option>
@@ -118,28 +129,36 @@ export default function NurseAvailability() {
           <option value="GNM">GNM</option>
           <option value="GNM Pursuing">GNM Pursuing</option>
           <option value="ANM">ANM</option>
-          <option value="GDA (General Duty Assistant)">GDA (General Duty Assistant)</option>
-          <option value="PCA (Personal Care Assistant)">PCA (Personal Care Assistant)</option>
-          <option value="DHA (Diploma in Health Assistant)">DHA (Diploma in Health Assistant)</option>
-    
-
+          <option value="GDA (General Duty Assistant)">
+            GDA (General Duty Assistant)
+          </option>
+          <option value="PCA (Personal Care Assistant)">
+            PCA (Personal Care Assistant)
+          </option>
+          <option value="DHA (Diploma in Health Assistant)">
+            DHA (Diploma in Health Assistant)
+          </option>
         </select>
-<div className="flex items-center gap-2 ps-2">
-  <input
-    type="checkbox"
-    className="size-4"
-    checked={isRegisteredNurse}
-    onChange={(e) => setIsRegisteredNurse(e.target.checked)}
-  />
-  I have a valid Council Registration
-</div>
+        <div className="flex items-center gap-2 ps-2">
+          <input
+            type="checkbox"
+            className="size-4"
+            checked={isRegisteredNurse}
+            onChange={(e) => setIsRegisteredNurse(e.target.checked)}
+          />
+          I have a valid Council Registration
+        </div>
         <select
           value={specialization}
           onChange={(e) => setSpecialization(e.target.value)}
           className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
         >
-          <option disabled value="">Specialization</option>
-          <option value="Staff Nurse / Ward Nurse">Staff Nurse / Ward Nurse</option>
+          <option disabled value="">
+            Specialization
+          </option>
+          <option value="Staff Nurse / Ward Nurse">
+            Staff Nurse / Ward Nurse
+          </option>
           <option value="ICU Nurse / Critical Care Nurse">ICU Nurse</option>
           <option value="ER Nurse / Trauma Nurse">ER Nurse</option>
           <option value="Pediatric Nurse">Pediatric Nurse</option>
@@ -150,7 +169,9 @@ export default function NurseAvailability() {
           onChange={(e) => setWorkSchedule(e.target.value)}
           className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
         >
-          <option   value="" selected  disabled>Full Time / Part Time</option>
+          <option value="" selected disabled>
+            Full Time / Part Time
+          </option>
           <option value="FULL_TIME">Full Time</option>
           <option value="PART_TIME">Part Time</option>
         </select>
@@ -171,11 +192,15 @@ export default function NurseAvailability() {
                 onClick={() => toggleAvailability(index)}
               >
                 <img
-                  src={available ? "/available-btn.svg" : "/not-available-btn.svg"}
+                  src={
+                    available ? "/available-btn.svg" : "/not-available-btn.svg"
+                  }
                   alt="toggle"
                   className="w-6 h-6"
                 />
-                <span className={available ? "text-[#09B438]" : "text-[#FE1940]"}>
+                <span
+                  className={available ? "text-[#09B438]" : "text-[#FE1940]"}
+                >
                   {available ? "Available" : "NA"}
                 </span>
               </span>
@@ -194,7 +219,12 @@ export default function NurseAvailability() {
                       type="time"
                       value={shifts[shiftIndex].start}
                       onChange={(e) =>
-                        handleTimeChange(dayIdx, shiftIndex, "start", e.target.value)
+                        handleTimeChange(
+                          dayIdx,
+                          shiftIndex,
+                          "start",
+                          e.target.value
+                        )
                       }
                       className="border-b border-[#BBBBBB]"
                     />
@@ -210,7 +240,12 @@ export default function NurseAvailability() {
                       type="time"
                       value={shifts[shiftIndex].end}
                       onChange={(e) =>
-                        handleTimeChange(dayIdx, shiftIndex, "end", e.target.value)
+                        handleTimeChange(
+                          dayIdx,
+                          shiftIndex,
+                          "end",
+                          e.target.value
+                        )
                       }
                       className="border-b border-[#BBBBBB]"
                     />

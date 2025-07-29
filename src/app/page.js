@@ -12,7 +12,6 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-
   const { login: loginToStore, loadToken } = useAuthStore();
 
   useEffect(() => {
@@ -99,7 +98,9 @@ export default function Home() {
                 <button
                   type="submit"
                   className={`w-[120px] py-2 text-white rounded-3xl ${
-                    loading ? "bg-blue-400 cursor-not-allowed" : "bg-[#3674B5] cursor-pointer"
+                    loading
+                      ? "bg-blue-400 cursor-not-allowed"
+                      : "bg-[#3674B5] cursor-pointer"
                   }`}
                   disabled={loading}
                 >

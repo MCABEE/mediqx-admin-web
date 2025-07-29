@@ -18,7 +18,7 @@ const RouteProtector = ({ children }) => {
 
     if (!token || token.trim() === "" || !isValidJWT(token)) {
       localStorage.clear();
-      router.push("/"); 
+      router.push("/");
       return;
     }
 
@@ -27,7 +27,7 @@ const RouteProtector = ({ children }) => {
       (error) => {
         if (error.response?.status === 401) {
           localStorage.clear();
-          router.push("/"); 
+          router.push("/");
         }
         return Promise.reject(error);
       }

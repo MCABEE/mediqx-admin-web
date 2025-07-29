@@ -3,7 +3,7 @@ import {
   registerNurse,
   submitNursePageTwo,
   submitNursePageThree,
-   generateFileUploadUrlAPI,
+  generateFileUploadUrlAPI,
   confirmFileUploadAPI,
 } from "@/api/addStaffNurseApi";
 
@@ -12,7 +12,7 @@ const useNurseRegistrationStore = create((set, get) => ({
   error: null,
   successData: null,
   userId: null,
-  qualificationId:null,
+  qualificationId: null,
   // Page 1 Registration
   registerNurse: async (nurseData) => {
     set({ isLoading: true, error: null, successData: null, userId: null });
@@ -31,7 +31,7 @@ const useNurseRegistrationStore = create((set, get) => ({
 
   // Page 2 Experience Submission
   submitNursePageTwo: async (pageTwoData) => {
-    set({ isLoading: true, error: null,qualificationId:null });
+    set({ isLoading: true, error: null, qualificationId: null });
     try {
       const userId = get().userId;
       if (!userId) throw new Error("User ID is missing");
@@ -39,12 +39,11 @@ const useNurseRegistrationStore = create((set, get) => ({
       const payload = { ...pageTwoData, userId };
       const result = await submitNursePageTwo(payload);
       console.log(result);
-set({qualificationId:result.data.qualificationId})
+      set({ qualificationId: result.data.qualificationId });
       return result;
-      
     } catch (error) {
       set({ error: error.message });
-      throw error; 
+      throw error;
     } finally {
       set({ isLoading: false });
     }
@@ -68,8 +67,6 @@ set({qualificationId:result.data.qualificationId})
     }
   },
 
-
-
   uploadedFiles: {
     nursingCertificate: null,
     councilRegistration: null,
@@ -92,8 +89,8 @@ set({qualificationId:result.data.qualificationId})
     return result.data;
   },
 
-  confirmFileUpload: async (fileId,type) => {
-    const result = await confirmFileUploadAPI(fileId,type);
+  confirmFileUpload: async (fileId, type) => {
+    const result = await confirmFileUploadAPI(fileId, type);
     if (!result.success) throw new Error(result.error);
     return result.data;
   },
