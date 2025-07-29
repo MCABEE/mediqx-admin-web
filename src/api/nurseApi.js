@@ -44,3 +44,93 @@ export const verifyNurseStatus = async (nurseId, status) => {
     throw new Error(message);
   }
 };
+
+
+
+export const updateNurse = async (userId, data) => {
+  try {
+    const response = await api.put(`/admin/nurses/update-nurse/page-1/${userId}`, data, {
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }); 
+    return response.data;
+  } catch (error) {
+    const message = error.response?.data?.message || "Failed to update nurse details.";
+    throw new Error(message);
+  }
+};
+
+
+
+export const updateNurseAvailability = async (userId, availabilities) => {
+  try {
+    const response = await api.put(
+      `/admin/nurses/availability-update/${userId}`,
+      {
+        availabilities: availabilities.map((a) => ({
+          ...a,
+          isRecurring: true,
+          recurrenceRules: {},
+        })),
+      },
+      {
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to update availability.";
+    throw new Error(message);
+  }
+};
+
+
+
+
+export const updateNurseExperience = async (userId, data) => {
+  try {
+    const response = await api.put(
+      `/admin/nurses/update-qualification/${userId}`,
+      data,
+      {
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const message = error.response?.data?.message || "Failed to update experience.";
+    throw new Error(message);
+  }
+};
+ 
+
+
+
+export const getAssignableNurses = async ({
+  page = 1,
+  limit = 10,
+  from,
+  to,
+  radius,
+  centerLatitude,
+  centerLongitude
+}) => {
+  try {
+    const response = await api.get(
+      `/admin/nurse-assignment/nurses?page=${page}&limit=${limit}&role=NURSE&date=${from}&to=${to}&radius=${radius}&centerLatitude=${centerLatitude}&centerLongitude=${centerLongitude}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to fetch assignable nurses");
+  }
+};

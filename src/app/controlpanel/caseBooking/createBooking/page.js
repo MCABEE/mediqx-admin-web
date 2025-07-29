@@ -589,38 +589,18 @@ const handleSubmit = async (e) => {
             <option value="FEMALE">Female</option>
           </select>
 
-          {/* <div className="grid grid-cols-3 gap-2 mb-6">
-            {[
-              "Hindi",
-              "Kannada",
-              "English",
-              "Malayalam",
-              "Tamil",
-              "Telugu",
-            ].map((lang) => (
-              <label key={lang} className="inline-flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={preferredLanguages.includes(lang)}
-                  onChange={() =>
-                    toggleArray(lang, preferredLanguages, setPreferredLanguages)
-                  }
-                />
-                {lang}
-              </label>
-            ))}
-          </div> */}
+       
           <h1 className="text-[16px] font-semibold text-black">
             Preferred Languages
           </h1>
           <div className="grid grid-cols-2 gap-2 mb-4">
             {[
-              "Hindi",
-              "Kannada",
-              "English",
-              "Malayalam",
-              "Tamil",
-              "Telugu",
+              "HINDI",
+              "KANNADA",
+              "ENGLISH",
+              "MALAYALAM",
+              "TAMIL",
+              "TELUGU",
             ].map((lang) => (
               <label key={lang} className="inline-flex items-center gap-2">
                 <input

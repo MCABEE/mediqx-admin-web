@@ -5,7 +5,7 @@ import React from 'react'
 function page() {
   return (
     <div>
-        <Navlink/>
+        {/* <Navlink/> */}
         {/* Filter header */}
               <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between  px-6  rounded-[15px] mt-2">
                 <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
@@ -84,7 +84,7 @@ function page() {
                         </td>
                       </tr>
                      
-                        <tr  className="bg-white">
+                         <tr  className="bg-white">
                           <td className="p-2">03</td>
                             <Link href={"/controlpanel/patient-management/patient-details"}>
                           <td className="border-l-4 border-[#C0D8F6] p-2">Pradeep Kumar N</td>

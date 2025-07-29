@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { getNurses, getNurseById, verifyNurseStatus } from "@/api/nurseApi"; // Make sure this path is correct
+import { getNurses, getNurseById, verifyNurseStatus,updateNurse,updateNurseAvailability ,updateNurseExperience,getAssignableNurses } from "@/api/nurseApi"; 
 
 const useNurseStore = create(
   persist(
@@ -12,7 +12,7 @@ const useNurseStore = create(
       limit: 10,
       totalPages: 0,
       totalUsers: 0,
-      selectedNurse: null,
+      selectedNurse: null, 
 
       fetchNurses: async (page = 1, limit = 10,status) => {
         set({ isLoading: true, error: null });
@@ -65,6 +65,99 @@ const useNurseStore = create(
     set({ isLoading: false });
   }
 },
+
+
+
+
+updateAvailability: async (userId, payload) => {
+  set({ isLoading: true, error: null });
+  try {
+    const result = await updateNurseAvailability(userId, payload.availabilities); // pass only the array
+    console.log("✅ Availability updated:", result);
+    await get().fetchNurseById(userId);
+    return result;
+  } catch (error) {
+    set({ error: error.message });
+    throw new Error(error.message);
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
+
+
+
+
+
+
+updateNurseDetails: async (userId, nurseData) => {
+  set({ isLoading: true, error: null });
+  try {
+    const result = await updateNurse(userId, nurseData);
+    console.log("Nurse updated successfully:", result);
+    
+    // Optionally refresh nurse details or list
+    await get().fetchNurseById(userId);
+    await get().fetchNurses(get().page, get().limit);
+
+    return result;
+  } catch (error) {
+    set({ error: error.message });
+    throw new Error(error.message);
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
+updateExperience: async (userId, payload) => {
+  set({ isLoading: true, error: null });
+  try {
+    const result = await updateNurseExperience(userId, payload);
+    console.log("Experience updated successfully:", result);
+
+    // Refresh nurse details if needed
+    await get().fetchNurseById(userId);
+    return result;
+  } catch (error) {
+    set({ error: error.message });
+    throw new Error(error.message);
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
+
+
+
+
+
+
+
+
+
+fetchAssignableNurses: async (params) => {
+  set({ isLoading: true, error: null });
+  try {
+    const data = await getAssignableNurses(params);
+    set({
+      users: data?.data?.users || [],
+      totalPages: data?.data?.totalPages || 0,
+      totalUsers: data?.data?.total || 0
+    });
+  } catch (error) {
+    set({ error: error.message });
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
+
+
+
 
 
       setPage: (newPage) => set({ page: newPage }),

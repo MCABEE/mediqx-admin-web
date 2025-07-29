@@ -8,39 +8,40 @@ export const menus = [
     {
       id: 1,
       name: "Staff Management (HR)",
-      hasSubmenu: "",
+      hasSubmenu: false,
       link: "/controlpanel/staffManagement",
     },
+    
     {
       id: 2,
-      name: "Agent Management",
-      hasSubmenu: false,
-      link: "/controlpanel/agentManagement/newAgentRequest",
-    },
-    {
-      id: 3,
       name: "Service Bookings",
       hasSubmenu: false,
       link: "/controlpanel/caseBooking/newBooking",
       // link: "videoUpdates",
     },
     {
-      id: 4,
+      id: 3,
       name: "Cases",
       hasSubmenu: false,
       link: "/controlpanel/cases",
     },
     {
-      id: 5,
+      id: 4,
       name: "Patient Management",
       hasSubmenu: false,
-      link: "/controlpanel/patient-management/ongoing-patients",
+      link: "/controlpanel/patient-management",
     },
     {
-      id: 6,
+      id: 5,
       name: "Billing",
       hasSubmenu: false,
       //link: "profileReports",
+    },
+    {
+      id: 6,
+      name: "Agent Management",
+      hasSubmenu: false,
+      link: "/controlpanel/agentManagement/newAgentRequest",
     },
     {
       id: 7,

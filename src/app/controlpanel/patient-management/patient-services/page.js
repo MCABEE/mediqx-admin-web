@@ -8,7 +8,7 @@ function page() {
   const router = useRouter();
   return (
     <div>
-      <Navlink />
+      {/* <Navlink /> */}
 
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
         <div
