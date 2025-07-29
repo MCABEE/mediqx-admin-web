@@ -134,3 +134,35 @@ export const getAssignableNurses = async ({
     throw new Error(error.response?.data?.message || "Failed to fetch assignable nurses");
   }
 };
+ 
+
+
+
+
+
+export const getNurseCalendar = async (userId, monthStart, monthEnd) => {
+  try {
+    const response = await api.get(
+      `/admin/availability/${userId}/calender?monthStart=${monthStart}&monthEnd=${monthEnd}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to fetch nurse calendar");
+  }
+};
+
+
+
+
+export const searchNurses = async (page = 1, limit = 10, status, search = "") => {
+  try {
+    const response = await api.get(
+      `/admin/users?page=${page}&limit=${limit}&filter=${status}&role=NURSE&search=${encodeURIComponent(search)}`
+    );
+    return response;
+  } catch (error) { 
+    const errorMessage =
+      error.response?.data?.message || "Failed to fetch users.";
+    throw new Error(errorMessage);
+  }
+};

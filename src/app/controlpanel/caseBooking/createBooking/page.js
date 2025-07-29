@@ -1,4 +1,3 @@
-
 "use client";
 
 import Navlink from "@/components/caseBooking/NavLink";
@@ -9,7 +8,6 @@ const CaseBookingPage = () => {
   const { submitBooking } = useBookingStore();
   const [langError, setLangError] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-
 
   const [form, setForm] = useState({
     patientName: "",
@@ -54,74 +52,75 @@ const CaseBookingPage = () => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+    if (preferredLanguages.length === 0) {
+      setLangError(true);
+      return;
+    } else {
+      setLangError(false);
+    }
 
-  if (preferredLanguages.length === 0) {
-    setLangError(true);
-    return;
-  } else {
-    setLangError(false);
-  }
+    const payload = {
+      ...form,
+      contactPersonMobileNumber: form.contactPersonMobileNumber.startsWith(
+        "+91"
+      )
+        ? form.contactPersonMobileNumber
+        : `+91${form.contactPersonMobileNumber}`,
+      age: Number(form.age),
+      height: Number(form.height || 0),
+      weight: Number(form.weight || 0),
+      startDate: new Date(form.startDate).toISOString(),
+      durationType: visitType,
+      durationValue:
+        visitType === "ONE_TIME_VISIT" ? "0" : Number(form.durationValue),
+      weekdays,
+      flexibility,
+      preferredLanguages,
+      preferredGender,
+      serviceType: form.serviceType,
+      durationValue: form.durationValue || 1,
+    };
 
-  const payload = {
-    ...form,
-    contactPersonMobileNumber: form.contactPersonMobileNumber.startsWith("+91")
-      ? form.contactPersonMobileNumber
-      : `+91${form.contactPersonMobileNumber}`,
-    age: Number(form.age),
-    height: Number(form.height || 0),
-    weight: Number(form.weight || 0),
-    startDate: new Date(form.startDate).toISOString(),
-    durationType: visitType,
-    durationValue: visitType === "ONE_TIME_VISIT" ? "0" : Number(form.durationValue),
-    weekdays,
-    flexibility,
-    preferredLanguages,
-    preferredGender,
-    serviceType:form.serviceType,
-    durationValue: form.durationValue || 1,
+    const result = await submitBooking(payload);
+
+    if (result.success) {
+      setSuccessMessage("Booking successfully created.");
+      // Reset form
+      setForm({
+        patientName: "",
+        gender: "",
+        age: "",
+        height: "",
+        weight: "",
+        diagnosis: "",
+        healthStatus: "",
+        stayAt: "",
+        serviceType: "",
+        location: "",
+        pincode: "",
+        contactPersonName: "",
+        contactPersonRelation: "",
+        contactPersonEmail: "",
+        contactPersonMobileNumber: "",
+        scheduleType: "",
+        startDate: "",
+        durationType: "",
+        durationValue: "",
+        startTime: "",
+        endTime: "",
+      });
+      setVisitType("");
+      setWeekdays([]);
+      setFlexibility("");
+      setPreferredGender("");
+      setPreferredLanguages([]);
+    } else {
+      setSuccessMessage(" Failed to create booking. Please try again.");
+    }
   };
-
-  const result = await submitBooking(payload);
-
-  if (result.success) {
-    setSuccessMessage("Booking successfully created.");
-    // Reset form
-    setForm({
-      patientName: "",
-      gender: "",
-      age: "",
-      height: "",
-      weight: "",
-      diagnosis: "",
-      healthStatus: "",
-      stayAt: "",
-      serviceType: "",
-      location: "",
-      pincode: "",
-      contactPersonName: "",
-      contactPersonRelation: "",
-      contactPersonEmail: "",
-      contactPersonMobileNumber: "",
-      scheduleType: "",
-      startDate: "",
-      durationType: "",
-      durationValue: "",
-      startTime: "",
-      endTime: "",
-    });
-    setVisitType("");
-    setWeekdays([]);
-    setFlexibility("");
-    setPreferredGender("");
-    setPreferredLanguages([]);
-  } else {
-    setSuccessMessage(" Failed to create booking. Please try again.");
-  }
-};
-
 
   const durationLabel = {
     FEW_DAYS: "Days",
@@ -161,7 +160,9 @@ const handleSubmit = async (e) => {
               required
               className="w-1/2 h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
             >
-              <option value=""disabled selected>Gender</option>
+              <option value="" disabled selected>
+                Gender
+              </option>
               <option value="MALE">Male</option>
               <option value="FEMALE">Female</option>
               <option value="OTHER">Other</option>
@@ -203,7 +204,9 @@ const handleSubmit = async (e) => {
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300  outline-none"
           >
-            <option value="" selected disabled>Service Required</option>
+            <option value="" selected disabled>
+              Service Required
+            </option>
 
             <option value="DOCTOR_VISIT">Doctor Visit</option>
             <option value="NURSING_SERVICE_AT_HOME">
@@ -230,17 +233,36 @@ const handleSubmit = async (e) => {
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="" selected disabled>Current HealthStatus / Activity</option>
+            <option value="" selected disabled>
+              Current HealthStatus / Activity
+            </option>
             <option value="Bedridden Patients">Bedridden Patients</option>
-            <option value="Patients with Limited Mobility"> Patients with Limited Mobility </option>
+            <option value="Patients with Limited Mobility">
+              {" "}
+              Patients with Limited Mobility{" "}
+            </option>
             <option value="Tube-fed Patients">Tube-fed Patients</option>
-            <option value="Patients with Indwelling Catheters">Patients with Indwelling Catheters</option>
-            <option value="Patients with Tracheostomy / Ventilator">Patients with Tracheostomy / Ventilator</option>
-            <option value="Post-Surgical Recovery Patients">Post-Surgical Recovery Patients</option>
-            <option value="Elderly with Chronic Conditions (Geriatric Care)">Elderly with Chronic Conditions (Geriatric Care)</option>
-            <option value="Patients Requiring Palliative / Hospice Care">Patients Requiring Palliative / Hospice Care</option>
-            <option value="Patients on IV Therapy / Home Infusion">Patients on IV Therapy / Home Infusion</option>
-            <option value="Post-COVID or Respiratory Rehab Patients">Post-COVID or Respiratory Rehab Patients</option>
+            <option value="Patients with Indwelling Catheters">
+              Patients with Indwelling Catheters
+            </option>
+            <option value="Patients with Tracheostomy / Ventilator">
+              Patients with Tracheostomy / Ventilator
+            </option>
+            <option value="Post-Surgical Recovery Patients">
+              Post-Surgical Recovery Patients
+            </option>
+            <option value="Elderly with Chronic Conditions (Geriatric Care)">
+              Elderly with Chronic Conditions (Geriatric Care)
+            </option>
+            <option value="Patients Requiring Palliative / Hospice Care">
+              Patients Requiring Palliative / Hospice Care
+            </option>
+            <option value="Patients on IV Therapy / Home Infusion">
+              Patients on IV Therapy / Home Infusion
+            </option>
+            <option value="Post-COVID or Respiratory Rehab Patients">
+              Post-COVID or Respiratory Rehab Patients
+            </option>
           </select>
 
           <select
@@ -250,7 +272,9 @@ const handleSubmit = async (e) => {
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="" selected disabled>Now Patient stayed at</option>
+            <option value="" selected disabled>
+              Now Patient stayed at
+            </option>
             <option value="HOSPITAL">Hospital</option>
             <option value="RESIDENCE">Residence</option>
             <option value="CARE_HOME">Care Home</option>
@@ -326,7 +350,8 @@ const handleSubmit = async (e) => {
             <option value="Relative (Other)">Relative (Other)</option>
             <option value="Caretaker / Attendant">Caretaker / Attendant</option>
             <option value="Legal Guardian">Legal Guardian</option>
-            <option value="Friend ">Friend </option>  </select>
+            <option value="Friend ">Friend </option>{" "}
+          </select>
 
           <input
             name="contactPersonEmail"
@@ -424,21 +449,21 @@ const handleSubmit = async (e) => {
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           /> */}
 
-<input
-  name="startDate"
-  type={form.startDateInputType || "text"}
-  value={form.startDate}
-  placeholder="Service Period From"
-  onFocus={() =>
-    setForm((prev) => ({
-      ...prev,
-      startDateInputType: "date",
-    }))
-  }
-  onChange={handleChange}
-  required
-  className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
-/>
+          <input
+            name="startDate"
+            type={form.startDateInputType || "text"}
+            value={form.startDate}
+            placeholder="Service Period From"
+            onFocus={() =>
+              setForm((prev) => ({
+                ...prev,
+                startDateInputType: "date",
+              }))
+            }
+            onChange={handleChange}
+            required
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+          />
 
           <select
             value={visitType}
@@ -472,8 +497,11 @@ const handleSubmit = async (e) => {
                   value={form.durationValue}
                   onChange={handleChange}
                 >
-                  <option value=""selected disabled> Duration</option>
-                  {[1, 2, 3, 4, 5,6].map((val) => (
+                  <option value="" selected disabled>
+                    {" "}
+                    Duration
+                  </option>
+                  {[1, 2, 3, 4, 5, 6].map((val) => (
                     <option key={val} value={val}>
                       {val}
                     </option>
@@ -499,7 +527,9 @@ const handleSubmit = async (e) => {
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="" selected disabled>Daily Schedule Type</option>
+            <option value="" selected disabled>
+              Daily Schedule Type
+            </option>
             <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
             <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
             <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option>
@@ -582,14 +612,13 @@ const handleSubmit = async (e) => {
             value={preferredGender}
             onChange={(e) => setPreferredGender(e.target.value)}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none" 
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
             <option value="">Preferred Gender</option>
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
           </select>
 
-       
           <h1 className="text-[16px] font-semibold text-black">
             Preferred Languages
           </h1>
@@ -632,12 +661,13 @@ const handleSubmit = async (e) => {
         >
           Submit
         </button>
-<div className="h-[48px] mb-10">
-  
-        {successMessage && (
-  <p className=" text-[#3674B5] font-medium px-8  ">{successMessage}</p>
-)}
-</div>
+        <div className="h-[48px] mb-10">
+          {successMessage && (
+            <p className=" text-[#3674B5] font-medium px-8  ">
+              {successMessage}
+            </p>
+          )}
+        </div>
       </form>
     </>
   );

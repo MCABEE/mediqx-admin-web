@@ -4,13 +4,69 @@ import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 
 const defaultSchedule = [
-  { day: "Sunday", available: false, id: "", shifts: [{ start: "", end: "" }, { start: "", end: "" }] },
-  { day: "Monday", available: false, id: "", shifts: [{ start: "", end: "" }, { start: "", end: "" }] },
-  { day: "Tuesday", available: false, id: "", shifts: [{ start: "", end: "" }, { start: "", end: "" }] },
-  { day: "Wednesday", available: false, id: "", shifts: [{ start: "", end: "" }, { start: "", end: "" }] },
-  { day: "Thursday", available: false, id: "", shifts: [{ start: "", end: "" }, { start: "", end: "" }] },
-  { day: "Friday", available: false, id: "", shifts: [{ start: "", end: "" }, { start: "", end: "" }] },
-  { day: "Saturday", available: false, id: "", shifts: [{ start: "", end: "" }, { start: "", end: "" }] },
+  {
+    day: "Sunday",
+    available: false,
+    id: "",
+    shifts: [
+      { start: "", end: "" },
+      { start: "", end: "" },
+    ],
+  },
+  {
+    day: "Monday",
+    available: false,
+    id: "",
+    shifts: [
+      { start: "", end: "" },
+      { start: "", end: "" },
+    ],
+  },
+  {
+    day: "Tuesday",
+    available: false,
+    id: "",
+    shifts: [
+      { start: "", end: "" },
+      { start: "", end: "" },
+    ],
+  },
+  {
+    day: "Wednesday",
+    available: false,
+    id: "",
+    shifts: [
+      { start: "", end: "" },
+      { start: "", end: "" },
+    ],
+  },
+  {
+    day: "Thursday",
+    available: false,
+    id: "",
+    shifts: [
+      { start: "", end: "" },
+      { start: "", end: "" },
+    ],
+  },
+  {
+    day: "Friday",
+    available: false,
+    id: "",
+    shifts: [
+      { start: "", end: "" },
+      { start: "", end: "" },
+    ],
+  },
+  {
+    day: "Saturday",
+    available: false,
+    id: "",
+    shifts: [
+      { start: "", end: "" },
+      { start: "", end: "" },
+    ],
+  },
 ];
 
 const EditNurseAvailability = ({ availabilities = [], userId, onClose }) => {
@@ -21,14 +77,22 @@ const EditNurseAvailability = ({ availabilities = [], userId, onClose }) => {
   useEffect(() => {
     if (availabilities.length > 0) {
       const mapped = defaultSchedule.map((item) => {
-        const existing = availabilities.find((a) => a.weekday === item.day.toUpperCase());
+        const existing = availabilities.find(
+          (a) => a.weekday === item.day.toUpperCase()
+        );
         return {
           ...item,
           id: existing?.id || "",
           available: existing?.isAvailable || false,
           shifts: [
-            { start: existing?.slotOneStart || "", end: existing?.slotOneEnd || "" },
-            { start: existing?.slotTwoStart || "", end: existing?.slotTwoEnd || "" },
+            {
+              start: existing?.slotOneStart || "",
+              end: existing?.slotOneEnd || "",
+            },
+            {
+              start: existing?.slotTwoStart || "",
+              end: existing?.slotTwoEnd || "",
+            },
           ],
         };
       });
@@ -38,7 +102,9 @@ const EditNurseAvailability = ({ availabilities = [], userId, onClose }) => {
 
   const toggleAvailability = (index) => {
     setSchedule((prev) =>
-      prev.map((day, i) => (i === index ? { ...day, available: !day.available } : day))
+      prev.map((day, i) =>
+        i === index ? { ...day, available: !day.available } : day
+      )
     );
     setError(""); // Clear error on change
   };
@@ -88,7 +154,9 @@ const EditNurseAvailability = ({ availabilities = [], userId, onClose }) => {
         const slotTwoEnd = formatToHHmm(item.shifts[1].end);
 
         if ((slotTwoStart && !slotTwoEnd) || (!slotTwoStart && slotTwoEnd)) {
-          setError(`Both Slot Two start and end times must be provided for ${item.day}`);
+          setError(
+            `Both Slot Two start and end times must be provided for ${item.day}`
+          );
           return;
         }
 
@@ -122,7 +190,9 @@ const EditNurseAvailability = ({ availabilities = [], userId, onClose }) => {
           <IoClose size={24} />
         </button>
 
-        <h2 className="text-lg font-semibold mb-6 text-center text-black">Edit Availability</h2>
+        <h2 className="text-lg font-semibold mb-6 text-center text-black">
+          Edit Availability
+        </h2>
 
         {error && (
           <div className="bg-red-100 text-red-700 px-4 py-2 rounded-md mb-4 text-sm font-medium">
@@ -141,11 +211,17 @@ const EditNurseAvailability = ({ availabilities = [], userId, onClose }) => {
                   onClick={() => toggleAvailability(index)}
                 >
                   <img
-                    src={available ? "/available-btn.svg" : "/not-available-btn.svg"}
+                    src={
+                      available
+                        ? "/available-btn.svg"
+                        : "/not-available-btn.svg"
+                    }
                     alt="toggle"
                     className="w-6 h-6"
                   />
-                  <span className={available ? "text-[#09B438]" : "text-[#FE1940]"}>
+                  <span
+                    className={available ? "text-[#09B438]" : "text-[#FE1940]"}
+                  >
                     {available ? "Available" : "NA"}
                   </span>
                 </span>
@@ -164,7 +240,12 @@ const EditNurseAvailability = ({ availabilities = [], userId, onClose }) => {
                         type="time"
                         value={shifts[shiftIndex].start}
                         onChange={(e) =>
-                          handleTimeChange(dayIdx, shiftIndex, "start", e.target.value)
+                          handleTimeChange(
+                            dayIdx,
+                            shiftIndex,
+                            "start",
+                            e.target.value
+                          )
                         }
                         className="border-b border-[#BBBBBB]"
                       />
@@ -180,7 +261,12 @@ const EditNurseAvailability = ({ availabilities = [], userId, onClose }) => {
                         type="time"
                         value={shifts[shiftIndex].end}
                         onChange={(e) =>
-                          handleTimeChange(dayIdx, shiftIndex, "end", e.target.value)
+                          handleTimeChange(
+                            dayIdx,
+                            shiftIndex,
+                            "end",
+                            e.target.value
+                          )
                         }
                         className="border-b border-[#BBBBBB]"
                       />

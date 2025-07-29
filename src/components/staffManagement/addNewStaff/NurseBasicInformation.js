@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 
@@ -242,17 +242,6 @@ const NurseBasicInformation = () => {
             required
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
           />
-
-          {/* <input
-            type="text"
-            name="pincode"
-            value={formData.pincode}
-            onChange={handleChange}
-            placeholder="Pin Code"
-            maxLength={6}
-            required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
-          /> */}
 
           <input
             type="text"

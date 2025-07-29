@@ -97,7 +97,6 @@ const Table = () => {
                     const qualification = nurse.educationQualifications || "";
 
                     return (
-                    
                       <tr
                         key={nurse.userId || index}
                         className="bg-white cursor-pointer hover:bg-gray-100"

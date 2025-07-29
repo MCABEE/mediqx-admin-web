@@ -103,7 +103,10 @@ function StaffDetailPage() {
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
             Basics
           </h1>
-          <button onClick={() => setIsEditModalOpen(true)} className="cursor-pointer hover:scale-110">
+          <button
+            onClick={() => setIsEditModalOpen(true)}
+            className="cursor-pointer hover:scale-110"
+          >
             <img src="/edit-btn.svg" className="size-6" alt="edit" />
           </button>
         </div>
@@ -160,14 +163,20 @@ function StaffDetailPage() {
         {/* Basic Details */}
         <div className="px-[39px] pt-[15px]">
           <div className="flex items-center justify-end">
-            <button onClick={() => setEditAvailabilityPopup(true)} className="cursor-pointer hover:scale-110">
+            <button
+              onClick={() => setEditAvailabilityPopup(true)}
+              className="cursor-pointer hover:scale-110"
+            >
               <img src="/edit-btn.svg" className="size-6" alt="edit" />
             </button>
           </div>
           {/* Availability */}
           <AvailabilitySchedule availabilities={availabilities} />
           <div className="flex items-center justify-end mt-6">
-            <button onClick={() => setIsExperincePopUp(true)} className="cursor-pointer hover:scale-110">
+            <button
+              onClick={() => setIsExperincePopUp(true)}
+              className="cursor-pointer hover:scale-110"
+            >
               <img src="/edit-btn.svg" className="size-6" alt="edit" />
             </button>
           </div>
@@ -213,7 +222,6 @@ function StaffDetailPage() {
 
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
-           
 
               <span>
                 {qualifications.startDate &&

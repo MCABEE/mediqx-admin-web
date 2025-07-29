@@ -51,18 +51,17 @@ const Page = () => {
     <div>
       {/* Tabs Header */}
 
-       <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
-      <Navlink
-        tabs={statusTabs}
-        selectedStatus={selectedStatus}
-        onStatusChange={handleStatusClick}
-      />
-    </div>
-        {/* <div className="flex gap-2 justify-center items-center">
+      <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
+        <Navlink
+          tabs={statusTabs}
+          selectedStatus={selectedStatus}
+          onStatusChange={handleStatusClick}
+        />
+      </div>
+      {/* <div className="flex gap-2 justify-center items-center">
           <p className="text-black font-semibold pt-[23px] pb-[19px]">Clear</p>
           <input type="checkbox" className="size-[20px]" />
         </div> */}
-     
 
       {/* Total count */}
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px] px-6 text-black font-semibold text-[32px] flex justify-between">
@@ -83,8 +82,9 @@ const Page = () => {
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">
               Service Date
             </th>
-            <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl  p-2">Staff</th>
-           
+            <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl  p-2">
+              Staff
+            </th>
           </tr>
         </thead>
         <tbody>

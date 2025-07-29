@@ -41,10 +41,16 @@ const AvailabilitySchedule = ({ availabilities }) => {
             return (
               <span key={day} className="flex gap-4 items-center">
                 <img
-                  src={isAvailable ? "/available-btn.svg" : "/not-available-btn.svg"}
+                  src={
+                    isAvailable
+                      ? "/available-btn.svg"
+                      : "/not-available-btn.svg"
+                  }
                   alt=""
                 />
-                <span className={isAvailable ? "text-[#09B438]" : "text-[#FE1940]"}>
+                <span
+                  className={isAvailable ? "text-[#09B438]" : "text-[#FE1940]"}
+                >
                   {isAvailable ? "Available" : "NA"}
                 </span>
               </span>
@@ -56,7 +62,9 @@ const AvailabilitySchedule = ({ availabilities }) => {
         <div className="flex flex-col text-[16px] text-black font-light gap-[18px] ps-8">
           {daysOfWeek.map((day) => {
             const availability = availabilities.find((a) => a.weekday === day);
-            const time = availability?.slotOneStart ? formatTime(availability.slotOneStart) : "";
+            const time = availability?.slotOneStart
+              ? formatTime(availability.slotOneStart)
+              : "";
             return (
               <span
                 key={day}
@@ -72,7 +80,9 @@ const AvailabilitySchedule = ({ availabilities }) => {
         <div className="flex flex-col text-[16px] text-black font-light gap-[18px] ps-8">
           {daysOfWeek.map((day) => {
             const availability = availabilities.find((a) => a.weekday === day);
-            const time = availability?.slotOneEnd ? formatTime(availability.slotOneEnd) : "";
+            const time = availability?.slotOneEnd
+              ? formatTime(availability.slotOneEnd)
+              : "";
             return (
               <span
                 key={day}
@@ -88,7 +98,9 @@ const AvailabilitySchedule = ({ availabilities }) => {
         <div className="flex flex-col text-[16px] text-black font-light gap-[18px] ps-8">
           {daysOfWeek.map((day) => {
             const availability = availabilities.find((a) => a.weekday === day);
-            const time = availability?.slotTwoStart ? formatTime(availability.slotTwoStart) : "";
+            const time = availability?.slotTwoStart
+              ? formatTime(availability.slotTwoStart)
+              : "";
             return (
               <span
                 key={day}
@@ -104,7 +116,9 @@ const AvailabilitySchedule = ({ availabilities }) => {
         <div className="flex flex-col text-[16px] text-black font-light gap-[18px] ps-8">
           {daysOfWeek.map((day) => {
             const availability = availabilities.find((a) => a.weekday === day);
-            const time = availability?.slotTwoEnd ? formatTime(availability.slotTwoEnd) : "";
+            const time = availability?.slotTwoEnd
+              ? formatTime(availability.slotTwoEnd)
+              : "";
             return (
               <span
                 key={day}

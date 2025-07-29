@@ -3,10 +3,9 @@ import useNurseStore from "@/app/lib/store/nurseStore";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
-
 const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
   const { updateNurseDetails } = useNurseStore();
-console.log(contact);
+  console.log(contact);
 
   if (!show) return null;
 
@@ -45,7 +44,6 @@ console.log(contact);
       onCancel(); // Close modal
     } catch (error) {
       console.log(error.message || "Failed to update nurse");
-      
     }
   };
 
@@ -64,9 +62,22 @@ console.log(contact);
         </h2>
 
         <div className="space-y-4">
-          <InputField label="Full Name" value={contact.fullName} onChange={(e) => handleChange("fullName", e.target.value)} />
-          <InputField label="Email" type="email" value={contact.email} onChange={(e) => handleChange("email", e.target.value)} />
-          <InputField label="Mobile Number" value={contact.mobileNumber} onChange={(e) => handleChange("mobileNumber", e.target.value)} />
+          <InputField
+            label="Full Name"
+            value={contact.fullName}
+            onChange={(e) => handleChange("fullName", e.target.value)}
+          />
+          <InputField
+            label="Email"
+            type="email"
+            value={contact.email}
+            onChange={(e) => handleChange("email", e.target.value)}
+          />
+          <InputField
+            label="Mobile Number"
+            value={contact.mobileNumber}
+            onChange={(e) => handleChange("mobileNumber", e.target.value)}
+          />
 
           <SelectField
             label="Gender"
@@ -83,7 +94,9 @@ console.log(contact);
           <SelectField
             label="Education Qualification"
             value={contact.educationQualifications}
-            onChange={(e) => handleChange("educationQualifications", e.target.value)}
+            onChange={(e) =>
+              handleChange("educationQualifications", e.target.value)
+            }
             options={[
               { label: "MSc Nursing", value: "MSc Nursing" },
               { label: "BSc Nursing", value: "BSc Nursing" },
@@ -92,9 +105,18 @@ console.log(contact);
               { label: "GNM", value: "GNM" },
               { label: "GNM Pursuing", value: "GNM Pursuing" },
               { label: "ANM", value: "ANM" },
-              { label: "GDA (General Duty Assistant)", value: "GDA (General Duty Assistant)" },
-              { label: "PCA (Personal Care Assistant)", value: "PCA (Personal Care Assistant)" },
-              { label: "DHA (Diploma in Health Assistant)", value: "DHA (Diploma in Health Assistant)" },
+              {
+                label: "GDA (General Duty Assistant)",
+                value: "GDA (General Duty Assistant)",
+              },
+              {
+                label: "PCA (Personal Care Assistant)",
+                value: "PCA (Personal Care Assistant)",
+              },
+              {
+                label: "DHA (Diploma in Health Assistant)",
+                value: "DHA (Diploma in Health Assistant)",
+              },
             ]}
           />
 
@@ -103,7 +125,10 @@ console.log(contact);
             value={contact.specializations || ""}
             onChange={(e) => handleChange("specializations", [e.target.value])}
             options={[
-              { label: "Staff Nurse / Ward Nurse", value: "Staff Nurse / Ward Nurse" },
+              {
+                label: "Staff Nurse / Ward Nurse",
+                value: "Staff Nurse / Ward Nurse",
+              },
               { label: "ICU Nurse", value: "ICU Nurse / Critical Care Nurse" },
               { label: "ER Nurse", value: "ER Nurse / Trauma Nurse" },
               { label: "Pediatric Nurse", value: "Pediatric Nurse" },
@@ -123,10 +148,26 @@ console.log(contact);
 
           {/* Address Fields */}
           <div className="grid grid-cols-2 gap-4">
-            <InputField label="State" value={contact.address?.state || ""} onChange={(e) => handleAddressChange("state", e.target.value)} />
-            <InputField label="District" value={contact.address?.district || ""} onChange={(e) => handleAddressChange("district", e.target.value)} />
-            <InputField label="City" value={contact.address?.city || ""} onChange={(e) => handleAddressChange("city", e.target.value)} />
-            <InputField label="Pincode" value={contact.address?.pincode || ""} onChange={(e) => handleAddressChange("pincode", e.target.value)} />
+            <InputField
+              label="State"
+              value={contact.address?.state || ""}
+              onChange={(e) => handleAddressChange("state", e.target.value)}
+            />
+            <InputField
+              label="District"
+              value={contact.address?.district || ""}
+              onChange={(e) => handleAddressChange("district", e.target.value)}
+            />
+            <InputField
+              label="City"
+              value={contact.address?.city || ""}
+              onChange={(e) => handleAddressChange("city", e.target.value)}
+            />
+            <InputField
+              label="Pincode"
+              value={contact.address?.pincode || ""}
+              onChange={(e) => handleAddressChange("pincode", e.target.value)}
+            />
           </div>
         </div>
 
