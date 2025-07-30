@@ -27,7 +27,9 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
     const payload = {
       fullName: contact.fullName,
       gender: contact.gender,
-      dob: contact.dob,
+      dob: contact.dob
+  ? new Date(contact.dob).toISOString().split("T")[0]
+  : null,
       email: contact.email,
       mobileNumber: contact.mobileNumber,
       addressId: contact.address?.addressId,
@@ -39,6 +41,9 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
       specializations: contact.specializations || [],
       workSchedule: contact.workSchedule,
     };
+    if (contact.dob && contact.dob.includes("T")) {
+    payload.dob = contact.dob; 
+  }
 
     try {
       await updateNurseDetails(userId, payload);
