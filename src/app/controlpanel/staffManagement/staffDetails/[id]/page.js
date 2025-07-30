@@ -52,7 +52,9 @@ function StaffDetailPage() {
     if (selectedNurse) {
       setEditedContact({
         gender: selectedNurse.gender || "",
-        dob: selectedNurse.dob || "",
+        dob: selectedNurse.dob
+    ? new Date(selectedNurse.dob).toISOString().split("T")[0]
+    : "",
         fullName: selectedNurse.fullName || "",
         email: selectedNurse.email || "",
         mobileNumber: selectedNurse.mobileNumber || "",
