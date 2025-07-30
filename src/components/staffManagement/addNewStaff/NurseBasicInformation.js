@@ -14,6 +14,7 @@ const NurseBasicInformation = () => {
     city: "",
     pincode: "",
     referralCode: "",
+    dob:"",
   });
 
   const [selectedState, setSelectedState] = useState("");
@@ -200,6 +201,19 @@ const NurseBasicInformation = () => {
               {validationErrors.mobileNumber}
             </span>
           )}
+
+          <input
+  type="text"
+  name="dob"
+  value={formData.dob}
+  onChange={handleChange}
+  placeholder="Date of Birth"
+  onFocus={(e) => (e.target.type = "date")}
+  onBlur={(e) => (e.target.type = "text")}
+  required
+  className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none placeholder:text-black"
+/>
+
 
           <select
             name="state"

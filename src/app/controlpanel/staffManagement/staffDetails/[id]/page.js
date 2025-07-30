@@ -24,6 +24,7 @@ function StaffDetailPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedContact, setEditedContact] = useState({
     gender: "",
+    dob: "",
     fullName: "",
     email: "",
     mobileNumber: "",
@@ -51,6 +52,7 @@ function StaffDetailPage() {
     if (selectedNurse) {
       setEditedContact({
         gender: selectedNurse.gender || "",
+        dob: selectedNurse.dob || "",
         fullName: selectedNurse.fullName || "",
         email: selectedNurse.email || "",
         mobileNumber: selectedNurse.mobileNumber || "",
@@ -144,6 +146,14 @@ function StaffDetailPage() {
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Phone Number</span>
             <span>{selectedNurse.mobileNumber}</span>
+          </div>
+          <div className="flex gap-[18px]">
+            <span className="w-[280px]">DOB</span>
+            <span>
+              {selectedNurse.dob
+                ? new Date(selectedNurse.dob).toISOString().split("T")[0]
+                : ""}
+            </span>
           </div>
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Qualification</span>
