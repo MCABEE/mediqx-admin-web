@@ -27,6 +27,7 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
     const payload = {
       fullName: contact.fullName,
       gender: contact.gender,
+      dob: contact.dob,
       email: contact.email,
       mobileNumber: contact.mobileNumber,
       addressId: contact.address?.addressId,
@@ -77,6 +78,16 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
             label="Mobile Number"
             value={contact.mobileNumber}
             onChange={(e) => handleChange("mobileNumber", e.target.value)}
+          />
+          <InputField
+            label="Dob"
+            type="date"
+            value={
+              contact.dob
+                ? new Date(contact.dob).toISOString().split("T")[0]
+                : ""
+            }
+            onChange={(e) => handleChange("dob", e.target.value)}
           />
 
           <SelectField
