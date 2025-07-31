@@ -251,6 +251,10 @@ function NurseExperienceDetails() {
               </option>
               <option value="Kerala">Kerala</option>
               <option value="Karnataka">Karnataka</option>
+              <option value="Maharastra">Maharastra</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Other">Other</option>
             </select>
 
             <input
