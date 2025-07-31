@@ -82,6 +82,7 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
           <InputField
             label="Mobile Number"
             value={contact.mobileNumber}
+            readOnly
             onChange={(e) => handleChange("mobileNumber", e.target.value)}
           />
           <InputField
@@ -208,7 +209,7 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
 };
 
 // Reusable Input Field
-const InputField = ({ label, value, onChange, type = "text" }) => (
+const InputField = ({ label, value, onChange, type = "text" ,...props }) => (
   <div className="flex flex-col">
     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
     <input
@@ -217,6 +218,7 @@ const InputField = ({ label, value, onChange, type = "text" }) => (
       onChange={onChange}
       className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder={`Enter ${label.toLowerCase()}`}
+       {...props}
     />
   </div>
 );
