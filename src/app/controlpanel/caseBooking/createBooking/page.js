@@ -442,13 +442,19 @@ const CaseBookingPage = () => {
 
           {/* <input
             name="startDate"
-            type="date"
+            type={form.startDateInputType || "text"}
             value={form.startDate}
+            placeholder="Service Period From"
+            onFocus={() =>
+              setForm((prev) => ({
+                ...prev,
+                startDateInputType: "date",
+              }))
+            }
             onChange={handleChange}
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           /> */}
-
           <input
             name="startDate"
             type={form.startDateInputType || "text"}
@@ -460,6 +466,7 @@ const CaseBookingPage = () => {
                 startDateInputType: "date",
               }))
             }
+            min={new Date().toISOString().split("T")[0]} // 🔹 This disables past dates
             onChange={handleChange}
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
