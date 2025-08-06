@@ -1,273 +1,399 @@
 "use client";
-import React, { useState } from "react";
-import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
-import { submitNursePageThree } from "@/api/addStaffNurseApi";
+import React, { useState, useMemo } from "react";
 
-const daysOfWeek = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+function AddNurseAvailability() {
+  const today = new Date().toISOString().split("T")[0];
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [mode, setMode] = useState("");
+  const [selectedDates, setSelectedDates] = useState({});
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
+  const [popupDate, setPopupDate] = useState(null);
+  const [slot, setSlot] = useState({ from: "", to: "" });
+  const [fullTimeSlots, setFullTimeSlots] = useState(new Set());
 
-const defaultShift = { start: "", end: "" };
+  const getAllDatesInRange = (startStr, endStr) => {
+    const start = new Date(startStr);
+    const end = new Date(endStr);
+    const dates = [];
 
-export default function NurseAvailability() {
-  const { userId } = useNurseRegistrationStore();
-  const [qualification, setQualification] = useState("");
-  const [specialization, setSpecialization] = useState("");
-  const [workSchedule, setWorkSchedule] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [isRegisteredNurse, setIsRegisteredNurse] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const [schedule, setSchedule] = useState(
-    daysOfWeek.map((day) => ({
-      day,
-      available: false,
-      shifts: [{ ...defaultShift }, { ...defaultShift }],
-    }))
-  );
-
-  const toggleAvailability = (index) => {
-    const newSchedule = [...schedule];
-    newSchedule[index].available = !newSchedule[index].available;
-    if (!newSchedule[index].available) {
-      newSchedule[index].shifts = [{ ...defaultShift }, { ...defaultShift }];
+    for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+      dates.push(new Date(dt));
     }
-    setSchedule(newSchedule);
+
+    return dates;
   };
 
-  const handleTimeChange = (dayIndex, shiftIndex, field, value) => {
-    const newSchedule = [...schedule];
-    newSchedule[dayIndex].shifts[shiftIndex][field] = value;
-    setSchedule(newSchedule);
+  const allDates = useMemo(() => {
+    if (!fromDate || !toDate) return [];
+    return getAllDatesInRange(fromDate, toDate);
+  }, [fromDate, toDate]);
+
+  const groupedByMonth = useMemo(() => {
+    const groups = {};
+    allDates.forEach((date) => {
+      const key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(new Date(date));
+    });
+    return Object.entries(groups);
+  }, [allDates]);
+
+  const formatDate = (date) => date.toISOString().split("T")[0];
+
+  const formatTime12Hour = (time) => {
+    if (!time) return "";
+    const [hour, minute] = time.split(":");
+    const h = +hour % 12 || 12;
+    const ampm = +hour >= 12 ? "PM" : "AM";
+    return `${h}:${minute} ${ampm}`;
   };
 
-  const generateAvailabilityPayload = () => {
-    return schedule.map(({ day, available, shifts }) => {
-      const payload = {
-        isAvailable: available,
-        weekday: day.toUpperCase(),
-        isRecurring: true,
-        recurrenceRules: {},
-      };
+  const formatMonthYear = (key) => {
+    const [year, month] = key.split("-");
+    const d = new Date(year, month - 1);
+    return d.toLocaleString("default", { month: "long", year: "numeric" });
+  };
 
-      const isValidTime = (time) => /^\d{2}:\d{2}$/.test(time);
+  const handleDateClick = (date) => {
+    const key = formatDate(date);
+    const todayDate = new Date().toISOString().split("T")[0];
+    if (key < todayDate) return;
 
-      if (available) {
-        if (isValidTime(shifts[0].start))
-          payload.slotOneStart = shifts[0].start;
-        if (isValidTime(shifts[0].end)) payload.slotOneEnd = shifts[0].end;
-        if (isValidTime(shifts[1].start))
-          payload.slotTwoStart = shifts[1].start;
-        if (isValidTime(shifts[1].end)) payload.slotTwoEnd = shifts[1].end;
+    if (mode === "fulltime") {
+      setSelectedDates((prev) => {
+        const updated = { ...prev };
+        if (updated[key]) delete updated[key];
+        else
+          updated[key] = { fulltime: true, slots: Array.from(fullTimeSlots) };
+        return updated;
+      });
+    } else if (mode === "parttime") {
+      if (selectedDates[key] && !selectedDates[key].fulltime) {
+        setSelectedDates((prev) => {
+          const updated = { ...prev };
+          delete updated[key];
+          return updated;
+        });
+      } else {
+        setPopupDate(date);
+        setSlot({ from: "", to: "" });
       }
+    }
+  };
 
-      return payload;
+  const handleSaveSlot = () => {
+    const key = formatDate(popupDate);
+    if (slot.from && slot.to) {
+      setSelectedDates((prev) => ({
+        ...prev,
+        [key]: {
+          fulltime: false,
+          from: slot.from,
+          to: slot.to,
+        },
+      }));
+    }
+    setPopupDate(null);
+  };
+
+  const handleRemoveDate = (key) => {
+    setSelectedDates((prev) => {
+      const updated = { ...prev };
+      delete updated[key];
+      return updated;
     });
   };
 
-  const handleSubmit = async () => {
-    setErrorMessage("");
+  const selectedDateList = Object.keys(selectedDates).sort();
+  const leaveDates = allDates
+    .map(formatDate)
+    .filter((d) => !selectedDates[d])
+    .sort();
 
-    if (!userId) {
-      setErrorMessage("Please complete the  above fields first.");
-      return;
-    }
-    if (!workSchedule) {
-      setErrorMessage(
-        "Please select your work schedule Part Time or Full Time."
-      );
-      return;
-    }
-    const payload = {
-      userId,
-      educationQualifications: [qualification],
-      specializations: [specialization],
-      workSchedule,
-      isRegisteredNurse,
-      availabilities: generateAvailabilityPayload(),
-    };
+  const toggleFullTimeSlot = (label) => {
+    // Only allow one checkbox at a time
+    const updated = new Set();
+    updated.add(label);
+    setFullTimeSlots(updated);
+  };
 
-    try {
-      setLoading(true);
-      const result = await submitNursePageThree(payload);
-      console.log("Success:", result);
-      setErrorMessage("");
-      window.location.reload();
-    } catch (err) {
-      console.error(err);
-      setErrorMessage(err.message || "Submission failed.");
-    } finally {
-      setLoading(false);
-    }
+  const handleSaveAvailability = () => {
+    const availableDays = Object.entries(selectedDates).map(([date, info]) => ({
+      date,
+      type: info.fulltime ? "Fulltime" : "Parttime",
+      slots: info.fulltime
+        ? info.slots || []
+        : [formatTime12Hour(info.from), formatTime12Hour(info.to)],
+    }));
+
+    console.log("Available Days:", availableDays);
+    console.log("Leave Days:", leaveDates);
+  };
+
+  const resetAll = () => {
+    setFromDate("");
+    setToDate("");
+    setSelectedDates({});
+    setCurrentMonthIndex(0);
+    setPopupDate(null);
+    setSlot({ from: "", to: "" });
+    setFullTimeSlots(new Set());
   };
 
   return (
-    <div className="py-6">
-      <h1 className="text-[16px] font-semibold text-black pb-[18px]">
-        Qualification & Work Schedule
-      </h1>
+    <div className="py-10 px-4">
+      <h1 className="font-semibold text-[16px]">Manage your Work schedule</h1>
 
-      <div className="flex flex-col gap-5 mb-6">
+      <div className="mt-6">
+        <p className="mt-6 text-[14px] text-black ">
+          Choose Full time / Part time
+        </p>
         <select
-          value={qualification}
-          onChange={(e) => setQualification(e.target.value)}
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
+          value={mode}
+          onChange={(e) => {
+            setMode(e.target.value);
+            resetAll(); // 🔄 Reset on mode change
+            setMode(e.target.value);
+          }}
+          className="w-[240px] h-[40px] px-2 mt-2 border-1 rounded-[15px] border-[#bbbbbb] outline-none"
         >
-          <option disabled value="">
-            Qualification
-          </option>
-          <option value="MSc Nursing">MSc Nursing</option>
-          <option value="BSc Nursing">BSc Nursing</option>
-          <option value="BSc Nursing Pursuing">GNM</option>
-          <option value="Post BSc Nursing">Post BSc Nursing</option>
-          <option value="GNM">GNM</option>
-          <option value="GNM Pursuing">GNM Pursuing</option>
-          <option value="ANM">ANM</option>
-          <option value="GDA (General Duty Assistant)">
-            GDA (General Duty Assistant)
-          </option>
-          <option value="PCA (Personal Care Assistant)">
-            PCA (Personal Care Assistant)
-          </option>
-          <option value="DHA (Diploma in Health Assistant)">
-            DHA (Diploma in Health Assistant)
-          </option>
-        </select>
-        <div className="flex items-center gap-2 ps-2">
-          <input
-            type="checkbox"
-            className="size-4"
-            checked={isRegisteredNurse}
-            onChange={(e) => setIsRegisteredNurse(e.target.checked)}
-          />
-          I have a valid Council Registration
-        </div>
-        <select
-          value={specialization}
-          onChange={(e) => setSpecialization(e.target.value)}
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
-        >
-          <option disabled value="">
-            Specialization
-          </option>
-          <option value="Staff Nurse / Ward Nurse">
-            Staff Nurse / Ward Nurse
-          </option>
-          <option value="ICU Nurse / Critical Care Nurse">ICU Nurse</option>
-          <option value="ER Nurse / Trauma Nurse">ER Nurse</option>
-          <option value="Pediatric Nurse">Pediatric Nurse</option>
-        </select>
-
-        <select
-          value={workSchedule}
-          onChange={(e) => setWorkSchedule(e.target.value)}
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black"
-        >
-          <option value="" selected disabled>
-            Full Time / Part Time
-          </option>
-          <option value="FULL_TIME">Full Time</option>
-          <option value="PART_TIME">Part Time</option>
+          <option value="">Select</option>
+          <option value="fulltime">Full time</option>
+          <option value="parttime">Part time</option>
         </select>
       </div>
 
-      <h1 className="text-[16px] font-semibold text-black py-[18px]">
-        Weekly Availability
-      </h1>
-
-      <div className="flex gap-8 text-[14px] text-black font-light">
-        {/* Days and toggle */}
-        <div className="flex flex-col gap-[18px]">
-          {schedule.map(({ day, available }, index) => (
-            <div key={index} className="flex items-center gap-3">
-              <span className="w-[80px]">{day}</span>
-              <span
-                className="flex items-center gap-1 cursor-pointer"
-                onClick={() => toggleAvailability(index)}
-              >
-                <img
-                  src={
-                    available ? "/available-btn.svg" : "/not-available-btn.svg"
-                  }
-                  alt="toggle"
-                  className="w-6 h-6"
+      {mode === "fulltime" && (
+        <>
+          <p className="mt-6 text-[14px] text-black ">
+            If you are ready to work fulltime, Choose your convenient time slots
+            for a period{" "}
+          </p>
+          <div className="mt-4 flex gap-8 flex-wrap text-[16px] text-black ">
+            {[
+              "24 Hrs",
+              "12 Hrs Day only",
+              "12 Hrs Night only",
+              "12 Hrs flexible",
+            ].map((label) => (
+              <label key={label} className="flex  items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2 size-5"
+                  checked={fullTimeSlots.has(label)}
+                  onChange={() => toggleFullTimeSlot(label)}
                 />
-                <span
-                  className={available ? "text-[#09B438]" : "text-[#FE1940]"}
-                >
-                  {available ? "Available" : "NA"}
-                </span>
-              </span>
-            </div>
-          ))}
-        </div>
+                {label}
+              </label>
+            ))}
+          </div>
+        </>
+      )}
 
-        {/* Shift inputs */}
-        {[0, 1].map((shiftIndex) => (
-          <React.Fragment key={shiftIndex}>
-            <div className="flex flex-col gap-[18px] ps-8">
-              {schedule.map(({ available, shifts }, dayIdx) => (
-                <span key={dayIdx} className="min-h-[22px]">
-                  {available && (
-                    <input
-                      type="time"
-                      value={shifts[shiftIndex].start}
-                      onChange={(e) =>
-                        handleTimeChange(
-                          dayIdx,
-                          shiftIndex,
-                          "start",
-                          e.target.value
-                        )
-                      }
-                      className="border-b border-[#BBBBBB]"
-                    />
-                  )}
-                </span>
-              ))}
-            </div>
-            <div className="flex flex-col gap-[18px] ps-4">
-              {schedule.map(({ available, shifts }, dayIdx) => (
-                <span key={dayIdx} className="min-h-[22px]">
-                  {available && (
-                    <input
-                      type="time"
-                      value={shifts[shiftIndex].end}
-                      onChange={(e) =>
-                        handleTimeChange(
-                          dayIdx,
-                          shiftIndex,
-                          "end",
-                          e.target.value
-                        )
-                      }
-                      className="border-b border-[#BBBBBB]"
-                    />
-                  )}
-                </span>
-              ))}
-            </div>
-          </React.Fragment>
-        ))}
+      <div className="mt-6">
+        <p className="mt-6 text-[14px] text-black ">Set your available days</p>
+        <div className="flex gap-4 mt-2">
+          <div>
+            <p className="text-[14px] text-gray-600">Choose from Date</p>
+            <input
+              type="date"
+              min={today}
+              value={fromDate}
+              onChange={(e) => {
+                setFromDate(e.target.value);
+                setToDate("");
+                setSelectedDates({});
+                setCurrentMonthIndex(0);
+              }}
+              className="w-[240px] h-[40px] px-2 mt-2 border-1 rounded-[15px] border-[#bbbbbb] outline-none"
+            />
+          </div>
+          <div>
+            <p className="text-[14px] text-gray-600">Choose To Date</p>
+
+            <input
+              type="date"
+              min={fromDate || today}
+              value={toDate}
+              onChange={(e) => {
+                setToDate(e.target.value);
+                setSelectedDates({});
+                setCurrentMonthIndex(0);
+              }}
+              className="w-[240px] h-[40px] px-2 mt-2 border-1 rounded-[15px] border-[#bbbbbb] outline-none"
+              disabled={!fromDate}
+            />
+          </div>
+        </div>
       </div>
 
-      <button
-        disabled={loading}
-        onClick={handleSubmit}
-        className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center my-6 cursor-pointer"
-      >
-        {loading ? "Submitting..." : "Submit"}
-      </button>
-
-      {errorMessage && (
-        <p className="text-red-600 text-sm mt-2">{errorMessage}</p>
+      {selectedDateList.length > 0 && (
+        <div className="mt-6">
+          <p className="font-semibold text-green-700">Selected Dates:</p>
+          <div className="flex flex-wrap gap-2 mt-2 text-sm">
+            {selectedDateList.map((key) => {
+              const val = selectedDates[key];
+              return (
+                <span
+                  key={key}
+                  className="px-2 py-1 bg-green-100 rounded flex items-center gap-1"
+                >
+                  {key}
+                  {!val.fulltime && (
+                    <span className="text-xs">
+                      ({formatTime12Hour(val.from)} - {formatTime12Hour(val.to)}
+                      )
+                    </span>
+                  )}
+                  <button
+                    onClick={() => handleRemoveDate(key)}
+                    className="text-red-500 cursor-pointer hover:scale-125"
+                  >
+                    ✕
+                  </button>
+                </span>
+              );
+            })}
+          </div>
+        </div>
       )}
+
+      {leaveDates.length > 0 && (
+        <div className="mt-4">
+          <p className="font-semibold text-red-700">Leave Dates:</p>
+          <div className="flex flex-wrap gap-2 mt-2 text-sm">
+            {leaveDates.map((d) => (
+              <span key={d} className="px-2 py-1 bg-red-100 rounded">
+                {d}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {groupedByMonth.length > 0 && (
+        <>
+          <p className="font-semibold mt-8">
+            {formatMonthYear(groupedByMonth[currentMonthIndex][0])}
+          </p>
+
+          <div className="grid grid-cols-7 gap-4 mt-5">
+            {groupedByMonth[currentMonthIndex][1].map((date) => {
+              const key = formatDate(date);
+              const isSelected = selectedDates[key];
+              const isPast = key < today;
+
+              return (
+                <div
+                  key={key}
+                  onClick={() => !isPast && handleDateClick(date)}
+                  className={`size-20 border border-[#aaaaaa] rounded flex justify-center items-center font-semibold cursor-pointer transition ${
+                    isPast
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : isSelected
+                      ? "bg-blue-500 text-white"
+                      : "bg-white border-gray-400"
+                  }`}
+                >
+                  {date.getDate()}
+                </div>
+              );
+            })}
+          </div>
+          {/* <p className='text-[14px] mt-2'>
+            Please select the availability dates on calender
+          </p> */}
+
+          {groupedByMonth.length > 1 && (
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={() =>
+                  setCurrentMonthIndex((prev) => Math.max(prev - 1, 0))
+                }
+                disabled={currentMonthIndex === 0}
+                className="px-4 py-1 border border-[#bbbbbb] rounded-[15px] disabled:opacity-50 cursor-pointer"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() =>
+                  setCurrentMonthIndex((prev) =>
+                    Math.min(prev + 1, groupedByMonth.length - 1)
+                  )
+                }
+                disabled={currentMonthIndex === groupedByMonth.length - 1}
+                className="px-4 py-1 border border-[#bbbbbb] rounded-[15px]  disabled:opacity-50 cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      {popupDate && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-2xl shadow-xl w-[360px]">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Set Time Slot for{" "}
+              <span className="text-blue-600">{formatDate(popupDate)}</span>
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  From
+                </label>
+                <input
+                  type="time"
+                  value={slot.from}
+                  onChange={(e) => setSlot({ ...slot, from: e.target.value })}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  To
+                </label>
+                <input
+                  type="time"
+                  value={slot.to}
+                  onChange={(e) => setSlot({ ...slot, to: e.target.value })}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setPopupDate(null)}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveSlot}
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="mt-10">
+        <button
+          onClick={handleSaveAvailability}
+          className="w-[280px] px-6  py-2 bg-[#3674B5] text-white font-semibold rounded-[15px]"
+        >
+          Save
+        </button>
+      </div>
     </div>
   );
 }
+
+export default AddNurseAvailability;
