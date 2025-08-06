@@ -27,6 +27,9 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
     const payload = {
       fullName: contact.fullName,
       gender: contact.gender,
+      dob: contact.dob
+  ? new Date(contact.dob).toISOString().split("T")[0]
+  : null,
       email: contact.email,
       mobileNumber: contact.mobileNumber,
       addressId: contact.address?.addressId,
@@ -38,6 +41,9 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
       specializations: contact.specializations || [],
       workSchedule: contact.workSchedule,
     };
+    if (contact.dob && contact.dob.includes("T")) {
+    payload.dob = contact.dob; 
+  }
 
     try {
       await updateNurseDetails(userId, payload);
@@ -76,7 +82,18 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
           <InputField
             label="Mobile Number"
             value={contact.mobileNumber}
+            readOnly
             onChange={(e) => handleChange("mobileNumber", e.target.value)}
+          />
+          <InputField
+            label="Dob"
+            type="date"
+            value={
+              contact.dob
+                ? new Date(contact.dob).toISOString().split("T")[0]
+                : ""
+            }
+            onChange={(e) => handleChange("dob", e.target.value)}
           />
 
           <SelectField
@@ -192,7 +209,7 @@ const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
 };
 
 // Reusable Input Field
-const InputField = ({ label, value, onChange, type = "text" }) => (
+const InputField = ({ label, value, onChange, type = "text" ,...props }) => (
   <div className="flex flex-col">
     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
     <input
@@ -201,6 +218,7 @@ const InputField = ({ label, value, onChange, type = "text" }) => (
       onChange={onChange}
       className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder={`Enter ${label.toLowerCase()}`}
+       {...props}
     />
   </div>
 );
