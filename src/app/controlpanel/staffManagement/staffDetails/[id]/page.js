@@ -175,12 +175,12 @@ function StaffDetailPage() {
         {/* Basic Details */}
         <div className="px-[39px] pt-[15px]">
           <div className="flex items-center justify-end">
-            <button
+            {/* <button
               onClick={() => setEditAvailabilityPopup(true)}
               className="cursor-pointer hover:scale-110"
             >
               <img src="/edit-btn.svg" className="size-6" alt="edit" />
-            </button>
+            </button> */}
           </div>
           {/* Availability */}
           <AvailabilitySchedule availabilities={availabilities} />

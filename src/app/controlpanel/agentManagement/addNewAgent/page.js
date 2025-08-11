@@ -8,15 +8,64 @@ function page() {
 
       <div className="bg-white border  border-[#888888] rounded-[15px] my-2">
         <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
-          Basics
+          Basics Information 
         </h1>
         <div className="flex flex-col gap-5 px-[39px]">
           <select className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 ">
             <option
               value=""
+              >
+              Type of Agent
+            </option>
+          </select>
+
+
+
+        <input
+            type="text"
+            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
+            placeholder="Full Name"
+          />
+
+
+
+          <select className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 ">
+            <option
+              value=""
               className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] pe-4 "
             >
-              Current Location
+              Gender
+            </option>
+          </select>
+        
+        
+          <input
+            type="date"
+            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
+            placeholder="Email ID"
+          />
+
+          
+          <select className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 ">
+            <option
+              value=""
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] pe-4 "
+            >
+              Referral Type
+            </option>
+          </select>
+
+
+
+           <h1 className="text-[16px] font-semibold text-black">
+          Current Location 
+        </h1>
+        <select className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 ">
+            <option
+              value=""
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] pe-4 "
+            >
+              State
             </option>
           </select>
           <select className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 ">
@@ -24,57 +73,44 @@ function page() {
               value=""
               className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] pe-4 "
             >
-              Introduce yourself
+              District
             </option>
           </select>
-        
           <input
             type="text"
             className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Full Name"
+            placeholder="Area / Location"
           />
-          <input
+         
+        </div>
+
+        <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
+        Address and Contact
+        </h1>
+        <div className="flex flex-col gap-5 px-[39px] mb-12">
+       
+         <input
+            type="text"
+            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
+            placeholder="Address Line 1"
+          />
+           <input
+            type="text"
+            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
+            placeholder="Address Line 2"
+          />
+           <input
             type="email"
             className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Email ID"
+            placeholder="Email"
           />
           <input
             type="number"
             className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
             placeholder="Mobile Number"
           />
-          <input
-            type="text"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Pin Code"
-          />
-          <input
-            type="text"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] placeholder:text-black outline-none rounded-[15px] ps-8 pe-4 "
-            placeholder="Residential Address"
-          />
-        </div>
-
-        <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
-        Verify yourself
-        </h1>
-        <div className="flex flex-col gap-5 px-[39px] mb-12">
-        <label
-            for="Any ID Proof (Govt ID)"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] ps-8 pe-4 flex items-center justify-between cursor-pointer"
-          >
-            Any ID Proof (Govt ID) <img src="/upload-btn.svg" alt="" />
-            <input type="file" id="cv-upload" className="hidden" />
-          </label>
-          <label
-            for="Photo"
-            className="w-[328px] h-[40px] text-black text-[14px] font-light border-[1px] border-[#BBBBBB] rounded-[15px] ps-8 pe-4 flex items-center justify-between cursor-pointer"
-          >
-           Photo <img src="/upload-btn.svg" alt="" />
-            <input type="file" id="cv-upload" className="hidden" />
-          </label>
           <button className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center">
-            Upload
+            Submit
           </button>
 
           <span className=" text-[14px] text-[#3674B5] font-semibold ps-4 ">
