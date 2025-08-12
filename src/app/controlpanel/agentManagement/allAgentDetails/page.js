@@ -1,21 +1,29 @@
+"use client"
 import Navlink from '@/components/agentManagement/Navlink'
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 const page = () => {
+    const router = useRouter();
+  
   return (
     <div>
         <Navlink/>
-        <div className="w-full h-[72px] flex justify-between items-center bg-white mt-2 px-[39px] py-[19px] rounded-[15px] border border-[#BBBBBB]">
-            <span className="text-[20px] font-semibold text-[#333333]">Amal Kumar</span>
-            <div className="flex items-center  gap-4 ">
-                <button className='w-[192px] h-[40px] text-white text-[16px] font-semibold bg-[#3674B5] rounded-[15px]'>
-                View Referrals
-                </button>
-                <button>
-                    <img src="/delete-btn.svg" alt="" />
-                </button>
-            </div>
+        <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
+        <div
+          onClick={() => router.back()}
+          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]"
+        >
+          Back
         </div>
+        <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px]">
+          <p className="font-semibold">{"Patient Name"}</p>
+          <div className="flex justify-center items-center gap-[92px]">
+            <p></p>
+            <p>Direct</p>
+          </div>
+        </div>
+      </div>
         <div className=' w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]'>
             <div className='w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px]'>
                 <h1 className='text-[16px] font-semibold text-black'>Agent - Basic Informations</h1>

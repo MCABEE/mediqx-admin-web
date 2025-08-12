@@ -44,7 +44,7 @@ const BookingDetailsPage = () => {
 
   const booking = selectedBooking;
 
-  return (
+  return ( 
     <div>
       <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 rounded-[15px]">
         <p className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 border-b-8 border-[#3674B5]">
