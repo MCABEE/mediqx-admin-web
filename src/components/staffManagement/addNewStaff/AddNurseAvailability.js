@@ -291,7 +291,8 @@ function AddNurseAvailability() {
           </div>
 
           {/* Specialization */}
-          <select
+          <div className="pb-3">
+            <select
             value={specialization}
             onChange={(e) => setSpecialization(e.target.value)}
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black mt-3"
@@ -306,6 +307,7 @@ function AddNurseAvailability() {
             <option value="ER Nurse / Trauma Nurse">ER Nurse</option>
             <option value="Pediatric Nurse">Pediatric Nurse</option>
           </select>
+          </div>
 
           {/* Single select for schedule + mode */}
           <select
@@ -320,7 +322,7 @@ function AddNurseAvailability() {
               setErrorMsg("");
             }}
             required
-            className="w-[328px] h-[40px] px-2 mt-6 border-1 rounded-[15px] border-[#bbbbbb] outline-none"
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black mt-3"
           >
             <option value="">Select Work Schedule</option>
             <option value="FULL_TIME">Full Time</option>
