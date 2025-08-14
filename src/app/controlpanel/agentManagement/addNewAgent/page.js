@@ -17,9 +17,11 @@ function page() {
               >
               Type of Agent
             </option>
+            <option value="">Institution</option>
+            <option value="">Doctor</option>
+            <option value="">Healthcare professional</option>
+            <option value="">Public</option>
           </select>
-
-
 
         <input
             type="text"
@@ -53,6 +55,9 @@ function page() {
             >
               Referral Type
             </option>
+            <option value="">Staff</option>
+            <option value="">Patient</option>
+            <option value="">Both</option>
           </select>
 
 
