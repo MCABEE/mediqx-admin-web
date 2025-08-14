@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import { useRouter } from "next/navigation";
+import Navlink from "@/components/patientManagement/Navlink";
 
 const Page = () => {
   const {
@@ -18,7 +19,7 @@ const Page = () => {
   const router = useRouter();
   const [popupStatus, setPopupStatus] = useState(null);
   const [selectedBooking, setSelectedBooking] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState("COMPLETED"); // Default tab
+  const [selectedStatus, setSelectedStatus] = useState("ONGOING");
 
   useEffect(() => {
     fetchBookings(page, 10, selectedStatus);
@@ -37,40 +38,30 @@ const Page = () => {
   };
 
   const statusTabs = [
-    { label: "On Going", value: "ONGOING" },
-    { label: "To be Started", value: "UPCOMING" },
+    { label: "Ongoing Patients", value: "ONGOING" },
+    { label: "To be Start", value: "UPCOMING" },
     { label: "Completed Cases", value: "COMPLETED" },
   ];
 
   const getTabClass = (status) =>
-    selectedStatus === status ? "text-[#3674B5]" : "text-black";
-
+    selectedStatus === status
+      ? "border-b-8 border-[#3674B5]"
+      : "border-b-2 border-transparent";
   return (
     <div>
       {/* Tabs Header */}
-      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 rounded-[15px]">
-        {/* New Bookings */}
-        <p className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 border-b-8 border-[#3674B5]">
-          Assigned Cases
-        </p>
-      </div>
+
       <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
-        <div className="flex gap-[48px] pt-[23px] pb-[19px]">
-          {statusTabs.map((tab) => (
-            <p
-              key={tab.value}
-              onClick={() => handleStatusClick(tab.value)}
-              className={`cursor-pointer ${getTabClass(tab.value)}`}
-            >
-              {tab.label}
-            </p>
-          ))}
-        </div>
-        {/* <div className="flex gap-2 justify-center items-center">
+        <Navlink
+          tabs={statusTabs}
+          selectedStatus={selectedStatus}
+          onStatusChange={handleStatusClick}
+        />
+      </div>
+      {/* <div className="flex gap-2 justify-center items-center">
           <p className="text-black font-semibold pt-[23px] pb-[19px]">Clear</p>
           <input type="checkbox" className="size-[20px]" />
         </div> */}
-      </div>
 
       {/* Total count */}
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px] px-6 text-black font-semibold text-[32px] flex justify-between">
@@ -91,9 +82,8 @@ const Page = () => {
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">
               Service Date
             </th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Staff</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
-              <img src="/detail-btn.svg" alt="arrow" />
+            <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl  p-2">
+              Staff
             </th>
           </tr>
         </thead>
@@ -130,11 +120,12 @@ const Page = () => {
                 {bookingsList.map((booking, i) => (
                   <tr
                     key={booking.id}
-                    className={`bg-white ${
-                      booking.staffAssignmentStatus !== "GREEN"
-                        ? "hover:bg-gray-100"
-                        : "opacity-70"
-                    }`}
+                    className="text-black bg-white hover:bg-gray-100  cursor-pointer"
+                    onClick={() =>
+                      router.push(
+                        `/controlpanel/patient-management/patient-details/${booking.id}`
+                      )
+                    }
                   >
                     <td className="p-2">{i + 1}</td>
                     <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
@@ -150,36 +141,7 @@ const Page = () => {
                       })}
                     </td>
                     <td className="border-l-4 border-[#C0D8F6] p-2">
-                      {/* {["GREEN", "RED", "YELLOW", "BLUE"].includes(booking.assignmentStatus) ? (
-                        <img
-                          src={
-                            booking.assignmentStatus === "GREEN"
-                              ? "/tick.svg"
-                              : booking.assignmentStatus === "RED"
-                              ? "/cross.svg"
-                              : booking.assignmentStatus === "YELLOW"
-                              ? "/pending.svg"
-                              : "/assign.svg"
-                          }
-                          alt={booking.assignmentStatus}
-                          className="w-5 h-5 cursor-pointer"
-                          onClick={() => handleStatusIconClick(booking.assignmentStatus, booking)}
-                        />
-                        
-                      ) : (
-                        <span className="text-xs text-gray-400">N/A</span>
-                      )} */}
-                      <img src="/tick.svg" alt="tick" />
-                    </td>
-                    <td
-                      className="border-l-4 border-[#C0D8F6] p-2 text-blue-600 underline cursor-pointer"
-                      onClick={() =>
-                        router.push(
-                          `/controlpanel/cases/case-list-details/${booking.id}`
-                        )
-                      }
-                    >
-                      <img src="/detail-btn.svg" alt="arrow" />
+                      {booking.assignedNurseName}
                     </td>
                   </tr>
                 ))}

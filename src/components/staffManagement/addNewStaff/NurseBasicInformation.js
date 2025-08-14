@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 
@@ -14,6 +14,7 @@ const NurseBasicInformation = () => {
     city: "",
     pincode: "",
     referralCode: "",
+    dob: "",
   });
 
   const [selectedState, setSelectedState] = useState("");
@@ -22,6 +23,7 @@ const NurseBasicInformation = () => {
     useNurseRegistrationStore();
   const [validationErrors, setValidationErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -173,17 +175,6 @@ const NurseBasicInformation = () => {
             required
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
           />
-          {/* 
-          <input
-            type="text"
-            name="mobileNumber"
-            value={formData.mobileNumber}
-            onChange={handleChange}
-            placeholder="Phone Number"
-            maxLength={10}
-            required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
-          /> */}
 
           <input
             type="text"
@@ -200,6 +191,18 @@ const NurseBasicInformation = () => {
               {validationErrors.mobileNumber}
             </span>
           )}
+
+          <input
+            type={isFocused ? "date" : "text"}
+            name="dob"
+            value={formData.dob}
+            onChange={handleChange}
+            placeholder="Date of Birth"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            required
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none placeholder:text-black"
+          />
 
           <select
             name="state"
@@ -242,17 +245,6 @@ const NurseBasicInformation = () => {
             required
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]  outline-none placeholder:text-black"
           />
-
-          {/* <input
-            type="text"
-            name="pincode"
-            value={formData.pincode}
-            onChange={handleChange}
-            placeholder="Pin Code"
-            maxLength={6}
-            required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px]"
-          /> */}
 
           <input
             type="text"

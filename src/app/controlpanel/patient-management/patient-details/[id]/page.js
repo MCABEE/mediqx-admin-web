@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import useBookingStore from "@/app/lib/store/bookingStore";
+import Link from "next/link";
 
 const formatDate = (isoString) => {
   if (!isoString) return "-";
@@ -44,18 +45,12 @@ const BookingDetailsPage = () => {
 
   const booking = selectedBooking;
 
-  return ( 
+  return (
     <div>
-      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 rounded-[15px]">
-        <p className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 border-b-8 border-[#3674B5]">
-          Assigned Cases
-        </p>
-      </div>
-
-      <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
+      <div className="w-full h-[48px] bg-[#C0D8F6] rounded-[15px] flex ">
         <div
           onClick={() => router.back()}
-          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]"
+          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
         >
           Back
         </div>
@@ -132,72 +127,15 @@ const BookingDetailsPage = () => {
             <span className="w-[250px] font-medium">Mobile Number</span>
             <span>{booking.contactPersonMobileNumber}</span>
           </div>
-        </div>
-      </div>
 
-      {/* SERVICE DETAILS */}
-      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
-        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">
-            Service Required
-          </h1>
-        </div>
-        <div className="flex flex-col gap-[10px] p-8 text-[16px] text-black">
-          <div className="flex">
-            <span className="w-[200px] font-medium">Diagnosis</span>
-            <span>{booking.diagnosis}</span>
-          </div>
-          <div className="flex">
-            <span className="w-[200px] font-medium">Service Period from</span>
-            <span>{formatDate(booking.startDate)}</span>
-          </div>
-          <div className="flex">
-            <span className="w-[200px] font-medium">Service Type</span>
-            <span>{booking.serviceType}</span>
-          </div>
-          <div className="flex">
-            <span className="w-[200px] font-medium">Duration</span>
-            <span>
-              {booking.durationType} ({booking.durationValue} weeks)
-            </span>
-          </div>
-
-          {/* <div className="flex">
-    <span className="w-[200px] font-medium">End Time</span>
-    <span>{formatTime(booking.endTime)}</span>
-  </div> */}
-          <div className="flex">
-            <span className="w-[200px] font-medium">Frequency</span>
-            <span>{booking.weekdays?.join(", ")}</span>
-          </div>
-          <div className="flex">
-            <span className="w-[200px] font-medium">Flexibility</span>
-            <span>{booking.flexibility}</span>
-          </div>
-          <div className="flex">
-            <span className="w-[200px] font-medium"> Time</span>
-            <span>{formatTime(booking.startTime)}</span> &nbsp; - &nbsp;{" "}
-            <span>{formatTime(booking.endTime)}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* STAFF PREFERENCE */}
-      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB] mb-6">
-        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">
-            Staff Preference
-          </h1>
-        </div>
-        <div className="flex gap-10 p-8">
-          <div className="flex flex-col gap-[10px] text-[16px] text-black">
-            <span>Preferred Gender</span>
-            <span>Preferred Language</span>
-          </div>
-          <div className="flex flex-col gap-[10px] text-[16px] text-black">
-            <span>{booking.preferredGender || "-"}</span>
-            <span>{booking.preferredLanguages?.join(", ") || "-"}</span>
-          </div>
+          <Link
+            href={{
+              pathname: `/controlpanel/patient-management/patient-services/${booking.userId}`,
+            }}
+            className="w-[192px] h-[40px] rounded-[15px] text-white bg-[#3674B5] mt-8 flex items-center justify-center cursor-pointer"
+          >
+            View Services
+          </Link>
         </div>
       </div>
     </div>

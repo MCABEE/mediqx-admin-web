@@ -21,9 +21,9 @@ function Sidebar() {
       setActive("Service Bookings");
     } else if (pathname.includes("/controlpanel/dashboard")) {
       setActive("Home");
-    }  else if (pathname.includes("/controlpanel/cases")) {
+    } else if (pathname.includes("/controlpanel/cases")) {
       setActive("Cases");
-    }  else if (pathname.includes("/controlpanel/patient-management/ongoing-patients")) {
+    } else if (pathname.includes("/controlpanel/patient-management")) {
       setActive("Patient Management");
     } else {
       // fallback: match from menu links if more are added later

@@ -10,7 +10,7 @@ const AssignStaffTable = ({
   setRadius,
   currentPage,
   setCurrentPage,
-  onApplyRadius, 
+  onApplyRadius,
 }) => {
   const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
@@ -75,24 +75,6 @@ const AssignStaffTable = ({
       {/* Header with Radius */}
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] my-4 py-2 px-6 text-[#3674B5] font-semibold text-[24px] flex justify-between items-center">
         <p>{nurses.length} Results found</p>
-        {/* 
-       <div className="flex items-center gap-4 bg-white p-3 rounded-xl shadow-md border border-gray-200">
-  <label className="text-base font-medium text-gray-700">Radius (km)</label>
-
-  <input
-    type="number"
-    value={radius}
-    onChange={(e) => setRadius(Number(e.target.value))}
-    className="w-24 text-sm px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 shadow-sm"
-  />
-
-  <button
-    onClick={onApplyRadius}
-    className="px-2 py-1 bg-blue-500 text-sm text-white rounded-lg shadow hover:bg-blue-600 hover:shadow-lg transition-all duration-200"
-  >
-    Apply
-  </button>
-</div> */}
 
         <div className=" bg-white p-2 rounded-xl ">
           <label className="text-base font-semibold text-gray-700 mb-3 block">
@@ -117,7 +99,7 @@ const AssignStaffTable = ({
                 >
                   {/* Dot */}
                   <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 z-10
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 z-10 cursor-pointer
             ${
               radius === value
                 ? "bg-blue-500 border-blue-500 scale-125 shadow-lg"

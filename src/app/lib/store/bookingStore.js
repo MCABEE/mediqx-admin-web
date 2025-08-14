@@ -12,6 +12,8 @@ import {
   searchCoordinatesByText,
   updateBooking,
   updateBookingLocation,
+  getBookingsByPatientId,
+  getDutyLogs,
 } from "@/api/bookingApi";
 
 const useBookingStore = create((set, get) => ({
@@ -24,6 +26,8 @@ const useBookingStore = create((set, get) => ({
   isLoading: false,
   error: null,
   coordinates: null,
+
+  dutyLogs: [],
 
   // Fetch all bookings (existing)
   fetchBookings: async (page = 1, limit = 10, status) => {
@@ -175,6 +179,36 @@ const useBookingStore = create((set, get) => ({
     } catch (err) {
       set({ isLoading: false, error: err.message });
       return { success: false, error: err.message };
+    }
+  },
+
+  fetchBookingsByPatient: async (patientId, page = 1, limit = 10) => {
+    set({ isLoading: true });
+    try {
+      const data = await getBookingsByPatientId(patientId, page, limit);
+      set({
+        patientBookings: data || [],
+        totalPages: data.totalPages || 0,
+        totalBookings: data.total || 0,
+        page: data.page,
+        limit: data.limit,
+        error: null,
+      });
+    } catch (err) {
+      set({ error: err.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  dutyLogs: [],
+  fetchDutyLogs: async (serviceId, page = 1, limit = 10) => {
+    set({ isLoading: true, error: null });
+    try {
+      const data = await getDutyLogs(serviceId, page, limit);
+      set({ dutyLogs: data || [], isLoading: false });
+    } catch (err) {
+      set({ error: err.message, isLoading: false });
     }
   },
 }));

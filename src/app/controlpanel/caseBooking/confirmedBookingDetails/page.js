@@ -7,18 +7,18 @@ const page = () => {
     <div>
       <Navlink />
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
-
-
-      <Link href={"/controlpanel/caseBooking/confirmedBooking"} className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]">Back
-
-</Link>
+        <Link
+          href={"/controlpanel/caseBooking/confirmedBooking"}
+          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]"
+        >
+          Back
+        </Link>
         <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px] ">
-        <p className="font-semibold">Pradeep Kumar N</p>
-       <div className="flex justify-center items-center gap-[92px]">
-       <p>12 April</p>
-       <p>Direct</p>
-       </div>
-
+          <p className="font-semibold">Pradeep Kumar N</p>
+          <div className="flex justify-center items-center gap-[92px]">
+            <p>12 April</p>
+            <p>Direct</p>
+          </div>
         </div>
       </div>
       <div className=" w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
@@ -119,12 +119,8 @@ const page = () => {
       </div>
       <div className=" w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
         <div className="w-full h-[72px] flex justify-between items-center bg-[#C0D8F6] px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">
-          Referred By
-          </h1>
-          <h1 className="text-[16px] font-semibold text-black">
-        08
-          </h1>
+          <h1 className="text-[16px] font-semibold text-black">Referred By</h1>
+          <h1 className="text-[16px] font-semibold text-black">08</h1>
         </div>
         <div className="flex gap-10 p-8">
           <div className="flex flex-col gap-[10px] text-[16px]  text-black ">
@@ -132,27 +128,27 @@ const page = () => {
           </div>
           <div className="flex flex-col gap-[10px] text-[16px]  text-black">
             <span className="text-[16px]  text-black">Madan Mohan</span>
-            <span className="text-[16px]  text-black">Indiranagar, Bengaluru</span>
+            <span className="text-[16px]  text-black">
+              Indiranagar, Bengaluru
+            </span>
 
             <span className="text-[16px]  text-black">8089 258 569</span>
-
           </div>
         </div>
       </div>
       <div className=" w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB] mb-[200px]">
-        <div className="w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px] border-b-2">
-        </div>
+        <div className="w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px] border-b-2"></div>
         <div className="flex gap-8 px-[39px] py-[24px] ">
           <Link href={"/controlpanel/caseBooking/assignStaff"}>
-          <button className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer">
-          Assign Staff
-          </button>
+            <button className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer">
+              Assign Staff
+            </button>
           </Link>
           <button className="w-[192px] h-[40px] bg-white text-black border flex justify-center items-center rounded-[15px]">
             Edit Service
           </button>
           <button className="w-[192px] h-[40px] bg-[#FFD1D9] text-black flex justify-center items-center rounded-[15px]">
-          Cancel Service
+            Cancel Service
           </button>
         </div>
       </div>

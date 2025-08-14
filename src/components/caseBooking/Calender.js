@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useState } from "react";
 
-
 const Calendar = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -47,27 +46,25 @@ const Calendar = () => {
 
   return (
     <div className="  bg-white border-[1px] border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
-        <div className="flex border-b border-[#BBBBBB] ">
-      <Link href={"/controlpanel/caseBooking/assignStaff"}>
-      <h1 className=" text-[#333333] text-[20px] py-[26px]  px-[38px] border-r border-[#BBBBBB]">
-       Back
-      </h1>
-      </Link>
-      <h1 className="font-semibold text-[#333333] text-[20px] py-[26px] px-[38px]">
-        Nitheesh Kumar M
-      </h1>
-        </div>
-        <div className="flex border-b border-[#BBBBBB] py-[20px] text-[16px]">
+      <div className="flex border-b border-[#BBBBBB] ">
+        <Link href={"/controlpanel/caseBooking/assignStaff"}>
+          <h1 className=" text-[#333333] text-[20px] py-[26px]  px-[38px] border-r border-[#BBBBBB]">
+            Back
+          </h1>
+        </Link>
+        <h1 className="font-semibold text-[#333333] text-[20px] py-[26px] px-[38px]">
+          Nitheesh Kumar M
+        </h1>
+      </div>
+      <div className="flex border-b border-[#BBBBBB] py-[20px] text-[16px]">
         <h1 className="font-semibold text-[#333333]    px-[38px]">
-        Duty Schedule
-      </h1>
-      <h1 className=" text-[#333333] px-[38px]">
-      2025 April 02 - 2025 April 17
-      </h1>
-      <h1 className=" text-[#333333] px-[38px]">
-      24 Hrs
-      </h1>
-        </div>
+          Duty Schedule
+        </h1>
+        <h1 className=" text-[#333333] px-[38px]">
+          2025 April 02 - 2025 April 17
+        </h1>
+        <h1 className=" text-[#333333] px-[38px]">24 Hrs</h1>
+      </div>
       <div className="flex justify-between text-black  items-center mb-4 px-[38px] py-[15px] border-b border-[#BBBBBB] ">
         <h2 className="text-lg font-bold">
           {months[selectedMonth - 1]} {year}
@@ -100,7 +97,7 @@ const Calendar = () => {
           <div
             key={day.date}
             // className={`p-4 bg-[#B6E9C4] text-center rounded ${getColor(day.status)}`}
-              className="p-4  text-center rounded bg-[#B6E9C4]"
+            className="p-4  text-center rounded bg-[#B6E9C4]"
           >
             {day.date}
           </div>
