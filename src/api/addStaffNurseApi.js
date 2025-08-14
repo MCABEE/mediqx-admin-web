@@ -53,7 +53,7 @@ export const generateFileUploadUrlAPI = async ({
       type,
     });
 
-    console.log(response);
+    console.log(response); 
 
     return {
       success: true,

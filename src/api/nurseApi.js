@@ -116,26 +116,50 @@ export const updateNurseExperience = async (userId, data) => {
 
 
 
+
+
 export const getAssignableNurses = async ({
   page = 1,
   limit = 10,
-  from,
-  to,
+  role = "NURSE",
+  gender,
+  languages,
+  date,
   radius,
   centerLatitude,
-  centerLongitude
+  centerLongitude,
+  durationType,
+  durationValue,
+  frequency,
+  scheduleType,
+  startTime,
+  endTime
 }) => {
   try {
-    const response = await api.get(
-      `/admin/nurse-assignment/nurses?page=${page}&limit=${limit}&role=NURSE&date=${from}&to=${to}&radius=${radius}&centerLatitude=${centerLatitude}&centerLongitude=${centerLongitude}`
-    );
+    const response = await api.get("/admin/nurse-assignment/nurses", {
+      params: {
+        page,
+        limit,
+        role,
+        gender,
+        languages: Array.isArray(languages) ? languages.join(",") : languages,
+        date,
+        radius,
+        centerLatitude,
+        centerLongitude,
+        durationType,
+        durationValue,
+        frequency,
+        scheduleType,
+        startTime,
+        endTime,
+      },
+    });
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to fetch assignable nurses");
   }
 };
- 
-
 
 
 

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import useNurseStore from "@/app/lib/store/nurseStore";
-
 import AssignStaffTable from "./AssignStaffTable";
 import Navlink from "./NavLink";
 import LocationMap from "./LocationMap";
@@ -13,71 +12,119 @@ const AssignStaffPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // ✅ Get patient details from URL params
+  // ✅ Extract patient details from URL params
   const bookingId = searchParams.get("bookingId");
   const fullName = searchParams.get("fullName");
   const from = searchParams.get("from");
-  const to = searchParams.get("to");
   const service = searchParams.get("service");
   const schedule = searchParams.get("schedule");
   const gender = searchParams.get("gender");
-  const language = searchParams.get("language");
+  const language = searchParams.get("language"); // comma-separated string
   const location = searchParams.get("location");
   const latitude = searchParams.get("latitude");
   const longitude = searchParams.get("longitude");
+  const role = "NURSE";
+  const durationValue = searchParams.get("durationValue");
+  const durationType = searchParams.get("durationType");
+  const frequency = searchParams.get("frequency"); // string or array
+  const scheduleType = searchParams.get("scheduleType");
+  const startTime = searchParams.get("startTime");
+  const endTime = searchParams.get("endTime");
 
-  const [radius, setRadius] = useState(10); // default radius
+  const [radius, setRadius] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ✅ Zustand stores
+  // ✅ Zustand store hooks
   const { assignNurse } = useBookingStore();
   const { users, fetchAssignableNurses, isLoading } = useNurseStore();
 
-  // ✅ Fetch data initially when page or params change
-  useEffect(() => {
-    const params = {
+
+
+  const formatTime = (isoString) => {
+    if (!isoString) return "-";
+    const date = new Date(isoString);
+    const hours = date.getUTCHours(); // Use UTC hours
+    const minutes = date.getUTCMinutes(); // Use UTC minutes
+    const paddedHours = hours.toString().padStart(2, "0");
+    const paddedMinutes = minutes.toString().padStart(2, "0");
+    return `${paddedHours}:${paddedMinutes}`;
+  };
+
+
+  const buildParams = (override = {}) => {
+    const baseParams = {
       page: currentPage,
       limit: 50,
-      from,
-      to,
+      role,
+      gender,
+      // languages: language ? language.split(",").map((l) => l.trim()) : [],
+      date: from,
       radius,
-      centerLatitude: latitude,
-      centerLongitude: longitude,
+      centerLatitude: Number(latitude),
+      centerLongitude: Number(longitude),
+      durationType,
+      durationValue,
+      frequency: frequency
+        ? Array.isArray(frequency)
+          ? frequency
+          : frequency.split(",").map((f) => f.trim())
+        : [],
+      scheduleType,
+      ...override,
     };
+
+    // ⏳ Only include start/end time for CUSTOM_HOURS
+    if (scheduleType === "CUSTOM_HOURS") {
+      baseParams.startTime = formatTime(startTime);
+      baseParams.endTime = formatTime(endTime);
+    }
+
+    return baseParams;
+  };
+
+  // ✅ Fetch nurses when params change
+  useEffect(() => {
+    if (!from || !latitude || !longitude) {
+      console.warn("⛔ Missing required query params for API call");
+      return;
+    }
+    const params = buildParams();
+    console.log("📤 Sending params from useEffect to store:", params);
     fetchAssignableNurses(params);
   }, [
     from,
-    to,
     latitude,
     longitude,
     currentPage,
     fetchAssignableNurses,
     radius,
+    role,
+    gender,
+    // language,
+    durationType,
+    durationValue,
+    frequency,
+    scheduleType,
+    startTime,
+    endTime,
   ]);
 
-  // ✅ Assign nurse
+  // ✅ Assign nurse handler
   const handleAssign = async (userId) => {
     try {
       await assignNurse(bookingId, userId);
       router.push("/controlpanel/caseBooking/confirmedBooking");
     } catch (error) {
-      console.error("Failed to assign nurse.");
+      console.error("❌ Failed to assign nurse:", error);
     }
   };
 
-  // ✅ Called when user selects a radius
+  // ✅ Radius change handler
   const handleApplyRadius = (value) => {
-    setRadius(value); // Update state for UI
-    const params = {
-      page: currentPage,
-      limit: 50,
-      from,
-      to,
-      radius: value, // Use clicked value
-      centerLatitude: latitude,
-      centerLongitude: longitude,
-    };
-    fetchAssignableNurses(params); // Fetch API immediately
+    setRadius(value);
+    const params = buildParams({ radius: value });
+    console.log("📤 Sending params from handleApplyRadius to store:", params);
+    fetchAssignableNurses(params);
   };
 
   return (
@@ -129,7 +176,7 @@ const AssignStaffPage = () => {
         latitude={latitude}
         longitude={longitude}
         fullName={fullName}
-        nurses={users} // updates when API refetches
+        nurses={users}
       />
 
       {/* Table */}
@@ -141,7 +188,7 @@ const AssignStaffPage = () => {
         setRadius={setRadius}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        onApplyRadius={handleApplyRadius} // Pass correct handler
+        onApplyRadius={handleApplyRadius}
       />
     </div>
   );
