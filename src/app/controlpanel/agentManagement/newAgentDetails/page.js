@@ -19,38 +19,48 @@ const page = () => {
           <p className="font-semibold">{ "Agent Name"}</p>
           <div className="flex justify-center items-center gap-[92px]">
             <p></p>
-            <p>Direct</p>
+            <p>Doctor</p>
           </div>
         </div>
       </div>
         <div className=' w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]'>
-            <div className='w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px]'>
-                <h1 className='text-[16px] font-semibold text-black'>Agent - Basic Informations</h1>
+            <div className='w-full h-[52px] flex items-center border-b-1 border-b-[#BBBBBB] px-8 rounded-t-[15px]'>
+                <h1 className='text-[16px] font-semibold text-black'>Agent - Details</h1>
                 
             </div>
-            <div className="flex gap-10 p-8">
+            <div className="flex gap-16 p-8">
         <div className="flex flex-col gap-[10px] text-[16px]  text-black">
-        <span className="text-[16px]  text-black">
-        Current Location
-        </span>
-        <span className="text-[16px]  text-black">
-        Introduce
-        </span>
-        <span className="text-[16px]  text-black">
+           <span className="text-[16px]  text-black">
         Full Name
         </span>
-        <span className="text-[16px]  text-black">
-        Email ID
+         <span className="text-[16px]  text-black">
+        Gender
         </span>
         <span className="text-[16px]  text-black">
-        Mobile Number
+        DOB
         </span>
         <span className="text-[16px]  text-black">
-        PinCode
+        Current Location (state)
         </span>
         <span className="text-[16px]  text-black">
-        Address
+        District
         </span>
+        <span className="text-[16px]  text-black">
+        Area / Location
+        </span>
+        <span className="text-[16px]  text-black">
+        Address (As per ID)
+        </span>
+        <span className="text-[16px]  text-black">
+        Email 
+        </span>
+        <span className="text-[16px]  text-black">
+        Phone Number
+        </span>
+        <span className="text-[16px]  text-black">
+        Referral Type
+        </span>
+        
         </div>
         <div className="flex flex-col gap-[10px] text-[16px]  text-black">
         <span className="text-[16px]  text-black">
@@ -81,10 +91,10 @@ Tamil Nadu
         </div>
 
 
-        <div className='w-full mt-2 flex gap-4'>
-        <div className=' w-1/2  bg-white rounded-[15px] border border-[#BBBBBB]'>
-            <div className='w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px]'>
-                <h1 className='text-[16px] font-semibold text-black'>Agent - ID Proof</h1>
+      
+        <div className='  bg-white rounded-[15px] border border-[#BBBBBB] mt-4' >
+            <div className='w-full h-[52px] flex items-center border-b-1 border-b-[#BBBBBB] px-8 rounded-t-[15px]'>
+                <h1 className='text-[16px] font-semibold text-black'>ID Proof</h1>
                 
             </div>
             <div className='p-8'>
@@ -93,8 +103,8 @@ Tamil Nadu
             </div>
             
         </div>
-        <div className=' w-1/2  bg-white rounded-[15px] border border-[#BBBBBB]'>
-            <div className='w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px]'>
+        <div className='  bg-white rounded-[15px] border border-[#BBBBBB] mt-4'>
+            <div className='w-full h-[52px] flex items-center border-b-1 border-b-[#BBBBBB] px-8 rounded-t-[15px]'>
                 <h1 className='text-[16px] font-semibold text-black'>Agent - Photo</h1>
                 
             </div>
@@ -103,10 +113,10 @@ Tamil Nadu
             </div>
             
         </div>
-        </div>
+     
 
         <div className=' w-full mt-2 mb-10 bg-white rounded-[15px] border border-[#BBBBBB]'>
-            <div className='w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px]'>
+            <div className='w-full h-[52px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px]'>
                 <h1 className='text-[16px] font-semibold text-black'>Action</h1>
                 
             </div>
