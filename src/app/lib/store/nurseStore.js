@@ -130,22 +130,23 @@ const useNurseStore = create(
         }
       },
 
+    
       fetchAssignableNurses: async (params) => {
-        set({ isLoading: true, error: null });
-        try {
-          const data = await getAssignableNurses(params);
-          set({
-            users: data?.data?.users || [],
-            totalPages: data?.data?.totalPages || 0,
-            totalUsers: data?.data?.total || 0,
-          });
-        } catch (error) {
-          set({ error: error.message });
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+    set({ isLoading: true, error: null });
 
+    try {
+      const data = await getAssignableNurses(params);
+      set({
+        users: data?.data?.users || [],
+        totalPages: data?.data?.totalPages || 0,
+        totalUsers: data?.data?.total || 0,
+      });
+    } catch (error) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
       fetchNurseCalendar: async (userId, monthStart, monthEnd) => {
         set({ isLoading: true, error: null });
         try {

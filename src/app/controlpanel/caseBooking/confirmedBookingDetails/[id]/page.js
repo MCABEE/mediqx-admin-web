@@ -298,6 +298,13 @@ const BookingDetailsPage = () => {
                 location: `${booking.city}`,
                 latitude:booking.latitude,
                 longitude:booking.longitude,
+                language: booking.preferredLanguages || [],
+                durationValue:booking.durationValue,
+                durationType:booking.durationType,
+                frequency:booking.weekdays,
+                scheduleType:booking.scheduleType,
+                startTime:booking.startTime,
+                endTime:booking.endTime,
               },
             }}
           >
