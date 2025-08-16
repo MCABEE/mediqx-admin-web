@@ -68,6 +68,23 @@ export const updateAgentApprovalStatus = async (agentId, status) => {
   }
 };
 
+export const updateAgentReferralStatus = async (agentId, status) => {
+  try {
+    const response = await api.patch(
+      `/admin/agent/${agentId}/referral-status`,
+      { status },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data; // Assuming backend returns updated agent or success message
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to update approval status.";
+    throw new Error(message);
+  }
+};
+
 export const getAgentReferrals = async (agentId, page = 1, limit = 10) => {
   try {
     const response = await api.get(
