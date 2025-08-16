@@ -1,13 +1,18 @@
 // src/store/agentStore.js
 import { create } from "zustand";
-import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus} from "@/api/agentManagementApi";
+import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals} from "@/api/agentManagementApi";
 
 const useAgentStore = create((set, get) => ({
   agents: [],
   agentDetails: null,
+  referrals: [],
   loading: false,
   error: null,
   successMessage: "",
+   staffReferralList: [],
+  staffReferralLoading: false,
+  staffReferralError: null,
+  staffReferralTotalPages: 1,
 
  
  fetchAgents: async (page = 1, limit = 10, filter = "ALL") => {
@@ -101,6 +106,35 @@ updateAgent: async (id, formData) => {
       return { success: false };
     }
   },
+
+
+ fetchAgentReferrals: async (agentId, page = 1, limit = 10) => {
+  set({ loading: true, error: null });
+  try {
+    const response = await getAgentReferrals(agentId, page, limit);
+    set({
+      referrals: response.data?.referrals || [],
+      agentInfo: response.data?.agentInfo || null,  // also save agent info if you want
+      loading: false,
+    });
+  } catch (err) {
+    set({ error: err.message, loading: false });
+  }
+},
+
+
+
+fetchStaffReferrals: async (agentId, search, page, limit) => {
+  set({ staffReferralLoading: true, staffReferralError: null });
+  try {
+    const res = await searchStaffReferrals(agentId, search, page, limit);
+    // Assuming res.data is the array of staff; adjust if needed!
+    set({ staffReferralList: Array.isArray(res.data) ? res.data : [], staffReferralLoading: false });
+  } catch (error) {
+    set({ staffReferralError: error.message, staffReferralLoading: false });
+  }
+}
+
 
 }));
 

@@ -25,6 +25,10 @@ function Page() {
 
   const [formData, setFormData] = useState(initialState);
   const [mobileError, setMobileError] = useState("");
+    const [dob, setDob] = useState("");
+      const [isFocused, setIsFocused] = useState(false);
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,7 +88,7 @@ function Page() {
               onChange={handleChange}
               className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] outline-none rounded-[15px] ps-8 pe-4"
             >
-              <option value="">Type of Agent</option>
+              <option value="" className="text-gray-300">Type of Agent</option>
               <option value="INSTITUTION">Institution</option>
               <option value="DOCTOR">Doctor</option>
               <option value="HEALTHCARE_PROFESSIONAL">
@@ -100,7 +104,7 @@ function Page() {
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Full Name"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black ps-8 pe-4"
             />
 
             <select
@@ -108,7 +112,7 @@ function Page() {
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black  ps-8 pe-4"
             >
               <option value="">Gender</option>
               <option value="MALE">Male</option>
@@ -116,21 +120,45 @@ function Page() {
               <option value="OTHER">Other</option>
             </select>
 
-            <input
+            {/* <input
               required
               name="dob"
               type="date"
               value={formData.dob}
               onChange={handleChange}
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
-            />
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none  ps-8 pe-4"
+            /> */}
+                <div className="relative w-[328px]">
+      {isFocused ? (
+        <input
+          required
+          type="date"
+          name="dob"
+          value={formData.dob}
+          onChange={handleChange}
+          onBlur={() => setIsFocused(false)}
+          className="w-full h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none ps-8 pe-4"
+          autoFocus
+        />
+      ) : (
+        <input
+          type="text"
+          name="dob-dummy"
+          placeholder="Dob"
+          value={formData.dob ? new Date(formData.dob).toLocaleDateString() : ""}
+          onFocus={() => setIsFocused(true)}
+          readOnly
+          className="w-full h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none ps-8 pe-4 placeholder:text-black"
+        />
+      )}
+    </div>
 
             <select
               required
               name="referralType"
               value={formData.referralType}
               onChange={handleChange}
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none  ps-8 pe-4"
             >
               <option value="">Referral Type</option>
               <option value="STAFF">Staff</option>
@@ -149,7 +177,7 @@ function Page() {
               value={formData.state}
               onChange={handleChange}
               placeholder="State"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black  ps-8 pe-4"
             />
             <input
               required
@@ -158,7 +186,7 @@ function Page() {
               value={formData.district}
               onChange={handleChange}
               placeholder="District"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black  ps-8 pe-4"
             />
             <input
               required
@@ -167,7 +195,7 @@ function Page() {
               value={formData.city}
               onChange={handleChange}
               placeholder="Area / Location"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black  ps-8 pe-4"
             />
           </div>
 
@@ -182,7 +210,7 @@ function Page() {
               value={formData.lineFirst}
               onChange={handleChange}
               placeholder="Address Line 1"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black  ps-8 pe-4"
             />
             <input
               required
@@ -191,7 +219,7 @@ function Page() {
               value={formData.lineSecond}
               onChange={handleChange}
               placeholder="Address Line 2"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black  ps-8 pe-4"
             />
 
             <input
@@ -201,7 +229,7 @@ function Page() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black  ps-8 pe-4"
             />
 
             <input
@@ -211,7 +239,7 @@ function Page() {
               value={formData.mobileNumber}
               onChange={handleChange}
               placeholder="Mobile Number (10 digits)"
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] ps-8 pe-4"
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none placeholder:text-black  ps-8 pe-4"
             />
             {mobileError && (
               <span className="text-[13px] text-red-700 ps-2">
@@ -222,7 +250,7 @@ function Page() {
             <button
               type="submit"
               disabled={loading}
-              className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center"
+              className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center cursor-pointer" 
             >
               {loading ? "Submitting..." : "Submit"}
             </button>
