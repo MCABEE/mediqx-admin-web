@@ -1,4 +1,5 @@
 "use client";
+
 import ManageReferralPopup from "@/components/agentManagement/ManageReferralPopup";
 import Navlink from "@/components/agentManagement/Navlink";
 import { useRouter, useParams } from "next/navigation";
@@ -16,6 +17,9 @@ const Page = () => {
   const [manageReferral, setManageReferral] = useState(false);
   const [selectedReferral, setSelectedReferral] = useState(null);
   const [page, setPage] = useState(1);
+  const [skipFetch, setSkipFetch] = useState(false); 
+
+  const limit = 20;
 
   const {
     fetchAgentReferrals,
@@ -28,35 +32,59 @@ const Page = () => {
     totalPages = 1,
   } = useAgentStore();
 
-  console.log("Referral list", referrals);
-
   useEffect(() => {
-    if (agentId) {
-      if (activeTab === "referrals") {
-        fetchAgentReferrals(agentId, page, 10);
-      } else {
-        fetchAgentById(agentId);
-      }
+    if (!agentId || skipFetch) return; // 🚫 Skip fetch if flagged
+
+    if (activeTab === "referrals") {
+      fetchAgentReferrals(agentId, page, limit);
+    } else {
+      fetchAgentById(agentId);
     }
-  }, [agentId, activeTab, page, fetchAgentReferrals, fetchAgentById]);
+  }, [
+    agentId,
+    activeTab,
+    page,
+    fetchAgentReferrals,
+    fetchAgentById,
+    skipFetch,
+  ]);
 
   const handleTabClick = (tab) => {
     if (tab !== activeTab) {
       setActiveTab(tab);
-      setPage(1); // Reset page when switching to referrals
+      setPage(1); // Reset page when switching tabs
     }
   };
 
   const handleManage = (referral) => {
-    console.log("Selected referral ID:", referral.id);
     setSelectedReferral(referral);
     setManageReferral(true);
+  };
+
+  const handlePopupSuccess = (updatedReferral) => {
+    setManageReferral(false);
+
+    if (updatedReferral) {
+      // Don’t trigger fetch immediately after popup
+      setSkipFetch(true);
+
+      // Update store state locally
+      useAgentStore.setState((prev) => ({
+        referrals: prev.referrals.map((ref) =>
+          ref.id === updatedReferral.id ? updatedReferral : ref
+        ),
+      }));
+
+      // ✅ Reset skipFetch after short delay
+      setTimeout(() => setSkipFetch(false), 300);
+    }
   };
 
   return (
     <div className="pb-4">
       <Navlink />
 
+      {/* Header */}
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
         <div
           onClick={() => router.back()}
@@ -72,6 +100,7 @@ const Page = () => {
         </div>
       </div>
 
+      {/* Stats */}
       <div className="bg-white rounded-[15px] border border-[#BBBBBB] p-6 mt-2 flex justify-between">
         <div className="flex gap-4">
           <h1 className="text-black font-semibold text-[16px]">
@@ -121,7 +150,7 @@ const Page = () => {
         </h1>
       </div>
 
-      {/* Tab content */}
+      {/* Profile Tab */}
       {activeTab === "profile" && (
         <div className="flex gap-16 p-8 bg-white rounded-[15px] border border-[#BBBBBB] mt-2">
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
@@ -157,6 +186,7 @@ const Page = () => {
         </div>
       )}
 
+      {/* Referrals Tab */}
       {activeTab === "referrals" && (
         <div className="space-y-4 py-2 mt-2">
           {loading && <p className="px-4 py-2">Loading referrals...</p>}
@@ -183,39 +213,40 @@ const Page = () => {
 
               <div className="flex p-6 gap-16">
                 <div className="flex flex-col gap-[10px] text-[16px] text-black">
-                  <span className="text-[16px] text-black">Type</span>
-                  <span className="text-[16px] text-black">Full Name</span>
-                  <span className="text-[16px] text-black">Qualification</span>
-                  <span className="text-[16px] text-black">Contact Number</span>
-                  <span className="text-[16px] text-black">
-                    Referral Status
-                  </span>
-                  <span className="text-[16px] text-black">Referral Name</span>
+                  <span>Type</span>
+                  <span>Full Name</span>
+                  <span>Qualification</span>
+                  <span>Contact Number</span>
+                  <span>Referral Status</span>
                 </div>
                 <div className="flex flex-col gap-[10px] text-[16px] text-black">
-                  <span className="text-[16px] text-black">
-                    {ref.referralType || "-"}
-                  </span>
-                  <span className="text-[16px] text-black">
-                    {ref.fullName || "-"}
-                  </span>
-                  <span className="text-[16px] text-black">
-                    {ref.qualificationOrService || "-"}
-                  </span>
-                  <span className="text-[16px] text-black">
-                    {ref.contactNumber || "-"}
-                  </span>
-                  <span className="text-[16px] text-black">
+                  <span>{ref.referralType || "-"}</span>
+                  <span>{ref.fullName || "-"}</span>
+                  <span>{ref.qualificationOrService || "-"}</span>
+                  <span>{ref.contactNumber || "-"}</span>
+                  <span
+                    className={`text-[16px]font-thin  ${
+                      ref.referralStatus?.toUpperCase() === "CONFIRMED"
+                        ? "text-green-600"
+                        : ref.referralStatus?.toUpperCase() === "CANCELLED"
+                        ? "text-red-600"
+                        : "text-blue-600"
+                    }`}
+                  >
                     {ref.referralStatus || "-"}
                   </span>
-                  <span className="text-[16px] text-black">-</span>
                 </div>
               </div>
 
               <button
-                className="bg-[#3674B5] rounded-[15px] text-white px-8 py-2 mx-6 cursor-pointer mb-4"
-                // onClick={() => handleManage(ref)}
-                disabled={ref.referralStatus?.toUpperCase() === "CONFIRMED"}
+                className={`rounded-[15px] px-8 py-2 mx-6 cursor-pointer mb-4 
+    ${
+      ref.referralStatus?.toUpperCase() === "PENDING"
+        ? "bg-[#3674B5] text-white hover:bg-[#19588f]"
+        : "bg-gray-400 text-white cursor-not-allowed"
+    }`}
+                onClick={() => handleManage(ref)}
+                disabled={ref.referralStatus?.toUpperCase() !== "PENDING"}
               >
                 Manage
               </button>
@@ -252,8 +283,9 @@ const Page = () => {
       {manageReferral && (
         <ManageReferralPopup
           referral={selectedReferral}
-          agentId={agentInfo?.id}
+          agentId={agentId}
           onClose={() => setManageReferral(false)}
+          onSubmitSuccess={handlePopupSuccess}
         />
       )}
     </div>

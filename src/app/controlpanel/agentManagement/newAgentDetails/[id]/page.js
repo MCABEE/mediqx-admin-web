@@ -28,7 +28,7 @@ const ConfirmModal = ({ visible, status, onConfirm, onCancel, loading }) => {
           <button
             onClick={() => onConfirm(status)}
             disabled={loading}
-            className={`px-4 py-2 rounded text-white transition ${
+            className={`px-4 py-2 rounded text-white transition cursor-pointer ${
               status === "APPROVED"
                 ? "bg-green-600 hover:bg-green-700"
                 : "bg-red-600 hover:bg-red-700"
@@ -203,13 +203,13 @@ const Page = () => {
         <div className="p-8">
           <div className="flex gap-8">
             <button
-              className="w-[192px] h-[40px] bg-[#F93827] text-white rounded-[15px] hover:opacity-80 transition"
+              className="w-[192px] h-[40px] bg-[#F93827] text-white rounded-[15px] hover:opacity-80 transition cursor-pointer"
               onClick={() => setConfirmAction("REJECTED")}
             >
               Reject
             </button>
             <button
-              className="w-[192px] h-[40px] bg-[#09B438] text-white rounded-[15px] hover:opacity-80 transition"
+              className="w-[192px] h-[40px] bg-[#09B438] text-white rounded-[15px] hover:opacity-80 transition cursor-pointer"
               onClick={() => setConfirmAction("APPROVED")}
             >
               Approve
