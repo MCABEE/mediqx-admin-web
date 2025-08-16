@@ -12,6 +12,16 @@ const Page = () => {
   const limit = 10;
   const filter = "CONFIRMED";
 
+  const totalPages = Math.ceil(totalAgents / limit) || 1;
+
+  const goToNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
+  const goToPrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
   useEffect(() => {
     fetchAgents(page, limit, filter);
   }, [page, filter, fetchAgents]);
@@ -27,12 +37,8 @@ const Page = () => {
           <tr className="p-2 bg-[#C0D8F6]">
             <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">No</th>
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">Name</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-              Location
-            </th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-              Category
-            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Location</th>
+            <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">Category</th>
           </tr>
         </thead>
         <tbody>
@@ -57,26 +63,54 @@ const Page = () => {
               </td>
             </tr>
           )}
-          {agents.map((agent, index) => (
-            <tr key={agent.id} className="bg-white">
-              <td className="p-2">{(page - 1) * limit + index + 1}</td>
-              <td className="border-l-4 border-[#C0D8F6] p-2">
-                <Link
-                  href={`/controlpanel/agentManagement/newAgentDetails/${agent.id}`}
+
+          {agents.map((agent, index) => {
+            const url = `/controlpanel/agentManagement/allAgentDetails/${agent.id}`;
+
+            return (
+              <Link key={agent.id} href={url} passHref legacyBehavior>
+                <tr
+                  className="bg-white cursor-pointer hover:bg-blue-100"
+                  tabIndex={0}
+                  role="link"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      window.location.href = url;
+                    }
+                  }}
                 >
-                  {agent.fullName}
-                </Link>
-              </td>
-              <td className="border-l-4 border-[#C0D8F6] p-2">
-                {agent.city || "-"}
-              </td>
-              <td className="border-l-4 border-[#C0D8F6] p-2">
-                {agent.typeOfAgent || "-"}
-              </td>
-            </tr>
-          ))}
+                  <td className="p-2">{(page - 1) * limit + index + 1}</td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">{agent.fullName}</td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">{agent.city || "-"}</td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">{agent.typeOfAgent || "-"}</td>
+                </tr>
+              </Link>
+            );
+          })}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-between items-center mt-4 px-4">
+        <button
+          disabled={page === 1}
+          onClick={goToPrevPage}
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span>
+          Page {page} of {totalPages}
+        </span>
+        <button
+          disabled={page === totalPages}
+          onClick={goToNextPage}
+          className="py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

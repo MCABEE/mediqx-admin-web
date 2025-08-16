@@ -33,22 +33,6 @@ const Page = () => {
       {/* Header */}
       <div className="w-full h-[80px] flex items-center justify-between bg-white border border-[#888888] rounded-[15px] mt-2 text-black px-8">
         <h1 className="text-[32px] font-semibold">{totalAgents}</h1>
-        {/* <select
-          value={filter}
-          onChange={(e) => {
-            setFilter(e.target.value);
-            setPage(1); // Reset to first on filter change
-          }}
-          className="border border-gray-400 rounded px-3 py-1 text-sm"
-        >
-          <option value="ALL">All</option>
-          <option value="ACTIVE">Active</option>
-          <option value="INACTIVE">Inactive</option>
-          <option value="PENDING">Pending</option>
-          <option value="STAFF">Staff</option>
-          <option value="PATIENT">Patient</option>
-          <option value="NEW">New</option>
-        </select> */}
       </div>
 
       {/* Table */}
@@ -65,7 +49,7 @@ const Page = () => {
             <th className="text-base border-l-4 border-[#F0F4F9] px-2 py-1">
               Category
             </th>
-            <th className="text-base border-l-4 border-[#F0F4F9] px-2 py-1">
+            <th className="text-base border-l-4 border-[#F0F4F9] px-2 rounded-r-2xl py-1">
               Status
             </th>
           </tr>
@@ -92,32 +76,48 @@ const Page = () => {
               </td>
             </tr>
           )}
-          {agents.map((agent, index) => (
-            <tr key={`${agent.id}-${index}`} className="bg-white">
-              <td className="p-2">{(page - 1) * limit + index + 1}</td>
-              <td className="border-l-4 border-[#C0D8F6] p-2">
-                <Link
-                  href={`/controlpanel/agentManagement/newAgentDetails/${agent.id}`}
+          {agents.map((agent, index) => {
+            const url = `/controlpanel/agentManagement/newAgentDetails/${agent.id}`;
+            return (
+              <Link
+                key={`${agent.id}-${index}`}
+                href={url}
+                passHref
+                legacyBehavior
+              >
+                <tr
+                  className="bg-white cursor-pointer hover:bg-blue-100"
+                  tabIndex={0}
+                  role="link"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      window.location.href = url;
+                    }
+                  }}
                 >
-                  {agent.fullName}
-                </Link>
-              </td>
-              <td className="border-l-4 border-[#C0D8F6] p-2">
-                {agent.city || "-"}
-              </td>
-              <td className="border-l-4 border-[#C0D8F6] p-2">
-                {agent.typeOfAgent || "-"}
-              </td>
-              <td className="border-l-4 border-[#C0D8F6] p-2">
-                {agent.approvalStatus}
-              </td>
-            </tr>
-          ))}
+                  <td className="p-2">{(page - 1) * limit + index + 1}</td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                    {agent.fullName}
+                  </td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                    {agent.city || "-"}
+                  </td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                    {agent.typeOfAgent || "-"}
+                  </td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                    {agent.approvalStatus}
+                  </td>
+                </tr>
+              </Link>
+            );
+          })}
         </tbody>
       </table>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center mt-4 px-4">
+      <div className="flex justify-between items-center mt-4 ">
         <button
           disabled={page === 1}
           onClick={goToPrevPage}
