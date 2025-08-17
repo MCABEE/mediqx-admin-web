@@ -136,7 +136,7 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
 
           <h1 className="text-black font-semibold mt-4">Choose Staff Name (Confirmed)</h1>
 
-          <input
+          {/* <input
             ref={inputRef}
             type="text"
             className="w-full h-[40px] border-1 border-[#BBBBBB] rounded-[15px] px-4 outline-none"
@@ -171,10 +171,53 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
                   </div>
                 ))}
             </div>
-          )}
+          )} */}
+          <div className="relative w-full">
+  <input
+    ref={inputRef}
+    type="text"
+    className="w-full h-[40px] border border-[#BBBBBB] rounded-[8px] px-4 outline-none focus:ring-2 focus:ring-blue-400"
+    placeholder="Type to search staff..."
+    value={staffName}
+    onChange={onStaffInputChange}
+    onFocus={onStaffInputFocus}
+    disabled={referralStatus !== "CONFIRMED"}
+    autoComplete="off"
+  />
+
+  {showDropdown && referralStatus === "CONFIRMED" && (
+    <div className="absolute top-full left-0 w-full bg-white border border-gray-300 shadow-lg rounded-md mt-1 z-50 h-24 overflow-y-auto">
+      {staffReferralLoading && (
+        <p className="p-2 text-gray-500 text-sm">Loading...</p>
+      )}
+
+      {!staffReferralLoading &&
+        Array.isArray(staffReferralList) &&
+        staffReferralList.length === 0 && (
+          <p className="p-2 text-gray-500 text-sm">No staff found.</p>
+        )}
+
+      {!staffReferralLoading &&
+        staffReferralList.map((staff) => (
+          <div
+            key={staff.id || staff.userId}
+            className={`px-4 py-2 text-[12px] cursor-pointer hover:bg-blue-100 ${
+              staffName === (staff.fullName || staff.name)
+                ? "bg-blue-50 font-medium"
+                : ""
+            }`}
+            onMouseDown={() => onStaffSelect(staff.fullName || staff.name)}
+          >
+            {staff.fullName || staff.name}
+          </div>
+        ))}
+    </div>
+  )}
+</div>
+
 
           <button
-            className={`bg-[#3674B5] w-full h-[40px] rounded-[15px] text-white mt-4 ${
+            className={`bg-[#3674B5] w-full h-[40px] rounded-[15px] text-white cursor-pointer mt-4 ${
               isSubmitDisabled ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={isSubmitDisabled}
