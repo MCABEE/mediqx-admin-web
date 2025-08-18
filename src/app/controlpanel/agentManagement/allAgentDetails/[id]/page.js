@@ -17,7 +17,7 @@ const Page = () => {
   const [manageReferral, setManageReferral] = useState(false);
   const [selectedReferral, setSelectedReferral] = useState(null);
   const [page, setPage] = useState(1);
-  const [skipFetch, setSkipFetch] = useState(false); 
+  const [skipFetch, setSkipFetch] = useState(false);
 
   const limit = 20;
 
@@ -33,7 +33,7 @@ const Page = () => {
   } = useAgentStore();
 
   useEffect(() => {
-    if (!agentId || skipFetch) return; // 🚫 Skip fetch if flagged
+    if (!agentId || skipFetch) return; 
 
     if (activeTab === "referrals") {
       fetchAgentReferrals(agentId, page, limit);
@@ -152,6 +152,7 @@ const Page = () => {
 
       {/* Profile Tab */}
       {activeTab === "profile" && (
+        <>
         <div className="flex gap-16 p-8 bg-white rounded-[15px] border border-[#BBBBBB] mt-2">
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
             <span>Full Name</span>
@@ -184,6 +185,52 @@ const Page = () => {
             <span>{agentDetails?.referralType || "-"}</span>
           </div>
         </div>
+            {/* ID Proof */}
+      <div className="bg-white rounded-[15px] border border-[#BBBBBB] mt-4">
+        <div className="w-full h-[52px] flex items-center border-b px-8 rounded-t-[15px] border-[#BBBBBB]">
+          <h1 className="text-[16px] font-semibold text-black">ID Proof</h1>
+        </div>
+        <div className="p-8">
+          {agentDetails?.idProof ? (
+            <img
+              src={`https://dev-nurse-docs.s3.ap-south-1.amazonaws.com/${agentDetails.idProof}`}
+              alt="idproof"
+              className="max-w-xs max-h-64 rounded shadow"
+            />
+          ) : (
+            <img
+              src="/no-image.png"
+              alt="No ID Proof"
+              className="max-w-xs max-h-64 opacity-60"
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Agent Photo */}
+      <div className="bg-white rounded-[15px] border border-[#BBBBBB] mt-4">
+        <div className="w-full h-[52px] flex items-center border-b px-8 rounded-t-[15px] border-[#BBBBBB]">
+          <h1 className="text-[16px] font-semibold text-black">
+            Agent - Photo
+          </h1>
+        </div>
+        <div className="p-8">
+          {agentDetails?.passportImage ? (
+            <img
+              src={`https://dev-nurse-docs.s3.ap-south-1.amazonaws.com/${agentDetails.passportImage}`}
+              alt="photo"
+              className="max-w-xs max-h-64 rounded shadow"
+            />
+          ) : (
+            <img
+              src="/no-image.png"
+              alt="No Photo"
+              className="max-w-xs max-h-64 opacity-60"
+            />
+          )}
+        </div>
+      </div>
+        </>
       )}
 
       {/* Referrals Tab */}
@@ -207,7 +254,7 @@ const Page = () => {
                 </div>
                 <p className="text-[#666666] flex items-center">
                   {new Date(ref.createdAt).toLocaleString() ||
-                    "16 Aug 2025, 10:24 AM"}
+                    ""}
                 </p>
               </div>
 
@@ -215,7 +262,12 @@ const Page = () => {
                 <div className="flex flex-col gap-[10px] text-[16px] text-black">
                   <span>Type</span>
                   <span>Full Name</span>
-                  <span>Qualification</span>
+                  <span>
+                    {ref.referralType === "STAFF"
+                      ? "Qualification" 
+                      : "Service Type"}
+                    
+                  </span>
                   <span>Contact Number</span>
                   <span>Referral Status</span>
                 </div>

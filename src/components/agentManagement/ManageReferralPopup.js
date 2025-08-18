@@ -363,7 +363,11 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
             <option value="CANCELLED">Rejected</option>
           </select>
 
-          <h1 className="text-black font-semibold mt-4">Choose Staff Name (Confirmed)</h1>
+          <h1 className="text-black font-semibold mt-4">
+            {referral?.referralType === "STAFF"
+                      ? "Choose Staff Name (Confirmed)" 
+                      : "Choose Patient Name (Confirmed)"}
+          </h1>
 
           <div className="relative w-full">
             <input
