@@ -107,13 +107,13 @@ updateAgent: async (id, formData) => {
     }
   },
 
-    updateAgentReferralStatus: async (agentId, status) => {
+    updateAgentReferralStatus: async (agentId, status,referralSignupStaffId) => {
     set({ loading: true, error: null });
     try {
-      const res = await updateAgentReferralStatus(agentId, status);
+      const res = await updateAgentReferralStatus(agentId, status,referralSignupStaffId);
 
       // Optionally refetch agent details to update state
-      await get().fetchAgentById(agentId);
+      await get().fetchAgentById(agentId); 
 
       set({ loading: false });
       return { success: true };

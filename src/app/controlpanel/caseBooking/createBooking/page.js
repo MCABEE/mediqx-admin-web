@@ -539,7 +539,7 @@ const CaseBookingPage = () => {
             </option>
             <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
             <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
-            <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option>
+            {/* <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option> */}
             <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
             <option value="CUSTOM_HOURS">Custom Hours</option>
           </select>

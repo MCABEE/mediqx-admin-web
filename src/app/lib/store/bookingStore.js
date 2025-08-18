@@ -117,7 +117,7 @@ const useBookingStore = create((set, get) => ({
       const res = await cancelBookingApi(bookingId, payload);
       set({ isLoading: false });
       return res;
-    } catch (err) {
+    } catch (err) { 
       set({ error: err.message, isLoading: false });
       throw err;
     }

@@ -68,11 +68,11 @@ export const updateAgentApprovalStatus = async (agentId, status) => {
   }
 };
 
-export const updateAgentReferralStatus = async (agentId, status) => {
+export const updateAgentReferralStatus = async (agentId, status,referralSignupStaffId) => {
   try {
     const response = await api.patch(
       `/admin/agent/${agentId}/referral-status`,
-      { status },
+      { status,referralSignupStaffId },
       {
         headers: { "Content-Type": "application/json" },
       }
