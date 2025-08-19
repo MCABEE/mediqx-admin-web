@@ -255,25 +255,18 @@ function AddNurseAvailability() {
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
             required
           >
+        
             <option disabled value="">
               Qualification
             </option>
-            <option value="MSc Nursing">MSc Nursing</option>
-            <option value="BSc Nursing">BSc Nursing</option>
-            <option value="BSc Nursing Pursuing">GNM</option>
-            <option value="Post BSc Nursing">Post BSc Nursing</option>
-            <option value="GNM">GNM</option>
-            <option value="GNM Pursuing">GNM Pursuing</option>
-            <option value="ANM">ANM</option>
-            <option value="GDA (General Duty Assistant)">
-              GDA (General Duty Assistant)
-            </option>
-            <option value="PCA (Personal Care Assistant)">
-              PCA (Personal Care Assistant)
-            </option>
-            <option value="DHA (Diploma in Health Assistant)">
-              DHA (Diploma in Health Assistant)
-            </option>
+            <option value="ANM (Auxiliary Nurse Midwife)">ANM (Auxiliary Nurse Midwife)</option>
+            <option value="GNM (General Nursing and Midwifery)">GNM (General Nursing and Midwifery)</option>
+            <option value="GDA (General Duty Assistant)">GDA (General Duty Assistant)</option>
+            <option value="B.Sc. Nursing">B.Sc. Nursing</option>
+            <option value="Post Basic B.Sc. Nursing">Post Basic B.Sc. Nursing</option>
+            <option value="M.Sc. Nursing">M.Sc. Nursing</option>
+            <option value="Nurse Practitioner (NP)">Nurse Practitioner (NP)</option>
+            
           </select>
 
           {/* Registered Nurse Checkbox */}
