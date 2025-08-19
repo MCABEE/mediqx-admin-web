@@ -12,23 +12,22 @@ const formatTime12Hour = (time) => {
   return `${h}:${minute} ${ampm}`;
 };
 
-// Format date to YYYY-MM-DD in UTC to avoid timezone issues
+// Format date to YYYY-MM-DD (local, no UTC shift)
 const formatDate = (date) => {
   if (!(date instanceof Date)) date = new Date(date);
-  // Get UTC date portion
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(date.getUTCDate()).padStart(2, "0");
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
-// Group availabilities by year-month key (yyyy-mm) based on UTC date
+// Group availabilities by local year-month key (yyyy-mm)
 const groupAvailabilitiesByMonth = (availabilities) => {
   const map = {};
   availabilities.forEach((avail) => {
     const dateObj = avail.dateObj || new Date(avail.date);
-    const year = dateObj.getUTCFullYear();
-    const month = dateObj.getUTCMonth() + 1;
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
     const yearMonthKey = `${year}-${String(month).padStart(2, "0")}`;
     if (!map[yearMonthKey]) map[yearMonthKey] = [];
     map[yearMonthKey].push({ ...avail, dateObj });
@@ -48,22 +47,22 @@ const AvailabilitySchedule = ({ availabilities }) => {
 
   const formatMonthYear = (key) => {
     const [year, month] = key.split("-");
-    const d = new Date(Date.UTC(Number(year), Number(month) - 1));
+    const d = new Date(Number(year), Number(month) - 1);
     return d.toLocaleString("default", { month: "long", year: "numeric" });
   };
 
   const calendarGridForMonth = (year, month, monthAvailabilities) => {
-    // month: 1-based month number
-    const firstDay = new Date(Date.UTC(year, month - 1, 1));
-    const lastDay = new Date(Date.UTC(year, month, 0));
-    const daysInMonth = lastDay.getUTCDate();
-    const startDay = firstDay.getUTCDay();
+    // month: 1-based month number (local)
+    const firstDay = new Date(year, month - 1, 1);
+    const lastDay = new Date(year, month, 0);
+    const daysInMonth = lastDay.getDate();
+    const startDay = firstDay.getDay();
     const grid = [];
 
-    // Filter availabilities strictly for this month (UTC)
+    // Filter availabilities strictly for this month (local)
     const filteredAvail = monthAvailabilities.filter((avail) => {
       const d = avail.dateObj || new Date(avail.date);
-      return d.getUTCFullYear() === year && d.getUTCMonth() + 1 === month;
+      return d.getFullYear() === year && d.getMonth() + 1 === month;
     });
 
     // Map date string to availability for quick lookup
@@ -134,7 +133,7 @@ const AvailabilitySchedule = ({ availabilities }) => {
             >
               <div className="font-semibold">
                 {item.dateObj
-                  ? item.dateObj.getUTCDate()
+                  ? item.dateObj.getDate()
                   : item.dateStr.split("-")[2]}
               </div>
               {item.isAvailable && (
