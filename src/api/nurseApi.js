@@ -1,7 +1,7 @@
 import api from "./axiosInstance";
-export const getNurses = async (page = 1, limit = 10,status) => {
+export const getNurses = async (page = 1, limit = 10,status , role) => {
     try {
-      const response = await api.get(`/admin/users?page=${page}&limit=${limit}&filter=${status}&role=NURSE`);
+      const response = await api.get(`/admin/users?page=${page}&limit=${limit}&filter=${status}&role=${role}`);
       console.log(response);
       
       return response;

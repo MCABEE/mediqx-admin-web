@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams } from "next/navigation";
 import nurseStore from "@/app/lib/store/nurseStore";
 
 const Table = () => {
@@ -16,15 +16,28 @@ const Table = () => {
   } = nurseStore();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
+    const searchParams = useSearchParams();
+
+  const roleFromUrl = searchParams.get("role") || "NURSE";
+  const [selectedRole, setSelectedRole] = useState(roleFromUrl);
+
+  // useEffect(() => {
+  //   fetchNurses(currentPage, limit, "NEW","NURSE");
+  // }, [currentPage, fetchNurses, limit]);
 
   useEffect(() => {
-    fetchNurses(currentPage, limit, "NEW");
-  }, [currentPage, fetchNurses, limit]);
+    fetchNurses(currentPage, limit, "NEW", selectedRole);
+  }, [currentPage, fetchNurses, limit, selectedRole]);
 
-  const handleNameClick = async (userId) => {
-    await fetchNurseById(userId);
-    router.push(`/controlpanel/staffManagement/staffDetails/${userId}`);
-  };
+  // const handleNameClick = async (userId) => {
+  //   await fetchNurseById(userId);
+  //   router.push(`/controlpanel/staffManagement/staffDetails/${userId}`);
+  // };
+
+   const handleNameClick = async (userId) => {
+  await fetchNurseById(userId);
+  router.push(`/controlpanel/staffManagement/staffDetails/${userId}?role=${selectedRole}`);
+};
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
@@ -47,6 +60,43 @@ const Table = () => {
 
   return (
     <>
+      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between  px-6  rounded-[15px] mt-2  ">
+        <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
+          <p
+            className={`cursor-pointer ${
+              selectedRole === "NURSE" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("NURSE");
+              setCurrentPage(1); // Reset to first page when role changes
+            }}
+          >
+            Nurse
+          </p>
+          <p
+            className={`cursor-pointer ${
+              selectedRole === "PARAMEDICAL" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("PARAMEDICAL");
+              setCurrentPage(1);
+            }}
+          >
+            Paramedical
+          </p>
+          <p
+            className={`cursor-pointer ${
+              selectedRole === "PHYSIOTHERAPIST" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("PHYSIOTHERAPIST");
+              setCurrentPage(1);
+            }}
+          >
+            Physiotherapist
+          </p>
+        </div>
+      </div>
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px] px-6 text-black font-semibold text-[32px]">
         <p>{totalUsers}</p>
       </div>
