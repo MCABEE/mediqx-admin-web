@@ -117,7 +117,7 @@ const Page = () => {
       </table>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center mt-4 ">
+      <div className="flex justify-between items-center mt-4 mb-2">
         <button
           disabled={page === 1}
           onClick={goToPrevPage}

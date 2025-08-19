@@ -543,7 +543,7 @@ function AddNurseAvailability() {
                 <span className="text-blue-600">{formatDate(popupDate)}</span>
               </h2>
               <div className="space-y-4">
-                {["forenoon", "afternoon"].map((period) => (
+                {/* {["forenoon", "afternoon"].map((period) => (
                   <div key={period}>
                     <p className="font-medium text-gray-700 capitalize">
                       {period}
@@ -579,7 +579,54 @@ function AddNurseAvailability() {
                       />
                     </div>
                   </div>
-                ))}
+                ))} */}
+                {["forenoon", "afternoon"].map((period) => (
+  <div key={period}>
+    <p className="font-medium text-gray-700 capitalize">{period}</p>
+    <div className="flex gap-3 mt-1">
+      <input
+        type="time"
+        value={slot[period].from}
+        onChange={(e) => {
+          const fromTime = e.target.value;
+          const [hoursStr, minutesStr] = fromTime.split(":");
+          let hours = parseInt(hoursStr, 10);
+          let minutes = parseInt(minutesStr, 10);
+          hours += 2;
+          if (hours >= 24) hours -= 24; // wrap around midnight
+
+          const toTime = `${hours.toString().padStart(2, "0")}:${minutes
+            .toString()
+            .padStart(2, "0")}`;
+
+          setSlot({
+            ...slot,
+            [period]: {
+              from: fromTime,
+              to: toTime,
+            },
+          });
+        }}
+        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <input
+        type="time"
+        value={slot[period].to}
+        onChange={(e) =>
+          setSlot({
+            ...slot,
+            [period]: {
+              ...slot[period],
+              to: e.target.value,
+            },
+          })
+        }
+        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
+      />
+    </div>
+  </div>
+))}
+
               </div>
               {errorMsg && (
                 <p className="text-red-500 text-sm mt-2 font-medium">

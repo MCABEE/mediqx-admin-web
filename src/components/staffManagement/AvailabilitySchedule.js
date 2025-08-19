@@ -3,7 +3,7 @@ import React, { useState, useMemo } from "react";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-// Utility to format format time strings like "08:15" to "8:15 AM"
+// Format "08:15" as "8:15 AM"
 const formatTime12Hour = (time) => {
   if (!time) return "";
   const [hour, minute] = time.split(":");
@@ -12,20 +12,27 @@ const formatTime12Hour = (time) => {
   return `${h}:${minute} ${ampm}`;
 };
 
-// Utility to get ISO date string from Date object
-const formatDate = (date) => date.toISOString().split("T")[0];
+// Format date to YYYY-MM-DD in UTC to avoid timezone issues
+const formatDate = (date) => {
+  if (!(date instanceof Date)) date = new Date(date);
+  // Get UTC date portion
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
-// Group availabilities by month for calendar view
+// Group availabilities by year-month key (yyyy-mm) based on UTC date
 const groupAvailabilitiesByMonth = (availabilities) => {
   const map = {};
   availabilities.forEach((avail) => {
-    // avail.date expected as ISO string "YYYY-MM-DDT00:00:00"
-    const dateObj = new Date(avail.date);
-    const yearMonthKey = `${dateObj.getFullYear()}-${dateObj.getMonth() + 1}`;
+    const dateObj = avail.dateObj || new Date(avail.date);
+    const year = dateObj.getUTCFullYear();
+    const month = dateObj.getUTCMonth() + 1;
+    const yearMonthKey = `${year}-${String(month).padStart(2, "0")}`;
     if (!map[yearMonthKey]) map[yearMonthKey] = [];
     map[yearMonthKey].push({ ...avail, dateObj });
   });
-  // Sort each month's availabilities by day number
   Object.values(map).forEach((arr) =>
     arr.sort((a, b) => a.dateObj - b.dateObj)
   );
@@ -33,57 +40,60 @@ const groupAvailabilitiesByMonth = (availabilities) => {
 };
 
 const AvailabilitySchedule = ({ availabilities }) => {
-  // Group availabilities by month
   const groupedByMonth = useMemo(
     () => groupAvailabilitiesByMonth(availabilities),
     [availabilities]
   );
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
 
-  // Helper to display month-year header
   const formatMonthYear = (key) => {
     const [year, month] = key.split("-");
-    const d = new Date(year, month - 1);
+    const d = new Date(Date.UTC(Number(year), Number(month) - 1));
     return d.toLocaleString("default", { month: "long", year: "numeric" });
   };
 
-  // Prepare a calendar grid for the month with day slots
   const calendarGridForMonth = (year, month, monthAvailabilities) => {
     // month: 1-based month number
-    const firstDay = new Date(year, month - 1, 1);
-    const lastDay = new Date(year, month, 0);
-    const daysInMonth = lastDay.getDate();
-
-    // Start with day of week of first day (0=Sun,..6=Sat)
-    const startDay = firstDay.getDay();
-
+    const firstDay = new Date(Date.UTC(year, month - 1, 1));
+    const lastDay = new Date(Date.UTC(year, month, 0));
+    const daysInMonth = lastDay.getUTCDate();
+    const startDay = firstDay.getUTCDay();
     const grid = [];
 
-    // Fill blanks for days before first day
-    for (let i = 0; i < startDay; i++) {
-      grid.push(null);
-    }
+    // Filter availabilities strictly for this month (UTC)
+    const filteredAvail = monthAvailabilities.filter((avail) => {
+      const d = avail.dateObj || new Date(avail.date);
+      return d.getUTCFullYear() === year && d.getUTCMonth() + 1 === month;
+    });
 
-    // Fill days with availability info or null
+    // Map date string to availability for quick lookup
+    const availMap = {};
+    filteredAvail.forEach((a) => {
+      availMap[formatDate(a.dateObj || new Date(a.date))] = a;
+    });
+
+    // Leading empty slots for weekdays before first day
+    for (let i = 0; i < startDay; i++) grid.push(null);
+
+    // Fill days of month
     for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${month.toString().padStart(2, "0")}-${day
-        .toString()
-        .padStart(2, "0")}`;
-      const avail = monthAvailabilities.find(
-        (a) => formatDate(a.dateObj) === dateStr
-      );
-      grid.push(avail || { dateStr, isAvailable: false });
+      const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      if (availMap[dateStr]) {
+        grid.push({ ...availMap[dateStr], isAvailable: true, dateStr });
+      } else {
+        grid.push({ dateStr, isAvailable: false });
+      }
     }
 
-    // Optionally fill more nulls so total count is multiple of 7 (for full weeks)
-    while (grid.length % 7 !== 0) {
-      grid.push(null);
-    }
+    // Trailing empty slots to complete the last week
+    while (grid.length % 7 !== 0) grid.push(null);
 
     return grid;
   };
 
-  if (groupedByMonth.length === 0) {
+  if (!groupedByMonth.length) {
     return (
       <div className="py-6 text-center text-gray-600">
         No availability data to display.
@@ -92,15 +102,11 @@ const AvailabilitySchedule = ({ availabilities }) => {
   }
 
   const [monthKey, monthAvailabilities] = groupedByMonth[currentMonthIndex];
-  const [year, month] = monthKey.split("-");
-  const grid = calendarGridForMonth(
-    Number(year),
-    Number(month),
-    monthAvailabilities
-  );
+  const [year, month] = monthKey.split("-").map(Number);
+  const grid = calendarGridForMonth(year, month, monthAvailabilities);
 
   return (
-    <div className="py-6 px-4 w-full  rounded shadow">
+    <div className="py-6 px-4 w-full rounded shadow">
       <h2 className="text-xl font-semibold mb-4 text-center">
         {formatMonthYear(monthKey)}
       </h2>
@@ -116,10 +122,10 @@ const AvailabilitySchedule = ({ availabilities }) => {
       <div className="grid grid-cols-7 gap-1 text-center">
         {grid.map((item, idx) =>
           item === null ? (
-            <div key={idx} className="p-2"></div> // empty slot
+            <div key={idx} className="p-2"></div>
           ) : (
             <div
-              key={idx}
+              key={item.dateStr + "-" + idx}
               className={`p-2 rounded cursor-default min-h-20 ${
                 item.isAvailable
                   ? "bg-blue-500 text-white"
@@ -128,14 +134,13 @@ const AvailabilitySchedule = ({ availabilities }) => {
             >
               <div className="font-semibold">
                 {item.dateObj
-                  ? item.dateObj.getDate()
+                  ? item.dateObj.getUTCDate()
                   : item.dateStr.split("-")[2]}
               </div>
               {item.isAvailable && (
                 <div className="text-xs mt-1 space-y-1">
                   {item.fixedSlots ? (
                     <span className="block">
-                      {/* Show full-time fixed slot label, e.g. SHIFT_24_HOURS → "24 Hours" */}
                       {item.fixedSlots === "SHIFT_24_HOURS"
                         ? "24 Hours"
                         : item.fixedSlots === "DAY_SHIFT_12_HOURS"
@@ -169,7 +174,6 @@ const AvailabilitySchedule = ({ availabilities }) => {
         )}
       </div>
 
-      {/* Pagination for months */}
       {groupedByMonth.length > 1 && (
         <div className="flex justify-between mt-4">
           <button

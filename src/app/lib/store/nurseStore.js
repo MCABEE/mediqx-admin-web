@@ -137,7 +137,7 @@ const useNurseStore = create(
     try {
       const data = await getAssignableNurses(params);
       set({
-        users: data?.data?.users || [],
+        users: data?.data?.users || [], 
         totalPages: data?.data?.totalPages || 0,
         totalUsers: data?.data?.total || 0,
       });

@@ -1,6 +1,6 @@
 // src/store/agentStore.js
 import { create } from "zustand";
-import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals} from "@/api/agentManagementApi";
+import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals,updateAgentReferralStatus} from "@/api/agentManagementApi";
 
 const useAgentStore = create((set, get) => ({
   agents: [],
@@ -107,6 +107,22 @@ updateAgent: async (id, formData) => {
     }
   },
 
+    updateAgentReferralStatus: async (agentId, status,referralSignupStaffId) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await updateAgentReferralStatus(agentId, status,referralSignupStaffId);
+
+      // Optionally refetch agent details to update state
+      await get().fetchAgentById(agentId); 
+
+      set({ loading: false });
+      return { success: true };
+    } catch (err) {
+      set({ error: err.message, loading: false });
+      return { success: false };
+    }
+  },
+
 
  fetchAgentReferrals: async (agentId, page = 1, limit = 10) => {
   set({ loading: true, error: null });
@@ -124,16 +140,17 @@ updateAgent: async (id, formData) => {
 
 
 
-fetchStaffReferrals: async (agentId, search, page, limit) => {
+fetchStaffReferrals: async (referralId, search, page, limit) => {
   set({ staffReferralLoading: true, staffReferralError: null });
   try {
-    const res = await searchStaffReferrals(agentId, search, page, limit);
-    // Assuming res.data is the array of staff; adjust if needed!
-    set({ staffReferralList: Array.isArray(res.data) ? res.data : [], staffReferralLoading: false });
+    const res = await searchStaffReferrals(referralId, search, page, limit);
+    // Extract users array from nested data object
+    const users = Array.isArray(res.data?.users) ? res.data.users : [];
+    set({ staffReferralList: users, staffReferralLoading: false });
   } catch (error) {
     set({ staffReferralError: error.message, staffReferralLoading: false });
   }
-}
+},
 
 
 }));
