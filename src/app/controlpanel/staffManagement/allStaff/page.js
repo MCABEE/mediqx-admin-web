@@ -1,4 +1,4 @@
-import React from "react";
+import React,{Suspense} from "react";
 import Navlink from "@/components/staffManagement/Navlink";
 import Table from "@/components/staffManagement/AllStaff/Table";
 
@@ -6,8 +6,9 @@ const page = () => {
   return (
     <div>
       <Navlink />
-     
-      <Table />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Table />
+      </Suspense>
     </div>
   );
 };
