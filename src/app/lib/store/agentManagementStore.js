@@ -124,19 +124,43 @@ updateAgent: async (id, formData) => {
   },
 
 
- fetchAgentReferrals: async (agentId, page = 1, limit = 10) => {
+//  fetchAgentReferrals: async (agentId, page = 1, limit = 10) => {
+//   set({ loading: true, error: null });
+//   try {
+//     const response = await getAgentReferrals(agentId, page, limit);
+//     set({
+//       referrals: response.data?.referrals || [],
+//       agentInfo: response.data?.agentInfo || null,  // also save agent info if you want
+//       loading: false,
+//     });
+//   } catch (err) {
+//     set({ error: err.message, loading: false });
+//   }
+// },
+
+
+// lib/store/agentManagementStore.js
+
+fetchAgentReferrals: async (
+  agentId,
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL"
+) => {
   set({ loading: true, error: null });
   try {
-    const response = await getAgentReferrals(agentId, page, limit);
+    const response = await getAgentReferrals(agentId, page, limit, referralStatus);
     set({
-      referrals: response.data?.referrals || [],
-      agentInfo: response.data?.agentInfo || null,  // also save agent info if you want
+      referrals: response?.data?.referrals || [],
+      agentInfo: response?.data?.agentInfo || null,
+      totalPages: response?.data?.totalPages || 1,
       loading: false,
     });
   } catch (err) {
     set({ error: err.message, loading: false });
   }
 },
+
 
 
 
