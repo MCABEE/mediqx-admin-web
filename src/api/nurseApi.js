@@ -225,7 +225,7 @@ export const getNurseCalendar = async (userId, monthStart, monthEnd) => {
 export const searchNurses = async (page = 1, limit = 10, status, search = "") => {
   try {
     const response = await api.get(
-      `/admin/users?page=${page}&limit=${limit}&filter=${status}&role=NURSE&search=${encodeURIComponent(search)}`
+      `/admin/users?page=${page}&limit=${limit}&filter=${status}&search=${encodeURIComponent(search)}`
     );
     return response;
   } catch (error) { 
