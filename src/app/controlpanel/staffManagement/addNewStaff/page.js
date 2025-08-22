@@ -11,7 +11,7 @@ function page() {
     <div>
       <Navlink />
 
-      <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 pb-4 rounded-[15px] mt-4">
+      {/* <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 pb-4 rounded-[15px] mt-4">
         <div className="flex text-black font-semibold gap-[48px]">
           <p className="text-blue-800">Nurse</p>
           <p>Paramedical</p>
@@ -19,10 +19,8 @@ function page() {
           <p>Supervisor</p>
         </div>
 
-        {/* <span className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4">
-          Referral
-        </span> */}
-      </div>
+        
+      </div> */}
 
       <div className="bg-white border-[1px] border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
         <NurseBasicInformation />

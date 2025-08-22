@@ -47,7 +47,7 @@ export const menus = [
     id: 7,
     name: "Referrals Management",
     hasSubmenu: false,
-    //link: "profileReports",
+    link: "/controlpanel/referral-management/all-referrals",
   },
   {
     id: 8,

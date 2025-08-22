@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter,useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navlink from "@/components/staffManagement/Navlink";
 import AvailabilitySchedule from "@/components/staffManagement/AvailabilitySchedule";
@@ -13,6 +13,9 @@ function StaffDetailPage() {
   const router = useRouter();
   const { id } = useParams();
   const userId = id;
+  const searchParams = useSearchParams();
+  
+    const role = searchParams.get("role") || "NURSE";
   const { fetchNurseById, selectedNurse, verifyNurse } = nurseStore();
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
@@ -89,7 +92,12 @@ function StaffDetailPage() {
       <Navlink />
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
-        <div onClick={() => router.back()} className="cursor-pointer">
+        <div
+          onClick={() =>
+            router.push(`/controlpanel/staffManagement/allStaff?role=${role}`)
+          }
+          className="cursor-pointer"
+        >
           Back
         </div>
       </div>
@@ -376,7 +384,9 @@ function StaffDetailPage() {
                 onClick={async () => {
                   await verifyNurse(userId, modalData.action);
                   setModalData({ show: false, action: "" });
-                  router.push("/controlpanel/staffManagement");
+                  // router.push("/controlpanel/staffManagement");
+                   router.push(`/controlpanel/staffManagement?role=${role}`)
+                  router.back()
                 }}
                 className="px-4 py-2 bg-[#3674B5] text-white rounded-md cursor-pointer"
               >

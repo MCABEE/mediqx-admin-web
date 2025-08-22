@@ -25,6 +25,8 @@ function Sidebar() {
       setActive("Cases");
     } else if (pathname.includes("/controlpanel/patient-management")) {
       setActive("Patient Management");
+    } else if (pathname.includes("/controlpanel/referral-management")) {
+      setActive("Referrals Management");
     } else {
       // fallback: match from menu links if more are added later
       const matched = menus.find(

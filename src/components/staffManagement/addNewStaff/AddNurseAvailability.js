@@ -149,36 +149,88 @@ function AddNurseAvailability() {
   };
 
   // Prepare payload according to backend API
+  // const generateAvailabilities = () => {
+  //   const availabilities = [];
+  //   for (const [date, info] of Object.entries(selectedDates)) {
+  //     if (info.fulltime) {
+  //       availabilities.push({
+  //         date,
+  //         isAvailable: true,
+  //         fixedSlots: info.fixedSlot,
+  //         slotOneStart: null,
+  //         slotOneEnd: null,
+  //         slotTwoStart: null,
+  //         slotTwoEnd: null,
+  //       });
+  //     } else {
+  //       // For parttime, actual shifts
+  //       const s1 = info.slots.forenoon || null;
+  //       const s2 = info.slots.afternoon || null;
+  //       availabilities.push({
+  //         date,
+  //         isAvailable: true,
+  //         fixedSlots: null,
+  //         slotOneStart: s1 ? s1.from : null,
+  //         slotOneEnd: s1 ? s1.to : null,
+  //         slotTwoStart: s2 ? s2.from : null,
+  //         slotTwoEnd: s2 ? s2.to : null,
+  //       });
+  //     }
+  //   }
+  //   return availabilities;
+  // };
+
+
+
   const generateAvailabilities = () => {
-    const availabilities = [];
-    for (const [date, info] of Object.entries(selectedDates)) {
-      if (info.fulltime) {
-        availabilities.push({
-          date,
-          isAvailable: true,
-          fixedSlots: info.fixedSlot,
-          slotOneStart: null,
-          slotOneEnd: null,
-          slotTwoStart: null,
-          slotTwoEnd: null,
-        });
-      } else {
-        // For parttime, actual shifts
-        const s1 = info.slots.forenoon || null;
-        const s2 = info.slots.afternoon || null;
-        availabilities.push({
-          date,
-          isAvailable: true,
-          fixedSlots: null,
-          slotOneStart: s1 ? s1.from : null,
-          slotOneEnd: s1 ? s1.to : null,
-          slotTwoStart: s2 ? s2.from : null,
-          slotTwoEnd: s2 ? s2.to : null,
-        });
-      }
+  const availabilities = [];
+  // Add available dates in your current logic
+  for (const [date, info] of Object.entries(selectedDates)) {
+    if (info.fulltime) {
+      availabilities.push({
+        date,
+        isAvailable: true,
+        fixedSlots: info.fixedSlot,
+        slotOneStart: null,
+        slotOneEnd: null,
+        slotTwoStart: null,
+        slotTwoEnd: null,
+      });
+    } else {
+      const s1 = info.slots.forenoon || null;
+      const s2 = info.slots.afternoon || null;
+      availabilities.push({
+        date,
+        isAvailable: true,
+        fixedSlots: null,
+        slotOneStart: s1 ? s1.from : null,
+        slotOneEnd: s1 ? s1.to : null,
+        slotTwoStart: s2 ? s2.from : null,
+        slotTwoEnd: s2 ? s2.to : null,
+      });
     }
-    return availabilities;
-  };
+  }
+  // Add unavailable (leave) dates
+  leaveDates.forEach((date) => {
+    availabilities.push({
+      date,
+      isAvailable: false,
+      fixedSlots: null,
+      slotOneStart: null,
+      slotOneEnd: null,
+      slotTwoStart: null,
+      slotTwoEnd: null,
+    });
+  });
+  // Optionally sort by date
+  availabilities.sort((a, b) => a.date.localeCompare(b.date));
+  return availabilities;
+};
+
+
+
+
+
 
   const handleSaveAvailability = async () => {
     setFormError("");
@@ -255,25 +307,18 @@ function AddNurseAvailability() {
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
             required
           >
+        
             <option disabled value="">
               Qualification
             </option>
-            <option value="MSc Nursing">MSc Nursing</option>
-            <option value="BSc Nursing">BSc Nursing</option>
-            <option value="BSc Nursing Pursuing">GNM</option>
-            <option value="Post BSc Nursing">Post BSc Nursing</option>
-            <option value="GNM">GNM</option>
-            <option value="GNM Pursuing">GNM Pursuing</option>
-            <option value="ANM">ANM</option>
-            <option value="GDA (General Duty Assistant)">
-              GDA (General Duty Assistant)
-            </option>
-            <option value="PCA (Personal Care Assistant)">
-              PCA (Personal Care Assistant)
-            </option>
-            <option value="DHA (Diploma in Health Assistant)">
-              DHA (Diploma in Health Assistant)
-            </option>
+            <option value="ANM (Auxiliary Nurse Midwife)">ANM (Auxiliary Nurse Midwife)</option>
+            <option value="GNM (General Nursing and Midwifery)">GNM (General Nursing and Midwifery)</option>
+            <option value="GDA (General Duty Assistant)">GDA (General Duty Assistant)</option>
+            <option value="B.Sc. Nursing">B.Sc. Nursing</option>
+            <option value="Post Basic B.Sc. Nursing">Post Basic B.Sc. Nursing</option>
+            <option value="M.Sc. Nursing">M.Sc. Nursing</option>
+            <option value="Nurse Practitioner (NP)">Nurse Practitioner (NP)</option>
+            
           </select>
 
           {/* Registered Nurse Checkbox */}

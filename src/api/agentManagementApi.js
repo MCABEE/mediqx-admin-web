@@ -85,18 +85,40 @@ export const updateAgentReferralStatus = async (agentId, status,referralSignupSt
   }
 };
 
-export const getAgentReferrals = async (agentId, page = 1, limit = 10) => {
+// export const getAgentReferrals = async (agentId, page = 1, limit = 10) => {
+//   try {
+//     const response = await api.get(
+//       `/admin/agent/referral/${agentId}?page=${page}&limit=${limit}`
+//     );
+//     return response.data; // adapt if response.data structure differs
+//   } catch (error) {
+//     const message =
+//       error.response?.data?.message || "Failed to fetch referrals.";
+//     throw new Error(message);
+//   }
+// };
+
+
+// lib/api/agent.js
+
+export const getAgentReferrals = async (
+  agentId,
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL" // ✅ default added
+) => {
   try {
     const response = await api.get(
-      `/admin/agent/referral/${agentId}?page=${page}&limit=${limit}`
+      `/admin/agent/referral/${agentId}?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
     );
-    return response.data; // adapt if response.data structure differs
+    return response.data; // adapt if backend sends { data: {...} }
   } catch (error) {
     const message =
       error.response?.data?.message || "Failed to fetch referrals.";
     throw new Error(message);
   }
 };
+
 
 
 // Search staff referrals with pagination and search text

@@ -248,7 +248,7 @@ const Calendar = () => {
   const [nurseId, setNurseId] = useState(null); // Nurse ID for calendar
   const [debounceTimeout, setDebounceTimeout] = useState(null);
 
-  const { fetchNurseCalendar, calendarData, isLoading, fetchNurses, users } = useNurseStore();
+  const { fetchNurseCalendar, calendarData, isLoading, searchNurses, users } = useNurseStore();
 
   const months = [
     "January",
@@ -301,7 +301,7 @@ const Calendar = () => {
     if (debounceTimeout) clearTimeout(debounceTimeout);
     const timeout = setTimeout(() => {
       if (search.trim().length > 0) {
-        fetchNurses(1, 10, "APPROVED", search);
+        searchNurses(1, 10, "APPROVED", search);
       }
     }, 400);
     setDebounceTimeout(timeout);

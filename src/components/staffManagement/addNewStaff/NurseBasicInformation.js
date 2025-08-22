@@ -4,7 +4,7 @@ import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 
 const NurseBasicInformation = () => {
   const [formData, setFormData] = useState({
-    categoryByProfession: "NURSE",
+    categoryByProfession: "",
     fullName: "",
     gender: "",
     email: "",
@@ -154,6 +154,22 @@ const NurseBasicInformation = () => {
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
             <option value="OTHER">Other</option>
+          </select>
+
+
+          <select
+            name="categoryByProfession"
+            value={formData.categoryByProfession}
+            onChange={handleChange}
+            required
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
+          >
+            <option value="" disabled>
+              Category by profession
+            </option>
+            <option value="NURSE">Nurse</option>
+            <option value="PARAMEDICAL">Paramedical</option>
+            <option value="PHYSIOTHERAPIST">Physiotherapist</option>
           </select>
 
           <input
