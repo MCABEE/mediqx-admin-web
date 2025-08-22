@@ -79,11 +79,17 @@ const AvailabilitySchedule = ({ availabilities }) => {
       const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(
         day
       ).padStart(2, "0")}`;
+      // if (availMap[dateStr]) {
+      //   grid.push({ ...availMap[dateStr], isAvailable: true, dateStr });
+      // } else {
+      //   grid.push({ dateStr, isAvailable: false });
+      // }
       if (availMap[dateStr]) {
-        grid.push({ ...availMap[dateStr], isAvailable: true, dateStr });
-      } else {
-        grid.push({ dateStr, isAvailable: false });
-      }
+  grid.push({ ...availMap[dateStr], dateStr }); // keep original isAvailable
+} else {
+  grid.push({ dateStr, isAvailable: false });
+}
+
     }
 
     // Trailing empty slots to complete the last week
@@ -120,17 +126,19 @@ const AvailabilitySchedule = ({ availabilities }) => {
 
       <div className="grid grid-cols-7 gap-1 text-center">
         {grid.map((item, idx) =>
+      
           item === null ? (
             <div key={idx} className="p-2"></div>
           ) : (
             <div
               key={item.dateStr + "-" + idx}
               className={`p-2 rounded cursor-default min-h-20 ${
-                item.isAvailable
+                item.isAvailable === true
                   ? "bg-blue-500 text-white"
                   : "bg-gray-100 text-gray-400"
               }`}
             >
+              
               <div className="font-semibold">
                 {item.dateObj
                   ? item.dateObj.getDate()
