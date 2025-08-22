@@ -149,36 +149,88 @@ function AddNurseAvailability() {
   };
 
   // Prepare payload according to backend API
+  // const generateAvailabilities = () => {
+  //   const availabilities = [];
+  //   for (const [date, info] of Object.entries(selectedDates)) {
+  //     if (info.fulltime) {
+  //       availabilities.push({
+  //         date,
+  //         isAvailable: true,
+  //         fixedSlots: info.fixedSlot,
+  //         slotOneStart: null,
+  //         slotOneEnd: null,
+  //         slotTwoStart: null,
+  //         slotTwoEnd: null,
+  //       });
+  //     } else {
+  //       // For parttime, actual shifts
+  //       const s1 = info.slots.forenoon || null;
+  //       const s2 = info.slots.afternoon || null;
+  //       availabilities.push({
+  //         date,
+  //         isAvailable: true,
+  //         fixedSlots: null,
+  //         slotOneStart: s1 ? s1.from : null,
+  //         slotOneEnd: s1 ? s1.to : null,
+  //         slotTwoStart: s2 ? s2.from : null,
+  //         slotTwoEnd: s2 ? s2.to : null,
+  //       });
+  //     }
+  //   }
+  //   return availabilities;
+  // };
+
+
+
   const generateAvailabilities = () => {
-    const availabilities = [];
-    for (const [date, info] of Object.entries(selectedDates)) {
-      if (info.fulltime) {
-        availabilities.push({
-          date,
-          isAvailable: true,
-          fixedSlots: info.fixedSlot,
-          slotOneStart: null,
-          slotOneEnd: null,
-          slotTwoStart: null,
-          slotTwoEnd: null,
-        });
-      } else {
-        // For parttime, actual shifts
-        const s1 = info.slots.forenoon || null;
-        const s2 = info.slots.afternoon || null;
-        availabilities.push({
-          date,
-          isAvailable: true,
-          fixedSlots: null,
-          slotOneStart: s1 ? s1.from : null,
-          slotOneEnd: s1 ? s1.to : null,
-          slotTwoStart: s2 ? s2.from : null,
-          slotTwoEnd: s2 ? s2.to : null,
-        });
-      }
+  const availabilities = [];
+  // Add available dates in your current logic
+  for (const [date, info] of Object.entries(selectedDates)) {
+    if (info.fulltime) {
+      availabilities.push({
+        date,
+        isAvailable: true,
+        fixedSlots: info.fixedSlot,
+        slotOneStart: null,
+        slotOneEnd: null,
+        slotTwoStart: null,
+        slotTwoEnd: null,
+      });
+    } else {
+      const s1 = info.slots.forenoon || null;
+      const s2 = info.slots.afternoon || null;
+      availabilities.push({
+        date,
+        isAvailable: true,
+        fixedSlots: null,
+        slotOneStart: s1 ? s1.from : null,
+        slotOneEnd: s1 ? s1.to : null,
+        slotTwoStart: s2 ? s2.from : null,
+        slotTwoEnd: s2 ? s2.to : null,
+      });
     }
-    return availabilities;
-  };
+  }
+  // Add unavailable (leave) dates
+  leaveDates.forEach((date) => {
+    availabilities.push({
+      date,
+      isAvailable: false,
+      fixedSlots: null,
+      slotOneStart: null,
+      slotOneEnd: null,
+      slotTwoStart: null,
+      slotTwoEnd: null,
+    });
+  });
+  // Optionally sort by date
+  availabilities.sort((a, b) => a.date.localeCompare(b.date));
+  return availabilities;
+};
+
+
+
+
+
 
   const handleSaveAvailability = async () => {
     setFormError("");
