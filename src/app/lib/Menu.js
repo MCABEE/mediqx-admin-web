@@ -52,8 +52,33 @@ export const menus = [
   {
     id: 8,
     name: "Data Manager",
-    hasSubmenu: false,
-    //link: "profileReports",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "8-1",
+        name: "General Data",
+        link: "/controlpanel/data-manager/general-data/languages/add-languages",
+      },
+      {
+        id: "8-2",
+        name: "Patient Data",
+        link: "/controlpanel/data-manager/patient-data/services/add-services",
+      },
+      {
+        id: "8-3",
+        name: "Professionals Data",
+        link: "/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses",
+      },
+       {
+        id: "8-4",
+        name: "Products Data",
+        link: "/controlpanel/data-manager/products-data",
+      }, {
+        id: "8-5",
+        name: "Medical Data",
+        link: "/controlpanel/data-manager/medical-data",
+      },
+    ],
   },
   {
     id: 9,
