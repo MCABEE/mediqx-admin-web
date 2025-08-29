@@ -535,7 +535,7 @@ const handleUpdate = async () => {
               Edit
             </button>
             <button
-              className="bg-[#d9534f] text-white rounded-[15px] py-2 px-10 cursor-pointer"
+              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
               onClick={() => setIsConfirmOpen(true)}
               disabled={checkedItems.length === 0}
             >
