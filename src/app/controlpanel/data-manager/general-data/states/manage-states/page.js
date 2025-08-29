@@ -253,7 +253,7 @@ function ManageStatesPage() {
             </button>
           </div>
 
-          <div className="flex gap-3 mt-4 px-6">
+          <div className="flex gap-3 my-6 px-6">
             <button
               className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
               disabled={checkedItems.length !== 1}

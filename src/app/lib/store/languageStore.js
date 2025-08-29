@@ -426,20 +426,37 @@ const useLanguageStore = create(
     //     }
     //   },
 
-    updateLanguageById: async (id, language) => {
+//     updateLanguageById: async (id, language) => {
+//   set({ isLoading: true, error: null });
+//   try {
+//     await updateLanguage(id, { language });
+//     const { page, limit, fetchLanguages } = get();
+//     await fetchLanguages(page, limit);
+//     set({ success: true });
+//   } catch (error) {
+//     set({ error: error.message });
+//     throw error;   // <-- Propagate error to component for catching
+//   } finally {
+//     set({ isLoading: false });
+//   }
+// },
+updateLanguageById: async (id, language) => {
   set({ isLoading: true, error: null });
   try {
+    // Pass payload as object with property 'language'
     await updateLanguage(id, { language });
-    const { page, limit, fetchLanguages } = get();
-    await fetchLanguages(page, limit);
+    // Optionally refetch or update state here
+    const { page, limit, fetchLanguages } = get(); 
+    await fetchLanguages(page, limit); // Refresh list
     set({ success: true });
   } catch (error) {
-    set({ error: error.message });
-    throw error;   // <-- Propagate error to component for catching
+    throw error; // Let caller handle error display locally
   } finally {
     set({ isLoading: false });
   }
-},
+}
+
+
 
     }),
     {

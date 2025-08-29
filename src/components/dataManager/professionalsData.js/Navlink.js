@@ -7,77 +7,80 @@ import { usePathname } from "next/navigation";
 const Navlink = () => {
   const pathname = usePathname();
 
-  const isActive = (path) => pathname.startsWith(path); // Check if pathname starts with the given path
+  const isActive = (path) => pathname.startsWith(path);
 
   return (
     <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold flex gap-[25px] px-6 pt-6 rounded-[15px]">
-     
       <Link
         href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses")||
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/manage-reg-nurses")
+          isActive(
+            "/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
+          ) ||
+          isActive(
+            "/controlpanel/data-manager/professionals-data/reg-nurses/manage-reg-nurses"
+          )
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
       >
-        Reg Nurses     
-     </Link>
+        Reg Nurses
+      </Link>
       <Link
-        href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
+        href="/controlpanel/data-manager/professionals-data/nursing-assistants/add-nursing-assistants"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/add-servireg-nursesces")||
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/manage-reg-nurses")
+          isActive(
+            "/controlpanel/data-manager/professionals-data/nursing-assistants/add-nursing-assistants"
+          ) ||
+          isActive(
+            "/controlpanel/data-manager/professionals-data/nursing-assistants/manage-nursing-assistants"
+          )
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
       >
-         Nursing Assistants   
-     </Link>
+        Nursing Assistants
+      </Link>
       <Link
         href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/add-servireg-nursesces")||
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/manage-reg-nurses")
+          isActive("/hjgfh") || isActive("/ytfy")
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
       >
-       Technicians    
-     </Link>
+        Technicians
+      </Link>
       <Link
         href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/add-servireg-nursesces")||
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/manage-reg-nurses")
+          isActive("/rferf") || isActive("/erer")
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
       >
-        Therapy     
-     </Link>
+        Therapy
+      </Link>
       <Link
         href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/add-servireg-nursesces")||
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/manage-reg-nurses")
+          isActive("/erf") || isActive("/ewew")
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
       >
-        Ancillary     
-     </Link>
+        Ancillary
+      </Link>
       <Link
         href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/add-servireg-nurses")||
-          isActive("/controlpanel/data-manager/professionals-data/reg-nurses/manage-reg-nurses")
+          isActive("/erferf") || isActive("/erferf")
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
       >
-        Docters     
-     </Link>
+        Docters
+      </Link>
     </div>
   );
 };
