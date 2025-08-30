@@ -55,19 +55,7 @@ export const createManySkills = async (skills) => {
   }
 };
 
-// Fetch list with pagination for each category
-// export const fetchList = async (category, page = 1, limit = 10) => {
-//   try {
-//     const response = await api.get(
-//       `/admin/${category}?page=${page}&limit=${limit}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     const message =
-//       error.response?.data?.message || `Failed to fetch ${category}`;
-//     throw new Error(message);
-//   }
-// };
+
 export const fetchList = async (category, page, limit, professionalCategory) => {
   const response = await api.get(
     `/admin/${category}?page=${page}&limit=${limit}&category=${professionalCategory}`

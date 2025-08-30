@@ -68,9 +68,538 @@
 
 // export default page;
 
+// "use client";
 
+// import React, { useEffect, useState } from "react";
+// import Navlink from "@/components/dataManager/professionalsData.js/Navlink";
+// import Link from "next/link";
+// import EditPopup from "@/components/dataManager/generalData/EditPopup";
+// import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 
+// function ManageProfessionalsPage() {
+//   const professionalCategory = "NURSING_ASSISTANTS";
 
+//   const categories = [
+//     { key: "specializations", label: "Specialization" },
+//     { key: "qualifications", label: "Qualification" },
+//     { key: "working-departments", label: "Working Departments" },
+//     { key: "skills", label: "Skills" },
+//   ];
+
+//   const [selectedCategory, setSelectedCategory] = useState(categories[0].key);
+
+//   const {
+//     listedItems,
+//     pagination,
+//     isLoading,
+//     error,
+//     success,
+//     fetchItems,
+//     setPage,
+//     updateItemById,
+//     deleteItemById,
+//     resetSuccess,
+//   } = useManageProfessionalsStore();
+
+//   const [checkedId, setCheckedId] = useState(null);
+//   const [checkedName, setCheckedName] = useState("");
+//   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+//   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+//   const [editValue, setEditValue] = useState("");
+//   const [apiError, setApiError] = useState("");
+
+// useEffect(() => {
+//   fetchItems(
+//     selectedCategory,
+//     pagination[selectedCategory].page,
+//     pagination[selectedCategory].limit,
+//     professionalCategory
+//   );
+//   setCheckedId(null);
+//   setCheckedName("");
+// }, [selectedCategory, pagination[selectedCategory].page, pagination[selectedCategory].limit, fetchItems, professionalCategory]);
+
+//   useEffect(() => {
+//     if (checkedId) {
+//       const selectedItem = listedItems[selectedCategory].find(
+//         (i) => i.id === checkedId
+//       );
+//       if (!selectedItem) return;
+//       const keyMap = {
+//         specializations: "specialization",
+//         qualifications: "qualification",
+//         "working-departments": "workingDepartment",
+//         skills: "skill",
+//       };
+//       setEditValue(selectedItem[keyMap[selectedCategory]] || "");
+//       setCheckedName(selectedItem[keyMap[selectedCategory]] || "");
+//     } else {
+//       setEditValue("");
+//       setCheckedName("");
+//     }
+//   }, [checkedId, listedItems, selectedCategory]);
+
+//   const handleCheckboxChange = (id) => {
+//     setCheckedId(checkedId === id ? null : id);
+//     setApiError("");
+//   };
+
+//   const handleUpdate = async () => {
+//     if (!checkedId) return;
+//     setApiError("");
+//     try {
+//       const keyMap = {
+//         specializations: "specialization",
+//         qualifications: "qualification",
+//         "working-departments": "workingDepartment",
+//         skills: "skill",
+//       };
+//       await updateItemById(selectedCategory, checkedId, {
+//         [keyMap[selectedCategory]]: editValue,
+//         category: professionalCategory,
+//       });
+//       setIsEditPopupOpen(false);
+//       setCheckedId(null);
+//       resetSuccess();
+//     } catch (err) {
+//       setApiError(err.message || "Error updating item.");
+//     }
+//   };
+
+//   const handleDelete = async () => {
+//     if (!checkedId) return;
+//     try {
+//       await deleteItemById(selectedCategory, checkedId, professionalCategory);
+//       setCheckedId(null);
+//       setIsDeleteConfirmOpen(false);
+//     } catch (err) {
+//       console.error("Delete failed", err);
+//       setApiError(err.message || "Error deleting item.");
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <Navlink />
+
+//       <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex items-center gap-6 py-6 px-6 rounded-[15px] mt-2">
+//         {categories.map(({ key, label }) => (
+//           <h1
+//             key={key}
+//             className={`cursor-pointer font-semibold ${
+//               selectedCategory === key ? "text-[#3674B5]" : "text-[#000000]"
+//             }`}
+//             onClick={() => setSelectedCategory(key)}
+//           >
+//             {label}
+//           </h1>
+//         ))}
+//       </div>
+
+//       <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
+//         <div className="w-full flex items-center justify-between pt-[23px] pb-[19px]">
+//           <div className="flex items-center gap-[50px]">
+//             <Link
+//               href={" /controlpanel/data-manager/professionals-data/nursing-assistants/add-nursing-assistants"}
+//               className="text-black"
+//             >
+//               Add
+//             </Link>
+//             <h1 className="text-[#3674B5] ">Manage</h1>
+//           </div>
+//         </div>
+//       </div>
+
+//       {isLoading ? (
+//         <p className="mt-4 px-6">Loading...</p>
+//       ) : error ? (
+//         <p className="mt-4 px-6 text-red-600">{error}</p>
+//       ) : (
+//         <>
+//           {listedItems[selectedCategory]?.map((item, idx) => (
+//             <div
+//               key={item.id}
+//               className="bg-white flex items-center gap-2 px-6 py-2 mt-2"
+//             >
+//               <div className="border border-[#8888888c] py-2 px-4 rounded-[15px]">
+//                 {(
+//                   idx +
+//                   1 +
+//                   (pagination[selectedCategory].page - 1) *
+//                     pagination[selectedCategory].limit
+//                 )
+//                   .toString()
+//                   .padStart(2, "0")}
+//               </div>
+//               <input
+//                 type="text"
+//                 className="w-[350px] border border-[#8888888c] py-2 px-4 rounded-[15px] outline-none"
+//                 value={
+//                   selectedCategory === "specializations"
+//                     ? item.specialization
+//                     : selectedCategory === "qualifications"
+//                     ? item.qualification
+//                     : selectedCategory === "working-departments"
+//                     ? item.workingDepartment
+//                     : item.skill
+//                 }
+//                 readOnly
+//               />
+//               <input
+//                 type="checkbox"
+//                 checked={checkedId === item.id}
+//                 onChange={() => handleCheckboxChange(item.id)}
+//                 className="size-6 rounded-[15px]"
+//               />
+//             </div>
+//           ))}
+
+//           <div className="flex justify-center items-center gap-2 mt-4 px-6">
+//             <button
+//               disabled={pagination[selectedCategory].page <= 1}
+//               onClick={() =>
+//                 setPage(selectedCategory, pagination[selectedCategory].page - 1)
+//               }
+//               className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+//             >
+//               Previous
+//             </button>
+//             <span>
+//               Page {pagination[selectedCategory].page} of{" "}
+//               {pagination[selectedCategory].totalPages}
+//             </span>
+//             <button
+//               disabled={
+//                 pagination[selectedCategory].page >=
+//                 pagination[selectedCategory].totalPages
+//               }
+//               onClick={() =>
+//                 setPage(selectedCategory, pagination[selectedCategory].page + 1)
+//               }
+//               className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+//             >
+//               Next
+//             </button>
+//           </div>
+
+//           <div className="flex gap-3 mt-4 px-6">
+//             <button
+//               disabled={!checkedId}
+//               onClick={() => setIsEditPopupOpen(true)}
+//               className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
+//             >
+//               Edit
+//             </button>
+//             <button
+//               disabled={!checkedId}
+//               onClick={() => setIsDeleteConfirmOpen(true)}
+//               className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
+//             >
+//               Remove
+//             </button>
+//           </div>
+
+//           {isEditPopupOpen && (
+//             <EditPopup
+//               heading={`${selectedCategory.replace(/-/g, " ")} `}
+//               value={editValue}
+//               onChange={setEditValue}
+//               onUpdate={handleUpdate}
+//               onClose={() => {
+//                 setIsEditPopupOpen(false);
+//                 setApiError("");
+//               }}
+//               apiError={apiError}
+//             />
+//           )}
+
+//           {isDeleteConfirmOpen && (
+//             <ConfirmDeletePopup
+//               itemName={checkedName}
+//               onConfirm={handleDelete}
+//               onCancel={() => setIsDeleteConfirmOpen(false)}
+//             />
+//           )}
+//         </>
+//       )}
+//     </div>
+//   );
+// }
+
+// function ConfirmDeletePopup({ onConfirm, onCancel, itemName }) {
+//   return (
+//     <div className="fixed inset-0 flex items-center justify-center bg-[#1b1a1a74] backdrop-blur-xs z-50">
+//       <div className="bg-white rounded-lg p-6 w-[320px]">
+//         <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+//         <p className="mb-6">
+//           Are you sure you want to delete <strong>{itemName}</strong>?
+//         </p>
+//         <div className="flex justify-end gap-4">
+//           <button
+//             onClick={onCancel}
+//             className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+//           >
+//             Cancel
+//           </button>
+//           <button
+//             onClick={onConfirm}
+//             className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+//           >
+//             Delete
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default ManageProfessionalsPage;
+
+// "use client";
+
+// import React, { useEffect, useState } from "react";
+// import Navlink from "@/components/dataManager/professionalsData.js/Navlink";
+// import Link from "next/link";
+// import EditPopup from "@/components/dataManager/generalData/EditPopup";
+// import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
+
+// function ManageProfessionalsPage() {
+//   const professionalCategory = "NURSING_ASSISTANTS";
+
+//   const categories = [
+//     { key: "specializations", label: "Specialization" },
+//     { key: "qualifications", label: "Qualification" },
+//     { key: "working-departments", label: "Working Departments" },
+//     { key: "skills", label: "Skills" },
+//   ];
+
+//   const [selectedCategory, setSelectedCategory] = useState(categories[0].key);
+
+//   const {
+//     listedItems,
+//     pagination,
+//     isLoading,
+//     error,
+//     success,
+//     fetchItems,
+//     setPage,
+//     updateItemId,
+//     deleteItemId,
+//     resetSuccess,
+//   } = useManageProfessionalsStore();
+
+//   const [checkedId, setCheckedId] = useState(null);
+//   const [checkedName, setCheckedName] = useState("");
+//   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+//   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+//   const [editValue, setEditValue] = useState("");
+//   const [apiError, setApiError] = useState("");
+
+//   useEffect(() => {
+//     fetchItems(
+//       selectedCategory,
+//       pagination[selectedCategory].page,
+//       pagination[selectedCategory].limit,
+//       professionalCategory
+//     );
+//     setCheckedId(null);
+//     setCheckedName("");
+//   }, [selectedCategory, pagination[selectedCategory].page, pagination[selectedCategory].limit, fetchItems, professionalCategory]);
+
+//   useEffect(() => {
+//     if (checkedId) {
+//       const selected = listedItems[selectedCategory]?.find((i) => i.id === checkedId);
+//       if (!selected) return;
+//       const keyMap = {
+//         specializations: "specialization",
+//         qualifications: "qualification",
+//         "working-departments": "workingDepartment",
+//         skills: "skill",
+//       };
+//       setEditValue(selected[keyMap[selectedCategory]] || "");
+//       setCheckedName(selected[keyMap[selectedCategory]] || "");
+//     } else {
+//       setEditValue("");
+//       setCheckedName("");
+//     }
+//   }, [checkedId, listedItems, selectedCategory]);
+
+//   const handleCheckboxChange = (id) => {
+//     setCheckedId(id === checkedId ? null : id);
+//     setApiError("");
+//   };
+
+//   const handleUpdate = async () => {
+//     if (!checkedId) return;
+//     setApiError("");
+//     try {
+//       const keyMap = {
+//         specializations: "specialization",
+//         qualifications: "qualification",
+//         "working-departments": "workingDepartment",
+//         skills: "skill",
+//       };
+//       await updateItemId(selectedCategory, checkedId, { [keyMap[selectedCategory]]: editValue }, professionalCategory);
+//       setIsEditPopupOpen(false);
+//       setCheckedId(null);
+//       resetSuccess();
+//     } catch (err) {
+//       setApiError(err.message || "Error updating item.");
+//     }
+//   };
+
+//   const handleDelete = async () => {
+//     if (!checkedId) return;
+//     try {
+//       await deleteItemId(selectedCategory, checkedId, professionalCategory);
+//       setCheckedId(null);
+//       setIsDeleteConfirmOpen(false);
+//     } catch (err) {
+//       console.error("Delete failed", err);
+//       setApiError(err.message || "Error deleting item.");
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <Navlink />
+
+//       <div className="w-full bg-white border border-gray-300 text-base font-semibold flex gap-6 px-6 py-6 rounded-lg mt-2">
+//         {categories.map(({ key, label }) => (
+//           <h1
+//             key={key}
+//             className={`cursor-pointer font-semibold ${selectedCategory === key ? "text-blue-600" : "text-black"}`}
+//             onClick={() => setSelectedCategory(key)}
+//           >
+//             {label}
+//           </h1>
+//         ))}
+//       </div>
+
+//       <div className="w-full bg-white border border-gray-300 text-base font-semibold flex justify-between px-6 rounded-lg mt-2">
+//         <div className="flex gap-8 items-center py-5">
+//           <Link href="/controlpanel/professionals/add" className="text-black">
+//             Add
+//           </Link>
+//           <h1 className="text-blue-600 font-semibold">Manage</h1>
+//         </div>
+//       </div>
+
+//       {isLoading && <p className="px-6 py-4">Loading...</p>}
+//       {error && <p className="px-6 py-4 text-red-600">{error}</p>}
+
+//       {!isLoading && !error && (
+//         <>
+//           {listedItems[selectedCategory]?.map((item, idx) => {
+//             const keyMap = {
+//               specializations: "specialization",
+//               qualifications: "qualification",
+//               "working-departments": "workingDepartment",
+//               skills: "skill",
+//             };
+//             const value = item[keyMap[selectedCategory]] || "";
+//             return (
+//               <div key={item.id} className="bg-white flex items-center gap-2 px-6 py-2 mt-2">
+//                 <div className="w-6 text-center">{(idx + 1 + (pagination[selectedCategory].page - 1) * pagination[selectedCategory].limit).toString().padStart(2,'0')}</div>
+//                 <input className="w-80 border border-gray-300 rounded-md px-2 py-1" type="text" value={value} readOnly />
+//                 <input
+//                   type="checkbox"
+//                   className="w-6 h-6 rounded"
+//                   checked={checkedId === item.id}
+//                   onChange={() => handleCheckboxChange(item.id)}
+//                 />
+//               </div>
+//             );
+//           })}
+
+//           <div className="flex justify-center items-center gap-3 mt-4">
+//             <button
+//               disabled={pagination[selectedCategory].page <= 1}
+//               onClick={() => setPage(selectedCategory, pagination[selectedCategory].page - 1)}
+//               className="bg-gray-200 px-3 py-1 rounded disabled:opacity-50"
+//             >
+//               Previous
+//             </button>
+//             <div>Page {pagination[selectedCategory].page} of {pagination[selectedCategory].totalPages}</div>
+//             <button
+//               disabled={pagination[selectedCategory].page >= pagination[selectedCategory].totalPages}
+//               onClick={() => setPage(selectedCategory, pagination[selectedCategory].page + 1)}
+//               className="bg-gray-200 px-3 py-1 rounded disabled:opacity-50"
+//             >
+//               Next
+//             </button>
+//           </div>
+
+//           <div className="flex gap-3 mt-4 px-6">
+//             <button
+//               disabled={!checkedId}
+//               onClick={() => setIsEditPopupOpen(true)}
+//               className="bg-blue-600 text-white rounded px-4 py-2"
+//             >
+//               Edit
+//             </button>
+//             <button
+//               disabled={!checkedId}
+//               onClick={() => setIsDeleteConfirmOpen(true)}
+//               className="bg-red-600 text-white rounded px-4 py-2"
+//             >
+//               Remove
+//             </button>
+//           </div>
+//         </>
+//       )}
+
+//       {isEditPopupOpen && (
+//         <EditPopup
+//           heading={categories.find(c => c.key === selectedCategory)?.label || 'Edit'}
+//           value={editValue}
+//           onChange={setEditValue}
+//           onUpdate={handleUpdate}
+//           onClose={() => {
+//             setIsEditPopupOpen(false);
+//             setApiError("");
+//           }}
+//           apiError={apiError}
+//         />
+//       )}
+
+//       {isDeleteConfirmOpen && (
+//         <ConfirmPopup
+//           itemName={checkedName}
+//           onConfirm={handleDelete}
+//           onCancel={() => setIsDeleteConfirmOpen(false)}
+//         />
+//       )}
+//     </div>
+//   );
+// }
+
+// function ConfirmPopup({ onConfirm, onCancel, itemName }) {
+//   return (
+//     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-25 z-50">
+//       <div className="bg-white p-6 rounded-lg w-80">
+//         <h2 className="text-xl font-semibold mb-4">Confirm Delete</h2>
+//         <p className="mb-4">Are you sure you want to delete <strong>{itemName}</strong>?</p>
+//         <div className="flex justify-end space-x-4">
+//           <button
+//             onClick={onCancel}
+//             className="border px-4 py-2 rounded hover:bg-gray-100"
+//           >
+//             Cancel
+//           </button>
+//           <button
+//             onClick={onConfirm}
+//             className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+//           >
+//             Delete
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default ManageProfessionalsPage;
 
 "use client";
 
@@ -100,8 +629,8 @@ function ManageProfessionalsPage() {
     success,
     fetchItems,
     setPage,
-    updateItemById,
-    deleteItemById,
+    updateItemId,
+    deleteItemId,
     resetSuccess,
   } = useManageProfessionalsStore();
 
@@ -112,48 +641,37 @@ function ManageProfessionalsPage() {
   const [editValue, setEditValue] = useState("");
   const [apiError, setApiError] = useState("");
 
-//   useEffect(() => {
-//     fetchItems(
-//       selectedCategory,
-//       pagination[selectedCategory].page,
-//       pagination[selectedCategory].limit,
-//       professionalCategory
-//     );
-//     setCheckedId(null);
-//     setCheckedName("");
-//   }, [
-//     selectedCategory,
-//     pagination[selectedCategory].page,
-//     pagination[selectedCategory].limit,
-//     fetchItems,
-//     professionalCategory,
-//   ]);
-
-useEffect(() => {
-  fetchItems(
+  useEffect(() => {
+    fetchItems(
+      selectedCategory,
+      pagination[selectedCategory].page,
+      pagination[selectedCategory].limit,
+      professionalCategory
+    );
+    setCheckedId(null);
+    setCheckedName("");
+  }, [
     selectedCategory,
     pagination[selectedCategory].page,
     pagination[selectedCategory].limit,
-    professionalCategory  
-  );
-  setCheckedId(null);
-  setCheckedName("");
-}, [selectedCategory, pagination[selectedCategory].page, pagination[selectedCategory].limit, fetchItems, professionalCategory]);
+    fetchItems,
+    professionalCategory,
+  ]);
 
   useEffect(() => {
     if (checkedId) {
-      const selectedItem = listedItems[selectedCategory].find(
+      const selected = listedItems[selectedCategory]?.find(
         (i) => i.id === checkedId
       );
-      if (!selectedItem) return;
+      if (!selected) return;
       const keyMap = {
         specializations: "specialization",
         qualifications: "qualification",
         "working-departments": "workingDepartment",
         skills: "skill",
       };
-      setEditValue(selectedItem[keyMap[selectedCategory]] || "");
-      setCheckedName(selectedItem[keyMap[selectedCategory]] || "");
+      setEditValue(selected[keyMap[selectedCategory]] || "");
+      setCheckedName(selected[keyMap[selectedCategory]] || "");
     } else {
       setEditValue("");
       setCheckedName("");
@@ -161,7 +679,7 @@ useEffect(() => {
   }, [checkedId, listedItems, selectedCategory]);
 
   const handleCheckboxChange = (id) => {
-    setCheckedId(checkedId === id ? null : id);
+    setCheckedId(id === checkedId ? null : id);
     setApiError("");
   };
 
@@ -175,10 +693,12 @@ useEffect(() => {
         "working-departments": "workingDepartment",
         skills: "skill",
       };
-      await updateItemById(selectedCategory, checkedId, {
-        [keyMap[selectedCategory]]: editValue,
-        category: professionalCategory,
-      });
+      await updateItemId(
+        selectedCategory,
+        checkedId,
+        { [keyMap[selectedCategory]]: editValue },
+        professionalCategory
+      );
       setIsEditPopupOpen(false);
       setCheckedId(null);
       resetSuccess();
@@ -190,7 +710,7 @@ useEffect(() => {
   const handleDelete = async () => {
     if (!checkedId) return;
     try {
-      await deleteItemById(selectedCategory, checkedId, professionalCategory);
+      await deleteItemId(selectedCategory, checkedId, professionalCategory);
       setCheckedId(null);
       setIsDeleteConfirmOpen(false);
     } catch (err) {
@@ -203,12 +723,12 @@ useEffect(() => {
     <div>
       <Navlink />
 
-      <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex items-center gap-6 py-6 px-6 rounded-[15px] mt-2">
+      <div className="w-full bg-white border border-gray-300 text-base font-semibold flex gap-6 px-6 py-6 rounded-lg mt-2">
         {categories.map(({ key, label }) => (
           <h1
             key={key}
             className={`cursor-pointer font-semibold ${
-              selectedCategory === key ? "text-[#3674B5]" : "text-[#000000]"
+              selectedCategory === key ? "text-[#196BA5]" : "text-black"
             }`}
             onClick={() => setSelectedCategory(key)}
           >
@@ -217,71 +737,71 @@ useEffect(() => {
         ))}
       </div>
 
-      <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
-        <div className="w-full flex items-center justify-between pt-[23px] pb-[19px]">
-          <div className="flex items-center gap-[50px]">
-            <Link
-              href={" /controlpanel/data-manager/professionals-data/nursing-assistants/add-nursing-assistants"}
-              className="text-black"
-            >
-              Add
-            </Link>
-            <h1 className="text-[#3674B5] ">Manage</h1>
-          </div>
+      <div className="w-full bg-white border border-gray-300 text-base font-semibold flex justify-between px-6 rounded-lg mt-2">
+        <div className="flex gap-8 items-center py-5">
+          <Link
+            href={
+              " /controlpanel/data-manager/professionals-data/nursing-assistants/add-nursing-assistants"
+            }
+            className="text-black"
+          >
+            Add
+          </Link>
+          <h1 className="text-[#196BA5] font-semibold">Manage</h1>
         </div>
       </div>
 
-      {isLoading ? (
-        <p className="mt-4 px-6">Loading...</p>
-      ) : error ? (
-        <p className="mt-4 px-6 text-red-600">{error}</p>
-      ) : (
-        <>
-          {listedItems[selectedCategory]?.map((item, idx) => (
-            <div
-              key={item.id}
-              className="bg-white flex items-center gap-2 px-6 py-2 mt-2"
-            >
-              <div className="border border-[#8888888c] py-2 px-4 rounded-[15px]">
-                {(
-                  idx +
-                  1 +
-                  (pagination[selectedCategory].page - 1) *
-                    pagination[selectedCategory].limit
-                )
-                  .toString()
-                  .padStart(2, "0")}
-              </div>
-              <input
-                type="text"
-                className="w-[350px] border border-[#8888888c] py-2 px-4 rounded-[15px] outline-none"
-                value={
-                  selectedCategory === "specializations"
-                    ? item.specialization
-                    : selectedCategory === "qualifications"
-                    ? item.qualification
-                    : selectedCategory === "working-departments"
-                    ? item.workingDepartment
-                    : item.skill
-                }
-                readOnly
-              />
-              <input
-                type="checkbox"
-                checked={checkedId === item.id}
-                onChange={() => handleCheckboxChange(item.id)}
-                className="size-6 rounded-[15px]"
-              />
-            </div>
-          ))}
+      {isLoading && <p className="px-6 py-4">Loading...</p>}
+      {error && <p className="px-6 py-4 text-red-600">{error}</p>}
 
-          <div className="flex justify-center items-center gap-2 mt-4 px-6">
+      {!isLoading && !error && (
+        <>
+          {listedItems[selectedCategory]?.map((item, idx) => {
+            const keyMap = {
+              specializations: "specialization",
+              qualifications: "qualification",
+              "working-departments": "workingDepartment",
+              skills: "skill",
+            };
+            const value = item[keyMap[selectedCategory]] || "";
+            return (
+              <div
+                key={item.id}
+                className="bg-white flex items-center gap-2 px-6 py-2 mt-2"
+              >
+                <div className="border border-[#8888888c] py-2 px-4 rounded-[15px]">
+                  {(
+                    idx +
+                    1 +
+                    (pagination[selectedCategory].page - 1) *
+                      pagination[selectedCategory].limit
+                  )
+                    .toString()
+                    .padStart(2, "0")}
+                </div>
+                <input
+                  className="w-[350px] border border-[#8888888c] py-2 px-4 rounded-[15px] outline-none"
+                  type="text"
+                  value={value}
+                  readOnly
+                />
+                <input
+                  type="checkbox"
+                  className="w-6 h-6 rounded"
+                  checked={checkedId === item.id}
+                  onChange={() => handleCheckboxChange(item.id)}
+                />
+              </div>
+            );
+          })}
+
+          <div className="flex justify-center items-center gap-3 mt-4">
             <button
               disabled={pagination[selectedCategory].page <= 1}
               onClick={() =>
                 setPage(selectedCategory, pagination[selectedCategory].page - 1)
               }
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+              className="bg-gray-200 px-3 py-1 rounded disabled:opacity-50"
             >
               Previous
             </button>
@@ -297,7 +817,7 @@ useEffect(() => {
               onClick={() =>
                 setPage(selectedCategory, pagination[selectedCategory].page + 1)
               }
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+              className="bg-gray-200 px-3 py-1 rounded disabled:opacity-50"
             >
               Next
             </button>
@@ -319,52 +839,54 @@ useEffect(() => {
               Remove
             </button>
           </div>
-
-          {isEditPopupOpen && (
-            <EditPopup
-              heading={`${selectedCategory.replace(/-/g, " ")} `}
-              value={editValue}
-              onChange={setEditValue}
-              onUpdate={handleUpdate}
-              onClose={() => {
-                setIsEditPopupOpen(false);
-                setApiError("");
-              }}
-              apiError={apiError}
-            />
-          )}
-
-          {isDeleteConfirmOpen && (
-            <ConfirmDeletePopup
-              itemName={checkedName}
-              onConfirm={handleDelete}
-              onCancel={() => setIsDeleteConfirmOpen(false)}
-            />
-          )}
         </>
+      )}
+
+      {isEditPopupOpen && (
+        <EditPopup
+          heading={
+            categories.find((c) => c.key === selectedCategory)?.label || "Edit"
+          }
+          value={editValue}
+          onChange={setEditValue}
+          onUpdate={handleUpdate}
+          onClose={() => {
+            setIsEditPopupOpen(false);
+            setApiError("");
+          }}
+          apiError={apiError}
+        />
+      )}
+
+      {isDeleteConfirmOpen && (
+        <ConfirmPopup
+          itemName={checkedName}
+          onConfirm={handleDelete}
+          onCancel={() => setIsDeleteConfirmOpen(false)}
+        />
       )}
     </div>
   );
 }
 
-function ConfirmDeletePopup({ onConfirm, onCancel, itemName }) {
+function ConfirmPopup({ onConfirm, onCancel, itemName }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[#1b1a1a74] backdrop-blur-xs z-50">
-      <div className="bg-white rounded-lg p-6 w-[320px]">
-        <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
-        <p className="mb-6">
+    <div className="fixed inset-0 flex items-center justify-center bg-[#3230306a] backdrop-blur-xs z-50">
+      <div className="bg-white p-6 rounded-lg w-80">
+        <h2 className="text-xl font-semibold mb-4">Confirm Delete</h2>
+        <p className="mb-4">
           Are you sure you want to delete <strong>{itemName}</strong>?
         </p>
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end space-x-4">
           <button
             onClick={onCancel}
-            className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+            className="border px-4 py-2 rounded hover:bg-gray-100"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
             Delete
           </button>

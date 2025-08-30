@@ -428,46 +428,51 @@ const useManageProfessionalsStore = create(
           },
         })),
 
-      updateItemById: async (category, id, data, professionalCategory = "REG_NURSES") => {
-        if (!CATEGORIES.includes(category)) {
-          set({ error: `Unknown category: ${category}` });
-          return;
-        }
-        set({ isLoading: true, error: null, success: false });
-        try {
-          await updateItem(category, id, { ...data, category: professionalCategory });
-          const { page, limit } = get().pagination[category];
-          await get().fetchItems(category, page, limit, professionalCategory);
-          set({ success: true });
-        } catch (error) {
-          set({ error: error.message || "Failed to update item", success: false });
-          throw error;
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+      // updateItemById: async (category, id, data, professionalCategory) => {
+      //   if (!CATEGORIES.includes(category)) {
+      //     set({ error: `Unknown category: ${category}` });
+      //     return;
+      //   }
+      //   set({ isLoading: true, error: null, success: false });
+      //   try {
+      //     await updateItem(category, id, { ...data, category: professionalCategory });
+      //     const { page, limit } = get().pagination[category];
+      //     await get().fetchItems(category, page, limit, professionalCategory);
+      //     set({ success: true });
+      //   } catch (error) {
+      //     set({ error: error.message || "Failed to update item", success: false });
+      //     throw error;
+      //   } finally {
+      //     set({ isLoading: false });
+      //   }
+      // },
 
-    //   deleteItemById: async (category, id, professionalCategory = "REG_NURSES") => {
-    //     if (!CATEGORIES.includes(category)) {
-    //       set({ error: `Unknown category: ${category}` });
-    //       return;
-    //     }
-    //     set({ isLoading: true, error: null, success: false });
-    //     try {
-    //       await deleteItem(category, id);
-    //       const { page, limit, totalItems } = get().pagination[category];
-    //       const newTotal = totalItems - 1;
-    //       const newPage = newTotal <= (page - 1) * limit && page > 1 ? page - 1 : page;
-    //       set({ error: null });
-    //       await get().fetchItems(category, newPage, limit, professionalCategory);
-    //       setPage(category, newPage);
-    //     } catch (error) {
-    //       set({ error: error.message || "Failed to delete item" });
-    //     } finally {
-    //       set({ isLoading: false });
-    //     }
-    //   },
-deleteItemById: async (category, id, professionalCategory) => {
+updateItemId: async (category, id, data, professionalCategory) => {
+  if (!CATEGORIES.includes(category)) {
+    set({ error: `Unknown category: ${category}` });
+    return;
+  }
+  set({ isLoading: true, error: null, success: false });
+  try {
+    // Update the item without adding 'category' key to the data payload
+    await updateItem(category, id, data);
+
+    // Fetch updated list, passing back category and professionalCategory explicitly
+    const { page, limit } = get().pagination[category];
+    await get().fetchItems(category, page, limit, professionalCategory);
+
+    set({ success: true });
+  } catch (error) {
+    set({ error: error.message || "Failed to update item", success: false });
+    throw error;
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
+
+
+deleteItemId: async (category, id, professionalCategory) => {
   if (!CATEGORIES.includes(category)) {
     set({ error: `Unknown category: ${category}` });
     return;

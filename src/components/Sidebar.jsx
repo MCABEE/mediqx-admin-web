@@ -1,77 +1,3 @@
-// "use client";
-
-// import React, { useState, useEffect } from "react";
-// import { IoIosArrowDown } from "react-icons/io";
-// import { useRouter, usePathname } from "next/navigation";
-// import { menus } from "../app/lib/Menu";
-
-// function Sidebar() {
-//   const [active, setActive] = useState("Home");
-
-//   const router = useRouter();
-//   const pathname = usePathname();
-
-//   // Auto-select menu based on pathname
-//   useEffect(() => {
-//     if (pathname.includes("/controlpanel/staffManagement")) {
-//       setActive("Staff Management (HR)");
-//     } else if (pathname.includes("/controlpanel/agentManagement")) {
-//       setActive("Agent Management");
-//     } else if (pathname.includes("/controlpanel/caseBooking")) {
-//       setActive("Service Bookings");
-//     } else if (pathname.includes("/controlpanel/dashboard")) {
-//       setActive("Home");
-//     } else if (pathname.includes("/controlpanel/cases")) {
-//       setActive("Cases");
-//     } else if (pathname.includes("/controlpanel/patient-management")) {
-//       setActive("Patient Management");
-//     } else if (pathname.includes("/controlpanel/referral-management")) {
-//       setActive("Referrals Management");
-//     } else {
-//       // fallback: match from menu links if more are added later
-//       const matched = menus.find(
-//         (item) => item.link && pathname.startsWith(item.link)
-//       );
-//       if (matched) setActive(matched.name);
-//     }
-//   }, [pathname]);
-
-//   const handleMenuClick = (item) => {
-//     setActive(item.name);
-//     if (item.link) router.push(item.link);
-//   };
-
-//   return (
-//     <div className="h-full bg-white rounded-[16px] border-[#8888884d] border-[1px] ps-12 pe-8 pb-8">
-//       <div className="h-[75%]">
-//         {menus.map((item) => (
-//           <div key={item.id}>
-//             <div
-//               className={`text-black rounded-lg p-x flex items-center justify-between mt-5 cursor-pointer ${
-//                 active === item.name
-//                   ? "text-black bg-[#F0F4F9] p-2"
-//                   : "border border-transparent text-black"
-//               }`}
-//               onClick={() => handleMenuClick(item)}
-//             >
-//               <div className="flex items-center gap-4">{item.name}</div>
-//               {/* Optional submenu icon logic (not needed now) */}
-//               {item.hasSubmenu && (
-//                 <IoIosArrowDown
-//                   className={`transition-transform duration-300 ${
-//                     active === item.name ? "rotate-180" : ""
-//                   }`}
-//                 />
-//               )}
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Sidebar;
 
 
 
@@ -92,44 +18,117 @@ function Sidebar() {
   const pathname = usePathname();
 
   // Auto-select menu based on pathname
-  useEffect(() => {
-    // Direct matches for parent menus
-    if (pathname.includes("/controlpanel/staffManagement")) {
-      setActive("Staff Management (HR)");
-    } else if (pathname.includes("/controlpanel/agentManagement")) {
-      setActive("Agent Management");
-    } else if (pathname.includes("/controlpanel/caseBooking")) {
-      setActive("Service Bookings");
-    } else if (pathname.includes("/controlpanel/dashboard")) {
-      setActive("Home");
-    } else if (pathname.includes("/controlpanel/cases")) {
-      setActive("Cases");
-    } else if (pathname.includes("/controlpanel/patient-management")) {
-      setActive("Patient Management");
-    } else if (pathname.includes("/controlpanel/referral-management")) {
-      setActive("Referrals Management");
-    // } else if (pathname.includes("/controlpanel/data-manager")) {
-    //   setActive("Data Manager");
-    } else {
-      // Fallback: match submenu links first
-      menus.forEach((menu) => {
-        if (menu.hasSubmenu && menu.submenu) {
-          menu.submenu.forEach((sub) => {
-            if (pathname.startsWith(sub.link)) {
-              setActive(sub.name);
-              setOpenSubmenu(menu.name); // auto open parent
-            }
-          });
-        }
-      });
+  // useEffect(() => {
+  //   // Direct matches for parent menus
+  //   if (pathname.includes("/controlpanel/staffManagement")) {
+  //     setActive("Staff Management (HR)");
+  //   } else if (pathname.includes("/controlpanel/agentManagement")) {
+  //     setActive("Agent Management");
+  //   } else if (pathname.includes("/controlpanel/caseBooking")) {
+  //     setActive("Service Bookings");
+  //   } else if (pathname.includes("/controlpanel/dashboard")) {
+  //     setActive("Home");
+  //   } else if (pathname.includes("/controlpanel/cases")) {
+  //     setActive("Cases");
+  //   } else if (pathname.includes("/controlpanel/patient-management")) {
+  //     setActive("Patient Management");
+  //   } else if (pathname.includes("/controlpanel/referral-management")) {
+  //     setActive("Referrals Management");
+  //   // } else if (pathname.includes("/controlpanel/data-manager")) {
+  //   //   setActive("Data Manager");
+  //   } else {
+  //     // Fallback: match submenu links first
+  //     menus.forEach((menu) => {
+  //       if (menu.hasSubmenu && menu.submenu) {
+  //         menu.submenu.forEach((sub) => {
+  //           if (pathname.startsWith(sub.link)) {
+  //             setActive(sub.name);
+  //             setOpenSubmenu(menu.name); // auto open parent
+  //           }
+  //         });
+  //       }
+  //     });
 
-      // Then match top-level menus
-      const matched = menus.find(
-        (item) => item.link && pathname.startsWith(item.link)
+  //     // Then match top-level menus
+  //     const matched = menus.find(
+  //       (item) => item.link && pathname.startsWith(item.link)
+  //     );
+  //     if (matched) setActive(matched.name);
+  //   }
+  // }, [pathname]);
+useEffect(() => {
+  // Direct matches for parent menus
+  if (pathname.includes("/controlpanel/staffManagement")) {
+    setActive("Staff Management (HR)");
+    setOpenSubmenu(null);
+  } else if (pathname.includes("/controlpanel/agentManagement")) {
+    setActive("Agent Management");
+    setOpenSubmenu(null);
+  } else if (pathname.includes("/controlpanel/caseBooking")) {
+    setActive("Service Bookings");
+    setOpenSubmenu(null);
+  } else if (pathname.includes("/controlpanel/dashboard")) {
+    setActive("Home");
+    setOpenSubmenu(null);
+  } else if (pathname.includes("/controlpanel/cases")) {
+    setActive("Cases");
+    setOpenSubmenu(null);
+  } else if (pathname.includes("/controlpanel/patient-management")) {
+    setActive("Patient Management");
+    setOpenSubmenu(null);
+  } else if (pathname.includes("/controlpanel/referral-management")) {
+    setActive("Referrals Management");
+    setOpenSubmenu(null);
+
+  // ✅ Handle data-manager submenus
+  } else if (pathname.includes("/controlpanel/data-manager/general-data")) {
+    setActive("General Data");
+    setOpenSubmenu("Data Manager"); // parent
+  } else if (pathname.includes("/controlpanel/data-manager/patient-data")) {
+    setActive("Patient Data");
+    setOpenSubmenu("Data Manager"); // parent
+    } else if (pathname.includes("/controlpanel/data-manager/professionals-data")) {
+    setActive("Professionals Data");
+    setOpenSubmenu("Data Manager"); // parent
+
+  } else {
+    // Check submenus for match
+    let matchedSubmenu = null;
+    let matchedParent = null;
+
+    menus.some(menu => {
+      if (menu.hasSubmenu && menu.submenu) {
+        return menu.submenu.some(sub => {
+          if (pathname.startsWith(sub.link)) {
+            matchedSubmenu = sub.name;
+            matchedParent = menu.name;
+            return true; // break inner loop
+          }
+          return false;
+        });
+      }
+      return false;
+    });
+
+    if (matchedSubmenu) {
+      setActive(matchedSubmenu);
+      setOpenSubmenu(matchedParent);
+    } else {
+      // No submenu match found - try matching parents normally
+      const matchedParentMenu = menus.find(menu =>
+        menu.link && pathname.startsWith(menu.link)
       );
-      if (matched) setActive(matched.name);
+      if (matchedParentMenu) {
+        setActive(matchedParentMenu.name);
+        setOpenSubmenu(null);
+      } else {
+        // Default fallback
+        setActive("Home");
+        setOpenSubmenu(null);
+      }
     }
-  }, [pathname]);
+  }
+}, [pathname]);
 
   const handleMenuClick = (item) => {
     if (item.hasSubmenu) {

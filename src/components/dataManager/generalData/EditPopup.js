@@ -166,7 +166,7 @@ function EditPopup({ onClose, heading, value, onChange, onUpdate, apiError }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value.trim()) {
-      setFormError("Language is required");
+      setFormError("Field is required");
       return;
     }
     setFormError("");

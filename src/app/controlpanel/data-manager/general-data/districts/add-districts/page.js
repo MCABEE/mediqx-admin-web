@@ -17,7 +17,7 @@ function Page() {
     saveDistricts,
     resetSuccess,
     fetchStates,
-    page,
+    page, 
     totalPages,
   } = useDistrictStore();
 

@@ -146,24 +146,43 @@ const useCityStore = create(
 
       setSelectedDistrictId: (id) => set({ selectedDistrictId: id }),
 
-      fetchDistricts: async (page = 1) => {
-        set({ isDistrictsLoading: true, error: null });
-        try {
-          const res = await getDistricts(page, get().limit);
-          set((state) => ({
-            districtsList:
-              page === 1
-                ? res.data.districts || []
-                : [...state.districtsList, ...(res.data.districts || [])],
-            districtsPage: res.data.page || page,
-            districtsTotalPages: res.data.totalPages || 0,
-          }));
-        } catch (error) {
-          set({ error: error.message || "Failed to fetch districts." });
-        } finally {
-          set({ isDistrictsLoading: false });
-        }
-      },
+      // fetchDistricts: async (page = 1) => {
+      //   set({ isDistrictsLoading: true, error: null });
+      //   try {
+      //     const res = await getDistricts(page, get().limit);
+      //     set((state) => ({
+      //       districtsList:
+      //         page === 1
+      //           ? res.data.districts || []
+      //           : [...state.districtsList, ...(res.data.districts || [])],
+      //       districtsPage: res.data.page || page,
+      //       districtsTotalPages: res.data.totalPages || 0,
+      //     }));
+      //   } catch (error) {
+      //     set({ error: error.message || "Failed to fetch districts." });
+      //   } finally {
+      //     set({ isDistrictsLoading: false });
+      //   }
+      // },
+      fetchDistricts: async (page = 1, stateId = null) => {
+  set({ isDistrictsLoading: true, error: null });
+  try {
+    const res = await getDistricts(page, get().limit, stateId);
+    set((state) => ({
+      districtsList:
+        page === 1
+          ? res.data.districts || []
+          : [...state.districtsList, ...(res.data.districts || [])],
+      districtsPage: res.data.page || page,
+      districtsTotalPages: res.data.totalPages || 0,
+    }));
+  } catch (error) {
+    set({ error: error.message || "Failed to fetch districts." });
+  } finally {
+    set({ isDistrictsLoading: false });
+  }
+},
+
 
       // fetchCities: async (page = 1) => {
       //   set({ isLoading: true, error: null });

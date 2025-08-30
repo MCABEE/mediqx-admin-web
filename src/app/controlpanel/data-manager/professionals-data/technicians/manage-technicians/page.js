@@ -7,7 +7,7 @@ import EditPopup from "@/components/dataManager/generalData/EditPopup";
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 
 function ManageProfessionalsPage() {
-  const professionalCategory = "REG_NURSES";
+  const professionalCategory = "TECHNICIANS";
 
   const categories = [
     { key: "specializations", label: "Specialization" },
@@ -138,7 +138,7 @@ function ManageProfessionalsPage() {
         <div className="flex gap-8 items-center py-5">
           <Link
             href={
-              " /controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
+              " controlpanel/data-manager/professionals-data/technicians/add-technicians"
             }
             className="text-black"
           >
