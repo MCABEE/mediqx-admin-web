@@ -72,11 +72,11 @@ export const menus = [
        {
         id: "8-4",
         name: "Products Data",
-        link: "/controlpanel/data-manager/products-data",
+        link: "",
       }, {
         id: "8-5",
         name: "Medical Data",
-        link: "/controlpanel/data-manager/medical-data",
+        link: "",
       },
     ],
   },

@@ -42,9 +42,14 @@ const Navlink = () => {
         Nursing Assistants
       </Link>
       <Link
-        href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
+        href="/controlpanel/data-manager/professionals-data/technicians/add-technicians"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/hjgfh") || isActive("/ytfy")
+          isActive(
+            "/controlpanel/data-manager/professionals-data/technicians/add-technicians"
+          ) ||
+          isActive(
+            "/controlpanel/data-manager/professionals-data/technicians/manage-technicians"
+          )
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
@@ -52,9 +57,14 @@ const Navlink = () => {
         Technicians
       </Link>
       <Link
-        href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
+        href="/controlpanel/data-manager/professionals-data/therapy/add-therapy"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/rferf") || isActive("/erer")
+          isActive(
+            "/controlpanel/data-manager/professionals-data/therapy/add-therapy"
+          ) ||
+          isActive(
+            "/controlpanel/data-manager/professionals-data/therapy/manage-therapy"
+          )
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
@@ -62,9 +72,14 @@ const Navlink = () => {
         Therapy
       </Link>
       <Link
-        href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
+        href="/controlpanel/data-manager/professionals-data/ancillary/add-ancillary"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/erf") || isActive("/ewew")
+          isActive(
+            "/controlpanel/data-manager/professionals-data/ancillary/add-ancillary"
+          ) ||
+          isActive(
+            "/controlpanel/data-manager/professionals-data/ancillary/manage-ancillary"
+          )
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
@@ -72,14 +87,19 @@ const Navlink = () => {
         Ancillary
       </Link>
       <Link
-        href="/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses"
+        href="/controlpanel/data-manager/professionals-data/doctors/add-doctors"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/erferf") || isActive("/erferf")
+          isActive(
+            "/controlpanel/data-manager/professionals-data/doctors/add-doctors"
+          ) ||
+          isActive(
+            "/controlpanel/data-manager/professionals-data/doctors/manage-doctors"
+          )
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}
       >
-        Docters
+        Doctors
       </Link>
     </div>
   );
