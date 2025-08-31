@@ -14,7 +14,9 @@ export const addDistricts = async (districts) => {
     );
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to add districts.");
+    throw new Error(
+      error.response?.data?.message || "Failed to add districts."
+    );
   }
 };
 
@@ -32,19 +34,6 @@ export const getStates = async (page = 1, limit = 10) => {
   }
 };
 
-
-
-
-// export const getDistricts = async (page = 1, limit = 10) => {
-//   try {
-//     const response = await api.get(`/admin/districts?page=${page}&limit=${limit}`, {
-//       headers: { accept: "application/json" },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     throw new Error(error.response?.data?.message || "Failed to fetch districts.");
-//   }
-// };
 export const getDistricts = async (page = 1, limit = 10, stateId = null) => {
   let url = `/admin/districts?page=${page}&limit=${limit}`;
   if (stateId) url += `&stateId=${stateId}`;
@@ -53,7 +42,6 @@ export const getDistricts = async (page = 1, limit = 10, stateId = null) => {
   });
   return response.data;
 };
-
 
 export const updateDistrict = async (id, data) => {
   try {
@@ -65,7 +53,9 @@ export const updateDistrict = async (id, data) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to update district.");
+    throw new Error(
+      error.response?.data?.message || "Failed to update district."
+    );
   }
 };
 
@@ -76,6 +66,8 @@ export const deleteDistrict = async (id) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to delete district.");
+    throw new Error(
+      error.response?.data?.message || "Failed to delete district."
+    );
   }
 };
