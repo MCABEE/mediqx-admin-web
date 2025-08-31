@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect } from "react";
 import Navlink from "@/components/dataManager/professionalsData.js/Navlink";
@@ -99,7 +98,7 @@ function AddRegNursesPage({ category = "DOCTORS" }) {
               <button
                 disabled={isLoading}
                 onClick={() => handleAddField("specializations")}
-                className="text-lg text-[#196BA5] font-bold cursor-pointer"
+                className="bg-[#196BA5] text-white text-xl rounded-lg size-7 cursor-pointer"
                 aria-label="Add specialization field"
               >
                 +
@@ -131,7 +130,7 @@ function AddRegNursesPage({ category = "DOCTORS" }) {
               <button
                 disabled={isLoading}
                 onClick={() => handleAddField("qualifications")}
-                className="text-lg text-[#196BA5] font-bold cursor-pointer"
+                className="bg-[#196BA5] text-white text-xl rounded-lg size-7 cursor-pointer"
                 aria-label="Add qualification field"
               >
                 +
@@ -165,7 +164,7 @@ function AddRegNursesPage({ category = "DOCTORS" }) {
               <button
                 disabled={isLoading}
                 onClick={() => handleAddField("workingDepartments")}
-                className="text-lg text-[#196BA5] font-bold cursor-pointer"
+                className="bg-[#196BA5] text-white text-xl rounded-lg size-7 cursor-pointer"
                 aria-label="Add working department field"
               >
                 +
@@ -195,7 +194,7 @@ function AddRegNursesPage({ category = "DOCTORS" }) {
               <button
                 disabled={isLoading}
                 onClick={() => handleAddField("skills")}
-                className="text-lg text-[#196BA5] font-bold cursor-pointer"
+                className="bg-[#196BA5] text-white text-xl rounded-lg size-7 cursor-pointer"
                 aria-label="Add skill field"
               >
                 +
