@@ -93,7 +93,10 @@ function ManageProfessionalsPage() {
       await updateItemId(
         selectedCategory,
         checkedId,
-        { [keyMap[selectedCategory]]: editValue },
+        {
+          [keyMap[selectedCategory]]: editValue,
+          category: professionalCategory,
+        },
         professionalCategory
       );
       setIsEditPopupOpen(false);
