@@ -149,7 +149,7 @@
 //   return (
 //     <div>
 //       <Navlink />
-      
+
 //       <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
 //         <div className="w-full flex items-center justify-between pt-[23px] pb-[19px]">
 //           <div className="flex item-center gap-[50px]">
@@ -301,16 +301,6 @@
 
 // export default ManageCitiesPage;
 
-
-
-
-
-
-
-
-
-
-
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import Navlink from "@/components/dataManager/generalData/Navlink";
@@ -391,6 +381,7 @@ function ManageCitiesPage() {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [editName, setEditName] = useState("");
   const [apiError, setApiError] = useState("");
+  const [districtId, setDistrictId] = useState("");
 
   // Fetch states initially
   useEffect(() => {
@@ -437,10 +428,16 @@ function ManageCitiesPage() {
   // Outside click closes dropdowns
   useEffect(() => {
     function handleClickOutside(event) {
-      if (stateDropdownRef.current && !stateDropdownRef.current.contains(event.target)) {
+      if (
+        stateDropdownRef.current &&
+        !stateDropdownRef.current.contains(event.target)
+      ) {
         setStateDropdownOpen(false);
       }
-      if (districtDropdownRef.current && !districtDropdownRef.current.contains(event.target)) {
+      if (
+        districtDropdownRef.current &&
+        !districtDropdownRef.current.contains(event.target)
+      ) {
         setDistrictDropdownOpen(false);
       }
     }
@@ -466,6 +463,7 @@ function ManageCitiesPage() {
     if (checkedIds.length === 1) {
       const selected = listedCities.find((c) => c.id === checkedIds[0]);
       setEditName(selected?.name || "");
+      setDistrictId(selected?.districtId);
       setApiError("");
     } else {
       setEditName("");
@@ -479,7 +477,7 @@ function ManageCitiesPage() {
     try {
       await updateCityById(
         checkedIds[0],
-        { name: editName },
+        { name: editName, districtId: districtId },
         selectedDistrictId,
         page
       );
@@ -498,7 +496,8 @@ function ManageCitiesPage() {
   const selectedStateLabel =
     statesList.find((s) => s.id === selectedStateId)?.name || "Select State";
   const selectedDistrictLabel =
-    districtsList.find((d) => d.id === selectedDistrictId)?.name || "Select District";
+    districtsList.find((d) => d.id === selectedDistrictId)?.name ||
+    "Select District";
 
   return (
     <div>
@@ -552,7 +551,9 @@ function ManageCitiesPage() {
                 </div>
               ))}
               {isStatesLoading && (
-                <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                <div className="px-4 py-2 text-sm text-gray-500">
+                  Loading...
+                </div>
               )}
             </div>
           )}
@@ -593,7 +594,9 @@ function ManageCitiesPage() {
                 </div>
               ))}
               {isDistrictsLoading && (
-                <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                <div className="px-4 py-2 text-sm text-gray-500">
+                  Loading...
+                </div>
               )}
             </div>
           )}
