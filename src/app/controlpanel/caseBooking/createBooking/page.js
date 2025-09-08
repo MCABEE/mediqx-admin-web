@@ -1,13 +1,16 @@
 "use client";
 
 import Navlink from "@/components/caseBooking/NavLink";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useBookingStore from "@/app/lib/store/bookingStore";
+import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
+import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
 
 const CaseBookingPage = () => {
   const { submitBooking } = useBookingStore();
   const [langError, setLangError] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [selectedDiagnosis, setSelectedDiagnosis] = useState("");
 
   const [form, setForm] = useState({
     patientName: "",
@@ -39,6 +42,28 @@ const CaseBookingPage = () => {
   const [preferredGender, setPreferredGender] = useState("");
   const [preferredLanguages, setPreferredLanguages] = useState([]);
 
+  const {
+    listedServices: healthStatuses,
+    fetchServices: fetchHealthStatuses,
+    isLoading: isHealthLoading,
+    error: healthError,
+  } = useHealthStatusStore();
+
+  useEffect(() => {
+    fetchHealthStatuses(1, 100); // adjust pagination as needed
+  }, [fetchHealthStatuses]);
+
+  const handleDiagnosisChange = (e) => {
+    setSelectedDiagnosis(e.target.value);
+  };
+
+  const { listedDiagnoses, fetchDiagnosesList, isLoading, error } =
+    useDiagnosisStore();
+
+  useEffect(() => {
+    fetchDiagnosesList(1, 50); // Fetch first page with 50 records (adjust as needed)
+  }, [fetchDiagnosesList]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -64,6 +89,7 @@ const CaseBookingPage = () => {
 
     const payload = {
       ...form,
+      diagnosis: selectedDiagnosis,
       contactPersonMobileNumber: form.contactPersonMobileNumber.startsWith(
         "+91"
       )
@@ -95,7 +121,7 @@ const CaseBookingPage = () => {
         age: "",
         height: "",
         weight: "",
-        diagnosis: "",
+
         healthStatus: "",
         stayAt: "",
         serviceType: "",
@@ -117,6 +143,7 @@ const CaseBookingPage = () => {
       setFlexibility("");
       setPreferredGender("");
       setPreferredLanguages([]);
+      setSelectedDiagnosis("");
     } else {
       setSuccessMessage(" Failed to create booking. Please try again.");
     }
@@ -226,7 +253,7 @@ const CaseBookingPage = () => {
             <option value="OTHER">Other</option>
           </select>
 
-          <select
+          {/* <select
             name="healthStatus"
             value={form.healthStatus}
             onChange={handleChange}
@@ -263,6 +290,28 @@ const CaseBookingPage = () => {
             <option value="Post-COVID or Respiratory Rehab Patients">
               Post-COVID or Respiratory Rehab Patients
             </option>
+          </select> */}
+          <select
+            name="healthStatus"
+            value={form.healthStatus}
+            onChange={handleChange}
+            required
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+          >
+            <option value="" disabled>
+              Current HealthStatus / Activity
+            </option>
+            {isHealthLoading && <option disabled>Loading...</option>}
+            {healthError && !isHealthLoading && (
+              <option disabled>Error loading health statuses</option>
+            )}
+            {!isHealthLoading &&
+              !healthError &&
+              healthStatuses.map((status) => (
+                <option key={status.id} value={status.status}>
+                  {status.status}
+                </option>
+              ))}
           </select>
 
           <select
@@ -388,7 +437,7 @@ const CaseBookingPage = () => {
           </h1>
           {/* <input name="diagnosis" value={form.diagnosis} onChange={handleChange} placeholder="Diagnosis" required className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300" /> */}
 
-          <select
+          {/* <select
             name="diagnosis"
             id="diagnosis"
             value={form.diagnosis}
@@ -438,6 +487,32 @@ const CaseBookingPage = () => {
             <option value="Neurology">Neurology</option>
             <option value="Pulmonary">Pulmonary</option>
             <option value="Cardiovascular">Cardiovascular</option>
+          </select> */}
+
+          <select
+            name="diagnosis"
+            className="w-[328px] h-[40px] rounded-[15px] text-[14px] border border-[#BBBBBB] px-4 text-black outline-none"
+            required
+            value={selectedDiagnosis}
+            onChange={handleDiagnosisChange}
+          >
+            <option value="" disabled>
+              Select Diagnosis
+            </option>
+
+            {isLoading && <option disabled>Loading...</option>}
+
+            {!isLoading && error && (
+              <option disabled>Error loading diagnoses</option>
+            )}
+
+            {!isLoading &&
+              !error &&
+              listedDiagnoses.map((diag) => (
+                <option key={diag.id} value={diag.diagnosis}>
+                  {diag.diagnosis}
+                </option>
+              ))}
           </select>
 
           {/* <input
