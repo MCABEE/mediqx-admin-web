@@ -18,7 +18,7 @@ const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
     const searchParams = useSearchParams();
 
-  const roleFromUrl = searchParams.get("role") || "NURSE";
+  const roleFromUrl = searchParams.get("role") || "REGISTERED_NURSE";
   const [selectedRole, setSelectedRole] = useState(roleFromUrl);
 
   // useEffect(() => {
@@ -64,36 +64,57 @@ const Table = () => {
         <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
           <p
             className={`cursor-pointer ${
-              selectedRole === "NURSE" ? "text-blue-800" : ""
+              selectedRole === "REGISTERED_NURSE" ? "text-blue-800" : ""
             }`}
             onClick={() => {
-              setSelectedRole("NURSE");
+              setSelectedRole("REGISTERED_NURSE");
               setCurrentPage(1); // Reset to first page when role changes
             }}
           >
-            Nurse
+            Registered Nurse
           </p>
           <p
             className={`cursor-pointer ${
-              selectedRole === "PARAMEDICAL" ? "text-blue-800" : ""
+              selectedRole === "NURSING_ASSISTANTS" ? "text-blue-800" : ""
             }`}
             onClick={() => {
-              setSelectedRole("PARAMEDICAL");
+              setSelectedRole("NURSING_ASSISTANTS");
               setCurrentPage(1);
             }}
           >
-            Paramedical
+            Nursing Assistants
           </p>
           <p
             className={`cursor-pointer ${
-              selectedRole === "PHYSIOTHERAPIST" ? "text-blue-800" : ""
+              selectedRole === "TECHNICIANS" ? "text-blue-800" : ""
             }`}
             onClick={() => {
-              setSelectedRole("PHYSIOTHERAPIST");
+              setSelectedRole("TECHNICIANS");
               setCurrentPage(1);
             }}
           >
-            Physiotherapist
+            Technicians
+          </p>
+           <p
+            className={`cursor-pointer ${
+              selectedRole === "THERAPY" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("THERAPY");
+              setCurrentPage(1);
+            }}
+          >
+            Therapy
+          </p> <p
+            className={`cursor-pointer ${
+              selectedRole === "ANCILLARY_PERSONAL" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("ANCILLARY_PERSONAL");
+              setCurrentPage(1);
+            }}
+          >
+            Ancillary Personal
           </p>
         </div>
       </div>
