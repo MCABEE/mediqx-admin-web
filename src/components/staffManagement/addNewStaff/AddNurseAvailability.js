@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo,useEffect } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 import { submitNursePageThree } from "@/api/addStaffNurseApi";
+import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 
-function AddNurseAvailability() {
+function AddNurseAvailability({categoryByProfession}) {
   const today = new Date().toISOString().split("T")[0];
   const { userId } = useNurseRegistrationStore();
 
@@ -18,6 +19,35 @@ function AddNurseAvailability() {
   const [selectedDates, setSelectedDates] = useState({});
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
   const [popupDate, setPopupDate] = useState(null);
+
+   const { listedItems, fetchItems } = useManageProfessionalsStore();
+  
+  // Fetch specializations and qualifications when categoryByProfession changes
+  // useEffect(() => {
+  //   if (categoryByProfession) {
+  //     fetchItems("qualifications", 1, 50, categoryByProfession);
+  //     fetchItems("specializations", 1, 50, categoryByProfession);
+  //   }
+  // }, [categoryByProfession, fetchItems]);
+
+
+  const normalizedCategory = React.useMemo(() => {
+  if (categoryByProfession === "REGISTERED_NURSE") return "REG_NURSES";
+  if (categoryByProfession === "ANCILLARY_PERSONAL") return "ANCILLARY";
+  return categoryByProfession;
+}, [categoryByProfession]);
+
+useEffect(() => {
+  if (normalizedCategory) {
+    fetchItems("qualifications", 1, 50, normalizedCategory);
+    fetchItems("specializations", 1, 50, normalizedCategory);
+  }
+}, [normalizedCategory, fetchItems]);
+
+
+  // Lists from store, fallback to empty arrays if not loaded yet
+  const qualifications = listedItems.qualifications || [];
+  const specializations = listedItems.specializations || [];
 
   const [slot, setSlot] = useState({
     forenoon: { from: "", to: "" },
@@ -301,7 +331,7 @@ function AddNurseAvailability() {
 
         <div className="mt-6">
           {/* Qualification */}
-          <select
+          {/* <select
             value={qualification}
             onChange={(e) => setQualification(e.target.value)}
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
@@ -319,6 +349,22 @@ function AddNurseAvailability() {
             <option value="M.Sc. Nursing">M.Sc. Nursing</option>
             <option value="Nurse Practitioner (NP)">Nurse Practitioner (NP)</option>
             
+          </select> */}
+
+                   <select
+            value={qualification}
+            onChange={(e) => setQualification(e.target.value)}
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
+            required
+          >
+            <option disabled value="">
+              Qualification
+            </option>
+            {qualifications.map((q) => (
+              <option key={q.id} value={q.qualification || q}>
+                {q.qualification || q}
+              </option>
+            ))}
           </select>
 
           {/* Registered Nurse Checkbox */}
@@ -336,7 +382,7 @@ function AddNurseAvailability() {
           </div>
 
           {/* Specialization */}
-          <div className="pb-3">
+          {/* <div className="pb-3">
             <select
             value={specialization}
             onChange={(e) => setSpecialization(e.target.value)}
@@ -352,7 +398,24 @@ function AddNurseAvailability() {
             <option value="ER Nurse / Trauma Nurse">ER Nurse</option>
             <option value="Pediatric Nurse">Pediatric Nurse</option>
           </select>
+          </div> */}
+           <div className="pb-3">
+            <select
+              value={specialization}
+              onChange={(e) => setSpecialization(e.target.value)}
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none mt-3"
+            >
+              <option disabled value="">
+                Specialization
+              </option>
+              {specializations.map((s) => (
+                <option key={s.id} value={s.specialization || s}>
+                  {s.specialization || s}
+                </option>
+              ))}
+            </select>
           </div>
+
 
           {/* Single select for schedule + mode */}
           <select

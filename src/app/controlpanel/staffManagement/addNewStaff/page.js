@@ -4,9 +4,10 @@ import NurseBasicInformation from "@/components/staffManagement/addNewStaff/Nurs
 import NurseExperinceDetails from "@/components/staffManagement/addNewStaff/NurseExperinceDetails";
 import UploadCertificate from "@/components/staffManagement/addNewStaff/UploadCertificate";
 import Navlink from "@/components/staffManagement/Navlink";
-import React from "react";
+import React, { useState } from "react";
 
 function page() {
+    const [categoryByProfession, setCategoryByProfession] = useState("");
   return (
     <div>
       <Navlink />
@@ -23,17 +24,19 @@ function page() {
       </div> */}
 
       <div className="bg-white border-[1px] border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
-        <NurseBasicInformation />
+        {/* <NurseBasicInformation />
 
         <div>
           <NurseExperinceDetails />
-        </div>
+        </div> */}
+         <NurseBasicInformation setCategoryByProfession={setCategoryByProfession} />
+        <NurseExperinceDetails categoryByProfession={categoryByProfession} />
 
         <div className="px-[39px] pt-[15px]">
           <UploadCertificate />
 
           <div className="flex gap-x-[20px]">
-            <AddNurseAvailability />
+            <AddNurseAvailability categoryByProfession={categoryByProfession} />
           </div>
         </div>
       </div>

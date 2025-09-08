@@ -25,9 +25,11 @@ const useCityStore = create(
 
       // Paginated cities list for manage page
       listedCities: [],
+      scrollListedCities:[],
       page: 1,
       limit: 10,
       totalPages: 0,
+      
 
       // Selected district for adding cities
       selectedDistrictId: "",
@@ -67,6 +69,33 @@ const useCityStore = create(
       //     set({ isDistrictsLoading: false });
       //   }
       // },
+      scrollFetchCities: async (page = 1, districtId = null) => {
+  set({ isLoading: true, error: null });
+  try {
+    const res = districtId
+      ? await getCities(page, get().limit, districtId)
+      : await getCities(page, get().limit);
+      console.log(res);
+      
+    set((state) => ({
+      scrollListedCities:
+        page === 1
+          ? res.data.cities || []
+          : [...state.listedCities, ...(res.data.cities || [])],
+      page: res.data.page || page,
+      totalPages: res.data.totalPages || 0,
+      
+    })
+  
+  );
+    
+  } catch (error) {
+    set({ error: error.message || "Failed to fetch cities." });
+  } finally {
+    set({ isLoading: false });
+  }
+},
+
       fetchDistricts: async (page = 1, stateId = null) => {
         set({ isDistrictsLoading: true, error: null });
         try {
@@ -120,6 +149,8 @@ const useCityStore = create(
           set({ isLoading: false });
         }
       },
+
+      
 
       toggleCheckedId: (id) => {
         const checkedIds = get().checkedIds;

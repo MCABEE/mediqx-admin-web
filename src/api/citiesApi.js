@@ -60,7 +60,10 @@ export const getCities = async (page = 1, limit = 10, districtId = null) => {
   const response = await api.get(url, {
     headers: { accept: "application/json" },
   });
+  console.log(response.data);
+
   return response.data;
+  
 };
 
 
