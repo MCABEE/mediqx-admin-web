@@ -207,7 +207,7 @@ function AddRegNursesPage({ category = "NURSING_ASSISTANTS" }) {
       <button
         onClick={() => saveAllCategories(category)}
         disabled={isLoading}
-        className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 mt-6 mx-6 cursor-pointer"
+        className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 mt-6 mx-6 cursor-pointer mb-4"
       >
         Save
       </button>
