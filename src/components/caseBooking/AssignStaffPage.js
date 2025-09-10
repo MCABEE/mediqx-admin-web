@@ -480,7 +480,7 @@ const AssignStaffPage = () => {
   const location = searchParams.get("location");
   const latitude = searchParams.get("latitude");
   const longitude = searchParams.get("longitude");
-  const role = "NURSE";
+  const role = "";
   const durationValue = searchParams.get("durationValue");
   const durationType = searchParams.get("durationType");
   const scheduleType = searchParams.get("scheduleType");
