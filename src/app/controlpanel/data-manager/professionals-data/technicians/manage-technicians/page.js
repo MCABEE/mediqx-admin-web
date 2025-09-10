@@ -138,7 +138,7 @@ function ManageProfessionalsPage() {
         <div className="flex gap-8 items-center py-5">
           <Link
             href={
-              " controlpanel/data-manager/professionals-data/technicians/add-technicians"
+              "/controlpanel/data-manager/professionals-data/technicians/add-technicians"
             }
             className="text-black"
           >

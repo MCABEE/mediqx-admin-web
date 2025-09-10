@@ -166,7 +166,7 @@ export const updateNurseExperience = async (userId, data) => {
 export const getAssignableNurses = async ({
   page = 1,
   limit = 10,
-  role = "NURSE",
+  role ,
   gender,
   languages,
   date,
