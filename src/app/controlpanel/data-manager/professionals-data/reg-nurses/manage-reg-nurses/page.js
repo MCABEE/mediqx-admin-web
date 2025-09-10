@@ -220,7 +220,7 @@ function ManageProfessionalsPage() {
             </button>
           </div>
 
-          <div className="flex gap-3 mt-4 px-6">
+          <div className="flex gap-3 mt-4 px-6 mb-4">
             <button
               disabled={!checkedId}
               onClick={() => setIsEditPopupOpen(true)}
