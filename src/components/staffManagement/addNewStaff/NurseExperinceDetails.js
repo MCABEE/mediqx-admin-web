@@ -779,11 +779,18 @@ function NurseExperienceDetails({ categoryByProfession }) {
   const { submitNursePageTwo } = useNurseRegistrationStore();
 
   // Handler for provider state change
+  // const handleStateChange = (e) => {
+  //   const state = e.target.value;
+  //   setSelectedState(state);
+  //   setFormData((prev) => ({ ...prev, providerState: state }));
+  // };
+
   const handleStateChange = (e) => {
-    const state = e.target.value;
-    setSelectedState(state);
-    setFormData((prev) => ({ ...prev, providerState: state }));
-  };
+  const state = e.target.value;
+  setSelectedState(state);
+  setFormData((prev) => ({ ...prev, providerState: state }));
+};
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -920,7 +927,7 @@ function NurseExperienceDetails({ categoryByProfession }) {
             />
 
             {/* Provider State Dropdown from API */}
-            <select
+            {/* <select
               name="providerState"
               value={selectedState}
               onChange={handleStateChange}
@@ -934,7 +941,25 @@ function NurseExperienceDetails({ categoryByProfession }) {
                   {state.name}
                 </option>
               ))}
-            </select>
+            </select> */}
+
+            <select
+  name="providerState"
+  value={selectedState}
+  onChange={handleStateChange}
+              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2 outline-none placeholder:text-black"
+
+>
+  <option value="" disabled>
+    State
+  </option>
+  {(statesList || []).map((state) => (
+    <option key={state.id} value={state.id}>
+      {state.name}
+    </option>
+  ))}
+</select>
+
 
             <input
               type="text"
