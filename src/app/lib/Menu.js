@@ -69,15 +69,15 @@ export const menus = [
         name: "Professionals Data",
         link: "/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses",
       },
-       {
-        id: "8-4",
-        name: "Products Data",
-        link: "",
-      }, {
-        id: "8-5",
-        name: "Medical Data",
-        link: "",
-      },
+      //  {
+      //   id: "8-4",
+      //   name: "Products Data",
+      //   link: "",
+      // }, {
+      //   id: "8-5",
+      //   name: "Medical Data",
+      //   link: "",
+      // },
     ],
   },
   {
