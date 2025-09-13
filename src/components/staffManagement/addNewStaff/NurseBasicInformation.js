@@ -530,7 +530,14 @@ const selectedCityLabel = (scrollListedCities || []).find((c) => c.id === select
       return;
     }
     setValidationErrors({});
-    const finalData = { ...formData, mobileNumber: `+91${formData.mobileNumber}` };
+    const finalData = { ...formData,
+    stateId: selectedStateId,
+    districtId: selectedDistrictId,
+    cityId: selectedCityId,
+    mobileNumber: `+91${formData.mobileNumber}` };
+     delete finalData.state;
+  delete finalData.district;
+  delete finalData.city;
     try {
       await registerNurse(finalData);
       setIsSubmitted(true);
