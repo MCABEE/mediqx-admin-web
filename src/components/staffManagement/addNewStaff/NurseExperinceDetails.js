@@ -372,20 +372,6 @@
 
 // export default NurseExperienceDetails;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // "use client";
 // import React, { useState, useEffect } from "react";
 // import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
@@ -707,13 +693,6 @@
 
 // export default NurseExperienceDetails;
 
-
-
-
-
-
-
-
 "use client";
 import React, { useState, useEffect } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
@@ -742,7 +721,7 @@ function NurseExperienceDetails({ categoryByProfession }) {
   //   fetchStates(1); // Load provider states from API/store
   // }, [categoryByProfession, fetchItems, fetchStates]);
 
-   const normalizedCategory = React.useMemo(() => {
+  const normalizedCategory = React.useMemo(() => {
     if (categoryByProfession === "REGISTERED_NURSE") return "REG_NURSES";
     if (categoryByProfession === "ANCILLARY_PERSONAL") return "ANCILLARY";
     return categoryByProfession;
@@ -786,11 +765,10 @@ function NurseExperienceDetails({ categoryByProfession }) {
   // };
 
   const handleStateChange = (e) => {
-  const state = e.target.value;
-  setSelectedState(state);
-  setFormData((prev) => ({ ...prev, providerState: state }));
-};
-
+    const state = e.target.value;
+    setSelectedState(state);
+    setFormData((prev) => ({ ...prev, providerState: state }));
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -800,12 +778,21 @@ function NurseExperienceDetails({ categoryByProfession }) {
     }));
   };
 
-  const handleSkillChange = (skill) => {
+  // const handleSkillChange = (skill) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     skills: prev.skills.includes(skill)
+  //       ? prev.skills.filter((s) => s !== skill)
+  //       : [...prev.skills, skill],
+  //   }));
+  // };
+
+  const handleSkillChange = (skillId) => {
     setFormData((prev) => ({
       ...prev,
-      skills: prev.skills.includes(skill)
-        ? prev.skills.filter((s) => s !== skill)
-        : [...prev.skills, skill],
+      skills: prev.skills.includes(skillId)
+        ? prev.skills.filter((id) => id !== skillId)
+        : [...prev.skills, skillId],
     }));
   };
 
@@ -828,15 +815,27 @@ function NurseExperienceDetails({ categoryByProfession }) {
 
     const payload = {
       isExperienced: hasWorkExperience === "yes",
-      skills: formData.skills,
-      department: formData.department,
-      yearsOfExperience: hasWorkExperience === "yes" ? parseInt(formData.yearsOfExperience) || 0 : undefined,
-      monthsOfExperience: hasWorkExperience === "yes" ? parseInt(formData.monthsOfExperience) || 0 : undefined,
-      providerName: hasWorkExperience === "yes" ? formData.providerName : undefined,
-      providerLocation: hasWorkExperience === "yes" ? formData.providerLocation : undefined,
-      providerState: hasWorkExperience === "yes" ? formData.providerState : undefined,
+      skillsIds: formData.skills,
+      departmentId: formData.department,
+      yearsOfExperience:
+        hasWorkExperience === "yes"
+          ? parseInt(formData.yearsOfExperience) || 0
+          : undefined,
+      monthsOfExperience:
+        hasWorkExperience === "yes"
+          ? parseInt(formData.monthsOfExperience) || 0
+          : undefined,
+      providerName:
+        hasWorkExperience === "yes" ? formData.providerName : undefined,
+      providerLocation:
+        hasWorkExperience === "yes" ? formData.providerLocation : undefined,
+      providerStateId:
+        hasWorkExperience === "yes" ? formData.providerState : undefined,
       onGoing: hasWorkExperience === "yes" ? formData.onGoing : undefined,
-      startDate: hasWorkExperience === "yes" && formData.startDate ? new Date(formData.startDate).toISOString() : undefined,
+      startDate:
+        hasWorkExperience === "yes" && formData.startDate
+          ? new Date(formData.startDate).toISOString()
+          : undefined,
       endDate:
         hasWorkExperience === "yes"
           ? formData.onGoing
@@ -944,22 +943,20 @@ function NurseExperienceDetails({ categoryByProfession }) {
             </select> */}
 
             <select
-  name="providerState"
-  value={selectedState}
-  onChange={handleStateChange}
+              name="providerState"
+              value={selectedState}
+              onChange={handleStateChange}
               className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] px-2 outline-none placeholder:text-black"
-
->
-  <option value="" disabled>
-    State
-  </option>
-  {(statesList || []).map((state) => (
-    <option key={state.id} value={state.id}>
-      {state.name}
-    </option>
-  ))}
-</select>
-
+            >
+              <option value="" disabled>
+                State
+              </option>
+              {(statesList || []).map((state) => (
+                <option key={state.id} value={state.id}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
 
             <input
               type="text"
@@ -980,15 +977,21 @@ function NurseExperienceDetails({ categoryByProfession }) {
               <option value="" disabled>
                 Department
               </option>
-              {departments.map((dept) => (
+              {/* {departments.map((dept) => (
                 <option key={dept.id} value={dept.workingDepartment}>
+                  {dept.workingDepartment}
+                </option>
+              ))} */}
+              {departments.map((dept) => (
+                <option key={dept.id} value={dept.id}>
                   {dept.workingDepartment}
                 </option>
               ))}
             </select>
 
             <h1 className="text-[16px] font-semibold text-black pt-[18px]">
-              Working Duration <span className="font-light">(On this Hospital)</span>
+              Working Duration{" "}
+              <span className="font-light">(On this Hospital)</span>
             </h1>
 
             <div className="flex gap-3">
@@ -1036,8 +1039,10 @@ function NurseExperienceDetails({ categoryByProfession }) {
           <label key={skill.id} className="flex items-center gap-2">
             <input
               type="checkbox"
-              checked={formData.skills.includes(skill.skill)}
-              onChange={() => handleSkillChange(skill.skill)}
+              // checked={formData.skills.includes(skill.skill)}
+              // onChange={() => handleSkillChange(skill.skill)}
+              checked={formData.skills.includes(skill.id)}
+              onChange={() => handleSkillChange(skill.id)}
               className="size-[20px]"
             />
             <span className="text-[16px]">{skill.skill}</span>

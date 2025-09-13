@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useMemo,useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 import { submitNursePageThree } from "@/api/addStaffNurseApi";
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 
-function AddNurseAvailability({categoryByProfession}) {
+function AddNurseAvailability({ categoryByProfession }) {
   const today = new Date().toISOString().split("T")[0];
   const { userId } = useNurseRegistrationStore();
 
@@ -20,8 +20,8 @@ function AddNurseAvailability({categoryByProfession}) {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
   const [popupDate, setPopupDate] = useState(null);
 
-   const { listedItems, fetchItems } = useManageProfessionalsStore();
-  
+  const { listedItems, fetchItems } = useManageProfessionalsStore();
+
   // Fetch specializations and qualifications when categoryByProfession changes
   // useEffect(() => {
   //   if (categoryByProfession) {
@@ -30,20 +30,18 @@ function AddNurseAvailability({categoryByProfession}) {
   //   }
   // }, [categoryByProfession, fetchItems]);
 
-
   const normalizedCategory = React.useMemo(() => {
-  if (categoryByProfession === "REGISTERED_NURSE") return "REG_NURSES";
-  if (categoryByProfession === "ANCILLARY_PERSONAL") return "ANCILLARY";
-  return categoryByProfession;
-}, [categoryByProfession]);
+    if (categoryByProfession === "REGISTERED_NURSE") return "REG_NURSES";
+    if (categoryByProfession === "ANCILLARY_PERSONAL") return "ANCILLARY";
+    return categoryByProfession;
+  }, [categoryByProfession]);
 
-useEffect(() => {
-  if (normalizedCategory) {
-    fetchItems("qualifications", 1, 50, normalizedCategory);
-    fetchItems("specializations", 1, 50, normalizedCategory);
-  }
-}, [normalizedCategory, fetchItems]);
-
+  useEffect(() => {
+    if (normalizedCategory) {
+      fetchItems("qualifications", 1, 50, normalizedCategory);
+      fetchItems("specializations", 1, 50, normalizedCategory);
+    }
+  }, [normalizedCategory, fetchItems]);
 
   // Lists from store, fallback to empty arrays if not loaded yet
   const qualifications = listedItems.qualifications || [];
@@ -210,57 +208,50 @@ useEffect(() => {
   //   return availabilities;
   // };
 
-
-
   const generateAvailabilities = () => {
-  const availabilities = [];
-  // Add available dates in your current logic
-  for (const [date, info] of Object.entries(selectedDates)) {
-    if (info.fulltime) {
+    const availabilities = [];
+    // Add available dates in your current logic
+    for (const [date, info] of Object.entries(selectedDates)) {
+      if (info.fulltime) {
+        availabilities.push({
+          date,
+          isAvailable: true,
+          fixedSlots: info.fixedSlot,
+          slotOneStart: null,
+          slotOneEnd: null,
+          slotTwoStart: null,
+          slotTwoEnd: null,
+        });
+      } else {
+        const s1 = info.slots.forenoon || null;
+        const s2 = info.slots.afternoon || null;
+        availabilities.push({
+          date,
+          isAvailable: true,
+          fixedSlots: null,
+          slotOneStart: s1 ? s1.from : null,
+          slotOneEnd: s1 ? s1.to : null,
+          slotTwoStart: s2 ? s2.from : null,
+          slotTwoEnd: s2 ? s2.to : null,
+        });
+      }
+    }
+    // Add unavailable (leave) dates
+    leaveDates.forEach((date) => {
       availabilities.push({
         date,
-        isAvailable: true,
-        fixedSlots: info.fixedSlot,
+        isAvailable: false,
+        fixedSlots: null,
         slotOneStart: null,
         slotOneEnd: null,
         slotTwoStart: null,
         slotTwoEnd: null,
       });
-    } else {
-      const s1 = info.slots.forenoon || null;
-      const s2 = info.slots.afternoon || null;
-      availabilities.push({
-        date,
-        isAvailable: true,
-        fixedSlots: null,
-        slotOneStart: s1 ? s1.from : null,
-        slotOneEnd: s1 ? s1.to : null,
-        slotTwoStart: s2 ? s2.from : null,
-        slotTwoEnd: s2 ? s2.to : null,
-      });
-    }
-  }
-  // Add unavailable (leave) dates
-  leaveDates.forEach((date) => {
-    availabilities.push({
-      date,
-      isAvailable: false,
-      fixedSlots: null,
-      slotOneStart: null,
-      slotOneEnd: null,
-      slotTwoStart: null,
-      slotTwoEnd: null,
     });
-  });
-  // Optionally sort by date
-  availabilities.sort((a, b) => a.date.localeCompare(b.date));
-  return availabilities;
-};
-
-
-
-
-
+    // Optionally sort by date
+    availabilities.sort((a, b) => a.date.localeCompare(b.date));
+    return availabilities;
+  };
 
   const handleSaveAvailability = async () => {
     setFormError("");
@@ -292,8 +283,8 @@ useEffect(() => {
 
     const payload = {
       userId,
-      educationQualifications: [qualification],
-      specializations: [specialization],
+      educationQualificationsIds: [qualification],
+      specializationsIds: [specialization],
       workSchedule,
       isRegisteredNurse,
       availabilities: generateAvailabilities(),
@@ -302,9 +293,9 @@ useEffect(() => {
     try {
       setLoading(true);
       const result = await submitNursePageThree(payload);
-       console.log("✅ Success:", result); 
+      console.log("✅ Success:", result);
       setFormError("");
-      window.location.reload(); 
+      window.location.reload();
     } catch (err) {
       console.error("Submission error", err);
       setFormError(err.message || "Submission failed.");
@@ -351,17 +342,25 @@ useEffect(() => {
             
           </select> */}
 
-                   <select
+          <select
             value={qualification}
             onChange={(e) => setQualification(e.target.value)}
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
             required
           >
-            <option disabled value="">
+            {/* <option disabled value="">
               Qualification
             </option>
             {qualifications.map((q) => (
               <option key={q.id} value={q.qualification || q}>
+                {q.qualification || q}
+              </option>
+            ))} */}
+            <option disabled value="">
+              Qualification
+            </option>
+            {qualifications.map((q) => (
+              <option key={q.id} value={q.id}>
                 {q.qualification || q}
               </option>
             ))}
@@ -399,23 +398,30 @@ useEffect(() => {
             <option value="Pediatric Nurse">Pediatric Nurse</option>
           </select>
           </div> */}
-           <div className="pb-3">
+          <div className="pb-3">
             <select
               value={specialization}
               onChange={(e) => setSpecialization(e.target.value)}
               className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none mt-3"
             >
-              <option disabled value="">
+              {/* <option disabled value="">
                 Specialization
               </option>
               {specializations.map((s) => (
                 <option key={s.id} value={s.specialization || s}>
                   {s.specialization || s}
                 </option>
+              ))} */}
+              <option disabled value="">
+                Specialization
+              </option>
+              {specializations.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.specialization || s}
+                </option>
               ))}
             </select>
           </div>
-
 
           {/* Single select for schedule + mode */}
           <select
@@ -689,52 +695,55 @@ useEffect(() => {
                   </div>
                 ))} */}
                 {["forenoon", "afternoon"].map((period) => (
-  <div key={period}>
-    <p className="font-medium text-gray-700 capitalize">{period}</p>
-    <div className="flex gap-3 mt-1">
-      <input
-        type="time"
-        value={slot[period].from}
-        onChange={(e) => {
-          const fromTime = e.target.value;
-          const [hoursStr, minutesStr] = fromTime.split(":");
-          let hours = parseInt(hoursStr, 10);
-          let minutes = parseInt(minutesStr, 10);
-          hours += 2;
-          if (hours >= 24) hours -= 24; // wrap around midnight
+                  <div key={period}>
+                    <p className="font-medium text-gray-700 capitalize">
+                      {period}
+                    </p>
+                    <div className="flex gap-3 mt-1">
+                      <input
+                        type="time"
+                        value={slot[period].from}
+                        onChange={(e) => {
+                          const fromTime = e.target.value;
+                          const [hoursStr, minutesStr] = fromTime.split(":");
+                          let hours = parseInt(hoursStr, 10);
+                          let minutes = parseInt(minutesStr, 10);
+                          hours += 2;
+                          if (hours >= 24) hours -= 24; // wrap around midnight
 
-          const toTime = `${hours.toString().padStart(2, "0")}:${minutes
-            .toString()
-            .padStart(2, "0")}`;
+                          const toTime = `${hours
+                            .toString()
+                            .padStart(2, "0")}:${minutes
+                            .toString()
+                            .padStart(2, "0")}`;
 
-          setSlot({
-            ...slot,
-            [period]: {
-              from: fromTime,
-              to: toTime,
-            },
-          });
-        }}
-        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      <input
-        type="time"
-        value={slot[period].to}
-        onChange={(e) =>
-          setSlot({
-            ...slot,
-            [period]: {
-              ...slot[period],
-              to: e.target.value,
-            },
-          })
-        }
-        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </div>
-  </div>
-))}
-
+                          setSlot({
+                            ...slot,
+                            [period]: {
+                              from: fromTime,
+                              to: toTime,
+                            },
+                          });
+                        }}
+                        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                      <input
+                        type="time"
+                        value={slot[period].to}
+                        onChange={(e) =>
+                          setSlot({
+                            ...slot,
+                            [period]: {
+                              ...slot[period],
+                              to: e.target.value,
+                            },
+                          })
+                        }
+                        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
               {errorMsg && (
                 <p className="text-red-500 text-sm mt-2 font-medium">
