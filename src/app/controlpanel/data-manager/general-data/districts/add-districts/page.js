@@ -25,7 +25,7 @@ function Page() {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    fetchStates(1); // load first page
+    fetchStates(1,50); // load first page
   }, [fetchStates]);
 
   // Infinite scroll inside dropdown

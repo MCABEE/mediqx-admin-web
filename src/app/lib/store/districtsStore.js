@@ -134,7 +134,7 @@ saveDistricts: async () => {
   fetchStates: async (page = 1) => {
     set({ isStatesLoading: true, error: null });
     try {
-      const response = await getStates(page, 10);
+      const response = await getStates(page, 50);
       set((state) => ({
         statesList:
           page === 1
