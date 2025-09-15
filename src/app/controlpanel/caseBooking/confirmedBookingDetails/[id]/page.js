@@ -41,6 +41,12 @@ const BookingDetailsPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [showCancelPopup, setShowCancelPopup] = useState(false);
   const [showLocationPopup, setShowLocationPopup] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("");
+
+const handleRoleChange = (e) => {
+  setSelectedRole(e.target.value);
+};
+
 
   useEffect(() => {
     if (id) fetchBookingById(id);
@@ -277,6 +283,43 @@ const BookingDetailsPage = () => {
 
       </div>
 
+        <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
+        <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
+          <h1 className="text-[16px] font-semibold text-black">
+             Preferred Staff Category 
+          </h1>
+        </div>
+        <div className="flex gap-10 p-8">
+       {/* <select name="categoryByProfession"  required
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none">
+            <option value="" disabled>Category by profession</option>
+            <option value="REGISTERED_NURSE">Registered Nurse</option>
+            <option value="NURSING_ASSISTANTS">Nursing Assistants</option>
+            <option value="TECHNICIANS">Technicians</option>
+            <option value="THERAPY">Therapy</option>
+            <option value="ANCILLARY_PERSONAL">Ancillary Personal</option>
+          </select> */}
+
+          <select
+  name="categoryByProfession"
+  required
+  value={selectedRole}
+  onChange={handleRoleChange}
+  className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
+>
+  <option value="" disabled>
+    Category by profession
+  </option>
+  <option value="REGISTERED_NURSE">Registered Nurse</option>
+  <option value="NURSING_ASSISTANTS">Nursing Assistants</option>
+  <option value="TECHNICIANS">Technicians</option>
+  <option value="THERAPY">Therapy</option>
+  <option value="ANCILLARY_PERSONAL">Ancillary Personal</option>
+</select>
+
+        </div>
+      </div>
+
       {/* ACTION BUTTONS */}
       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB] mb-5">
         <div className="w-full h-[72px] flex items-center bg-[#C0D8F6] px-8 rounded-t-[15px] border-b-2">
@@ -305,12 +348,16 @@ const BookingDetailsPage = () => {
                 scheduleType:booking.scheduleType,
                 startTime:booking.startTime,
                 endTime:booking.endTime,
+                role: selectedRole,
               },
             }}
           >
-            <button className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer">
-              Assign Staff
-            </button>
+            <button
+    className="w-[192px] h-[40px] bg-[#3674B5] text-white flex justify-center items-center rounded-[15px] cursor-pointer"
+    disabled={!selectedRole} // Only enabled if a role is selected
+  >
+    Assign Staff
+  </button>
           </Link>
           <button
             onClick={handleCancelClick}
