@@ -377,7 +377,7 @@ const AssignStaffTable = ({
               </th>
             </tr>
           </thead>
-          <tbody>
+          {/* <tbody>
             {currentNurses.map((nurse, index) => (
               <tr
                 key={`${nurse.userId || "no-id"}-${indexOfFirstNurse + index}`} // ✅ Unique key
@@ -407,6 +407,51 @@ const AssignStaffTable = ({
                 </td>
               </tr>
             ))}
+          </tbody> */}
+
+          <tbody>
+            {currentNurses.length > 0 ? (
+              currentNurses.map((nurse, index) => (
+                <tr
+                  key={`${nurse.userId || "no-id"}-${
+                    indexOfFirstNurse + index
+                  }`} // ✅ Unique key
+                  className="bg-white"
+                >
+                  <td className="p-2">{indexOfFirstNurse + index + 1}</td>
+                  <td
+                    className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline"
+                    onClick={() => handleNameClick(nurse.userId)}
+                  >
+                    {nurse.fullName}
+                  </td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                    {nurse.location}
+                  </td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                    {nurse.gender}
+                  </td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                    {nurse.educationQualifications}
+                  </td>
+                  <td
+                    className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer text-blue-600 hover:underline"
+                    onClick={() => handleAssignClick(nurse)}
+                  >
+                    Assign
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="text-center py-6 text-gray-500 italic bg-white"
+                >
+                  No results found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
 

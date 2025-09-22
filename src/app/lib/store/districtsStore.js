@@ -28,10 +28,7 @@ const useDistrictStore = create((set, get) => ({
   checkedIds: [],
 
   setDistricts: (arr) => set({ districts: arr }),
-  // addDistrictInput: () =>
-  //   set((state) => ({
-  //     districts: [...state.districts, { name: "", stateId: "" }],
-  //   })),
+
   addDistrictInput: () => {
   set((state) => {
     const currentStateId = state.districts[0]?.stateId || "";
@@ -51,34 +48,6 @@ const useDistrictStore = create((set, get) => ({
       return { districts: arr };
     }),
 
-  // saveDistricts: async () => {
-  //   set({ isLoading: true, error: null, success: false });
-  //   try {
-  //     const filtered = get().districts.filter(
-  //       (d) => d.name.trim() !== "" && d.stateId.trim() !== ""
-  //     );
-  //     if (filtered.length === 0) {
-  //       set({
-  //         error:
-  //           "Please enter at least one valid district with state selected.",
-  //       });
-  //       return;
-  //     }
-  //     await addDistricts(filtered);
-  //     set({
-  //       success: true,
-  //       districts: [{ name: "", stateId: "" }],
-  //       error: null,
-  //     });
-  //   } catch (error) {
-  //     set({
-  //       error: error.message || "Failed to save districts.",
-  //       success: false,
-  //     });
-  //   } finally {
-  //     set({ isLoading: false });
-  //   }
-  // },
 saveDistricts: async () => {
   set({ isLoading: true, error: null, success: false });
   try {
