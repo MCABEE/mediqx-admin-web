@@ -339,7 +339,7 @@ import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 import useDistrictStore from "@/app/lib/store/districtsStore";
 import useCityStore from "@/app/lib/store/citiesStore";
 
-const NurseBasicInformation = ({setCategoryByProfession }) => {
+const NurseBasicInformation = ({setCategoryByProfession ,onComplete }) => {
   // Form state
   const [formData, setFormData] = useState({
     categoryByProfession: "",
@@ -541,6 +541,7 @@ const selectedCityLabel = (scrollListedCities || []).find((c) => c.id === select
     try {
       await registerNurse(finalData);
       setIsSubmitted(true);
+      onComplete ()
     } catch (err) {
       // Error handled in store
     }
