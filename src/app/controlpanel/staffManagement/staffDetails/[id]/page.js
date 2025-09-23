@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navlink from "@/components/staffManagement/Navlink";
 import AvailabilitySchedule from "@/components/staffManagement/AvailabilitySchedule";
@@ -13,6 +13,9 @@ function StaffDetailPage() {
   const router = useRouter();
   const { id } = useParams();
   const userId = id;
+  const searchParams = useSearchParams();
+
+  const role = searchParams.get("role") || "NURSE";
   const { fetchNurseById, selectedNurse, verifyNurse } = nurseStore();
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
@@ -53,8 +56,8 @@ function StaffDetailPage() {
       setEditedContact({
         gender: selectedNurse.gender || "",
         dob: selectedNurse.dob
-    ? new Date(selectedNurse.dob).toISOString().split("T")[0]
-    : "",
+          ? new Date(selectedNurse.dob).toISOString().split("T")[0]
+          : "",
         fullName: selectedNurse.fullName || "",
         email: selectedNurse.email || "",
         mobileNumber: selectedNurse.mobileNumber || "",
@@ -91,9 +94,14 @@ function StaffDetailPage() {
       <Navlink />
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
-        <Link href="/controlpanel/staffManagement" className="cursor-pointer">
+        <div
+          onClick={() =>
+            router.push(`/controlpanel/staffManagement?role=${role}`)
+          }
+          className="cursor-pointer"
+        >
           Back
-        </Link>
+        </div>
       </div>
 
       <div className="bg-white border border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
@@ -175,12 +183,12 @@ function StaffDetailPage() {
         {/* Basic Details */}
         <div className="px-[39px] pt-[15px]">
           <div className="flex items-center justify-end">
-            <button
+            {/* <button
               onClick={() => setEditAvailabilityPopup(true)}
               className="cursor-pointer hover:scale-110"
             >
               <img src="/edit-btn.svg" className="size-6" alt="edit" />
-            </button>
+            </button> */}
           </div>
           {/* Availability */}
           <AvailabilitySchedule availabilities={availabilities} />
@@ -399,7 +407,7 @@ function StaffDetailPage() {
                 onClick={async () => {
                   await verifyNurse(userId, modalData.action);
                   setModalData({ show: false, action: "" });
-                  router.push("/controlpanel/staffManagement");
+                  router.push(`/controlpanel/staffManagement?role=${role}`);
                 }}
                 className="px-4 py-2 bg-[#3674B5] text-white rounded-md cursor-pointer"
               >

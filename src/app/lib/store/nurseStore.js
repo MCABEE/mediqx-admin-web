@@ -25,10 +25,10 @@ const useNurseStore = create(
       selectedNurse: null,
       calendarData: null, //
 
-      fetchNurses: async (page = 1, limit = 10, status) => {
+      fetchNurses: async (page = 1, limit = 10, status , role) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await getNurses(page, limit, status);
+          const response = await getNurses(page, limit, status,role);
           const nurseData = response?.data?.data?.users || [];
           set({
             users: nurseData,
@@ -130,22 +130,23 @@ const useNurseStore = create(
         }
       },
 
+    
       fetchAssignableNurses: async (params) => {
-        set({ isLoading: true, error: null });
-        try {
-          const data = await getAssignableNurses(params);
-          set({
-            users: data?.data?.users || [],
-            totalPages: data?.data?.totalPages || 0,
-            totalUsers: data?.data?.total || 0,
-          });
-        } catch (error) {
-          set({ error: error.message });
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+    set({ isLoading: true, error: null });
 
+    try {
+      const data = await getAssignableNurses(params);
+      set({
+        users: data?.data?.users || [], 
+        totalPages: data?.data?.totalPages || 0,
+        totalUsers: data?.data?.total || 0,
+      });
+    } catch (error) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
       fetchNurseCalendar: async (userId, monthStart, monthEnd) => {
         set({ isLoading: true, error: null });
         try {
@@ -160,7 +161,7 @@ const useNurseStore = create(
         }
       },
 
-      fetchNurses: async (page = 1, limit = 10, status, search = "") => {
+      searchNurses: async (page = 1, limit = 10, status, search = "") => {
         set({ isLoading: true, error: null });
         try {
           const response = await searchNurses(page, limit, status, search);

@@ -47,13 +47,38 @@ export const menus = [
     id: 7,
     name: "Referrals Management",
     hasSubmenu: false,
-    //link: "profileReports",
+    link: "/controlpanel/referral-management/all-referrals",
   },
   {
     id: 8,
     name: "Data Manager",
-    hasSubmenu: false,
-    //link: "profileReports",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "8-1",
+        name: "General Data",
+        link: "/controlpanel/data-manager/general-data/languages/add-languages",
+      },
+      {
+        id: "8-2",
+        name: "Patient Data",
+        link: "/controlpanel/data-manager/patient-data/services/add-services",
+      },
+      {
+        id: "8-3",
+        name: "Professionals Data",
+        link: "/controlpanel/data-manager/professionals-data/reg-nurses/add-reg-nurses",
+      },
+      //  {
+      //   id: "8-4",
+      //   name: "Products Data",
+      //   link: "",
+      // }, {
+      //   id: "8-5",
+      //   name: "Medical Data",
+      //   link: "",
+      // },
+    ],
   },
   {
     id: 9,

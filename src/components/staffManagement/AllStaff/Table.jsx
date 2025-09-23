@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import nurseStore from "@/app/lib/store/nurseStore";
 
 const Table = () => {
+  const router = useRouter();
+
   const {
     users,
     fetchNurses,
@@ -14,16 +16,27 @@ const Table = () => {
     totalPages,
     totalUsers,
   } = nurseStore();
-  const router = useRouter();
-  const [currentPage, setCurrentPage] = useState(1);
 
+  // Initialize state locally with defaults
+  const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useSearchParams();
+
+  const roleFromUrl = searchParams.get("role") || "REGISTERED_NURSE";
+  const [selectedRole, setSelectedRole] = useState(roleFromUrl);
   useEffect(() => {
-    fetchNurses(currentPage, limit, "APPROVED");
-  }, [currentPage, fetchNurses, limit]);
+    fetchNurses(currentPage, limit, "APPROVED", selectedRole);
+  }, [currentPage, selectedRole, limit, fetchNurses]);
+
+  // const handleNameClick = async (userId) => {
+  //   await fetchNurseById(userId);
+  //   router.push(`/controlpanel/staffManagement/allStaffDetails/${userId}`);
+  // };
 
   const handleNameClick = async (userId) => {
     await fetchNurseById(userId);
-    router.push(`/controlpanel/staffManagement/allStaffDetails/${userId}`);
+    router.push(
+      `/controlpanel/staffManagement/allStaffDetails/${userId}?role=${selectedRole}`
+    );
   };
 
   const handlePrevPage = () => {
@@ -37,9 +50,8 @@ const Table = () => {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  // Group users by formatted creation date
   const groupedUsers = users?.reduce((acc, nurse) => {
-    const dateKey = new Date(nurse.createdAt).toISOString().split("T")[0]; // e.g., "2025-05-23"
+    const dateKey = new Date(nurse.createdAt).toISOString().split("T")[0];
     if (!acc[dateKey]) acc[dateKey] = [];
     acc[dateKey].push(nurse);
     return acc;
@@ -47,6 +59,66 @@ const Table = () => {
 
   return (
     <>
+      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between px-6 rounded-[15px] mt-2">
+        <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
+          <p
+            className={`cursor-pointer ${
+              selectedRole === "REGISTERED_NURSE" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("REGISTERED_NURSE");
+              setCurrentPage(1);
+            }}
+          >
+            Registed Nurse
+          </p>
+          <p
+            className={`cursor-pointer ${
+              selectedRole === "NURSING_ASSISTANTS" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("NURSING_ASSISTANTS");
+              setCurrentPage(1);
+            }}
+          >
+            Nursing Assistants
+          </p>
+          <p
+            className={`cursor-pointer ${
+              selectedRole === "TECHNICIANS" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("TECHNICIANS");
+              setCurrentPage(1);
+            }}
+          >
+            Technicians
+          </p>
+           <p
+            className={`cursor-pointer ${
+              selectedRole === "THERAPY" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("THERAPY");
+              setCurrentPage(1);
+            }}
+          >
+            Therapy
+          </p>
+           <p
+            className={`cursor-pointer ${
+              selectedRole === "ANCILLARY_PERSONAL" ? "text-blue-800" : ""
+            }`}
+            onClick={() => {
+              setSelectedRole("ANCILLARY_PERSONAL");
+              setCurrentPage(1);
+            }}
+          >
+            Ancillary Personal
+          </p>
+        </div>
+      </div>
+
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px] px-6 text-black font-semibold text-[32px]">
         <p>{totalUsers}</p>
       </div>
@@ -90,42 +162,34 @@ const Table = () => {
                       })}
                     </td>
                   </tr>
-                  {nurses.map((nurse, index) => {
-                    const name = nurse.fullName || "";
-                    const location = nurse.location || "";
-                    const gender = nurse.gender || "";
-                    const qualification = nurse.educationQualifications || "";
-
-                    return (
-                      <tr
-                        key={nurse.userId || index}
-                        className="bg-white cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleNameClick(nurse.userId)}
-                      >
-                        <td className="p-2">
-                          {(currentPage - 1) * limit + index + 1}
-                        </td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
-                          {name}
-                        </td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">
-                          {location}
-                        </td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">
-                          {gender}
-                        </td>
-                        <td className="border-l-4 border-[#C0D8F6] p-2">
-                          {qualification}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {nurses.map((nurse, index) => (
+                    <tr
+                      key={nurse.userId || index}
+                      className="bg-white cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleNameClick(nurse.userId)}
+                    >
+                      <td className="p-2">
+                        {(currentPage - 1) * limit + index + 1}
+                      </td>
+                      <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
+                        {nurse.fullName || ""}
+                      </td>
+                      <td className="border-l-4 border-[#C0D8F6] p-2">
+                        {nurse.location || ""}
+                      </td>
+                      <td className="border-l-4 border-[#C0D8F6] p-2">
+                        {nurse.gender || ""}
+                      </td>
+                      <td className="border-l-4 border-[#C0D8F6] p-2">
+                        {nurse.educationQualifications || ""}
+                      </td>
+                    </tr>
+                  ))}
                 </React.Fragment>
               ))}
           </tbody>
         </table>
 
-        {/* Pagination Controls */}
         {totalPages > 1 && (
           <div className="flex justify-between my-4 gap-4">
             <button
