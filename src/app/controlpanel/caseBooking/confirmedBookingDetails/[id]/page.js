@@ -354,12 +354,12 @@ const BookingDetailsPage = () => {
           >
             Cancel Service
           </button>
-          <button
+          {/* <button
             onClick={handleEditClick}
             className="w-[192px] h-[40px] bg-white text-[#333333] border flex justify-center items-center rounded-[15px] cursor-pointer"
           >
             Edit Service
-          </button>
+          </button> */}
         </div>
       </div>
 
