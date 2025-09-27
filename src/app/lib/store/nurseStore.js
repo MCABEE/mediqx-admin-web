@@ -25,27 +25,82 @@ const useNurseStore = create(
       selectedNurse: null,
       calendarData: null, //
 
-      fetchNurses: async (page = 1, limit = 10, status , role) => {
-        set({ isLoading: true, error: null });
-        try {
-          const response = await getNurses(page, limit, status,role);
-          const nurseData = response?.data?.data?.users || [];
-          set({
-            users: nurseData,
-            page,
-            limit,
-            totalPages: response?.data?.data?.totalPages || 0,
-            totalUsers: response?.data?.data?.total || 0,
-          });
-          console.log("Fetched nurses:", nurseData);
-        } catch (error) {
-          set({ error: error.message });
-          console.error("Error fetching nurses:", error);
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+      // fetchNurses: async (page = 1, limit = 10, status , role) => {
+      //   set({ isLoading: true, error: null });
+      //   try {
+      //     const response = await getNurses(page, limit, status,role);
+      //     const nurseData = response?.data?.data?.users || [];
+      //     set({
+      //       users: nurseData,
+      //       page,
+      //       limit,
+      //       totalPages: response?.data?.data?.totalPages || 0,
+      //       totalUsers: response?.data?.data?.total || 0,
+      //     });
+      //     console.log("Fetched nurses:", nurseData);
+      //   } catch (error) {
+      //     set({ error: error.message });
+      //     console.error("Error fetching nurses:", error);
+      //   } finally {
+      //     set({ isLoading: false });
+      //   }
+      // },
 
+
+  // Filters
+  search: "",
+  location: "",
+  qualifications: "",
+  gender: "",
+
+  // Actions
+  setFilter: (key, value) => set({ [key]: value, page: 1 }),
+
+  clearFilters: () =>
+    set({
+      search: "",
+      location: "",
+      qualifications: "",
+      gender: "",
+      page: 1,
+    }),
+
+  setPage: (page) => set({ page }),
+
+  // Fetch Nurses
+  fetchNurses: async (
+    page = get().page,
+    limit = get().limit,
+    status = "ALL",
+    role = "REGISTERED_NURSE",
+    filters
+  ) => {
+    set({ isLoading: true, error: null });
+
+    const currentFilters = filters || {
+      search: get().search,
+      location: get().location,
+      qualifications: get().qualifications,
+      gender: get().gender,
+    };
+
+    try {
+      const response = await getNurses(page, limit, status, role, currentFilters);
+      const nurseData = response?.data?.data?.users || [];
+      set({
+        users: nurseData,
+        page,
+        limit,
+        totalPages: response?.data?.data?.totalPages || 0,
+        totalUsers: response?.data?.data?.total || 0,
+      });
+    } catch (error) {
+      set({ error: error.message, users: [], totalPages: 0, totalUsers: 0 });
+      console.error("Error fetching nurses:", error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
       fetchNurseById: async (userId) => {
         set({ isLoading: true, error: null });
         try {
