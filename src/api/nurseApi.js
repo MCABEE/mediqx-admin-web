@@ -1,18 +1,61 @@
 import api from "./axiosInstance";
-export const getNurses = async (page = 1, limit = 10,status , role) => {
-    try {
-      const response = await api.get(`/admin/users?page=${page}&limit=${limit}&filter=${status}&role=${role}`);
-      console.log(response);
+// export const getNurses = async (page = 1, limit = 10,status , role) => {
+//     try {
+//       const response = await api.get(`/admin/users?page=${page}&limit=${limit}&filter=${status}&role=${role}`);
+//       console.log(response);
       
-      return response;
-    } catch (error) { 
-      const errorMessage =
-        error.response?.data?.message || "Failed to fetch users.";
-      throw new Error(errorMessage);
-    }
-  }; 
+//       return response;
+//     } catch (error) { 
+//       const errorMessage =
+//         error.response?.data?.message || "Failed to fetch users.";
+//       throw new Error(errorMessage);
+//     }
+//   }; 
   
- 
+// export const getNurses = async (page = 1, limit = 10, status, role, search = "") => {
+//   try {
+//     const response = await api.get(
+//       `/admin/users?page=${page}&limit=${limit}&filter=${status}&role=${role}&search=${search}`
+//     );
+//     return response;
+//   } catch (error) {
+//     const errorMessage =
+//       error.response?.data?.message || "Failed to fetch users.";
+//     throw new Error(errorMessage);
+//   }
+// };
+
+
+export const getNurses = async (
+  page = 1,
+  limit = 10,
+  status = "ALL",
+  role = "REGISTERED_NURSE",
+  filters = { search: "", location: "", qualifications: "", gender: "" }
+) => {
+  try {
+    const response = await api.get("/admin/users", {
+      params: {
+        page,
+        limit,
+        filter: status,
+        role,
+        search: filters.search,
+        location: filters.location,
+        qualifications: filters.qualifications,
+        gender: filters.gender,
+      },
+    });
+    return response;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to fetch users.";
+    throw new Error(errorMessage);
+  }
+};
+
+
+
   export const getNurseById = async (userId) => {
     try {
       const response = await api.get(`/nurses/${userId}`);
