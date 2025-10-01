@@ -23,7 +23,19 @@ const Navlink = () => {
       >
         Languages
       </Link>
-      <Link
+       <Link
+        href="/controlpanel/data-manager/general-data/location/add-location"
+        className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
+          isActive("/controlpanel/data-manager/general-data/location/add-location")||
+          isActive("/controlpanel/data-manager/general-data/location/manage-location")
+
+            ? "border-b-8 border-[#3674B5]"
+            : "border-b-2 border-transparent"
+        }`}
+      >
+        Location
+      </Link>
+      {/* <Link
         href="/controlpanel/data-manager/general-data/states/add-states"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
           isActive("/controlpanel/data-manager/general-data/states/add-states")||
@@ -58,7 +70,7 @@ const Navlink = () => {
         }`}
       >
         Cities
-      </Link>
+      </Link> */}
     </div>
   );
 };
