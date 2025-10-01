@@ -111,7 +111,9 @@ const handleSubmit = async () => {
     providerStateId: hasWorkExperience === "yes" ? formData.providerState : undefined,
     latitude: hasWorkExperience === "yes" ? formData.latitude : undefined,
     longitude: hasWorkExperience === "yes" ? formData.longitude : undefined,
-    mapLocation: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
+    // mapLocation: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
+      providerAddress: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
+
     onGoing: hasWorkExperience === "yes" ? formData.onGoing : undefined,
     startDate:
       hasWorkExperience === "yes" && formData.startDate
