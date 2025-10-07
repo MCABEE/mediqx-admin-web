@@ -66,12 +66,10 @@ function StaffDetailPage() {
         workSchedule: nurseData.workSchedule || "",
         address: {
           addressId: selectedNurse.address?.id || "",
-          state: selectedNurse.address?.state || "",
-          district: selectedNurse.address?.district || "",
-          city: selectedNurse.address?.city || "",
-          lineFirst: selectedNurse.address?.lineFirst || "",
-          lineSecond: selectedNurse.address?.lineSecond || "",
-          pincode: selectedNurse.address?.pincode || "",
+          fullAddress: selectedNurse.address?.fullAddress || "",
+          latitude: selectedNurse.address?.latitude || "",
+          longitude: selectedNurse.address?.longitude || "",
+
         },
       });
     }
@@ -130,24 +128,16 @@ function StaffDetailPage() {
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Gender</span>
-            <span>{selectedNurse.gender}</span>
+            <div className="grow">{selectedNurse.gender}</div>
           </div>
+      
+        
+         
           <div className="flex gap-[18px]">
-            <span className="w-[280px]">State</span>
-            <span>{address.state}</span>
+            <div className="w-[280px]">Address</div>
+            <div className="flex-1">{address.fullAddress}</div>
           </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">District</span>
-            <span>{address.district}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">City</span>
-            <span>{address.city}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">Pin Code</span>
-            <span>{address.pincode}</span>
-          </div>
+         
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Email</span>
@@ -232,13 +222,10 @@ function StaffDetailPage() {
               <span>{qualifications.department || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
-              <span className="w-[280px]">State</span>
-              <span>{qualifications.providerState || "Nil"}</span>
-            </div>
-            <div className="flex gap-[18px]">
               <span className="w-[280px]">Location</span>
-              <span>{qualifications.providerLocation || "Nil"}</span>
+              <span className="flex-1">{qualifications.providerAddress || "Nil"}</span>
             </div>
+
 
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
@@ -453,24 +440,27 @@ function StaffDetailPage() {
         show={isEditModalOpen}
         contact={editedContact}
         userId={userId}
+        role={role}
         onChange={setEditedContact}
         initialContact={selectedNurse}
         onCancel={() => setIsEditModalOpen(false)}
       />
 
-      {editAvailabilityPopup && (
+      {/* {editAvailabilityPopup && (
         <EditNurseAvailability
           availabilities={availabilities}
           userId={userId}
           onClose={() => setEditAvailabilityPopup(false)}
         />
-      )}
+      )} */}
 
       {isEditExperincePopUp && (
         <EditExperincePopup
           qualifications={qualifications}
           nurseData={nurseData}
           userId={userId}
+        role={role}
+
           onClose={() => setIsExperincePopUp(false)}
         />
       )}

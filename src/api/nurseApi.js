@@ -67,6 +67,36 @@ export const getNurses = async (
       throw new Error(errorMessage);
     }
   };
+
+
+
+  
+  export const getNurseProfileById = async (userId) => {
+    try {
+      const response = await api.get(`/admin/nurses/nurse-profile/${userId}`);
+      console.log(".....................",response);
+      
+      return response.data.data;
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch nurse details.";
+      throw new Error(errorMessage);
+    }
+  };
+
+
+
+  export const getNurseQualificationById = async (userId) => {
+    try {
+      const response = await api.get(`/admin/nurses/nurse-qualification/${userId}`);
+      
+      return response.data.data;
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Failed to fetch nurse details.";
+      throw new Error(errorMessage);
+    }
+  };
+
+
   
 export const verifyNurseStatus = async (nurseId, status) => {
   try {

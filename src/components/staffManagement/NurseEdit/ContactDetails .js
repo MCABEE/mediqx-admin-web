@@ -1,229 +1,639 @@
-"use client";
-import useNurseStore from "@/app/lib/store/nurseStore";
-import React from "react";
-import { AiOutlineClose } from "react-icons/ai";
+// "use client";
 
-const EditContactModal = ({ show, contact, onChange, userId, onCancel }) => {
-  const { updateNurseDetails } = useNurseStore();
-  console.log(contact);
+// import React, { useEffect, useState } from "react";
+// import useNurseStore from "@/app/lib/store/nurseStore";
+// import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
+// import { AiOutlineClose } from "react-icons/ai";
+// import LocationPickerPopup from "../addNewStaff/LocationPickerPopup";
+
+// const EditContactModal = ({ show, contact, onChange, userId, onCancel, role }) => {
+//   const { updateNurseDetails } = useNurseStore();
+//   const { fetchItems, listedItems } = useManageProfessionalsStore();
+
+//   const [qualifications, setQualifications] = useState([]);
+//   const [specializations, setSpecializations] = useState([]);
+//   const [showLocationPopup, setShowLocationPopup] = useState(false);
+
+//   const categoryRole = (() => {
+//     if (role === "REGISTERED_NURSE") return "REG_NURSES";
+//     if (role === "ANCILLARY_PERSONAL") return "ANCILLARY";
+//     return role;
+//   })();
+
+//   // Fetch dropdowns
+//   useEffect(() => {
+//     fetchItems("qualifications", 1, 50, categoryRole);
+//     fetchItems("specializations", 1, 50, categoryRole);
+//   }, [categoryRole, fetchItems]);
+
+//   useEffect(() => {
+//     if (listedItems.qualifications) {
+//       setQualifications(
+//         listedItems.qualifications.map((q) => ({ label: q.qualification, value: q.id }))
+//       );
+//     }
+//     if (listedItems.specializations) {
+//       setSpecializations(
+//         listedItems.specializations.map((s) => ({ label: s.specialization, value: s.id }))
+//       );
+//     }
+//   }, [listedItems]);
+
+//   if (!show) return null;
+
+//   const handleChange = (field, value) => onChange({ ...contact, [field]: value });
+
+//   const handleLocationUpdated = ({ latitude, longitude, mapLocation, fullAddress }) => {
+//     handleChange("latitude", latitude);
+//     handleChange("longitude", longitude);
+//     handleChange("mapLocation", mapLocation);
+//     handleChange("address", { ...contact.address, latitude, longitude, fullAddress: fullAddress || mapLocation });
+//   };
+
+//   const getIdByLabel = (list, label) => list.find((i) => i.label === label)?.value || "";
+
+//   // const handleSave = async () => {
+//   //   // Validate required fields
+//   //   if (!contact.fullName || !contact.email || !contact.mobileNumber) {
+//   //     alert("Full Name, Email and Mobile Number are required");
+//   //     return;
+//   //   }
+
+//   //   const payload = {
+//   //     addressId: contact.address?.addressId || null,
+//   //     fullName: contact.fullName || "",
+//   //     gender: contact.gender || "",
+//   //     dob: contact.dob ? new Date(contact.dob).toISOString().split("T")[0] : null,
+//   //     email: contact.email || "",
+//   //     mobileNumber: contact.mobileNumber || "",
+
+//   //     // Always send IDs (map to existing or empty)
+//   //     educationQualifications: contact.educationQualifications
+//   //       ? [
+//   //           {
+//   //             id: getIdByLabel(qualifications, contact.educationQualifications),
+//   //             qualificationId: getIdByLabel(qualifications, contact.educationQualifications),
+//   //           },
+//   //         ]
+//   //       : [],
+//   //     specializations: Array.isArray(contact.specializations)
+//   //       ? contact.specializations.map((label) => ({
+//   //           id: getIdByLabel(specializations, label),
+//   //           specializationId: getIdByLabel(specializations, label),
+//   //         }))
+//   //       : [],
+
+//   //     workSchedule: contact.workSchedule || "",
+
+//   //     latitude: contact.latitude || null,
+//   //     longitude: contact.longitude || null,
+//   //     mapLocation: contact.mapLocation || contact.address?.fullAddress || "",
+//   //   };
+
+//   //   try {
+//   //     await updateNurseDetails(userId, payload);
+//   //     onCancel();
+//   //   } catch (err) {
+//   //     console.error(err.message || "Failed to update nurse");
+//   //   }
+//   // };
+// const handleSave = async () => {
+//   if (!contact.fullName || !contact.email || !contact.mobileNumber) {
+//     alert("Full Name, Email and Mobile Number are required");
+//     return;
+//   }
+
+//   const payload = {
+//     addressId: contact.address?.addressId || null,
+//     fullName: contact.fullName || "",
+//     gender: contact.gender || "",
+//     dob: contact.dob ? new Date(contact.dob).toISOString().split("T")[0] : null,
+//     email: contact.email || "",
+//     mobileNumber: contact.mobileNumber || "",
+
+//     educationQualifications: contact.educationQualifications
+//       ? [
+//           {
+//             id: getIdByLabel(qualifications, contact.educationQualifications),
+//             qualificationId: getIdByLabel(qualifications, contact.educationQualifications),
+//           },
+//         ]
+//       : [],
+//     specializations: Array.isArray(contact.specializations)
+//       ? contact.specializations.map((label) => ({
+//           id: getIdByLabel(specializations, label),
+//           specializationId: getIdByLabel(specializations, label),
+//         }))
+//       : [],
+//     workSchedule: contact.workSchedule || "",
+
+//     // ✅ Keep old values if nothing changed
+//     latitude: contact.latitude ?? contact.address?.latitude ?? null,
+//     longitude: contact.longitude ?? contact.address?.longitude ?? null,
+//     mapLocation: contact.mapLocation ?? contact.address?.fullAddress ?? "",
+//   };
+
+//   try {
+//     await updateNurseDetails(userId, payload);
+//     onCancel();
+//   } catch (err) {
+//     console.error(err.message || "Failed to update nurse");
+//   }
+// };
+
+//   return (
+//     <>
+//       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+//         <div className="relative bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 shadow-xl border border-gray-200">
+//           <button
+//             onClick={onCancel}
+//             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+//           >
+//             <AiOutlineClose className="w-5 h-5" />
+//           </button>
+
+//           <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+//             Edit Nurse Details
+//           </h2>
+
+//           <div className="space-y-4">
+//             <InputField
+//               label="Full Name"
+//               value={contact.fullName}
+//               onChange={(e) => handleChange("fullName", e.target.value)}
+//             />
+//             <InputField
+//               label="Email"
+//               type="email"
+//               value={contact.email}
+//               onChange={(e) => handleChange("email", e.target.value)}
+//             />
+//             <InputField label="Mobile Number" value={contact.mobileNumber} readOnly />
+//             <InputField
+//               label="Dob"
+//               type="date"
+//               value={contact.dob ? new Date(contact.dob).toISOString().split("T")[0] : ""}
+//               onChange={(e) => handleChange("dob", e.target.value)}
+//             />
+
+//             <SelectField
+//               label="Gender"
+//               value={contact.gender}
+//               options={[
+//                 { label: "Select gender", value: "" },
+//                 { label: "Male", value: "MALE" },
+//                 { label: "Female", value: "FEMALE" },
+//                 { label: "Other", value: "OTHER" },
+//               ]}
+//               onChange={(e) => handleChange("gender", e.target.value)}
+//             />
+
+//             <SelectField
+//               label="Education Qualification"
+//               value={getIdByLabel(qualifications, contact.educationQualifications) || ""}
+//               onChange={(e) =>
+//                 handleChange(
+//                   "educationQualifications",
+//                   qualifications.find((q) => q.value === e.target.value)?.label
+//                 )
+//               }
+//               options={[{ label: "Select qualification", value: "" }, ...qualifications]}
+//             />
+
+//             <SelectField
+//               label="Specialization"
+//               value={
+//                 contact.specializations
+//                   ? getIdByLabel(specializations, contact.specializations[0])
+//                   : ""
+//               }
+//               onChange={(e) =>
+//                 handleChange("specializations", [
+//                   specializations.find((s) => s.value === e.target.value)?.label,
+//                 ])
+//               }
+//               options={[{ label: "Select specialization", value: "" }, ...specializations]}
+//             />
+
+//             <SelectField
+//               label="Work Schedule"
+//               value={contact.workSchedule}
+//               onChange={(e) => handleChange("workSchedule", e.target.value)}
+//               options={[
+//                 { label: "Select schedule", value: "" },
+//                 { label: "Full Time", value: "FULL_TIME" },
+//                 { label: "Part Time", value: "PART_TIME" },
+//               ]}
+//             />
+
+//             {/* Location */}
+//             <div className="flex flex-col">
+//               <label className="text-sm font-medium text-gray-700 mb-1">Location</label>
+//               <button
+//                 type="button"
+//                 onClick={() => setShowLocationPopup(true)}
+//                 className="border border-gray-300 rounded-lg p-2 text-sm text-left focus:outline-none focus:ring-2 focus:ring-blue-500"
+//               >
+//                 {contact.address?.fullAddress || contact.mapLocation || "Pick location on map"}
+//               </button>
+//             </div>
+//           </div>
+
+//           <div className="flex justify-end gap-3 mt-8">
+//             <button
+//               onClick={onCancel}
+//               className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg"
+//             >
+//               Cancel
+//             </button>
+//             <button
+//               onClick={handleSave}
+//               className="px-4 py-2 bg-blue-800 hover:bg-blue-700 text-white rounded-lg"
+//             >
+//               Save
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+
+//       {showLocationPopup && (
+//         <LocationPickerPopup
+//           currentLat={contact.latitude}
+//           currentLng={contact.longitude}
+//           onClose={() => setShowLocationPopup(false)}
+//           onUpdated={handleLocationUpdated}
+//         />
+//       )}
+//     </>
+//   );
+// };
+
+// // Input & Select Fields
+// const InputField = ({ label, value, onChange, type = "text", ...props }) => (
+//   <div className="flex flex-col">
+//     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
+//     <input
+//       type={type}
+//       value={value}
+//       onChange={onChange}
+//       className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+//       placeholder={`Enter ${label.toLowerCase()}`}
+//       {...props}
+//     />
+//   </div>
+// );
+
+// const SelectField = ({ label, value, onChange, options }) => (
+//   <div className="flex flex-col">
+//     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
+//     <select
+//       value={value}
+//       onChange={onChange}
+//       className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+//     >
+//       {options.map((opt) => (
+//         <option key={opt.value} value={opt.value}>
+//           {opt.label}
+//         </option>
+//       ))}
+//     </select>
+//   </div>
+// );
+
+// export default EditContactModal;
+
+"use client";
+
+import React, { useEffect, useState } from "react";
+import useNurseStore from "@/app/lib/store/nurseStore";
+import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
+import { AiOutlineClose } from "react-icons/ai";
+import LocationPickerPopup from "../addNewStaff/LocationPickerPopup";
+
+const EditContactModal = ({ show, userId, onCancel, role }) => {
+  const { updateNurseDetails, fetchNurseProfileById, selectedNurseProfile } =
+    useNurseStore();
+  const { fetchItems, listedItems } = useManageProfessionalsStore();
+
+  const [qualifications, setQualifications] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
+  const [showLocationPopup, setShowLocationPopup] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  // Fetch nurse profile
+  useEffect(() => {
+    if (userId) fetchNurseProfileById(userId);
+  }, [userId, fetchNurseProfileById]);
+  console.log("newww", selectedNurseProfile);
+
+  // When profile comes, set it to formData
+  useEffect(() => {
+    if (selectedNurseProfile) {
+      setFormData({
+        fullName: selectedNurseProfile.fullName || "",
+        email: selectedNurseProfile.email || "",
+        mobileNumber: selectedNurseProfile.mobileNumber || "",
+        gender: selectedNurseProfile.gender || "",
+        dob: selectedNurseProfile.dob || "",
+        address: selectedNurseProfile.addresses?.[0] || {},
+
+        educationQualifications:
+          selectedNurseProfile.educationQualifications || [],
+
+        specializations: selectedNurseProfile.specializations || [],
+
+        workSchedule: selectedNurseProfile.workSchedule || "",
+      });
+    }
+  }, [selectedNurseProfile]);
+
+  const categoryRole = (() => {
+    if (role === "REGISTERED_NURSE") return "REG_NURSES";
+    if (role === "ANCILLARY_PERSONAL") return "ANCILLARY";
+    return role;
+  })();
+
+  // Fetch dropdown lists
+  useEffect(() => {
+    fetchItems("qualifications", 1, 50, categoryRole);
+    fetchItems("specializations", 1, 50, categoryRole);
+  }, [categoryRole, fetchItems]);
+
+  useEffect(() => {
+    if (listedItems.qualifications) {
+      setQualifications(
+        listedItems.qualifications.map((q) => ({
+          label: q.qualification,
+          value: q.id,
+        }))
+      );
+    }
+    if (listedItems.specializations) {
+      setSpecializations(
+        listedItems.specializations.map((s) => ({
+          label: s.specialization,
+          value: s.id,
+        }))
+      );
+    }
+  }, [listedItems]);
 
   if (!show) return null;
 
-  const handleChange = (field, value) => {
-    onChange({ ...contact, [field]: value });
-  };
+  const handleChange = (field, value) =>
+    setFormData((prev) => ({ ...prev, [field]: value }));
 
-  const handleAddressChange = (field, value) => {
-    onChange({
-      ...contact,
+  const handleLocationUpdated = ({
+    latitude,
+    longitude,
+    mapLocation,
+    fullAddress,
+  }) => {
+    setFormData((prev) => ({
+      ...prev,
       address: {
-        ...contact.address,
-        [field]: value,
+        ...prev.address,
+        latitude,
+        longitude,
+        fullAddress: fullAddress || mapLocation,
       },
-    });
+    }));
   };
 
   const handleSave = async () => {
+    if (!formData.fullName || !formData.email || !formData.mobileNumber) {
+      alert("Full Name, Email and Mobile Number are required");
+      return;
+    }
+
     const payload = {
-      fullName: contact.fullName,
-      gender: contact.gender,
-      dob: contact.dob
-  ? new Date(contact.dob).toISOString().split("T")[0]
-  : null,
-      email: contact.email,
-      mobileNumber: contact.mobileNumber,
-      addressId: contact.address?.addressId,
-      state: contact.address?.state,
-      district: contact.address?.district,
-      city: contact.address?.city,
-      pincode: contact.address?.pincode,
-      educationQualifications: [contact.educationQualifications],
-      specializations: contact.specializations || [],
-      workSchedule: contact.workSchedule,
+      addressId: formData.address?.id || null,
+      fullName: formData.fullName,
+      gender: formData.gender,
+      dob: formData.dob || null,
+      email: formData.email,
+      mobileNumber: formData.mobileNumber,
+      educationQualifications: formData.educationQualifications,
+      specializations: formData.specializations,
+      workSchedule: formData.workSchedule,
+
+      // Only send if address has been updated
+      latitude: formData.address?.latitude,
+      longitude: formData.address?.longitude,
+      mapLocation: formData.address?.fullAddress,
     };
-    if (contact.dob && contact.dob.includes("T")) {
-    payload.dob = contact.dob; 
-  }
 
     try {
       await updateNurseDetails(userId, payload);
-      onCancel(); // Close modal
-    } catch (error) {
-      console.log(error.message || "Failed to update nurse");
+      onCancel();
+    } catch (err) {
+      console.error(err.message || "Failed to update nurse");
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="relative bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 shadow-xl border border-gray-200">
-        <button
-          onClick={onCancel}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition cursor-pointer"
-        >
-          <AiOutlineClose className="w-5 h-5" />
-        </button>
-
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Edit Nurse Details
-        </h2>
-
-        <div className="space-y-4">
-          <InputField
-            label="Full Name"
-            value={contact.fullName}
-            onChange={(e) => handleChange("fullName", e.target.value)}
-          />
-          <InputField
-            label="Email"
-            type="email"
-            value={contact.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-          />
-          <InputField
-            label="Mobile Number"
-            value={contact.mobileNumber}
-            readOnly
-            onChange={(e) => handleChange("mobileNumber", e.target.value)}
-          />
-          <InputField
-            label="Dob"
-            type="date"
-            value={
-              contact.dob
-                ? new Date(contact.dob).toISOString().split("T")[0]
-                : ""
-            }
-            onChange={(e) => handleChange("dob", e.target.value)}
-          />
-
-          <SelectField
-            label="Gender"
-            value={contact.gender}
-            options={[
-              { label: "Select gender", value: "" },
-              { label: "Male", value: "MALE" },
-              { label: "Female", value: "FEMALE" },
-              { label: "Other", value: "OTHER" },
-            ]}
-            onChange={(e) => handleChange("gender", e.target.value)}
-          />
-
-          <SelectField
-            label="Education Qualification"
-            value={contact.educationQualifications}
-            onChange={(e) =>
-              handleChange("educationQualifications", e.target.value)
-            }
-            options={[
-              { label: "MSc Nursing", value: "MSc Nursing" },
-              { label: "BSc Nursing", value: "BSc Nursing" },
-              { label: "BSc Nursing Pursuing", value: "BSc Nursing Pursuing" },
-              { label: "Post BSc Nursing", value: "Post BSc Nursing" },
-              { label: "GNM", value: "GNM" },
-              { label: "GNM Pursuing", value: "GNM Pursuing" },
-              { label: "ANM", value: "ANM" },
-              {
-                label: "GDA (General Duty Assistant)",
-                value: "GDA (General Duty Assistant)",
-              },
-              {
-                label: "PCA (Personal Care Assistant)",
-                value: "PCA (Personal Care Assistant)",
-              },
-              {
-                label: "DHA (Diploma in Health Assistant)",
-                value: "DHA (Diploma in Health Assistant)",
-              },
-            ]}
-          />
-
-          <SelectField
-            label="Specialization"
-            value={contact.specializations || ""}
-            onChange={(e) => handleChange("specializations", [e.target.value])}
-            options={[
-              {
-                label: "Staff Nurse / Ward Nurse",
-                value: "Staff Nurse / Ward Nurse",
-              },
-              { label: "ICU Nurse", value: "ICU Nurse / Critical Care Nurse" },
-              { label: "ER Nurse", value: "ER Nurse / Trauma Nurse" },
-              { label: "Pediatric Nurse", value: "Pediatric Nurse" },
-            ]}
-          />
-
-          <SelectField
-            label="Work Schedule"
-            value={contact.workSchedule}
-            options={[
-              { label: "Select schedule", value: "" },
-              { label: "Full Time", value: "FULL_TIME" },
-              { label: "Part Time", value: "PART_TIME" },
-            ]}
-            onChange={(e) => handleChange("workSchedule", e.target.value)}
-          />
-
-          {/* Address Fields */}
-          <div className="grid grid-cols-2 gap-4">
-            <InputField
-              label="State"
-              value={contact.address?.state || ""}
-              onChange={(e) => handleAddressChange("state", e.target.value)}
-            />
-            <InputField
-              label="District"
-              value={contact.address?.district || ""}
-              onChange={(e) => handleAddressChange("district", e.target.value)}
-            />
-            <InputField
-              label="City"
-              value={contact.address?.city || ""}
-              onChange={(e) => handleAddressChange("city", e.target.value)}
-            />
-            <InputField
-              label="Pincode"
-              value={contact.address?.pincode || ""}
-              onChange={(e) => handleAddressChange("pincode", e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex justify-end gap-3 mt-8">
+    <>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+        <div className="relative bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 shadow-xl border border-gray-200">
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg font-medium transition cursor-pointer"
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
           >
-            Cancel
+            <AiOutlineClose className="w-5 h-5" />
           </button>
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 bg-blue-800 hover:bg-blue-700 text-white rounded-lg font-semibold transition cursor-pointer"
-          >
-            Save
-          </button>
+
+          <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+            Edit Nurse Details
+          </h2>
+
+          <div className="space-y-4">
+            <InputField
+              label="Full Name"
+              value={formData.fullName || ""}
+              onChange={(e) => handleChange("fullName", e.target.value)}
+            />
+            <InputField
+              label="Email"
+              type="email"
+              value={formData.email || ""}
+              onChange={(e) => handleChange("email", e.target.value)}
+            />
+            <InputField
+              label="Mobile Number"
+              value={formData.mobileNumber || ""}
+              disabled={true}
+              readOnly
+            />
+            <InputField
+              label="Dob"
+              type="date"
+              value={
+                formData.dob
+                  ? new Date(formData.dob).toISOString().split("T")[0]
+                  : ""
+              }
+              onChange={(e) => handleChange("dob", e.target.value)}
+            />
+
+            <SelectField
+              label="Gender"
+              value={formData.gender || ""}
+              options={[
+                { label: "Select gender", value: "" },
+                { label: "MALE", value: "MALE" },
+                { label: "FEMALE", value: "FEMALE" },
+                { label: "OTHER", value: "OTHER" },
+              ]}
+              onChange={(e) => handleChange("gender", e.target.value)}
+            />
+
+            <SelectField
+              label="Education Qualification"
+              value={
+                formData.educationQualifications?.[0]?.qualificationId || ""
+              }
+              onChange={(e) => {
+                const selectedOption = qualifications.find(
+                  (q) => q.value === e.target.value
+                );
+
+                if (selectedOption) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    educationQualifications: [
+                      {
+                        // If editing existing, keep its original id
+                        id: prev.educationQualifications?.[0]?.id || null,
+                        qualification: selectedOption.label,
+                        qualificationId: selectedOption.value,
+                      },
+                    ],
+                  }));
+                } else {
+                  // Clear selection
+                  setFormData((prev) => ({
+                    ...prev,
+                    educationQualifications: [],
+                  }));
+                }
+              }}
+              options={[
+                { label: "Select qualification", value: "" },
+                ...qualifications,
+              ]}
+            />
+
+            <SelectField
+              label="Specialization"
+              value={formData.specializations?.[0]?.specializationId || ""}
+              onChange={(e) => {
+                const selectedOption = specializations.find(
+                  (s) => s.value === e.target.value
+                );
+
+                if (selectedOption) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    specializations: [
+                      {
+                        id: prev.specializations?.[0]?.id || null, // keep original id if exists
+                        name: selectedOption.label,
+                        specializationId: selectedOption.value,
+                      },
+                    ],
+                  }));
+                } else {
+                  // Clear selection if default option is selected
+                  setFormData((prev) => ({
+                    ...prev,
+                    specializations: [],
+                  }));
+                }
+              }}
+              options={[
+                { label: "Select specialization", value: "" },
+                ...specializations,
+              ]}
+            />
+
+            <SelectField
+              label="Work Schedule"
+              value={formData.workSchedule || ""}
+              onChange={(e) => handleChange("workSchedule", e.target.value)}
+              options={[
+                { label: "Select schedule", value: "" },
+                { label: "FULL_TIME", value: "FULL_TIME" },
+                { label: "PART_TIME", value: "PART_TIME" },
+              ]}
+            />
+
+            {/* Location */}
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700 mb-1">
+                Location
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowLocationPopup(true)}
+                className="border border-gray-300 rounded-lg p-2 text-sm text-left focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {formData.address?.fullAddress || "Pick location on map"}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-8">
+            <button
+              onClick={onCancel}
+              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 bg-blue-800 hover:bg-blue-700 text-white rounded-lg"
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {showLocationPopup && (
+        <LocationPickerPopup
+          currentLat={formData.address?.latitude}
+          currentLng={formData.address?.longitude}
+          onClose={() => setShowLocationPopup(false)}
+          onUpdated={handleLocationUpdated}
+        />
+      )}
+    </>
   );
 };
 
-// Reusable Input Field
-const InputField = ({ label, value, onChange, type = "text" ,...props }) => (
+// Input & Select Fields
+const InputField = ({
+  label,
+  value,
+  onChange,
+  disabled = false,
+  type = "text",
+  ...props
+}) => (
   <div className="flex flex-col">
     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
     <input
       type={type}
       value={value}
       onChange={onChange}
-      className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
       placeholder={`Enter ${label.toLowerCase()}`}
-       {...props}
+      disabled={disabled}
+      {...props}
     />
   </div>
 );
 
-// Reusable Select Field
 const SelectField = ({ label, value, onChange, options }) => (
   <div className="flex flex-col">
     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
@@ -233,7 +643,7 @@ const SelectField = ({ label, value, onChange, options }) => (
       className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       {options.map((opt) => (
-        <option key={opt.value} value={opt.value}>
+        <option key={opt.value || opt.label} value={opt.value}>
           {opt.label}
         </option>
       ))}

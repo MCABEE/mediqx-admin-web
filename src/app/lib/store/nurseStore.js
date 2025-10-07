@@ -10,6 +10,8 @@ import {
   getAssignableNurses,
   getNurseCalendar,
   searchNurses,
+  getNurseProfileById,
+  getNurseQualificationById
 } from "@/api/nurseApi";
 
 const useNurseStore = create(
@@ -23,7 +25,10 @@ const useNurseStore = create(
       totalPages: 0,
       totalUsers: 0,
       selectedNurse: null,
-      calendarData: null, //
+      calendarData: null,
+      selectedNurseProfile:null, 
+      selectedNurseQualification:null, 
+
 
       // fetchNurses: async (page = 1, limit = 10, status , role) => {
       //   set({ isLoading: true, error: null });
@@ -114,6 +119,35 @@ const useNurseStore = create(
           set({ isLoading: false });
         }
       },
+
+       fetchNurseProfileById: async (userId) => {
+        set({ isLoading: true, error: null });
+        try {
+          const nurseDetails = await getNurseProfileById(userId);
+          set({ selectedNurseProfile: nurseDetails });
+          console.log("Fetched nurse details:", nurseDetails);
+        } catch (error) {
+          set({ error: error.message });
+          console.error("Error fetching nurse details:", error);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+         fetchNurseQualificationById: async (userId) => {
+        set({ isLoading: true, error: null });
+        try {
+          const nurseDetails = await getNurseQualificationById(userId);
+          set({ selectedNurseQualification: nurseDetails });
+          console.log("Fetched nurse details:", nurseDetails);
+        } catch (error) {
+          set({ error: error.message });
+          console.error("Error fetching nurse details:", error);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
 
       verifyNurse: async (nurseId, status) => {
         set({ isLoading: true, error: null });
