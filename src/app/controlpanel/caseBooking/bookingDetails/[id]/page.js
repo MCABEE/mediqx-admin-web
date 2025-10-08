@@ -88,6 +88,7 @@ const BookingDetailsPage = () => {
   if (!selectedBooking) return <p className="p-8">No booking found.</p>;
 
   const booking = selectedBooking;
+console.log(booking);
 
   return (
     <div>
@@ -148,8 +149,8 @@ const BookingDetailsPage = () => {
             <span>{booking.stayAt}</span>
           </div>
           <div className="flex">
-            <span className="w-[250px] font-medium">Residential Address</span>
-            <span>{booking.city} </span>
+            <span className="w-[250px] font-medium">Residential Address<br/>(Billing Address)</span>
+            <span>{booking.fullAddress} </span>
           </div>
           {/* <div className="flex">
     <span className="w-[250px] font-medium">Pincode</span>
@@ -242,8 +243,11 @@ const BookingDetailsPage = () => {
           </div>
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
             <span>{booking.preferredGender || "-"}</span>
-            <span>{booking.preferredLanguages?.join(", ") || "-"}</span>
-          </div>
+<span>
+  {booking.preferredLanguages?.length
+    ? booking.preferredLanguages.map(lang => lang.language).join(", ")
+    : "-"}
+</span>          </div>
         </div>
       </div>
 
@@ -264,9 +268,9 @@ const BookingDetailsPage = () => {
     <span>Current Location</span>
   </div>
   <div className="flex flex-col gap-[10px] text-[16px] text-black">
-    {booking.latitude && booking.longitude ? (
+    {booking.currentServiceAddress ? (
       <>
-        <span>Available</span>
+        <span>{booking.currentServiceAddress}</span>
         
       </>
     ) : (

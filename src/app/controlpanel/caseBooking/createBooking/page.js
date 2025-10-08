@@ -784,6 +784,7 @@ import useBookingStore from "@/app/lib/store/bookingStore";
 import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
 import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
 import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
+import useLanguageStore from "@/app/lib/store/languageStore";
 
 const CaseBookingPage = () => {
   const { submitBooking } = useBookingStore();
@@ -820,6 +821,16 @@ const CaseBookingPage = () => {
   const [flexibility, setFlexibility] = useState("");
   const [preferredGender, setPreferredGender] = useState("");
   const [preferredLanguages, setPreferredLanguages] = useState([]);
+  const {
+  listedLanguages,
+  fetchLanguages,
+  isLoading: isLangLoading,
+  error: langErrorFetch,
+} = useLanguageStore();
+
+useEffect(() => {
+  fetchLanguages(1, 100);
+}, [fetchLanguages]);
 
   // ✅ Health Status store
   const {
@@ -894,13 +905,16 @@ const CaseBookingPage = () => {
     visitType === "ONE_TIME_VISIT" ? "0" : Number(form.durationValue),
   weekdays,
   flexibility,
-  preferredLanguages,
+  preferredLanguageId:preferredLanguages,
   preferredGender,
   durationValue: form.durationValue || 1,
+  officialAddress:form.location,
 };
 delete payload.diagnosis;
   delete payload.serviceType;
   delete payload.healthStatus;
+  delete payload.location;
+
 
     const result = await submitBooking(payload);
 
@@ -1096,7 +1110,7 @@ delete payload.diagnosis;
             className="w-[328px] h-[80px] rounded-[15px] px-4 border border-gray-300 pt-2 placeholder:text-black outline-none"
           />
 
-          <input
+          {/* <input
             type="text"
             name="pincode"
             value={form.pincode}
@@ -1112,7 +1126,7 @@ delete payload.diagnosis;
             pattern="\d{6}"
             maxLength={6}
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
-          />
+          /> */}
 
           <input
             name="contactPersonName"
@@ -1375,7 +1389,7 @@ delete payload.diagnosis;
             <option value="FEMALE">Female</option>
           </select>
 
-          <h1 className="text-[16px] font-semibold text-black">
+          {/* <h1 className="text-[16px] font-semibold text-black">
             Preferred Languages
           </h1>
           <div className="grid grid-cols-2 gap-2 mb-4">
@@ -1403,7 +1417,37 @@ delete payload.diagnosis;
             <span className="text-red-500 text-sm mb-2">
               Please select at least one preferred language.
             </span>
-          )}
+          )} */}
+          <h1 className="text-[16px] font-semibold text-black">Preferred Languages</h1>
+
+<div className="grid grid-cols-2 gap-2 mb-4">
+  {isLangLoading && <p>Loading languages...</p>}
+  {langErrorFetch && !isLangLoading && (
+    <p className="text-red-500">Failed to load languages.</p>
+  )}
+  {!isLangLoading &&
+    !langErrorFetch &&
+    listedLanguages.map((lang) => (
+      <label key={lang.id} className="inline-flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={preferredLanguages.includes(lang.id)}
+          onChange={() => {
+            toggleArray(lang.id, preferredLanguages, setPreferredLanguages);
+            if (preferredLanguages.length > 0) setLangError(false);
+          }}
+        />
+        {lang.language}
+      </label>
+    ))}
+</div>
+
+{langError && (
+  <span className="text-red-500 text-sm mb-2">
+    Please select at least one preferred language.
+  </span>
+)}
+
         </div>
 
         <button

@@ -1,5 +1,3 @@
-
-
 // "use client";
 // import useBookingStore from "@/app/lib/store/bookingStore";
 // import React, { useState, useEffect } from "react";
@@ -613,17 +611,6 @@
 
 // export default EditBookingPopup;
 
-
-
-
-
-
-
-
-
-
-
-
 // "use client";
 // import useBookingStore from "@/app/lib/store/bookingStore";
 // import React, { useState, useEffect } from "react";
@@ -971,16 +958,6 @@
 
 // export default EditBookingPopup;
 
-
-
-
-
-
-
-
-
-
-
 // "use client";
 // import React, { useState, useEffect } from "react";
 // import useBookingStore from "@/app/lib/store/bookingStore";
@@ -1277,11 +1254,6 @@
 
 // export default EditBookingPopup;
 
-
-
-
-
-
 // "use client";
 // import React, { useState, useEffect } from "react";
 // import useBookingStore from "@/app/lib/store/bookingStore";
@@ -1567,20 +1539,13 @@
 
 
 
-
-
-
-
 "use client";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import React, { useState, useEffect } from "react";
 import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
 import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
 import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
-
-
-
-
+import useLanguageStore from "@/app/lib/store/languageStore";
 
 // Input Group Component
 const InputGroup = ({ label, type = "text", name, value, onChange }) => (
@@ -1598,22 +1563,26 @@ const InputGroup = ({ label, type = "text", name, value, onChange }) => (
 
 const EditBookingPopup = ({ initialData, onClose, onSave }) => {
   const { listedServices, fetchServices } = usePatientServiceStore();
-const { listedHealthStatus, fetchHealthStatus } = useHealthStatusStore();
-const { listedDiagnoses, fetchDiagnosesList } = useDiagnosisStore();
+  const { listedHealthStatus, fetchHealthStatus } = useHealthStatusStore();
+  const { listedDiagnoses, fetchDiagnosesList } = useDiagnosisStore();
+  const {
+    listedLanguages,
+    fetchLanguages,
+    isLoading: isLangLoading,
+    error: langErrorFetch,
+  } = useLanguageStore();
 
-
-
+  console.log(initialData);
 
   const { updateExistingBooking } = useBookingStore();
   const [form, setForm] = useState({
-   
     // Patient Details
     fullName: "",
     gender: "",
     age: "",
     height: "",
     weight: "",
-     diagnosisId: "",
+    diagnosisId: "",
     healthStatusId: "",
     stayAt: "",
     city: "",
@@ -1623,7 +1592,7 @@ const { listedDiagnoses, fetchDiagnosesList } = useDiagnosisStore();
     contactPersonMobileNumber: "",
 
     // Service Details
-   
+
     startDate: "",
     serviceTypeId: "",
     durationType: "",
@@ -1638,18 +1607,24 @@ const { listedDiagnoses, fetchDiagnosesList } = useDiagnosisStore();
     preferredGender: "",
     preferredLanguages: [],
   });
-  useEffect(() => {
-  fetchServices(1, 50);       // load services
-  fetchHealthStatus(1, 50); // load health statuses
-  fetchDiagnosesList(1, 50);  // load diagnoses
-}, [fetchServices, fetchHealthStatus, fetchDiagnosesList]);
-console.log(listedServices);
-console.log(listedHealthStatus);
-console.log(listedDiagnoses);
 
- // Prefill form when initialData and API lists are ready
   useEffect(() => {
-    if (!initialData) return;
+    fetchServices(1, 50); // load services
+    fetchHealthStatus(1, 50); // load health statuses
+    fetchDiagnosesList(1, 50); // load diagnoses
+  }, [fetchServices, fetchHealthStatus, fetchDiagnosesList]);
+
+  console.log(listedServices);
+  console.log(listedHealthStatus);
+  console.log(listedDiagnoses);
+
+  useEffect(() => {
+    fetchLanguages(1, 100);
+  }, [fetchLanguages]);
+
+  // Prefill form when initialData and API lists are ready
+  useEffect(() => {
+    if (!initialData || !listedLanguages) return;
 
     const diagnosisOption = listedDiagnoses?.find(
       (d) => d.diagnosis === initialData.diagnosis
@@ -1663,6 +1638,7 @@ console.log(listedDiagnoses);
 
     setForm((prev) => ({
       ...prev,
+     userId:initialData.userId||"",
       fullName: initialData.fullName || "",
       gender: initialData.gender || "",
       age: initialData.age || "",
@@ -1672,7 +1648,7 @@ console.log(listedDiagnoses);
       serviceTypeId: serviceOption?.id || "",
       healthStatusId: healthStatusOption?.id || "",
       stayAt: initialData.stayAt || "",
-      city: initialData.city || "",
+      fullAddress: initialData.fullAddress || "",
       contactPersonName: initialData.contactPersonName || "",
       contactPersonRelation: initialData.contactPersonRelation || "",
       contactPersonEmail: initialData.contactPersonEmail || "",
@@ -1686,10 +1662,20 @@ console.log(listedDiagnoses);
       flexibility: initialData.flexibility || "",
       scheduleType: initialData.scheduleType || "",
       preferredGender: initialData.preferredGender || "",
-      preferredLanguages: initialData.preferredLanguages || [],
+      // preferredLanguages: initialData.preferredLanguages || [],
+      preferredLanguages:
+        initialData.preferredLanguages?.map((l) => ({
+          id: l.id,
+          language: l.language,
+        })) || [],
     }));
-  }, [initialData, listedDiagnoses, listedServices, listedHealthStatus]);
-
+  }, [
+    initialData,
+    listedLanguages,
+    listedDiagnoses,
+    listedServices,
+    listedHealthStatus,
+  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -1697,12 +1683,17 @@ console.log(listedDiagnoses);
   };
 
   const handleSave = async () => {
-    const bookingId = form.id;
+    const bookingId = initialData.id;
+    console.log(bookingId);
+    
     const payload = {
-        ...form,
-      diagnosis: listedDiagnoses.find((d) => d.id === form.diagnosisId)?.diagnosis,
-      serviceType: listedServices.find((s) => s.id === form.serviceTypeId)?.service,
-      healthStatus: listedHealthStatus.find((h) => h.id === form.healthStatusId)?.status,
+      ...form,
+      diagnosis: listedDiagnoses.find((d) => d.id === form.diagnosisId)
+        ?.diagnosis,
+      serviceType: listedServices.find((s) => s.id === form.serviceTypeId)
+        ?.service,
+      healthStatus: listedHealthStatus.find((h) => h.id === form.healthStatusId)
+        ?.status,
       userId: form.userId,
       patientName: form.fullName,
       gender: form.gender,
@@ -1713,7 +1704,7 @@ console.log(listedDiagnoses);
       // healthStatus: form.healthStatus,
       stayAt: form.stayAt,
       // serviceType: form.serviceType,
-      location: form.city,
+      officialAddress: form.fullAddress,
       // pincode: "123456",
       contactPersonName: form.contactPersonName,
       contactPersonRelation: form.contactPersonRelation,
@@ -1726,7 +1717,10 @@ console.log(listedDiagnoses);
       endTime: form.endTime,
       weekdays: form.weekdays,
       flexibility: form.flexibility,
-      preferredLanguages: form.preferredLanguages,
+      // preferredLanguages: form.preferredLanguages,
+      // preferredLanguageId: form.preferredLanguages,
+          preferredLanguageId: form.preferredLanguages.map((l) => l.id),
+
       preferredGender: form.preferredGender,
       scheduleType: form.scheduleType,
     };
@@ -1802,21 +1796,20 @@ console.log(listedDiagnoses);
               Health Status
             </label>
             <select
- name="healthStatusId"
-   value={form.healthStatusId}
-  onChange={handleChange}
-  className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
->
-  <option value="" disabled>Select Health Status</option>
-  {listedHealthStatus?.map((status) => (
-    <option key={status.id} value={status.id}>
-      {status.status}
-    </option>
-  ))}
-</select>
-
-
-
+              name="healthStatusId"
+              value={form.healthStatusId}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
+            >
+              <option value="" disabled>
+                Select Health Status
+              </option>
+              {listedHealthStatus?.map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.status}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="flex flex-col gap-[6px]">
@@ -1841,9 +1834,9 @@ console.log(listedDiagnoses);
           </div>
 
           <InputGroup
-            label="City"
-            name="city"
-            value={form.city}
+            label="Residential Address"
+            name="fullAddress"
+            value={form.fullAddress}
             onChange={handleChange}
           />
           <InputGroup
@@ -1918,21 +1911,21 @@ console.log(listedDiagnoses);
             <label className="text-sm font-medium text-[#1F2937]">
               Diagnosis
             </label>
-      <select
-   name="diagnosisId"
-  value={form.diagnosisId}
-  onChange={handleChange}
-  className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
->
-  <option value="" disabled>Select Diagnosis</option>
-  {listedDiagnoses?.map((d) => (
-    <option key={d.id} value={d.id}>
-      {d.diagnosis}
-    </option>
-  ))}
-</select>
-
-
+            <select
+              name="diagnosisId"
+              value={form.diagnosisId}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
+            >
+              <option value="" disabled>
+                Select Diagnosis
+              </option>
+              {listedDiagnoses?.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.diagnosis}
+                </option>
+              ))}
+            </select>
           </div>
 
           <InputGroup
@@ -1946,22 +1939,21 @@ console.log(listedDiagnoses);
             <label className="text-sm font-medium text-[#1F2937]">
               Service Type
             </label>
-     <select
-   name="serviceTypeId"
-  value={form.serviceTypeId}
-  onChange={handleChange}
-  className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
->
-  <option value="" disabled>Service Required</option>
-  {listedServices?.map((s) => (
-    <option key={s.id} value={s.id}>
-      {s.service}
-    </option>
-  ))}
-</select>
-
-
-
+            <select
+              name="serviceTypeId"
+              value={form.serviceTypeId}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
+            >
+              <option value="" disabled>
+                Service Required
+              </option>
+              {listedServices?.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.service}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="flex flex-col gap-[6px]">
@@ -1973,7 +1965,7 @@ console.log(listedDiagnoses);
               value={form.durationType}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+              className="w-[328px] py-2 rounded-md text-sm px-4 border border-gray-300 placeholder:text-black outline-none"
             >
               <option value="" disabled>
                 Single Visit / Periodically
@@ -2113,7 +2105,7 @@ console.log(listedDiagnoses);
           </div>
 
           {/* Read-only Input showing comma-separated selected languages */}
-          <div>
+          {/* <div>
             <InputGroup
               label="Preferred Languages (comma separated)"
               name="preferredLanguages"
@@ -2122,7 +2114,6 @@ console.log(listedDiagnoses);
               readOnly
             />
 
-            {/* Checkbox group for selecting preferred languages */}
             <div className="grid grid-cols-2 gap-2 my-4">
               {[
                 "HINDI",
@@ -2150,6 +2141,95 @@ console.log(listedDiagnoses);
                 </label>
               ))}
             </div>
+          </div> */}
+          {/* Preferred Languages */}
+          {/* Preferred Languages */}
+          {/* Preferred Languages */}
+          <div>
+            <label className="text-sm font-medium text-[#1F2937] mb-1 block">
+              Preferred Languages
+            </label>
+            {/* Readonly input showing selected language names */}
+            {/* <input
+              type="text"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm "
+              readOnly
+              value={
+                listedLanguages
+                  ?.filter((l) => form.preferredLanguages.includes(l.id))
+                  .map((l) => l.language)
+                  .join(", ") || ""
+              }
+            /> */}
+            <input
+              type="text"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm"
+              readOnly
+              value={form.preferredLanguages.map((l) => l.language).join(", ")}
+            />
+
+            {isLangLoading && (
+              <p className="text-gray-500">Loading languages...</p>
+            )}
+            {langErrorFetch && (
+              <p className="text-red-500">Failed to load languages</p>
+            )}
+
+            <div className="grid grid-cols-2 gap-2 my-4">
+              {/* {listedLanguages?.map((lang) => (
+                <label key={lang.id} className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.preferredLanguages?.includes(lang.id)}
+                    onChange={() => {
+                      const updated = form.preferredLanguages.includes(lang.id)
+                        ? form.preferredLanguages.filter((id) => id !== lang.id)
+                        : [...form.preferredLanguages, lang.id];
+                      setForm((prev) => ({
+                        ...prev,
+                        preferredLanguages: updated,
+                      }));
+                    }}
+                  />
+                  {lang.language}
+                </label>
+              ))} */}
+
+           {listedLanguages?.map((lang) => {
+  const isChecked = form?.preferredLanguages?.some(
+    (l) => l.id.toString() === lang.id.toString()
+  );
+
+  return (
+    <label key={lang.id} className="inline-flex items-center gap-2">
+      <input
+        type="checkbox"
+        checked={!!isChecked}
+        onChange={() => {
+          setForm((prev) => {
+            const already = prev.preferredLanguages.some(
+              (l) => l.id.toString() === lang.id.toString()
+            );
+            return {
+              ...prev,
+              preferredLanguages: already
+                ? prev.preferredLanguages.filter(
+                    (l) => l.id.toString() !== lang.id.toString()
+                  )
+                : [
+                    ...prev.preferredLanguages,
+                    { id: lang.id, language: lang.language },
+                  ],
+            };
+          });
+        }}
+      />
+      {lang.language}
+    </label>
+  );
+})}
+
+            </div>
           </div>
         </div>
 
@@ -2174,11 +2254,3 @@ console.log(listedDiagnoses);
 };
 
 export default EditBookingPopup;
-
-
-
-
-
-
-
-
