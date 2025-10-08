@@ -93,6 +93,8 @@ const BookingDetailsPage = () => {
   if (!selectedBooking) return <p className="p-8">No booking found.</p>;
 
   const booking = selectedBooking;
+  console.log(booking.preferredLanguages);
+  
 
   return (
     <div>
@@ -152,9 +154,9 @@ const BookingDetailsPage = () => {
             <span className="w-[250px] font-medium">Now Patient stayed at</span>
             <span>{booking.stayAt}</span>
           </div>
-          <div className="flex">
-            <span className="w-[250px] font-medium">Residential Address</span>
-            <span>{booking.city} </span>
+            <div className="flex">
+            <span className="w-[250px] font-medium">Residential Address<br/>(Billing Address)</span>
+            <span>{booking.fullAddress} </span>
           </div>
           {/* <div className="flex">
     <span className="w-[250px] font-medium">Pincode</span>
@@ -247,7 +249,11 @@ const BookingDetailsPage = () => {
           </div>
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
             <span>{booking.preferredGender || "-"}</span>
-            <span>{booking.preferredLanguages?.join(", ") || "-"}</span>
+            <span>
+  {booking.preferredLanguages?.length
+    ? booking.preferredLanguages.map(lang => lang.language).join(", ")
+    : "-"}
+</span>   
           </div>
         </div>
       </div>
@@ -262,27 +268,28 @@ const BookingDetailsPage = () => {
             Update Location
           </button>
         </div>
-        <div className="flex gap-12 p-8">
-          <div className="flex flex-col gap-[10px] text-[16px] text-black">
-            <span>Current Location</span>
-          </div>
-          <div className="flex flex-col gap-[10px] text-[16px] text-black">
-            {booking.latitude && booking.longitude ? (
-              <>
-                <span>Available</span>
-              </>
-            ) : (
-              <span>NA</span>
-            )}
-          </div>
-        </div>
+         <div className="flex gap-12 p-8">
+  <div className="flex flex-col gap-[10px] text-[16px] text-black">
+    <span>Current Location</span>
+  </div>
+  <div className="flex flex-col gap-[10px] text-[16px] text-black">
+    {booking.currentServiceAddress ? (
+      <>
+        <span>{booking.currentServiceAddress}</span>
+        
+      </>
+    ) : (
+      <span>NA</span>
+    )}
+  </div>
+</div>
       </div>
 
       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
         <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
           <h1 className="text-[16px] font-semibold text-black">
             Preferred Staff Category
-          </h1>
+          </h1> 
         </div>
         <div className="flex gap-10 p-8">
           <select
@@ -321,11 +328,16 @@ const BookingDetailsPage = () => {
                 service: booking.serviceType,
                 schedule: booking.durationType,
                 gender: booking.preferredGender,
-                language: booking.preferredLanguages?.join(", "),
-                location: `${booking.city}`,
+                
+                location: booking.currentServiceAddress,
                 latitude: booking.latitude,
                 longitude: booking.longitude,
-                language: booking.preferredLanguages || [],
+language: JSON.stringify(
+      (booking.preferredLanguages || []).map((l) => ({
+        id: l.id,
+        language: l.language,
+      }))
+    ),                // language: booking.preferredLanguages || [],
                 durationValue: booking.durationValue,
                 durationType: booking.durationType,
                 frequency: booking.weekdays,
@@ -354,12 +366,12 @@ const BookingDetailsPage = () => {
           >
             Cancel Service
           </button>
-          {/* <button
+          <button
             onClick={handleEditClick}
             className="w-[192px] h-[40px] bg-white text-[#333333] border flex justify-center items-center rounded-[15px] cursor-pointer"
           >
             Edit Service
-          </button> */}
+          </button>
         </div>
       </div>
 

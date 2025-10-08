@@ -247,7 +247,8 @@ console.log(booking);
   {booking.preferredLanguages?.length
     ? booking.preferredLanguages.map(lang => lang.language).join(", ")
     : "-"}
-</span>          </div>
+</span>   
+       </div>
         </div>
       </div>
 
