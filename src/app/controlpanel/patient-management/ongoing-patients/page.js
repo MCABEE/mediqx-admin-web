@@ -85,8 +85,7 @@ function page() {
         </button>
         {/* <span className="text-black font-semibold text-lg">{page} / {totalPages}</span> */}
         <button
-          //   onClick={() => setPage(Math.min(page + 1, totalPages))}
-          //   disabled={page === totalPages}
+         
           className="bg-[#C0D8F6] px-4 py-2 rounded disabled:opacity-50"
         >
           Next

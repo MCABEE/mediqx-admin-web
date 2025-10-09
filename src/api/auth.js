@@ -1,4 +1,4 @@
-import api from "./axiosInstance"; // assuming api.js is in the same folder
+import api from "./axiosInstance"; 
 
 export const login = async (mobileNumber, password) => {
   try {

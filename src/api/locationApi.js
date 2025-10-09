@@ -1,29 +1,3 @@
-// import api from "./axiosInstance";
-
-// // Create multiple locations
-// export const addLocations = async (locations) => {
-//   try {
-//     const response = await api.post(
-//       "/admin/locations/create-many",
-//       { locations },
-//       {
-//         headers: {
-//           accept: "application/json",
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw new Error(error.response?.data?.message || "Failed to add locations.");
-//   }
-// };
-
-
-
-
-
-
 import api from "./axiosInstance";
 
 // Create multiple locations

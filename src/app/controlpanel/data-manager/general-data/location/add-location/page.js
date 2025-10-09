@@ -1,14 +1,9 @@
-
-
-
-
-
 "use client";
-
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useLocationStore from "@/app/lib/store/locationStore";
 import Navlink from "@/components/dataManager/generalData/Navlink";
 import Link from "next/link";
+import UploadExcelPopup from "@/components/dataManager/generalData/UploadExcelPopup";
 
 function AddLocations() {
   const {
@@ -22,6 +17,8 @@ function AddLocations() {
     resetSuccess,
     setError
   } = useLocationStore();
+
+  const [uploadExcelPopup,setUploadExcelPopup]=useState(false)
 
   useEffect(() => {
     if (success || error) {
@@ -46,13 +43,21 @@ function AddLocations() {
               Manage
             </Link>
           </div>
-          <button
+          <div className="flex items-center gap-4">
+            <button 
+            className="bg-[#196BA5] text-white text-[16px] rounded-lg p-2 cursor-pointer"
+            onClick={()=>setUploadExcelPopup(true)}
+            >
+              Upload Excel
+            </button>
+            <button
             className="bg-[#196BA5] text-white text-3xl rounded-lg size-9 cursor-pointer"
             type="button"
             onClick={addLocationInput}
           >
             +
           </button>
+          </div>
         </div>
       </div>
 
@@ -120,6 +125,13 @@ function AddLocations() {
           Location added successfully!
         </div>
       )}
+
+
+      {
+        uploadExcelPopup && (
+          <UploadExcelPopup onClose={()=>setUploadExcelPopup(false)}/>
+        )
+      }
     </div>
   );
 }

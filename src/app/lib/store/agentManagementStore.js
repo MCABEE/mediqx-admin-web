@@ -31,7 +31,7 @@ const useAgentStore = create((set, get) => ({
 },
 
 
-    // ✅ Fetch agent by ID
+    // Fetch agent by ID
   fetchAgentById: async (id) => {
     set({ loading: true, error: null });
     try {
@@ -43,7 +43,7 @@ const useAgentStore = create((set, get) => ({
   },
 
 
-  // ✅ Register new agent
+  // Register new agent
   createAgent: async (formData) => {
     set({ loading: true, error: null, successMessage: "" });
     try {
@@ -61,8 +61,8 @@ const useAgentStore = create((set, get) => ({
     }
   },
 
-    // ✅ Update agent
-// ✅ Update agent
+  
+//  Update agent
 updateAgent: async (id, formData) => {
   set({ loading: true, error: null, successMessage: "" });
   try {
@@ -124,22 +124,6 @@ updateAgent: async (id, formData) => {
   },
 
 
-//  fetchAgentReferrals: async (agentId, page = 1, limit = 10) => {
-//   set({ loading: true, error: null });
-//   try {
-//     const response = await getAgentReferrals(agentId, page, limit);
-//     set({
-//       referrals: response.data?.referrals || [],
-//       agentInfo: response.data?.agentInfo || null,  // also save agent info if you want
-//       loading: false,
-//     });
-//   } catch (err) {
-//     set({ error: err.message, loading: false });
-//   }
-// },
-
-
-// lib/store/agentManagementStore.js
 
 fetchAgentReferrals: async (
   agentId,

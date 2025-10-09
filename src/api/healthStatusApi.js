@@ -1,4 +1,4 @@
-import api from "./axiosInstance"; // Axios instance pre-configured with baseURL and Authorization headers
+import api from "./axiosInstance"; 
 
 // Create many patient health statuses
 export const createManyHealthStatuses = async (patientHealthStatuses) => {

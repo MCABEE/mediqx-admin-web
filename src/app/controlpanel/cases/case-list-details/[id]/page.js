@@ -44,7 +44,7 @@ const BookingDetailsPage = () => {
 
   const booking = selectedBooking;
 
-  return ( 
+  return (
     <div>
       <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex gap-[50px] px-6 pt-6 rounded-[15px]">
         <p className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 border-b-8 border-[#3674B5]">
@@ -110,10 +110,6 @@ const BookingDetailsPage = () => {
             <span className="w-[250px] font-medium">Residential Address</span>
             <span>{booking.city} </span>
           </div>
-          {/* <div className="flex">
-    <span className="w-[250px] font-medium">Pincode</span>
-    <span>{booking.pincode}</span>
-  </div> */}
           <div className="flex">
             <span className="w-[250px] font-medium">Contact person</span>
             <span>{booking.contactPersonName}</span>
@@ -162,10 +158,6 @@ const BookingDetailsPage = () => {
             </span>
           </div>
 
-          {/* <div className="flex">
-    <span className="w-[200px] font-medium">End Time</span>
-    <span>{formatTime(booking.endTime)}</span>
-  </div> */}
           <div className="flex">
             <span className="w-[200px] font-medium">Frequency</span>
             <span>{booking.weekdays?.join(", ")}</span>
