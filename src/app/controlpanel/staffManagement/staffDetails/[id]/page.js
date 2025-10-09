@@ -8,6 +8,7 @@ import nurseStore from "@/app/lib/store/nurseStore";
 import EditContactModal from "@/components/staffManagement/NurseEdit/ContactDetails ";
 import EditNurseAvailability from "@/components/staffManagement/NurseEdit/EditNurseAvailability";
 import EditExperincePopup from "@/components/staffManagement/NurseEdit/EditExperincePopup";
+import NurseFileSection from "@/components/staffManagement/NurseFileSection";
 
 function StaffDetailPage() {
   const router = useRouter();
@@ -84,7 +85,7 @@ function StaffDetailPage() {
   const files = selectedNurse.files || [];
   const availabilities = selectedNurse.availabilities || [];
   const qualifications = selectedNurse.qualifications[0] || {};
-
+console.log(qualifications)
   const isImage = (fileName) => /\.(jpe?g|png|webp|gif)$/i.test(fileName);
 
   return (
@@ -279,7 +280,7 @@ function StaffDetailPage() {
           </div>
         </div>
         {/* File Uploads */}
-        {[
+        {/* {[
           { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
           { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
           {
@@ -350,7 +351,17 @@ function StaffDetailPage() {
               )}
             </div>
           );
-        })}
+        })} */}
+
+           <NurseFileSection
+        userId={nurseData.userId}
+        educationQualificationId={qualifications.id}
+  files={files}
+  qualifications={qualifications}
+  url={url}
+  setPreview={setPreview}
+/>
+        
         {/* Contact Details with edit */}
         {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
 
@@ -412,7 +423,7 @@ function StaffDetailPage() {
       )}
 
       {/* Preview Modal */}
-      {preview.show && (
+      {/* {preview.show && (
         <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
           <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
             <button
@@ -434,7 +445,42 @@ function StaffDetailPage() {
             )}
           </div>
         </div>
+      )} */}
+      {preview.show && (
+  <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
+    <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
+      <button
+        onClick={() =>
+          setPreview({ show: false, fileUrl: "", isImage: false })
+        }
+        className=" w-7  h-7 absolute top-0 -right-8 bg-[#ffff] rounded-full text-gray-500 hover:text-black text-xl font-semibold cursor-pointer"
+      >
+        ✕
+      </button>
+
+      {preview.isImage ? (
+        <img
+          src={preview.fileUrl}
+          alt="Preview"
+          className="max-w-full max-h-[80vh] mx-auto"
+        />
+      ) : (
+        <div className="w-full h-[80vh]">
+          <embed
+            src={preview.fileUrl}
+            type="application/pdf"
+            width="100%"
+            height="100%"
+          />
+          {/* <p className="text-center mt-2">
+            If you cannot see the PDF, <a href={preview.fileUrl} target="_blank" rel="noopener noreferrer">download it here</a>.
+          </p> */}
+        </div>
       )}
+    </div>
+  </div>
+)}
+
 
       <EditContactModal
         show={isEditModalOpen}

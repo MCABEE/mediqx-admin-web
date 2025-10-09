@@ -1105,7 +1105,7 @@ delete payload.diagnosis;
             name="location"
             value={form.location}
             onChange={handleChange}
-            placeholder="Residential Address"
+            placeholder="Residential Address (billing address)"
             required
             className="w-[328px] h-[80px] rounded-[15px] px-4 border border-gray-300 pt-2 placeholder:text-black outline-none"
           />

@@ -89,6 +89,21 @@ const useNurseRegistrationStore = create((set, get) => ({
     return result.data;
   },
 
+  generateUploadUrlDetail: async ({ userId, fileName, contentType, type }) => {
+  if (!userId) throw new Error("User ID not found");
+
+  const result = await generateFileUploadUrlAPI({
+    userId,
+    fileName,
+    contentType,
+    type,
+  });
+
+  if (!result.success) throw new Error(result.error);
+  return result.data; // { signedUrl, fileId }
+},
+
+
   confirmFileUpload: async (fileId, type) => {
     const result = await confirmFileUploadAPI(fileId, type);
     if (!result.success) throw new Error(result.error);
