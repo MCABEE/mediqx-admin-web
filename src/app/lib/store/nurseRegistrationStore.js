@@ -5,6 +5,7 @@ import {
   submitNursePageThree,
   generateFileUploadUrlAPI,
   confirmFileUploadAPI,
+  processExcelUploadAPI,
 } from "@/api/addStaffNurseApi";
 
 const useNurseRegistrationStore = create((set, get) => ({
@@ -104,11 +105,25 @@ const useNurseRegistrationStore = create((set, get) => ({
 },
 
 
+  // confirmFileUpload: async (fileId, type) => {
+  //   const result = await confirmFileUploadAPI(fileId, type);
+  //   if (!result.success) throw new Error(result.error);
+  //   return result.data;
+    
+  // },
+
   confirmFileUpload: async (fileId, type) => {
-    const result = await confirmFileUploadAPI(fileId, type);
-    if (!result.success) throw new Error(result.error);
-    return result.data;
-  },
+  const result = await confirmFileUploadAPI(fileId, type);
+
+  if (!result.success) throw new Error(result.error);
+
+  // Extract the actual fileId from nested response
+  const confirmedFileId = result.data?.data?.fileId;
+  if (!confirmedFileId) throw new Error("File ID not returned from confirm API");
+
+  return { fileId: confirmedFileId };
+},
+
 
   setUploadedFile: (field, fileId) => {
     set((state) => ({
@@ -117,6 +132,19 @@ const useNurseRegistrationStore = create((set, get) => ({
         [field]: fileId,
       },
     }));
+  },
+
+  processExcelFile: async (fileId) => {
+    try {
+      console.log("🔄 Processing Excel File with ID:", fileId);
+      const res = await processExcelUploadAPI(fileId);
+      if (!res?.success) throw new Error("Excel processing failed");
+      console.log("✅ Excel processed successfully:", res.data);
+      return res.data;
+    } catch (err) {
+      console.error("processExcelFile Error:", err);
+      throw err;
+    }
   },
 
   // Reset error/success/userId

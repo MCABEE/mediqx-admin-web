@@ -15,37 +15,65 @@ export default function Home() {
   const { login: loginToStore, loadToken } = useAuthStore();
 
   useEffect(() => {
-    loadToken(); // Load token if already present (optional)
+    loadToken(); 
   }, [loadToken]);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setErrorMessage(""); // Clear any previous error
-    setLoading(true); // Start loading
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setErrorMessage("");
+  //   setLoading(true); 
 
-    try {
-      const data = await login(mobileNumber, password);
-      const accessToken = data?.data.accessToken;
+  //   try {
+  //     const data = await login(mobileNumber, password);
+  //     const accessToken = data?.data.accessToken;
 
-      if (accessToken) {
-        loginToStore(accessToken);
-        router.push("/controlpanel/dashboard");
-      } else {
-        setErrorMessage("Login failed: No token received.");
-      }
-    } catch (error) {
-      console.error("Login failed", error);
+  //     if (accessToken) {
+  //       loginToStore(accessToken);
+  //       router.push("/controlpanel/dashboard");
+  //     } else {
+  //       setErrorMessage("Login failed: No token received.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login failed", error);
 
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Login failed. Please try again.";
+  //     const message =
+  //       error?.response?.data?.message ||
+  //       error?.message ||
+  //       "Login failed. Please try again.";
 
-      setErrorMessage(message);
-    } finally {
-      setLoading(false); // Stop loading in any case
+  //     setErrorMessage(message);
+  //   } finally {
+  //     setLoading(false); // Stop loading in any case
+  //   }
+  // };
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setErrorMessage("");
+  setLoading(true);
+
+  try {
+    const data = await login(mobileNumber, password);
+
+    const accessToken = data?.data?.accessToken;
+    const userId = data?.data?.userId; // <-- get userId from API
+
+    if (accessToken && userId) {
+      loginToStore(accessToken, userId); // pass both to store
+      router.push("/controlpanel/dashboard");
+    } else {
+      setErrorMessage("Login failed: Missing token or userId.");
     }
-  };
+  } catch (error) {
+    console.error("Login failed", error);
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Login failed. Please try again.";
+    setErrorMessage(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-100">

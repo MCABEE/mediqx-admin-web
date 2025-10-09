@@ -10,7 +10,7 @@ function page() {
       <Suspense fallback={<div>Loading...</div>}>
         <Table />
       </Suspense>
-      {/* <Table /> */}
+    
     </div>
   );
 }

@@ -71,7 +71,7 @@ const Page = () => {
       <Navlink />
 
       {/* Filter header */}
-      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between  px-6  rounded-[15px] mt-2">
+      {/* <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between  px-6  rounded-[15px] mt-2">
         <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
           <p>By Patient</p>
           <p>By Referral</p>
@@ -81,7 +81,7 @@ const Page = () => {
           <p className="text-black font-semibold pt-[23px] pb-[19px]">Clear</p>
           <input type="checkbox" className="size-[20px]" />
         </div>
-      </div>
+      </div> */}
 
       {/* Total count */}
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px]  px-6 text-black font-semibold text-[32px] flex justify-between">

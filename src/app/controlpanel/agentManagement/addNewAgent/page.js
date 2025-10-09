@@ -25,10 +25,8 @@ function Page() {
 
   const [formData, setFormData] = useState(initialState);
   const [mobileError, setMobileError] = useState("");
-    const [dob, setDob] = useState("");
-      const [isFocused, setIsFocused] = useState(false);
-
-
+  const [dob, setDob] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +42,7 @@ function Page() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // prevent default form reload
+    e.preventDefault();
 
     if (formData.mobileNumber.length !== 10) {
       setMobileError("Mobile number must be exactly 10 digits");
@@ -54,7 +52,7 @@ function Page() {
 
     const apiData = {
       ...formData,
-      mobileNumber: `+91${formData.mobileNumber}`, // ✅ prepend
+      mobileNumber: `+91${formData.mobileNumber}`,
     };
 
     try {
@@ -66,7 +64,7 @@ function Page() {
 
   useEffect(() => {
     if (successMessage) {
-      setFormData(initialState); // clear after success
+      setFormData(initialState);
     }
   }, [successMessage]);
 
@@ -88,7 +86,9 @@ function Page() {
               onChange={handleChange}
               className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] outline-none rounded-[15px] ps-8 pe-4"
             >
-              <option value="" className="text-gray-300">Type of Agent</option>
+              <option value="" className="text-gray-300">
+                Type of Agent
+              </option>
               <option value="INSTITUTION">Institution</option>
               <option value="DOCTOR">Doctor</option>
               <option value="HEALTHCARE_PROFESSIONAL">
@@ -120,38 +120,34 @@ function Page() {
               <option value="OTHER">Other</option>
             </select>
 
-            {/* <input
-              required
-              name="dob"
-              type="date"
-              value={formData.dob}
-              onChange={handleChange}
-              className="w-[328px] h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none  ps-8 pe-4"
-            /> */}
-                <div className="relative w-[328px]">
-      {isFocused ? (
-        <input
-          required
-          type="date"
-          name="dob"
-          value={formData.dob}
-          onChange={handleChange}
-          onBlur={() => setIsFocused(false)}
-          className="w-full h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none ps-8 pe-4"
-          autoFocus
-        />
-      ) : (
-        <input
-          type="text"
-          name="dob-dummy"
-          placeholder="Dob"
-          value={formData.dob ? new Date(formData.dob).toLocaleDateString() : ""}
-          onFocus={() => setIsFocused(true)}
-          readOnly
-          className="w-full h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none ps-8 pe-4 placeholder:text-black"
-        />
-      )}
-    </div>
+            <div className="relative w-[328px]">
+              {isFocused ? (
+                <input
+                  required
+                  type="date"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={handleChange}
+                  onBlur={() => setIsFocused(false)}
+                  className="w-full h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none ps-8 pe-4"
+                  autoFocus
+                />
+              ) : (
+                <input
+                  type="text"
+                  name="dob-dummy"
+                  placeholder="Dob"
+                  value={
+                    formData.dob
+                      ? new Date(formData.dob).toLocaleDateString()
+                      : ""
+                  }
+                  onFocus={() => setIsFocused(true)}
+                  readOnly
+                  className="w-full h-[40px] text-black text-[14px] font-light border border-[#BBBBBB] rounded-[15px] outline-none ps-8 pe-4 placeholder:text-black"
+                />
+              )}
+            </div>
 
             <select
               required
@@ -250,7 +246,7 @@ function Page() {
             <button
               type="submit"
               disabled={loading}
-              className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center cursor-pointer" 
+              className="w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center cursor-pointer"
             >
               {loading ? "Submitting..." : "Submit"}
             </button>
