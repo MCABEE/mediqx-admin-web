@@ -55,7 +55,7 @@ const BookingDetailsPage = () => {
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
         <div
           onClick={() => router.back()}
-          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px]"
+          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
         >
           Back
         </div>
@@ -106,9 +106,13 @@ const BookingDetailsPage = () => {
             <span className="w-[250px] font-medium">Now Patient stayed at</span>
             <span>{booking.stayAt}</span>
           </div>
-          <div className="flex">
-            <span className="w-[250px] font-medium">Residential Address</span>
-            <span>{booking.city} </span>
+         <div className="flex">
+            <span className="w-[250px] font-medium">
+              Residential Address
+              <br />
+              (Billing Address)
+            </span>
+            <span>{booking.fullAddress} </span>
           </div>
           <div className="flex">
             <span className="w-[250px] font-medium">Contact person</span>
@@ -173,7 +177,7 @@ const BookingDetailsPage = () => {
           </div>
         </div>
       </div>
-
+ 
       {/* STAFF PREFERENCE */}
       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB] mb-6">
         <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-b-2">
@@ -188,7 +192,13 @@ const BookingDetailsPage = () => {
           </div>
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
             <span>{booking.preferredGender || "-"}</span>
-            <span>{booking.preferredLanguages?.join(", ") || "-"}</span>
+            <span>
+              {booking.preferredLanguages?.length
+                ? booking.preferredLanguages
+                    .map((lang) => lang.language)
+                    .join(", ")
+                : "-"}
+            </span>
           </div>
         </div>
       </div>

@@ -338,14 +338,15 @@ const Table = () => {
       </div>
 
       {/* Total + Clear Filters */}
-      <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-4 pb-4 px-6 text-black font-semibold text-[16px] flex justify-between items-center">
-        <p>Total: {totalUsers}</p>
+      <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-4 pb-4 px-6 text-black font-semibold text-[32px] flex justify-between items-center">
+        <p>{totalUsers}</p>
         <button
           onClick={() => {
             setNameSearch(""); setLocationSearch(""); setQualificationSearch(""); setGender("");
             setCurrentPage(1); clearFilters();
           }}
-          className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
+                    className="bg-[#C0D8F6] px-4 py-2 rounded-md text-sm font-medium hover:bg-[#aac4ec]"
+
         >
           Clear Filters
         </button>
@@ -364,7 +365,7 @@ const Table = () => {
             </tr>
 
             {/* Filters Row */}
-            <tr>
+            {/* <tr>
               <th></th>
               <th className="border-l-4 border-[#F0F4F9] p-2">
                 <input type="text" placeholder="Search name" value={nameSearch} onChange={e => setNameSearch(e.target.value)}
@@ -387,7 +388,50 @@ const Table = () => {
                 <input type="text" placeholder="Search qualification" value={qualificationSearch} onChange={e => setQualificationSearch(e.target.value)}
                   className="w-full px-2 py-1 border border-[#0000003f] rounded focus:outline-none focus:ring-1 focus:ring-blue-500"/>
               </th>
-            </tr>
+            </tr> */}
+            <tr className="bg-white border-b border-gray-200">
+  <th></th>
+  <th className="p-2 border-l-4 border-[#F0F4F9]">
+    <input
+      type="text"
+      placeholder="Search name"
+      value={nameSearch}
+      onChange={(e) => setNameSearch(e.target.value)}
+      className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[#3674B5]"
+    />
+  </th>
+  <th className="p-2 border-l-4 border-[#F0F4F9]">
+    <input
+      type="text"
+      placeholder="Search location"
+      value={locationSearch}
+      onChange={(e) => setLocationSearch(e.target.value)}
+      className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[#3674B5]"
+    />
+  </th>
+  <th className="p-2 border-l-4 border-[#F0F4F9]">
+    <select
+      value={gender}
+      onChange={(e) => setGender(e.target.value)}
+      className="border border-gray-300 rounded-md px-2 py-1 text-sm w-full outline-none focus:ring-1 focus:ring-[#3674B5]"
+    >
+      <option value="">All</option>
+      <option value="MALE">Male</option>
+      <option value="FEMALE">Female</option>
+      <option value="OTHER">Other</option>
+    </select>
+  </th>
+  <th className="p-2 border-l-4 border-[#F0F4F9] rounded-r-2xl">
+    <input
+      type="text"
+      placeholder="Search qualification"
+      value={qualificationSearch}
+      onChange={(e) => setQualificationSearch(e.target.value)}
+      className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[#3674B5]"
+    />
+  </th>
+</tr>
+
           </thead>
 
           <tbody>

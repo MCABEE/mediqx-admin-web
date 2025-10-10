@@ -1,16 +1,44 @@
 import api from "./axiosInstance";
 
-export const getBookingDetails = async (page = 1, limit = 10, status) => {
-     const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&filter=${status}`, 
-    {
+// export const getBookingDetails = async (page = 1, limit = 10, status) => {
+//      const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&filter=${status}`, 
+//     {
      
 
-      headers: { accept: "application/json" },
-    }
-  );
+//       headers: { accept: "application/json" },
+//     }
+//   );
 
-  return response.data.data;
+//   return response.data.data;
+// };
+
+
+
+export const getBookingDetails = async (
+  page = 1,
+  limit = 10,
+  status,
+  name = "",
+  location = "",
+  date = ""
+) => {
+  try {
+    const response = await api.get(
+      `/admin/bookings?page=${page}&limit=${limit}&filter=${status}&name=${name}&location=${location}&date=${date}`,
+      {
+        headers: { accept: "application/json" },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to fetch bookings.";
+    console.error("Booking fetch error:", errorMessage);
+    throw new Error(errorMessage);
+  }
 };
+
 
 export const createBooking = async (payload) => {
   const response = await api.post("/admin/bookings", payload, {
