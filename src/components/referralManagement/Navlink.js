@@ -15,7 +15,8 @@ const Navlink = () => {
       <Link
         href="/controlpanel/referral-management/all-referrals"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-          isActive("/controlpanel/referral-management/all-referrals")
+          (isActive("/controlpanel/referral-management/all-referrals")||
+          isActive("/controlpanel/referral-management/all-patient-referrals"))
             ? "border-b-8 border-[#3674B5]"
             : "border-b-2 border-transparent"
         }`}

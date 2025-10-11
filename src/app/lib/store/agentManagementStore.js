@@ -1,6 +1,6 @@
 // src/store/agentStore.js
 import { create } from "zustand";
-import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals,updateAgentReferralStatus} from "@/api/agentManagementApi";
+import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals,updateAgentReferralStatus, updateAgentPatientReferralStatus, getAgentPatientReferrals} from "@/api/agentManagementApi";
 
 const useAgentStore = create((set, get) => ({
   agents: [],
@@ -13,6 +13,7 @@ const useAgentStore = create((set, get) => ({
   staffReferralLoading: false,
   staffReferralError: null,
   staffReferralTotalPages: 1,
+  referralsPatient:[],
 
  
  fetchAgents: async (page = 1, limit = 10, filter = "ALL") => {
@@ -123,7 +124,25 @@ updateAgent: async (id, formData) => {
     }
   },
 
+updateAgentPatientReferralStatus: async (referralId, status, referralSignupStaffId) => {
+  set({ loading: true, error: null });
+  try {
+    const updatedReferral = await updateAgentPatientReferralStatus(referralId, status, referralSignupStaffId);
 
+    // Update local state instead of full refetch
+    set((prev) => ({
+      referralsPatient: prev.referralsPatient.map((ref) =>
+        ref.id === referralId ? updatedReferral : ref
+      ),
+      loading: false,
+    }));
+
+    return { success: true };
+  } catch (err) {
+    set({ error: err.message, loading: false });
+    return { success: false };
+  }
+},
 
 fetchAgentReferrals: async (
   agentId,
@@ -146,7 +165,25 @@ fetchAgentReferrals: async (
 },
 
 
-
+fetchAgentPatientReferrals: async (
+  agentId,
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL"
+) => {
+  set({ loading: true, error: null });
+  try {
+    const response = await getAgentPatientReferrals(agentId, page, limit, referralStatus);
+    set({
+      referralsPatient: response?.data?.referrals || [],
+      agentInfo: response?.data?.agentInfo || null,
+      totalPages: response?.data?.totalPages || 1,
+      loading: false,
+    });
+  } catch (err) {
+    set({ error: err.message, loading: false });
+  }
+},
 
 fetchStaffReferrals: async (referralId, search, page, limit) => {
   set({ staffReferralLoading: true, staffReferralError: null });
