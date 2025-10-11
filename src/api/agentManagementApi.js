@@ -70,7 +70,7 @@ export const updateAgentApprovalStatus = async (agentId, status) => {
 export const updateAgentReferralStatus = async (agentId, status,referralSignupStaffId) => {
   try {
     const response = await api.patch(
-      `/admin/agent/${agentId}/referral-status`,
+      `/admin/agent-staff-referral/${agentId}/referral-status`,
       { status,referralSignupStaffId },
       {
         headers: { "Content-Type": "application/json" },
@@ -84,6 +84,20 @@ export const updateAgentReferralStatus = async (agentId, status,referralSignupSt
   }
 };
 
+export const updateAgentPatientReferralStatus = async (agentId, status, referralSignupStaffId) => {
+  try {
+    const response = await api.patch(
+      `/admin/agent-patient-referral/${agentId}/referral-status`,
+      { status, referralSignupStaffId },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to update approval status.";
+    throw new Error(message);
+  }
+};
 
 
 // lib/api/agent.js
@@ -96,8 +110,28 @@ export const getAgentReferrals = async (
 ) => {
   try {
     const response = await api.get(
-      `/admin/agent/referral/${agentId}?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
+      `/admin/agent-staff-referral/referral/${agentId}?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
     );
+    return response.data; 
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to fetch referrals.";
+    throw new Error(message);
+  }
+};
+
+export const getAgentPatientReferrals = async (
+  agentId,
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL" // ✅ default added
+) => {
+  try {
+    const response = await api.get(
+      `/admin/agent-patient-referral/referral/${agentId}?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
+    );
+    console.log(response);
+    
     return response.data; 
   } catch (error) {
     const message =

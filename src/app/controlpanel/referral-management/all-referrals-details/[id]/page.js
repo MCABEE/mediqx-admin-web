@@ -5,10 +5,11 @@ import { useRouter, useParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import useAgentStore from "@/app/lib/store/agentManagementStore";
 import Navlink from "@/components/referralManagement/Navlink";
+import Link from "next/link";
 
 const Page = () => {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams(); 
   const agentId = params?.id;
 
   // Set 'referrals' as default active tab
@@ -85,21 +86,37 @@ const Page = () => {
     <div className="pb-4">
       <Navlink />
 
-      {/* Header */}
-      <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex ">
-        <div
-          onClick={() => router.back()}
-          className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
-        >
-          Back
-        </div>
-        <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px]">
-          <p className="font-semibold">
-            {agentInfo?.fullName || "Patient Name"}
-          </p>
-          <div className="flex justify-center items-center gap-[92px]"></div>
-        </div>
-      </div>
+      <div className="w-full h-[48px] bg-[#C0D8F6] my-2 rounded-[15px] flex">
+              <Link
+                href={"/controlpanel/referral-management/all-referrals"}
+                className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
+              >
+                Back
+              </Link>
+              <div className="w-full flex text-[16px] text-black justify-between items-center ps-[19px] pe-[73px]">
+                <p className="font-semibold">{agentInfo?.fullName || "Agent Name"}</p>
+              </div>
+            </div>
+
+
+       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold flex gap-[72px] px-6 pt-6 rounded-[15px] mt-2">
+           
+            <h1
+            
+              className= "h-full box-border flex justify-center items-center text-base  text-[#3674B5]  px-2 pb-4 "
+            >
+              Staff Referrals
+            </h1>
+            <Link
+               href={`/controlpanel/referral-management/all-patient-referrals/${agentId}`}
+              className="h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 "
+               
+            >
+              Patient Referrals
+            </Link>
+          </div>
+
+      
 
       {/* Stats */}
       <div className="bg-white rounded-[15px] border border-[#BBBBBB] p-6 mt-2 flex justify-between">
@@ -187,7 +204,7 @@ const Page = () => {
                 </p>
               </div>
 
-              <div className="flex p-6 gap-16">
+              {/* <div className="flex p-6 gap-16">
                 <div className="flex flex-col gap-[10px] text-[16px] text-black">
                   <span>Type</span>
                   <span>Full Name</span>
@@ -204,6 +221,74 @@ const Page = () => {
                   <span>{ref.fullName || "-"}</span>
                   <span>{ref.qualificationOrService || "-"}</span>
                   <span>{ref.contactNumber || "-"}</span>
+                  <span
+                    className={`text-[16px]font-thin  ${
+                      ref.referralStatus?.toUpperCase() === "CONFIRMED"
+                        ? "text-green-600"
+                        : ref.referralStatus?.toUpperCase() === "CANCELLED"
+                        ? "text-red-600"
+                        : "text-blue-600"
+                    }`}
+                  >
+                    {ref.referralStatus || "-"}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                className={`rounded-[15px] px-8 py-2 mx-6 cursor-pointer mb-4 
+    ${
+      ref.referralStatus?.toUpperCase() === "PENDING"
+        ? "bg-[#3674B5] text-white hover:bg-[#19588f]"
+        : "bg-gray-400 text-white cursor-not-allowed"
+    }`}
+                onClick={() => handleManage(ref)}
+                disabled={ref.referralStatus?.toUpperCase() !== "PENDING"}
+              >
+                Manage
+              </button> */}
+               <div className="flex p-6 gap-16">
+                <div className="flex flex-col gap-[10px] text-[16px] text-black">
+               
+                  <span>Full Name</span>
+                
+                  <span>Gender</span>
+                  <span>DOB</span>
+                  <span>Contact Number</span>
+                  <span>Email ID</span>
+
+                  <span>Qualification</span>
+                  <span>specialization</span>
+                  <span>Experince Level</span>
+                  <span>Work Schedule</span>
+                  <span>Language</span>
+
+
+                  <span>Work Location</span>
+                  <span>Referral Status</span>
+                
+
+
+                </div>
+                <div className="flex flex-col gap-[10px] text-[16px] text-black">
+                  <span>{ref.fullName || "-"}</span>
+                  <span>{ref.gender || "-"}</span>
+                  <span>
+  {ref.dob ? new Date(ref.dob).toLocaleDateString("en-GB") : "-"}
+</span>
+
+                  <span>{ref.mobileNumber || "-"}</span>
+                  <span>{ref.email || "-"}</span>
+                  <span>{ref?.qualifications[0].qualification || "-"}</span>
+                  <span>{ref?.specializations[0].specialization || "-"}</span>
+                  <span>{ref.experienceLevel || "-"}</span>
+                  <span>{ref.workSchedule || "-"}</span>
+<span>
+  {ref.languagesdetails?.map(lang => lang.language).join(", ") || "-"}
+</span>
+                  <span>{ref.workLocation || "-"}</span>
+
+                 
                   <span
                     className={`text-[16px]font-thin  ${
                       ref.referralStatus?.toUpperCase() === "CONFIRMED"
