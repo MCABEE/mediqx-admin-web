@@ -386,7 +386,7 @@ const UpdateLocationPopup = ({
     const payload = {
       latitude: toNumber(newCoordinates.latitude),
       longitude: toNumber(newCoordinates.longitude),
-      mapLocation: locationName || "",
+      currentServiceAddress: locationName || "",
     };
 
     try {

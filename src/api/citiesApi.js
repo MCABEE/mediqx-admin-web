@@ -18,17 +18,6 @@ export const addCities = async (cities) => {
   }
 };
 
-// export const getDistricts = async (page = 1, limit = 10) => {
-//   try {
-//     const response = await api.get(`/admin/districts?page=${page}&limit=${limit}`, {
-//       headers: { accept: "application/json" },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     throw new Error(error.response?.data?.message || "Failed to fetch districts.");
-//   }
-// };
-
 export const getDistricts = async (page = 1, limit = 10, stateId = null) => {
   try {
     let url = `/admin/districts?page=${page}&limit=${limit}`;
@@ -43,17 +32,7 @@ export const getDistricts = async (page = 1, limit = 10, stateId = null) => {
 };
 
 
-// export const getCities = async (page = 1, limit = 10) => {
-//   try {
-//     const response = await api.get(`/admin/cities?page=${page}&limit=${limit}`, {
-//       headers: { accept: "application/json" },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     throw new Error(error.response?.data?.message || "Failed to fetch cities.");
-//   }
-// };
-// In citiesApi.js:
+
 export const getCities = async (page = 1, limit = 10, districtId = null) => {
   let url = `/admin/cities?page=${page}&limit=${limit}`;
   if (districtId) url += `&districtId=${districtId}`;

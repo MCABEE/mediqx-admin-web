@@ -51,24 +51,7 @@ const useCityStore = create(
 
       setSelectedDistrictId: (id) => set({ selectedDistrictId: id }),
 
-      // fetchDistricts: async (page = 1) => {
-      //   set({ isDistrictsLoading: true, error: null });
-      //   try {
-      //     const res = await getDistricts(page, get().limit);
-      //     set((state) => ({
-      //       districtsList:
-      //         page === 1
-      //           ? res.data.districts || []
-      //           : [...state.districtsList, ...(res.data.districts || [])],
-      //       districtsPage: res.data.page || page,
-      //       districtsTotalPages: res.data.totalPages || 0,
-      //     }));
-      //   } catch (error) {
-      //     set({ error: error.message || "Failed to fetch districts." });
-      //   } finally {
-      //     set({ isDistrictsLoading: false });
-      //   }
-      // },
+     
       scrollFetchCities: async (page = 1, districtId = null) => {
   set({ isLoading: true, error: null });
   try {
@@ -115,21 +98,7 @@ const useCityStore = create(
         }
       },
 
-      // fetchCities: async (page = 1) => {
-      //   set({ isLoading: true, error: null });
-      //   try {
-      //     const res = await getCities(page, get().limit);
-      //     set({
-      //       listedCities: res.data.cities || [],
-      //       page: res.data.page || page,
-      //       totalPages: res.data.totalPages || 0,
-      //     });
-      //   } catch (error) {
-      //     set({ error: error.message || "Failed to fetch cities." });
-      //   } finally {
-      //     set({ isLoading: false });
-      //   }
-      // },
+    
 
       // --- Store code snippet ---
       fetchCities: async (page = 1, districtId = null) => {
@@ -190,35 +159,7 @@ const useCityStore = create(
         }
       },
 
-      // updateCityById: async (id, data) => {
-      //   set({ isLoading: true, error: null });
-      //   try {
-      //     await updateCity(id, data);
-      //     await get().fetchCities(get().page);
-      //     set({ success: true, checkedIds: [] });
-      //   } catch (error) {
-      //     set({ error: error.message || "Failed to update city." });
-      //     throw error;
-      //   } finally {
-      //     set({ isLoading: false });
-      //   }
-      // },
-
-      // deleteCityById: async (id) => {
-      //   set({ isLoading: true, error: null });
-      //   try {
-      //     await deleteCity(id);
-      //     const { page, fetchCities, listedCities } = get();
-      //     const newPage = listedCities.length === 1 && page > 1 ? page - 1 : page;
-      //     set({ checkedIds: [] });
-      //     await fetchCities(newPage);
-      //     set({ page: newPage });
-      //   } catch (error) {
-      //     set({ error: error.message || "Failed to delete city." });
-      //   } finally {
-      //     set({ isLoading: false });
-      //   }
-      // },
+      
 
       updateCityById: async (id, data, districtId, page) => {
         set({ isLoading: true, error: null });

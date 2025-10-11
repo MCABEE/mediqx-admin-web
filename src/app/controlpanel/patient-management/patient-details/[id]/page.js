@@ -101,14 +101,15 @@ const BookingDetailsPage = () => {
             <span className="w-[250px] font-medium">Now Patient stayed at</span>
             <span>{booking.stayAt}</span>
           </div>
-          <div className="flex">
-            <span className="w-[250px] font-medium">Residential Address</span>
-            <span>{booking.city} </span>
+         <div className="flex">
+            <span className="w-[250px] font-medium">
+              Residential Address
+              <br />
+              (Billing Address)
+            </span>
+            <span>{booking.fullAddress} </span>
           </div>
-          {/* <div className="flex">
-    <span className="w-[250px] font-medium">Pincode</span>
-    <span>{booking.pincode}</span>
-  </div> */}
+         
           <div className="flex">
             <span className="w-[250px] font-medium">Contact person</span>
             <span>{booking.contactPersonName}</span>

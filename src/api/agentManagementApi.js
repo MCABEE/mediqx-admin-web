@@ -17,7 +17,6 @@ export const getAgents = async (page = 1, limit = 10, filter = "ALL") => {
     const response = await api.get(
       `/admin/agent?page=${page}&limit=${limit}&filter=${filter}`
     );
-    // Return the inner 'data' property which contains { agents, total, page, ... }
     return response.data.data;
   } catch (error) {
     const message = error.response?.data?.message || "Failed to fetch agents.";
@@ -25,7 +24,7 @@ export const getAgents = async (page = 1, limit = 10, filter = "ALL") => {
   }
 };
 
-// ✅ Get agent by ID
+// Get agent by ID
 export const getAgentById = async (id) => {
   try {
     const response = await api.get(`/admin/agent/${id}`);
@@ -37,7 +36,7 @@ export const getAgentById = async (id) => {
   }
 };
 
-// ✅ Update agent by ID
+// Update agent by ID
 export const updateAgent = async (id, agentData) => {
   try {
     const response = await api.put(`/admin/agentupdate/${id}`, agentData, {
@@ -50,7 +49,7 @@ export const updateAgent = async (id, agentData) => {
   }
 };
 
-// ✅ Update Agent Approval Status
+//  Update Agent Approval Status
 export const updateAgentApprovalStatus = async (agentId, status) => {
   try {
     const response = await api.patch(
@@ -60,7 +59,7 @@ export const updateAgentApprovalStatus = async (agentId, status) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-    return response.data; // Assuming backend returns updated agent or success message
+    return response.data; 
   } catch (error) {
     const message =
       error.response?.data?.message || "Failed to update approval status.";
@@ -71,13 +70,13 @@ export const updateAgentApprovalStatus = async (agentId, status) => {
 export const updateAgentReferralStatus = async (agentId, status,referralSignupStaffId) => {
   try {
     const response = await api.patch(
-      `/admin/agent/${agentId}/referral-status`,
+      `/admin/agent-staff-referral/${agentId}/referral-status`,
       { status,referralSignupStaffId },
       {
         headers: { "Content-Type": "application/json" },
       }
     );
-    return response.data; // Assuming backend returns updated agent or success message
+    return response.data;
   } catch (error) {
     const message =
       error.response?.data?.message || "Failed to update approval status.";
@@ -85,18 +84,20 @@ export const updateAgentReferralStatus = async (agentId, status,referralSignupSt
   }
 };
 
-// export const getAgentReferrals = async (agentId, page = 1, limit = 10) => {
-//   try {
-//     const response = await api.get(
-//       `/admin/agent/referral/${agentId}?page=${page}&limit=${limit}`
-//     );
-//     return response.data; // adapt if response.data structure differs
-//   } catch (error) {
-//     const message =
-//       error.response?.data?.message || "Failed to fetch referrals.";
-//     throw new Error(message);
-//   }
-// };
+export const updateAgentPatientReferralStatus = async (agentId, status, referralSignupStaffId) => {
+  try {
+    const response = await api.patch(
+      `/admin/agent-patient-referral/${agentId}/referral-status`,
+      { status, referralSignupStaffId },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to update approval status.";
+    throw new Error(message);
+  }
+};
 
 
 // lib/api/agent.js
@@ -109,9 +110,29 @@ export const getAgentReferrals = async (
 ) => {
   try {
     const response = await api.get(
-      `/admin/agent/referral/${agentId}?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
+      `/admin/agent-staff-referral/referral/${agentId}?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
     );
-    return response.data; // adapt if backend sends { data: {...} }
+    return response.data; 
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to fetch referrals.";
+    throw new Error(message);
+  }
+};
+
+export const getAgentPatientReferrals = async (
+  agentId,
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL" // ✅ default added
+) => {
+  try {
+    const response = await api.get(
+      `/admin/agent-patient-referral/referral/${agentId}?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
+    );
+    console.log(response);
+    
+    return response.data; 
   } catch (error) {
     const message =
       error.response?.data?.message || "Failed to fetch referrals.";

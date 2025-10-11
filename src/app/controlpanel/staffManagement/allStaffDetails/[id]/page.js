@@ -8,6 +8,7 @@ import nurseStore from "@/app/lib/store/nurseStore";
 import EditContactModal from "@/components/staffManagement/NurseEdit/ContactDetails ";
 import EditNurseAvailability from "@/components/staffManagement/NurseEdit/EditNurseAvailability";
 import EditExperincePopup from "@/components/staffManagement/NurseEdit/EditExperincePopup";
+import NurseFileSection from "@/components/staffManagement/NurseFileSection";
 
 function StaffDetailPage() {
   const router = useRouter();
@@ -128,24 +129,16 @@ function StaffDetailPage() {
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Gender</span>
-            <span>{selectedNurse.gender}</span>
+            <div className="grow">{selectedNurse.gender}</div>
           </div>
+      
+        
+         
           <div className="flex gap-[18px]">
-            <span className="w-[280px]">State</span>
-            <span>{address.state}</span>
+            <div className="w-[280px]">Address</div>
+            <div className="flex-1">{address.fullAddress}</div>
           </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">District</span>
-            <span>{address.district}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">City</span>
-            <span>{address.city}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">Pin Code</span>
-            <span>{address.pincode}</span>
-          </div>
+         
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Email</span>
@@ -155,7 +148,7 @@ function StaffDetailPage() {
             <span className="w-[280px]">Phone Number</span>
             <span>{selectedNurse.mobileNumber}</span>
           </div>
-           <div className="flex gap-[18px]">
+          <div className="flex gap-[18px]">
             <span className="w-[280px]">DOB</span>
             <span>
               {selectedNurse.dob
@@ -189,8 +182,7 @@ function StaffDetailPage() {
             </button> */}
           </div>
           {/* Availability */}
-          <AvailabilitySchedule availabilities={availabilities}
-           />
+          <AvailabilitySchedule availabilities={availabilities} />
           <div className="flex items-center justify-end mt-6">
             <button
               onClick={() => setIsExperincePopUp(true)}
@@ -231,13 +223,10 @@ function StaffDetailPage() {
               <span>{qualifications.department || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
-              <span className="w-[280px]">State</span>
-              <span>{qualifications.providerState || "Nil"}</span>
-            </div>
-            <div className="flex gap-[18px]">
               <span className="w-[280px]">Location</span>
-              <span>{qualifications.providerLocation || "Nil"}</span>
+              <span className="flex-1">{qualifications.providerAddress || "Nil"}</span>
             </div>
+
 
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
@@ -291,7 +280,7 @@ function StaffDetailPage() {
           </div>
         </div>
         {/* File Uploads */}
-        {[
+        {/* {[
           { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
           { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
           {
@@ -315,7 +304,7 @@ function StaffDetailPage() {
           return (
             <div
               key={type}
-              className="flex flex-col bg-[#EBF2F8] px-[39px] py-6 gap-2 "
+              className="flex flex-col bg-[#EBF2F8] px-[39px] py-6 gap-2"
             >
               <span className="w-[300px] text-black">{label}</span>
               {file ? (
@@ -362,9 +351,19 @@ function StaffDetailPage() {
               )}
             </div>
           );
-        })}
-        {/* Contact Details with edit */}
-        {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
+        })} */}
+        <NurseFileSection
+        userId={nurseData.userId}
+        educationQualificationId={qualifications.id}
+
+  files={files}
+  qualifications={qualifications}
+  url={url}
+  setPreview={setPreview}
+/>
+        
+
+       
       </div>
 
       {/* Confirm Modal */}

@@ -1,17 +1,44 @@
 import api from "./axiosInstance";
 
-export const getBookingDetails = async (page = 1, limit = 10, status) => {
-  // const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&status=${status}`,
-     const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&filter=${status}`, 
-    {
+// export const getBookingDetails = async (page = 1, limit = 10, status) => {
+//      const response = await api.get(`/admin/bookings?page=${page}&limit=${limit}&filter=${status}`, 
+//     {
      
 
-      headers: { accept: "application/json" },
-    }
-  );
+//       headers: { accept: "application/json" },
+//     }
+//   );
 
-  return response.data.data;
+//   return response.data.data;
+// };
+
+
+
+export const getBookingDetails = async (
+  page = 1,
+  limit = 10,
+  status,
+  name = "",
+  location = "",
+  date = ""
+) => {
+  try {
+    const response = await api.get(
+      `/admin/bookings?page=${page}&limit=${limit}&filter=${status}&name=${name}&location=${location}&date=${date}`,
+      {
+        headers: { accept: "application/json" },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to fetch bookings.";
+    console.error("Booking fetch error:", errorMessage);
+    throw new Error(errorMessage);
+  }
 };
+
 
 export const createBooking = async (payload) => {
   const response = await api.post("/admin/bookings", payload, {
@@ -30,7 +57,7 @@ export const getBookingById = async (id) => {
       accept: "application/json",
     },
   });
-  return response.data.data; // Assuming `data` is the nested object
+  return response.data.data;
 };
 
 export const confirmBookingApi = async (bookingId, payload) => {
@@ -90,7 +117,7 @@ export const searchCoordinatesByText = async (text) => {
       }
     );
 
-    return response.data.data; // Adjust if the key is not `data`
+    return response.data.data; 
   } catch (error) {
     console.error("Error fetching coordinates:", error);
     return null;

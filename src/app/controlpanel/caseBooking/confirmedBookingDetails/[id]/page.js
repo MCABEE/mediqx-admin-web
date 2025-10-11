@@ -93,6 +93,7 @@ const BookingDetailsPage = () => {
   if (!selectedBooking) return <p className="p-8">No booking found.</p>;
 
   const booking = selectedBooking;
+  console.log(booking.preferredLanguages);
 
   return (
     <div>
@@ -153,13 +154,13 @@ const BookingDetailsPage = () => {
             <span>{booking.stayAt}</span>
           </div>
           <div className="flex">
-            <span className="w-[250px] font-medium">Residential Address</span>
-            <span>{booking.city} </span>
+            <span className="w-[250px] font-medium">
+              Residential Address
+              <br />
+              (Billing Address)
+            </span>
+            <span>{booking.fullAddress} </span>
           </div>
-          {/* <div className="flex">
-    <span className="w-[250px] font-medium">Pincode</span>
-    <span>{booking.pincode}</span>
-  </div> */}
           <div className="flex">
             <span className="w-[250px] font-medium">Contact person</span>
             <span>{booking.contactPersonName}</span>
@@ -207,16 +208,9 @@ const BookingDetailsPage = () => {
           </div>
           <div className="flex">
             <span className="w-[200px] font-medium">Duration</span>
-            <span>
-              {booking.durationType}
-              {/* ({booking.durationValue} ) */}
-            </span>
+            <span>{booking.durationType}</span>
           </div>
 
-          {/* <div className="flex">
-    <span className="w-[200px] font-medium">End Time</span>
-    <span>{formatTime(booking.endTime)}</span>
-  </div> */}
           <div className="flex">
             <span className="w-[200px] font-medium">Frequency</span>
             <span>{booking.weekdays?.join(", ")}</span>
@@ -247,7 +241,13 @@ const BookingDetailsPage = () => {
           </div>
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
             <span>{booking.preferredGender || "-"}</span>
-            <span>{booking.preferredLanguages?.join(", ") || "-"}</span>
+            <span>
+              {booking.preferredLanguages?.length
+                ? booking.preferredLanguages
+                    .map((lang) => lang.language)
+                    .join(", ")
+                : "-"}
+            </span>
           </div>
         </div>
       </div>
@@ -267,9 +267,9 @@ const BookingDetailsPage = () => {
             <span>Current Location</span>
           </div>
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
-            {booking.latitude && booking.longitude ? (
+            {booking.currentServiceAddress ? (
               <>
-                <span>Available</span>
+                <span>{booking.currentServiceAddress}</span>
               </>
             ) : (
               <span>NA</span>
@@ -321,11 +321,16 @@ const BookingDetailsPage = () => {
                 service: booking.serviceType,
                 schedule: booking.durationType,
                 gender: booking.preferredGender,
-                language: booking.preferredLanguages?.join(", "),
-                location: `${booking.city}`,
+
+                location: booking.currentServiceAddress,
                 latitude: booking.latitude,
                 longitude: booking.longitude,
-                language: booking.preferredLanguages || [],
+                language: JSON.stringify(
+                  (booking.preferredLanguages || []).map((l) => ({
+                    id: l.id,
+                    language: l.language,
+                  }))
+                ), // language: booking.preferredLanguages || [],
                 durationValue: booking.durationValue,
                 durationType: booking.durationType,
                 frequency: booking.weekdays,
@@ -354,12 +359,12 @@ const BookingDetailsPage = () => {
           >
             Cancel Service
           </button>
-          {/* <button
+          <button
             onClick={handleEditClick}
             className="w-[192px] h-[40px] bg-white text-[#333333] border flex justify-center items-center rounded-[15px] cursor-pointer"
           >
             Edit Service
-          </button> */}
+          </button>
         </div>
       </div>
 

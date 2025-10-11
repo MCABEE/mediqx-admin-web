@@ -1,86 +1,3 @@
-// "use client";
-// import EditPopup from "@/components/dataManager/generalData/EditPopup";
-// import Navlink from "@/components/dataManager/generalData/Navlink";
-// import Link from "next/link";
-// import React, { useState } from "react";
-
-// function page() {
-//   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-//   return (
-//     <div>
-//       <Navlink />
-//       <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
-//         <div className="w-full flex item-center justify-between pt-[23px] pb-[19px]">
-//           <div className=" flex items-center gap-[50px]">
-//             <Link
-//               href={
-//                 " /controlpanel/data-manager/general-data/states/add-states"
-//               }
-//               className="text-black"
-//             >
-//               Add
-//             </Link>
-
-//             <h1 className="text-[#3674B5]">Manage</h1>
-//           </div>
-//         </div>
-//       </div>
-
-//       <div className="w-full bg-[#C0D8F6] mt-2 rounded-t-[15px] px-6">
-//         <h1 className="text-black font-semibold py-[16px] ">Manage States</h1>
-//       </div>
-//       <div className="bg-white flex  items-center gap-2 px-6 py-2 mt-2">
-//         <div className="border border-[#8888888c] py-2 px-4 rounded-[15px]">
-//           01
-//         </div>
-//         <input
-//           type="text"
-//           className="w-[350px] border border-[#8888888c] py-2 px-4 rounded-[15px] outline-none"
-//           placeholder="Enter Language"
-//         />
-//         <input type="checkbox" className="size-6 rounded-[15px]" />
-//       </div>
-//       <div className="bg-white flex  items-center gap-2 px-6 py-2 mt-2">
-//         <div className="border border-[#8888888c] py-2 px-4 rounded-[15px]">
-//           02
-//         </div>
-//         <input
-//           type="text"
-//           className="w-[350px] border border-[#8888888c] py-2 px-4 rounded-[15px] outline-none"
-//           placeholder="Enter Language"
-//         />
-//         <input type="checkbox" className="size-6 rounded-[15px]" />
-//       </div>
-
-//       <div className="flex gap-3">
-//         <button
-//           className="bg-[#196BA5] text-white  rounded-[15px] py-2 px-10 mt-2 cursor-pointer "
-//           onClick={() => setIsPopupOpen(true)}
-//         >
-//           Edit
-//         </button>
-//         <button className="bg-[#196BA5] text-white  rounded-[15px] py-2 px-10 mt-2 cursor-pointer">
-//           Remove
-//         </button>
-//       </div>
-//       {isPopupOpen && (
-//         <EditPopup heading={"State"} onClose={() => setIsPopupOpen(false)} />
-//       )}
-//     </div>
-//   );
-// }
-
-// export default page;
-
-
-
-
-
-
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import useStateStore from "@/app/lib/store/stateStore";
@@ -94,7 +11,8 @@ function ConfirmDeletePopup({ id, stateName, onConfirm, onCancel }) {
       <div className="bg-white p-6 rounded-2xl shadow-md w-[350px]">
         <h2 className="font-semibold text-lg mb-4">Confirm Deletion</h2>
         <p>
-          Are you sure you want to delete the state <strong>{stateName}</strong>?
+          Are you sure you want to delete the state <strong>{stateName}</strong>
+          ?
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <button
@@ -172,7 +90,9 @@ function ManageStatesPage() {
     } catch (error) {
       if (
         (error.response?.data?.message &&
-          error.response.data.message.toLowerCase().includes("unique constraint failed")) ||
+          error.response.data.message
+            .toLowerCase()
+            .includes("unique constraint failed")) ||
         (typeof error.message === "string" &&
           error.message.toLowerCase().includes("unique constraint failed"))
       ) {
@@ -288,8 +208,8 @@ function ManageStatesPage() {
             <ConfirmDeletePopup
               id={checkedItems[0]}
               stateName={
-                listedStates.find((state) => state.id === checkedItems[0])?.name ||
-                ""
+                listedStates.find((state) => state.id === checkedItems[0])
+                  ?.name || ""
               }
               onConfirm={handleDeleteConfirm}
               onCancel={() => setIsConfirmOpen(false)}

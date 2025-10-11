@@ -38,9 +38,6 @@
 //   const { assignNurse } = useBookingStore();
 //   const { users, fetchAssignableNurses, isLoading } = useNurseStore();
 
-
-
-
 //   const formatTime = (isoString) => {
 //     if (!isoString) return "-";
 //     const date = new Date(isoString);
@@ -50,7 +47,6 @@
 //     const paddedMinutes = minutes.toString().padStart(2, "0");
 //     return `${paddedHours}:${paddedMinutes}`;
 //   };
-
 
 //   // const buildParams = (override = {}) => {
 //   //   const baseParams = {
@@ -84,7 +80,6 @@
 //   // };
 
 //   // ✅ Fetch nurses when params change
-  
 
 // const buildParams = (override = {}) => {
 //   let parsedFrequency = [];
@@ -123,9 +118,6 @@
 
 //   return baseParams;
 // };
-
-
-
 
 //   useEffect(() => {
 //     if (!from || !latitude || !longitude) {
@@ -239,15 +231,6 @@
 // };
 
 // export default AssignStaffPage;
-
-
-
-
-
-
-
-
-
 
 // "use client";
 
@@ -449,11 +432,6 @@
 
 // export default AssignStaffPage;
 
-
-
-
-
-
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -476,7 +454,7 @@ const AssignStaffPage = () => {
   const schedule = searchParams.get("schedule");
   const gender = searchParams.get("gender");
   const frequencyRaw = searchParams.getAll("frequency"); // array or []
-  const languageRaw = searchParams.getAll("language");   // array or []
+  const languageRaw = searchParams.getAll("language"); // array or []
   const location = searchParams.get("location");
   const latitude = searchParams.get("latitude");
   const longitude = searchParams.get("longitude");
@@ -486,6 +464,14 @@ const AssignStaffPage = () => {
   const scheduleType = searchParams.get("scheduleType");
   const startTime = searchParams.get("startTime");
   const endTime = searchParams.get("endTime");
+  
+  let languageObjects = [];
+  try {
+    languageObjects = JSON.parse(languageRaw);
+  } catch (err) {
+    console.warn("❌ Failed to parse language query param:", err);
+    languageObjects = [];
+  }
 
   // Memoize frequency and language to stabilize dependencies
   const frequencyParams = useMemo(() => frequencyRaw, [frequencyRaw.join(",")]);
@@ -603,7 +589,9 @@ const AssignStaffPage = () => {
       {/* Patient Details */}
       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
         <div className="h-[72px] flex items-center px-8 border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">Patient Details</h1>
+          <h1 className="text-[16px] font-semibold text-black">
+            Patient Details
+          </h1>
         </div>
         <div className="grid grid-cols-2 gap-y-[10px] p-8 text-[16px] text-black">
           <span className="font-medium">Service Period (From)</span>
@@ -619,7 +607,11 @@ const AssignStaffPage = () => {
           <span>{gender}</span>
 
           <span className="font-medium">Language</span>
-          <span>{languageParams.join(", ")}</span>
+          <span>
+            {languageObjects.length
+              ? languageObjects.map((l) => l.language).join(", ")
+              : "-"}
+          </span>
 
           <span className="font-medium">Location</span>
           <span>{location}</span>

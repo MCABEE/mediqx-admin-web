@@ -69,7 +69,6 @@ function ManageDistrictsPage() {
     fetchStates(1);
   }, [fetchStates]);
 
-  // Load districts when selectedStateId or page changes
   // Load districts when page or selectedStateId changes
   useEffect(() => {
     fetchDistricts(page, selectedStateId || null);
