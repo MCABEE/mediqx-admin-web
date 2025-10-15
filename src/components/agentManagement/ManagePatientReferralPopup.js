@@ -322,7 +322,7 @@ function ManagePatientReferralPopup({ referral, onClose, agentId, onSubmitSucces
                         }`}
                         onMouseDown={() => onSelectPerson(person)}
                       >
-                        {person.fullName || person.name}
+                        {person?.fullName || person?.name}
                       </div>
                     ))}
                 </div>
