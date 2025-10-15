@@ -2,7 +2,7 @@ import api from "./axiosInstance";
 
 export const getNurses = async (
   page = 1,
-  limit = 10,
+  limit = 50,
   status = "ALL",
   role = "REGISTERED_NURSE",
   filters = { search: "", location: "", qualifications: "", gender: "" }

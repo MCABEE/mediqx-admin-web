@@ -433,7 +433,7 @@ const Page = () => {
 
   // Fetch bookings initially
   useEffect(() => {
-    fetchBookings(page, 10, "CONFIRMED");
+    fetchBookings(page, 50, "CONFIRMED");
   }, [page]);
 
 
@@ -485,7 +485,7 @@ const groupedBookings = groupBookingsByDate(filteredBookings);
     if (!selectedBooking?.assignmentId) return;
     const result = await cancelAssignment(selectedBooking.assignmentId);
     if (result.success) {
-      fetchBookings(page, 10, "CONFIRMED");
+      fetchBookings(page, 50, "CONFIRMED");
       proceedToDetails();
       closePopup();
     } else {
@@ -504,7 +504,7 @@ const groupedBookings = groupBookingsByDate(filteredBookings);
       <Navlink />
 
       {/* Filter header */}
-      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between px-6 rounded-[15px] mt-2">
+      {/* <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between px-6 rounded-[15px] mt-2">
         <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
           <p>By Patient</p>
           <p>By Referral</p>
@@ -519,7 +519,7 @@ const groupedBookings = groupBookingsByDate(filteredBookings);
           </p>
           <input type="checkbox" className="size-[20px]" />
         </div>
-      </div>
+      </div> */}
 
       {/* Total count */}
       <div className="w-full  bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px] px-6 text-black font-semibold text-[32px] flex justify-between  items-center">
