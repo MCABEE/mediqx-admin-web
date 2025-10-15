@@ -334,7 +334,7 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
           <input
             disabled
             className="w-full h-[40px] border-1 border-[#BBBBBB] rounded-[15px] px-4 bg-gray-100 cursor-not-allowed"
-            value={referral?.qualifications[0].qualification || ""}
+            value={referral?.qualifications?.[0]?.qualification || ""}
           />
            
 
