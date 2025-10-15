@@ -21,7 +21,7 @@ const useNurseStore = create(
       isLoading: false,
       error: null,
       page: 1,
-      limit: 10,
+      limit: 50,
       totalPages: 0,
       totalUsers: 0,
       selectedNurse: null,
@@ -30,27 +30,7 @@ const useNurseStore = create(
       selectedNurseQualification:null, 
 
 
-      // fetchNurses: async (page = 1, limit = 10, status , role) => {
-      //   set({ isLoading: true, error: null });
-      //   try {
-      //     const response = await getNurses(page, limit, status,role);
-      //     const nurseData = response?.data?.data?.users || [];
-      //     set({
-      //       users: nurseData,
-      //       page,
-      //       limit,
-      //       totalPages: response?.data?.data?.totalPages || 0,
-      //       totalUsers: response?.data?.data?.total || 0,
-      //     });
-      //     console.log("Fetched nurses:", nurseData);
-      //   } catch (error) {
-      //     set({ error: error.message });
-      //     console.error("Error fetching nurses:", error);
-      //   } finally {
-      //     set({ isLoading: false });
-      //   }
-      // },
-
+     
 
   // Filters
   search: "",

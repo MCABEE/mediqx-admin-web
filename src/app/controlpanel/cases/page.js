@@ -265,7 +265,7 @@ const Page = () => {
   });
 
   useEffect(() => {
-    fetchBookings(page, 10, selectedStatus);
+    fetchBookings(page, 50, selectedStatus);
   }, [page, selectedStatus]);
 
   // Apply filters to bookings

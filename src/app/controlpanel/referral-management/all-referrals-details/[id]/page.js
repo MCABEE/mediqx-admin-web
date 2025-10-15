@@ -279,8 +279,8 @@ const Page = () => {
 
                   <span>{ref.mobileNumber || "-"}</span>
                   <span>{ref.email || "-"}</span>
-                  <span>{ref?.qualifications[0].qualification || "-"}</span>
-                  <span>{ref?.specializations[0].specialization || "-"}</span>
+                  <span>{ref?.qualifications?.[0]?.qualification || "-"}</span>
+                  <span>{ref?.specializations?.[0]?.specialization || "-"}</span>
                   <span>{ref.experienceLevel || "-"}</span>
                   <span>{ref.workSchedule || "-"}</span>
 <span>
