@@ -1,6 +1,18 @@
 import api from "./axiosInstance"; 
 
 // Create many patient health statuses
+// export const createManyHealthStatuses = async (patientHealthStatuses) => {
+//   try {
+//     const response = await api.post("/admin/patient-health-status/create-many", {
+//       patientHealthStatuses,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     const message = error.response?.data?.message || "Failed to add health statuses.";
+//     throw new Error(message);
+//   }
+// };
+
 export const createManyHealthStatuses = async (patientHealthStatuses) => {
   try {
     const response = await api.post("/admin/patient-health-status/create-many", {
@@ -8,8 +20,11 @@ export const createManyHealthStatuses = async (patientHealthStatuses) => {
     });
     return response.data;
   } catch (error) {
-    const message = error.response?.data?.message || "Failed to add health statuses.";
-    throw new Error(message);
+    console.error("createManyHealthStatuses API error:", error.response?.data);
+    const backendError = error.response?.data || {
+      message: "Failed to add health statuses.",
+    };
+    throw backendError; // Throw full backend response, not just message
   }
 };
 
