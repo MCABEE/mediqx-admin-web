@@ -17,7 +17,7 @@ const Page = () => {
   } = useBookingStore();
 
   useEffect(() => {
-    fetchBookings(page, 10, "CANCELLED");
+    fetchBookings(page, 50, "CANCELLED");
   }, [page]);
 
   const groupedBookings = groupBookingsByDate(bookings);
