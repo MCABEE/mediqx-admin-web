@@ -1,5 +1,29 @@
 import api from "./axiosInstance";
 
+// export const addLanguages = async (languages) => {
+//   try {
+//     const response = await api.post(
+//       "/admin/languages/create-many",
+//       { languages },
+//       {
+//         headers: {
+//           accept: "application/json",
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.log(error);
+    
+//     const message = error.response?.data?.message || "Failed to add languages.";
+//     throw new Error(message);
+//   }
+// };
+
+
+
+
 export const addLanguages = async (languages) => {
   try {
     const response = await api.post(
@@ -12,13 +36,14 @@ export const addLanguages = async (languages) => {
         },
       }
     );
+
     return response.data;
   } catch (error) {
-    const message = error.response?.data?.message || "Failed to add languages.";
-    throw new Error(message);
+    // Keep original API error details for component to use
+    console.error("Failed to add languages:", error);
+    throw error;
   }
 };
-
 
 
 // Get all languages with pagination

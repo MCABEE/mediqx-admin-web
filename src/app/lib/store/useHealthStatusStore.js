@@ -241,18 +241,26 @@ const useHealthStatusStore = create((set, get) => ({
 
       await createManyHealthStatuses(filtered);
       set({ success: true, servicesInputs: [""], error: null });
-    } catch (error) {
-      console.error("Store caught error:", error);
-      set({
-        error: {
-          message: error.message || "Failed to add health statuses.",
-          details: error.error?.details || null, // preserve duplicates
-        },
-        success: false,
-      });
-    } finally {
-      set({ isLoading: false });
-    }
+    }catch (err) {
+  console.error("Store caught error:", err);
+
+  const normalizedError = {
+    message:
+      typeof err === "string"
+        ? err
+        : typeof err?.message === "object"
+        ? err.message?.message || "An unknown error occurred."
+        : err?.message || "Failed to add health statuses.",
+    details:
+      err?.error?.details || err?.response?.data?.details || null,
+  };
+
+  set({
+    error: normalizedError,
+    success: false,
+  });
+}
+
   },
 
   resetSuccess: () => set({ success: false }),

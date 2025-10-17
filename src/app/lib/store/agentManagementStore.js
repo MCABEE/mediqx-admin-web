@@ -1,6 +1,6 @@
 // src/store/agentStore.js
 import { create } from "zustand";
-import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals,updateAgentReferralStatus, updateAgentPatientReferralStatus, getAgentPatientReferrals} from "@/api/agentManagementApi";
+import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals,updateAgentReferralStatus, updateAgentPatientReferralStatus, getAgentPatientReferrals, searchLocationByPincode} from "@/api/agentManagementApi";
 
 const useAgentStore = create((set, get) => ({
   agents: [],
@@ -196,6 +196,28 @@ fetchStaffReferrals: async (referralId, search, page, limit) => {
     set({ staffReferralError: error.message, staffReferralLoading: false });
   }
 },
+
+ 
+  locationResults: [],
+  locationLoading: false,
+  locationError: null,
+
+fetchLocationByPincode: async (pincode) => {
+  if (!pincode) return;
+  set({ locationLoading: true, locationError: null });
+
+  try {
+    console.log("Fetching pincode:", pincode); // 👈 Check this
+    const locations = await searchLocationByPincode(pincode);
+    console.log("Fetched locations:", locations); // 👈 See what it returns
+
+    set({ locationResults: locations, locationLoading: false });
+  } catch (err) {
+    console.error("Error fetching locations:", err);
+    set({ locationError: err.message, locationLoading: false });
+  }
+},
+
 
 
 }));

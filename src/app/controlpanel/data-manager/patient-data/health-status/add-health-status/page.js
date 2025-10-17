@@ -225,8 +225,12 @@ function AddHealthStatusPage() {
         </div>
       )}
       {error?.message && (
-        <div className="text-red-500 mt-2">{error.message}</div>
-      )}
+  <div className="text-red-500 mt-2">
+    {typeof error.message === "string"
+      ? error.message
+      : error.message?.message || "Something went wrong."}
+  </div>
+)}
     </div>
   );
 }

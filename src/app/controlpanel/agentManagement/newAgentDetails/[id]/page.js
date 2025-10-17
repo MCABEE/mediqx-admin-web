@@ -107,13 +107,13 @@ const Page = () => {
           <h1 className="text-[16px] font-semibold text-black">
             Agent - Details
           </h1>
-          <button
+          {/* <button
             onClick={() => setIsEditOpen(true)}
             className="cursor-pointer hover:scale-110"
             aria-label="Edit Agent Details"
           >
             <img src="/edit-btn.svg" alt="edit" className="w-6 h-6" />
-          </button>
+          </button> */}
         </div>
         <div className="flex gap-16 p-8">
           <div className="flex flex-col gap-[10px] text-[16px] text-black">

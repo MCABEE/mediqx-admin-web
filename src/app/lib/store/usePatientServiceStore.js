@@ -197,47 +197,114 @@ const usePatientServiceStore = create((set, get) => ({
   error: null,
   success: false,
 
-  setServicesInputs: (arr) => set({ servicesInputs: arr }),
-  addServiceInput: () =>
-    set((state) => ({ servicesInputs: [...state.servicesInputs, ""] })),
-  setServiceInputValue: (idx, value) =>
-    set((state) => {
-      const arr = [...state.servicesInputs];
-      arr[idx] = value;
-      return { servicesInputs: arr };
-    }),
+  // setServicesInputs: (arr) => set({ servicesInputs: arr }),
+  // addServiceInput: () =>
+  //   set((state) => ({ servicesInputs: [...state.servicesInputs, ""] })),
+  // setServiceInputValue: (idx, value) =>
+  //   set((state) => {
+  //     const arr = [...state.servicesInputs];
+  //     arr[idx] = value;
+  //     return { servicesInputs: arr };
+  //   }),
 
-  addServices: async () => {
-    set({ isLoading: true, error: null, success: false });
-    try {
-      const filtered = get()
-        .servicesInputs
-        .filter((s) => s.trim() !== "")
-        .map((s) => ({ service: s.trim() }));
+  // addServices: async () => {
+  //   set({ isLoading: true, error: null, success: false });
+  //   try {
+  //     const filtered = get()
+  //       .servicesInputs
+  //       .filter((s) => s.trim() !== "")
+  //       .map((s) => ({ service: s.trim() }));
 
-      if (filtered.length === 0) {
-        set({ error: { message: "Please enter at least one service." }, isLoading: false });
-        return;
-      }
+  //     if (filtered.length === 0) {
+  //       set({ error: { message: "Please enter at least one service." }, isLoading: false });
+  //       return;
+  //     }
 
-      await createManyPatientServices(filtered);
-      set({ success: true, servicesInputs: [""], error: null });
-    } catch (error) {
-      console.error("Store caught error:", error);
+  //     await createManyPatientServices(filtered);
+  //     set({ success: true, servicesInputs: [""], error: null });
+  //   } catch (error) {
+  //     console.error("Store caught error:", error);
+  //     set({
+  //       error: {
+  //         message: error.message || "Failed to add services.",
+  //         details: error.error?.details || null, // preserve duplicates if backend returns
+  //       },
+  //       success: false,
+  //     });
+  //   } finally {
+  //     set({ isLoading: false });
+  //   }
+  // },
+
+  // resetError: () => set({ error: null }),
+  // resetSuccess: () => set({ success: false }),
+
+
+setServicesInputs: (arr) => set({ servicesInputs: arr }),
+
+addServiceInput: () =>
+  set((state) => ({ servicesInputs: [...state.servicesInputs, ""] })),
+
+setServiceInputValue: (idx, value) =>
+  set((state) => {
+    const arr = [...state.servicesInputs];
+    arr[idx] = value;
+    return { servicesInputs: arr };
+  }),
+
+addServices: async () => {
+  set({ isLoading: true, error: null, success: false });
+  try {
+    const filtered = get()
+      .servicesInputs
+      .filter((s) => s.trim() !== "")
+      .map((s) => ({ service: s.trim() }));
+
+    if (filtered.length === 0) {
       set({
-        error: {
-          message: error.message || "Failed to add services.",
-          details: error.error?.details || null, // preserve duplicates if backend returns
-        },
-        success: false,
+        error: { message: "Please enter at least one service." },
+        isLoading: false,
       });
-    } finally {
-      set({ isLoading: false });
+      return;
     }
-  },
 
-  resetError: () => set({ error: null }),
-  resetSuccess: () => set({ success: false }),
+    await createManyPatientServices(filtered);
+
+    set({
+      success: true,
+      servicesInputs: [""],
+      error: null,
+    });
+  }catch (err) {
+  console.error("🛑 Store caught error:", err);
+
+  const normalizedError = {
+    message:
+      typeof err === "string"
+        ? err
+        : typeof err?.message === "object"
+        ? err?.message?.message || "An unknown error occurred."
+        : err?.response?.data?.message ||
+          err?.message ||
+          "Failed to add services.",
+    details:
+      err?.response?.data?.details ||
+      err?.error?.details ||
+      err?.details ||
+      null,
+  };
+
+  set({
+    error: normalizedError,
+    success: false,
+  });
+}
+
+},
+
+resetError: () => set({ error: null }),
+resetSuccess: () => set({ success: false }),
+
 
   // Listing & pagination
   listedServices: [],

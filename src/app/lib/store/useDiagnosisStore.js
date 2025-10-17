@@ -224,18 +224,26 @@ const useDiagnosisStore = create((set, get) => ({
 
       await createManyDiagnoses(filtered);
       set({ success: true, diagnosisInputs: [""], error: null });
-    } catch (error) {
-      console.error("Store caught error:", error);
-      set({
-        error: {
-          message: error.message || "Failed to add diagnoses.",
-          details: error.error?.details || null,
-        },
-        success: false,
-      });
-    } finally {
-      set({ isLoading: false });
-    }
+    } catch (err) {
+  console.error("Store caught error:", err);
+
+  const normalizedError = {
+    message:
+      typeof err === "string"
+        ? err
+        : typeof err?.message === "object"
+        ? err.message?.message || "An unknown error occurred."
+        : err?.message || "Failed to add data.",
+    details:
+      err?.error?.details || err?.response?.data?.details || null,
+  };
+
+  set({
+    error: normalizedError,
+    success: false,
+  });
+}
+
   },
 
   resetSuccess: () => set({ success: false }),

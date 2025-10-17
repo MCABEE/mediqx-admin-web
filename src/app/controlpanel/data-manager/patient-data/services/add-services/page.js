@@ -233,9 +233,17 @@ function Page() {
           Services added successfully!
         </div>
       )}
-      {error?.message && (
+      {/* {error?.message && (
         <div className="text-red-500 mt-2">{error.message}</div>
-      )}
+      )} */}
+      {error?.message && (
+  <div className="text-red-500 mt-2">
+    {typeof error.message === "string"
+      ? error.message
+      : error.message?.message || "Something went wrong."}
+  </div>
+)}
+
     </div>
   );
 }
