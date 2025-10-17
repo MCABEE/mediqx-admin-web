@@ -206,45 +206,95 @@ const useDiagnosisStore = create((set, get) => ({
     }),
 
   // 🧩 Add multiple diagnoses
-  addDiagnoses: async () => {
-    set({ isLoading: true, error: null, success: false });
-    try {
-      const filtered = get()
-        .diagnosisInputs
-        .filter((d) => d.trim() !== "")
-        .map((d) => ({ diagnosis: d.trim() }));
+//   addDiagnoses: async () => {
+//     set({ isLoading: true, error: null, success: false });
+//     try {
+//       const filtered = get()
+//         .diagnosisInputs
+//         .filter((d) => d.trim() !== "")
+//         .map((d) => ({ diagnosis: d.trim() }));
 
-      if (filtered.length === 0) {
-        set({
-          error: { message: "Please enter at least one diagnosis." },
-          isLoading: false,
-        });
-        return;
-      }
+//       if (filtered.length === 0) {
+//         set({
+//           error: { message: "Please enter at least one diagnosis." },
+//           isLoading: false,
+//         });
+//         return;
+//       }
 
-      await createManyDiagnoses(filtered);
-      set({ success: true, diagnosisInputs: [""], error: null });
-    } catch (err) {
-  console.error("Store caught error:", err);
+//       await createManyDiagnoses(filtered);
+//       set({ success: true, diagnosisInputs: [""], error: null });
+//     } catch (err) {
+//   console.error("Store caught error:", err);
 
-  const normalizedError = {
-    message:
-      typeof err === "string"
-        ? err
-        : typeof err?.message === "object"
-        ? err.message?.message || "An unknown error occurred."
-        : err?.message || "Failed to add data.",
-    details:
-      err?.error?.details || err?.response?.data?.details || null,
-  };
+//   const normalizedError = {
+//     message:
+//       typeof err === "string"
+//         ? err
+//         : typeof err?.message === "object"
+//         ? err.message?.message || "An unknown error occurred."
+//         : err?.message || "Failed to add data.",
+//     details:
+//       err?.error?.details || err?.response?.data?.details || null,
+//   };
 
-  set({
-    error: normalizedError,
-    success: false,
-  });
-}
+//   set({
+//     error: normalizedError,
+//     success: false,
+//   });
+// }
 
-  },
+//   },
+addDiagnoses: async () => {
+  set({ isLoading: true, error: null, success: false });
+
+  try {
+    const filtered = get()
+      .diagnosisInputs
+      .filter((d) => d.trim() !== "")
+      .map((d) => ({ diagnosis: d.trim() }));
+
+    if (filtered.length === 0) {
+      set({
+        error: { message: "Please enter at least one diagnosis." },
+        isLoading: false,
+      });
+      return;
+    }
+
+    await createManyDiagnoses(filtered);
+
+    set({
+      success: true,
+      diagnosisInputs: [""],
+      error: null,
+    });
+  } catch (err) {
+    console.error("🛑 Store caught error:", err);
+
+    const normalizedError = {
+      message:
+        typeof err === "string"
+          ? err
+          : typeof err?.message === "object"
+          ? err?.message?.message || "An unknown error occurred."
+          : err?.response?.data?.message ||
+            err?.message ||
+            "Failed to add diagnoses.",
+      details:
+        err?.response?.data?.details ||
+        err?.error?.details ||
+        err?.details ||
+        null,
+    };
+
+    set({
+      error: normalizedError,
+      success: false,
+    });
+  }
+},
+
 
   resetSuccess: () => set({ success: false }),
   resetError: () => set({ error: null }),
