@@ -179,7 +179,7 @@ function ManageDiagnosisPage() {
             <button
               disabled={checkedItems.length === 0}
               onClick={() => setIsConfirmOpen(true)}
-              className="bg-[#d9534f] text-white rounded-[15px] py-2 px-10 cursor-pointer"
+              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
             >
               Remove
             </button>

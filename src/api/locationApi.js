@@ -1,8 +1,29 @@
 import api from "./axiosInstance";
 
 // Create multiple locations
+// export const addLocations = async (locations) => {
+//   try {
+//     const response = await api.post(
+//       "/admin/locations/create-many",
+//       { locations },
+//       {
+//         headers: {
+//           accept: "application/json",
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.log(error);
+    
+//     throw new Error(error.response?.data?.message || "Failed to add locations.");
+//   }
+// };
+
 export const addLocations = async (locations) => {
   try {
+    console.log("📤 Sending locations to API:", locations);
     const response = await api.post(
       "/admin/locations/create-many",
       { locations },
@@ -13,12 +34,14 @@ export const addLocations = async (locations) => {
         },
       }
     );
+
+    console.log("✅ API Response:", response.data);
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to add locations.");
+    console.error("❌ API Error:", error);
+    throw error;
   }
 };
-
 // Get locations with pagination
 export const getLocations = async (page = 1, limit = 10) => {
   try {

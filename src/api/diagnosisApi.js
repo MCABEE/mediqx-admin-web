@@ -1,6 +1,17 @@
 import api from "./axiosInstance";
 
 // Create many patient diagnoses
+// export const createManyDiagnoses = async (patientDiagnoses) => {
+//   try {
+//     const response = await api.post("/admin/patient-diagnosis/create-many", {
+//       patientDiagnoses,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     const message = error.response?.data?.message || "Failed to add diagnoses.";
+//     throw new Error(message);
+//   }
+// };
 export const createManyDiagnoses = async (patientDiagnoses) => {
   try {
     const response = await api.post("/admin/patient-diagnosis/create-many", {
@@ -8,10 +19,16 @@ export const createManyDiagnoses = async (patientDiagnoses) => {
     });
     return response.data;
   } catch (error) {
-    const message = error.response?.data?.message || "Failed to add diagnoses.";
-    throw new Error(message);
+    console.error("createManyDiagnoses API error:", error.response?.data);
+
+    // Keep full backend error object
+    const backendError = error.response?.data || {
+      message: "Failed to add diagnoses.",
+    };
+    throw backendError; // ⚠️ throw full response, not just message
   }
 };
+
 
 // Fetch diagnoses list with pagination
 export const fetchDiagnoses = async (page = 1, limit = 10) => {
