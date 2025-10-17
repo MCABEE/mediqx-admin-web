@@ -274,7 +274,7 @@ const AssignStaffTable = ({
         <div className="fixed inset-0 z-50 bg-[#1a191959] backdrop-blur-xs flex items-center justify-center">
           <div className="bg-white w-[500px] h-[200px] p-8 rounded-xl shadow-md text-center flex justify-center items-center flex-col">
             <p className="font-thin text-black">
-              Are you sure you want to assign nurse <br />
+              Are you sure you want to assign  <br />
               <span className="font-semibold text-black">
                 "{selectedNurse?.fullName}"
               </span>

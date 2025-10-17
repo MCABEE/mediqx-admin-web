@@ -160,3 +160,21 @@ export const searchStaffReferrals = async (agentId, search = "", page = 1, limit
     throw error;
   }
 };
+
+
+export const searchLocationByPincode = async (pincode) => {
+  try {
+    const response = await api.get(`/admin/locations`, {
+      params: { page: 1, limit: 10, search: pincode },
+    });
+
+    console.log("API Response:", response.data); // 👈 Add this line
+
+    // Ensure this matches your backend response structure
+    return response.data.data?.locations || response.data.locations || [];
+  } catch (error) {
+    const message = error.response?.data?.message || "Failed to fetch location";
+    console.error("API Error:", message);
+    throw new Error(message);
+  }
+};
