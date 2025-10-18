@@ -236,3 +236,15 @@ export const searchNurses = async (
     throw new Error(errorMessage);
   }
 };
+
+
+export const getNurseLanguagesById = async (userId) => {
+  try {
+    const response = await api.get(`/admin/nurses/language/${userId}`);
+    return response.data.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to fetch nurse languages.";
+    throw new Error(message);
+  }
+};

@@ -87,10 +87,70 @@ const CaseBookingPage = () => {
     fetchDiagnosesList(1, 50);
   }, [fetchDiagnosesList]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setForm((prev) => ({ ...prev, [name]: value }));
+  // };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  // Handle scheduleType changes
+  if (name === "scheduleType") {
+    let startTime = "";
+    let endTime = "";
+
+    switch (value) {
+      case "FULL_TIME_24_HOURS":
+        startTime = "00:00";
+        endTime = "23:59";
+        break;
+      case "DAY_SHIFT_12_HOURS":
+        startTime = "08:00";
+        endTime = "20:00";
+        break;
+      case "NIGHT_SHIFT_12_HOURS":
+        startTime = "20:00";
+        endTime = addHoursToTime(startTime, 12); // handles midnight rollover
+        break;
+      case "CUSTOM_HOURS":
+        startTime = "";
+        endTime = "";
+        break;
+    }
+
+    setForm((prev) => ({ ...prev, scheduleType: value, startTime, endTime }));
+    return;
+  }
+
+  // Auto-update endTime if startTime changes and scheduleType is not CUSTOM_HOURS
+  if (name === "startTime" && form.scheduleType && form.scheduleType !== "CUSTOM_HOURS") {
+    let endTime = form.endTime;
+
+    if (form.scheduleType === "DAY_SHIFT_12_HOURS" || form.scheduleType === "NIGHT_SHIFT_12_HOURS") {
+      endTime = addHoursToTime(value, 12);
+    } else if (form.scheduleType === "FULL_TIME_24_HOURS") {
+      endTime = addHoursToTime(value, 24);
+    }
+
+    setForm((prev) => ({ ...prev, startTime: value, endTime }));
+    return;
+  }
+
+  // Default case: just update the changed field
+  setForm((prev) => ({ ...prev, [name]: value }));
+};
+
+// Utility to add hours to time string
+const addHoursToTime = (timeStr, hoursToAdd) => {
+  if (!timeStr) return "";
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  const date = new Date();
+  date.setHours(hours + hoursToAdd);
+  date.setMinutes(minutes);
+  const newHours = String(date.getHours()).padStart(2, "0");
+  const newMinutes = String(date.getMinutes()).padStart(2, "0");
+  return `${newHours}:${newMinutes}`;
+};
 
   const toggleArray = (value, array, setArray) => {
     if (array.includes(value)) {
@@ -551,7 +611,7 @@ const CaseBookingPage = () => {
             ))}
           </div>
 
-          <div className="flex gap-4 mb-4 mt-2">
+          {/* <div className="flex gap-4 mb-4 mt-2">
             <input
               name="startTime"
               type="time"
@@ -570,7 +630,33 @@ const CaseBookingPage = () => {
               className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
             />
             <span className="flex items-center">To</span>
-          </div>
+          </div> */}
+          <div className="flex gap-4 mb-4 mt-2">
+  <input
+    name="startTime"
+    type="time"
+    value={form.startTime}
+    onChange={handleChange}
+    required
+    disabled={!form.scheduleType} // disable if scheduleType is not selected
+    className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+  />
+  <span className="flex items-center pe-4">From</span>
+
+  <input
+    name="endTime"
+    type="time"
+    value={form.endTime}
+    onChange={handleChange}
+    required
+    disabled={form.scheduleType !== "CUSTOM_HOURS"} // editable only for CUSTOM_HOURS
+    className={`w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none ${
+      form.scheduleType !== "CUSTOM_HOURS" ? "bg-gray-100 cursor-not-allowed" : ""
+    }`}
+  />
+  <span className="flex items-center">To</span>
+</div>
+
         </div>
 
         {/* Staff Preferences */}

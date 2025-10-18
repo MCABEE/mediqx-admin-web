@@ -325,12 +325,13 @@ const BookingDetailsPage = () => {
                 location: booking.currentServiceAddress,
                 latitude: booking.latitude,
                 longitude: booking.longitude,
-                language: JSON.stringify(
-                  (booking.preferredLanguages || []).map((l) => ({
+                preferredLanguages: JSON.stringify(
+                  booking.preferredLanguages?.map((l) => ({
                     id: l.id,
                     language: l.language,
-                  }))
-                ), // language: booking.preferredLanguages || [],
+                  })) || []
+                ),
+                language: booking.preferredLanguages || [],
                 durationValue: booking.durationValue,
                 durationType: booking.durationType,
                 frequency: booking.weekdays,
