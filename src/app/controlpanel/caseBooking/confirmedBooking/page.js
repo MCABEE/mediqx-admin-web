@@ -439,15 +439,17 @@ const Page = () => {
 
   
   // Filter bookings based on name, location, and date
- const filteredBookings = bookings.filter((booking) => {
-  const matchesName = booking.fullName
-    .toLowerCase()
-    .includes(filters.name.toLowerCase());
-  const matchesLocation = booking.location
-    .toLowerCase()
-    .includes(filters.location.toLowerCase());
+ const filteredBookings = bookings?.filter((booking) => {
+const matchesName = (booking?.fullName || "")
+  .toLowerCase()
+  .includes((filters.name || "").toLowerCase());
+
+const matchesLocation = (booking?.location || "")
+  .toLowerCase()
+  .includes((filters.location || "").toLowerCase());
+
   const matchesDate = filters.date
-    ? new Date(booking.startDate).toLocaleDateString("en-CA") === filters.date
+    ? new Date(booking?.startDate).toLocaleDateString("en-CA") === filters.date
     : true;
 
   return matchesName && matchesLocation && matchesDate;
