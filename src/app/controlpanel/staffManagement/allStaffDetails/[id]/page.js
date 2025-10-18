@@ -411,7 +411,7 @@ function StaffDetailPage() {
             </h2>
             <p className="text-black">
               Are you sure you want to{" "}
-              <strong>{modalData.action.toLowerCase()}</strong> nurse{" "}
+              <strong>{modalData.action?.toLowerCase()}</strong> nurse{" "}
               <strong>{selectedNurse.fullName}</strong>?
             </p>
             <div className="flex justify-center gap-4 mt-6">
