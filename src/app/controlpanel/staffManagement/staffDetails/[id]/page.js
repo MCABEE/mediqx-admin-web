@@ -17,7 +17,7 @@ function StaffDetailPage() {
   const searchParams = useSearchParams();
 
   const role = searchParams.get("role") || "NURSE";
-  const { fetchNurseById, selectedNurse, verifyNurse } = nurseStore();
+  const { fetchNurseById, selectedNurse, verifyNurse ,fetchNurseLanguagesById,selectedNurseLanguages } = nurseStore();
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
   const [preview, setPreview] = useState({
@@ -49,7 +49,10 @@ function StaffDetailPage() {
   const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
 
   useEffect(() => {
-    if (userId) fetchNurseById(userId);
+    if (userId){
+       fetchNurseById(userId);
+       fetchNurseLanguagesById(userId);
+    }
   }, [userId]);
 
   useEffect(() => {
@@ -168,6 +171,33 @@ console.log(qualifications)
             <span className="w-[280px]">Fulltime / Part time</span>
             <span>{nurseData.workSchedule}</span>
           </div>
+
+          {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
+        </div>
+             <div className="flex justify-between px-[39px]">
+          <h1 className="text-[16px] font-semibold text-black py-[18px]">
+            Languages 
+          </h1>
+          {/* <button
+            
+            className="cursor-pointer hover:scale-110"
+          >
+            <img src="/edit-btn.svg" className="size-6" alt="edit" />
+          </button> */}
+        </div>
+        <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
+         <div className="flex gap-[18px]">
+  <span className="w-[280px]">Languages</span>
+ 
+  <span>
+  {selectedNurseLanguages?.userLanguages?.length > 0
+    ? selectedNurseLanguages.userLanguages.map(lang => lang.language).join(", ")
+    : "-"}
+</span>
+
+</div>
+
+         
 
           {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
         </div>
@@ -387,6 +417,7 @@ console.log(qualifications)
           </button>
         </div>
       </div>
+      
 
       {/* Confirm Modal */}
       {modalData.show && (

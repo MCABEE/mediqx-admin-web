@@ -547,7 +547,7 @@ const groupedBookings = groupBookingsByDate(filteredBookings);
               Service Date
             </th>
             <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
-              Staff
+              Assign
             </th>
           </tr>
 
