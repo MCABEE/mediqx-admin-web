@@ -12,6 +12,7 @@ function NurseExperienceDetails({ categoryByProfession, onComplete }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [hasWorkExperience, setHasWorkExperience] = useState("no");
   const [showLocationPopup, setShowLocationPopup] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   const { listedItems, fetchItems } = useManageProfessionalsStore();
   const { submitNursePageTwo } = useNurseRegistrationStore();
@@ -73,27 +74,108 @@ function NurseExperienceDetails({ categoryByProfession, onComplete }) {
       providerLocation: mapLocation,
     }));
   };
+// const handleSubmit = async () => {
+//   setErrorMessage("");
+//   setSuccessMessage("");
+//   setIsSubmitted(false);
+
+//   if (formData.skills.length === 0) {
+//     setErrorMessage("Please select at least one skill.");
+//     return;
+//   }
+
+//   if (hasWorkExperience === "yes") {
+//     if (!formData.startDate || (!formData.onGoing && !formData.endDate)) {
+//       setErrorMessage("Please complete your experience dates.");
+//       return;
+//     }
+//     if (!formData.mapLocation) {
+//       setErrorMessage("Please set your hospital location.");
+//       return;
+//     }
+//     if (!formData.department) {
+//       setErrorMessage("Please select a department.");
+//       return;
+//     }
+//   }
+
+//   const payload = {
+//     isExperienced: hasWorkExperience === "yes",
+//     skillsIds: formData.skills,
+//     departmentId: hasWorkExperience === "yes" ? formData.department : undefined,
+//     yearsOfExperience:
+//       hasWorkExperience === "yes" ? parseInt(formData.yearsOfExperience) || 0 : undefined,
+//     monthsOfExperience:
+//       hasWorkExperience === "yes" ? parseInt(formData.monthsOfExperience) || 0 : undefined,
+//     providerName: hasWorkExperience === "yes" ? formData.providerName : undefined,
+//     providerLocation: hasWorkExperience === "yes" ? formData.providerLocation : undefined,
+//     providerStateId: hasWorkExperience === "yes" ? formData.providerState : undefined,
+//     latitude: hasWorkExperience === "yes" ? formData.latitude : undefined,
+//     longitude: hasWorkExperience === "yes" ? formData.longitude : undefined,
+//     // mapLocation: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
+//       providerAddress: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
+
+//     onGoing: hasWorkExperience === "yes" ? formData.onGoing : undefined,
+//     startDate:
+//       hasWorkExperience === "yes" && formData.startDate
+//         ? new Date(formData.startDate).toISOString()
+//         : undefined,
+//     endDate:
+//       hasWorkExperience === "yes"
+//         ? formData.onGoing
+//           ? new Date().toISOString()
+//           : formData.endDate
+//           ? new Date(formData.endDate).toISOString()
+//           : undefined
+//         : undefined,
+//   };
+
+//   try {
+//     await submitNursePageTwo(payload);
+
+//     setSuccessMessage("Experience details submitted successfully.");
+//     setErrorMessage("");
+//     setIsSubmitted(true);
+//   } catch (err) {
+//     console.error("Submit error:", err);
+//     setSuccessMessage("");
+//     setErrorMessage("Something went wrong. Please try again.");
+//     return;
+//   }
+
+ 
+//   onComplete();
+// };
+
+
 const handleSubmit = async () => {
+  if (isClicked) return; // prevent double click
+
+  setIsClicked(true); // lock button
   setErrorMessage("");
   setSuccessMessage("");
   setIsSubmitted(false);
 
   if (formData.skills.length === 0) {
     setErrorMessage("Please select at least one skill.");
+    setIsClicked(false); // unlock button if error
     return;
   }
 
   if (hasWorkExperience === "yes") {
     if (!formData.startDate || (!formData.onGoing && !formData.endDate)) {
       setErrorMessage("Please complete your experience dates.");
+      setIsClicked(false);
       return;
     }
     if (!formData.mapLocation) {
       setErrorMessage("Please set your hospital location.");
+      setIsClicked(false);
       return;
     }
     if (!formData.department) {
       setErrorMessage("Please select a department.");
+      setIsClicked(false);
       return;
     }
   }
@@ -111,9 +193,7 @@ const handleSubmit = async () => {
     providerStateId: hasWorkExperience === "yes" ? formData.providerState : undefined,
     latitude: hasWorkExperience === "yes" ? formData.latitude : undefined,
     longitude: hasWorkExperience === "yes" ? formData.longitude : undefined,
-    // mapLocation: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
-      providerAddress: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
-
+    providerAddress: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
     onGoing: hasWorkExperience === "yes" ? formData.onGoing : undefined,
     startDate:
       hasWorkExperience === "yes" && formData.startDate
@@ -131,22 +211,22 @@ const handleSubmit = async () => {
 
   try {
     await submitNursePageTwo(payload);
-
     setSuccessMessage("Experience details submitted successfully.");
     setErrorMessage("");
     setIsSubmitted(true);
+
+    // Optional: keep the button disabled for 3 seconds to avoid accidental re-click
+    setTimeout(() => setIsClicked(false), 3000);
   } catch (err) {
     console.error("Submit error:", err);
     setSuccessMessage("");
     setErrorMessage("Something went wrong. Please try again.");
+    setIsClicked(false); // unlock button if error
     return;
   }
 
- 
   onComplete();
 };
-
-
   return (
     <div className="px-[39px] pt-[15px]">
       {/* Experience Selection */}
@@ -155,7 +235,7 @@ const handleSubmit = async () => {
       </h1>
       <div className="flex flex-col gap-[18px]">
         <select
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black text-[14px]"
+          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black text-[14px] outline-none"
           value={hasWorkExperience}
           onChange={(e) => setHasWorkExperience(e.target.value)}
         >
@@ -180,7 +260,7 @@ const handleSubmit = async () => {
               name="yearsOfExperience"
               value={formData.yearsOfExperience}
               onChange={handleChange}
-              className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black"
+              className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none"
             >
               <option value="">Year</option>
               {Array.from({ length: 31 }, (_, i) => (
@@ -193,7 +273,7 @@ const handleSubmit = async () => {
               name="monthsOfExperience"
               value={formData.monthsOfExperience}
               onChange={handleChange}
-              className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black"
+              className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none"
             >
               <option value="">Month</option>
               {Array.from({ length: 12 }, (_, i) => (
@@ -211,7 +291,7 @@ const handleSubmit = async () => {
             placeholder="Hospital (Last working)"
             value={formData.providerName}
             onChange={handleChange}
-            className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black"
+            className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none"
           />
 
           {/* Location */}
@@ -230,7 +310,7 @@ const handleSubmit = async () => {
             name="department"
             value={formData.department}
             onChange={handleChange}
-            className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black"
+            className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none"
           >
             <option value="">Department</option>
             {departments.map((dept) => (
@@ -249,7 +329,7 @@ const handleSubmit = async () => {
                 name="startDate"
                 value={formData.startDate}
                 onChange={handleChange}
-                className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black"
+                className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none"
               />
             </div>
             <div>
@@ -260,7 +340,7 @@ const handleSubmit = async () => {
                 value={formData.endDate}
                 onChange={handleChange}
                 disabled={formData.onGoing}
-                className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black disabled:bg-gray-200"
+                className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black disabled:bg-gray-200 outline-none"
               />
             </div>
             <label className="flex items-center gap-2 ms-4">
@@ -296,7 +376,7 @@ const handleSubmit = async () => {
       </div>
 
       {/* Submit */}
-      <button
+      {/* <button
         onClick={handleSubmit}
         disabled={isSubmitted}
         className={`mt-10 w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center ${
@@ -304,7 +384,17 @@ const handleSubmit = async () => {
         }`}
       >
         {isSubmitted ? "Submitted" : "Next"}
-      </button>
+      </button> */}
+      <button
+  onClick={handleSubmit}
+  disabled={isSubmitted || isClicked}
+  className={`mt-10 w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center ${
+    isSubmitted || isClicked ? "opacity-50 cursor-not-allowed" : ""
+  }`}
+>
+  {isSubmitted ? "Submitted" : "Next"}
+</button>
+
 
       {/* Messages */}
       {errorMessage && <p className="text-red-600 text-sm mt-2">{errorMessage}</p>}
