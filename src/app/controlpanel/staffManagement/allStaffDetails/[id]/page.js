@@ -467,6 +467,7 @@ function StaffDetailPage() {
         show={isEditModalOpen}
         contact={editedContact}
         userId={userId}
+        role={selectedNurse.role}
         onChange={setEditedContact}
         initialContact={selectedNurse}
         onCancel={() => setIsEditModalOpen(false)}
@@ -485,6 +486,8 @@ function StaffDetailPage() {
           qualifications={qualifications}
           nurseData={nurseData}
           userId={userId}
+        role={selectedNurse.role}
+
           onClose={() => setIsExperincePopUp(false)}
         />
       )}
