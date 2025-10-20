@@ -17,7 +17,13 @@ function StaffDetailPage() {
   const searchParams = useSearchParams();
 
   const role = searchParams.get("role") || "NURSE";
-  const { fetchNurseById, selectedNurse, verifyNurse ,fetchNurseLanguagesById,selectedNurseLanguages } = nurseStore();
+  const {
+    fetchNurseById,
+    selectedNurse,
+    verifyNurse,
+    fetchNurseLanguagesById,
+    selectedNurseLanguages,
+  } = nurseStore();
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
   const [preview, setPreview] = useState({
@@ -49,9 +55,9 @@ function StaffDetailPage() {
   const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
 
   useEffect(() => {
-    if (userId){
-       fetchNurseById(userId);
-       fetchNurseLanguagesById(userId);
+    if (userId) {
+      fetchNurseById(userId);
+      fetchNurseLanguagesById(userId);
     }
   }, [userId]);
 
@@ -73,7 +79,6 @@ function StaffDetailPage() {
           fullAddress: selectedNurse.address?.fullAddress || "",
           latitude: selectedNurse.address?.latitude || "",
           longitude: selectedNurse.address?.longitude || "",
-
         },
       });
     }
@@ -88,7 +93,7 @@ function StaffDetailPage() {
   const files = selectedNurse.files || [];
   const availabilities = selectedNurse.availabilities || [];
   const qualifications = selectedNurse.qualifications[0] || {};
-console.log(qualifications)
+  console.log(qualifications);
   const isImage = (fileName) => /\.(jpe?g|png|webp|gif)$/i.test(fileName);
 
   return (
@@ -134,14 +139,11 @@ console.log(qualifications)
             <span className="w-[280px]">Gender</span>
             <div className="grow">{selectedNurse.gender}</div>
           </div>
-      
-        
-         
+
           <div className="flex gap-[18px]">
             <div className="w-[280px]">Address</div>
             <div className="flex-1">{address.fullAddress}</div>
           </div>
-         
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Email</span>
@@ -174,9 +176,9 @@ console.log(qualifications)
 
           {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
         </div>
-             <div className="flex justify-between px-[39px]">
+        <div className="flex justify-between px-[39px]">
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
-            Languages 
+            Languages
           </h1>
           {/* <button
             
@@ -186,18 +188,17 @@ console.log(qualifications)
           </button> */}
         </div>
         <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
-         <div className="flex gap-[18px]">
-  <span className="w-[280px]">Languages</span>
- 
-  <span>
-  {selectedNurseLanguages?.userLanguages?.length > 0
-    ? selectedNurseLanguages.userLanguages.map(lang => lang.language).join(", ")
-    : "-"}
-</span>
+          <div className="flex gap-[18px]">
+            <span className="w-[280px]">Languages</span>
 
-</div>
-
-         
+            <span>
+              {selectedNurseLanguages?.userLanguages?.length > 0
+                ? selectedNurseLanguages.userLanguages
+                    .map((lang) => lang.language)
+                    .join(", ")
+                : "-"}
+            </span>
+          </div>
 
           {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
         </div>
@@ -254,9 +255,10 @@ console.log(qualifications)
             </div>
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Location</span>
-              <span className="flex-1">{qualifications.providerAddress || "Nil"}</span>
+              <span className="flex-1">
+                {qualifications.providerAddress || "Nil"}
+              </span>
             </div>
-
 
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
@@ -383,15 +385,15 @@ console.log(qualifications)
           );
         })} */}
 
-           <NurseFileSection
-        userId={nurseData.userId}
-        educationQualificationId={qualifications.id}
-  files={files}
-  qualifications={qualifications}
-  url={url}
-  setPreview={setPreview}
-/>
-        
+        <NurseFileSection
+          userId={nurseData.userId}
+          educationQualificationId={qualifications.id}
+          files={files}
+          qualifications={qualifications}
+          url={url}
+          setPreview={setPreview}
+        />
+
         {/* Contact Details with edit */}
         {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
 
@@ -417,7 +419,6 @@ console.log(qualifications)
           </button>
         </div>
       </div>
-      
 
       {/* Confirm Modal */}
       {modalData.show && (
@@ -478,46 +479,45 @@ console.log(qualifications)
         </div>
       )} */}
       {preview.show && (
-  <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
-    <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
-      <button
-        onClick={() =>
-          setPreview({ show: false, fileUrl: "", isImage: false })
-        }
-        className=" w-7  h-7 absolute top-0 -right-8 bg-[#ffff] rounded-full text-gray-500 hover:text-black text-xl font-semibold cursor-pointer"
-      >
-        ✕
-      </button>
+        <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
+          <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
+            <button
+              onClick={() =>
+                setPreview({ show: false, fileUrl: "", isImage: false })
+              }
+              className=" w-7  h-7 absolute top-0 -right-8 bg-[#ffff] rounded-full text-gray-500 hover:text-black text-xl font-semibold cursor-pointer"
+            >
+              ✕
+            </button>
 
-      {preview.isImage ? (
-        <img
-          src={preview.fileUrl}
-          alt="Preview"
-          className="max-w-full max-h-[80vh] mx-auto"
-        />
-      ) : (
-        <div className="w-full h-[80vh]">
-          <embed
-            src={preview.fileUrl}
-            type="application/pdf"
-            width="100%"
-            height="100%"
-          />
-          {/* <p className="text-center mt-2">
+            {preview.isImage ? (
+              <img
+                src={preview.fileUrl}
+                alt="Preview"
+                className="max-w-full max-h-[80vh] mx-auto"
+              />
+            ) : (
+              <div className="w-full h-[80vh]">
+                <embed
+                  src={preview.fileUrl}
+                  type="application/pdf"
+                  width="100%"
+                  height="100%"
+                />
+                {/* <p className="text-center mt-2">
             If you cannot see the PDF, <a href={preview.fileUrl} target="_blank" rel="noopener noreferrer">download it here</a>.
           </p> */}
+              </div>
+            )}
+          </div>
         </div>
       )}
-    </div>
-  </div>
-)}
-
 
       <EditContactModal
         show={isEditModalOpen}
         contact={editedContact}
         userId={userId}
-        role={role}
+        role={selectedNurse.role}
         onChange={setEditedContact}
         initialContact={selectedNurse}
         onCancel={() => setIsEditModalOpen(false)}
@@ -536,8 +536,7 @@ console.log(qualifications)
           qualifications={qualifications}
           nurseData={nurseData}
           userId={userId}
-        role={role}
-
+          role={selectedNurse.role}
           onClose={() => setIsExperincePopUp(false)}
         />
       )}
