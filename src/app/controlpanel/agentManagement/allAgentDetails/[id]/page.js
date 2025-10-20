@@ -453,11 +453,11 @@ const Page = () => {
 
       {/* Stats */}
       <div className="bg-white rounded-[15px] border border-[#BBBBBB] p-6 mt-2 flex justify-between">
-        <div className="flex gap-4">
+        {/* <div className="flex gap-4">
           <h1 className="text-black font-semibold text-[16px]">REFERRAL CODE:</h1>
           <p className="text-black font-semibold text-[16px]">{agentInfo?.referralCode || "-"}</p>
-        </div>
-        <div className="flex gap-4">
+        </div> */}
+        {/* <div className="flex gap-4">
           <div className="flex gap-2">
             <h1 className="text-black font-semibold text-[16px]">REFERRALS:</h1>
             <p className="text-black font-semibold text-[16px]">{agentInfo?.referralCount ?? 0}</p>
@@ -466,7 +466,29 @@ const Page = () => {
             <h1 className="text-black font-semibold text-[16px]">CONFIRMED:</h1>
             <p className="text-black font-semibold text-[16px]">{agentInfo?.confirmedReferralCount ?? 0}</p>
           </div>
+        </div> */}
+         {activeTab !== "profile" && (
+          <>
+          <div className="flex gap-4">
+          <h1 className="text-black font-semibold text-[16px]">REFERRAL CODE:</h1>
+          <p className="text-black font-semibold text-[16px]">{agentInfo?.referralCode || "-"}</p>
         </div>
+    <div className="flex gap-4">
+      <div className="flex gap-2">
+        <h1 className="text-black font-semibold text-[16px]">REFERRALS:</h1>
+        <p className="text-black font-semibold text-[16px]">
+          {agentInfo?.referralCount ?? 0}
+        </p>
+      </div>
+      <div className="flex gap-2">
+        <h1 className="text-black font-semibold text-[16px]">CONFIRMED:</h1>
+        <p className="text-black font-semibold text-[16px]">
+          {agentInfo?.confirmedReferralCount ?? 0}
+        </p>
+      </div>
+    </div>
+    </>
+  )}
       </div>
 
       {/* Tabs */}
