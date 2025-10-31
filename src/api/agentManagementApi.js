@@ -140,6 +140,40 @@ export const getAgentPatientReferrals = async (
   }
 };
 
+export const getAgentStaffReferrals = async (
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL"
+) => {
+  try {
+    const response = await api.get(
+      `/admin/agent-staff-referral/referrals?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to fetch referrals.";
+    throw new Error(message);
+  }
+};
+export const getNewAgentPatientReferrals = async (
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL"
+) => {
+  try {
+    const response = await api.get(
+      `/admin/agent-patient-referral/referrals?page=${page}&limit=${limit}&referralStatus=${referralStatus}`
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to fetch referrals.";
+    throw new Error(message);
+  }
+};
 
 
 // Search staff referrals with pagination and search text
@@ -175,6 +209,16 @@ export const searchLocationByPincode = async (pincode) => {
   } catch (error) {
     const message = error.response?.data?.message || "Failed to fetch location";
     console.error("API Error:", message);
+    throw new Error(message);
+  }
+};
+
+export const getAgentStaffReferralDetails = async (id) => {
+  try {
+    const response = await api.get(`/admin/agent-staff-referral/referrals/${id}`);
+    return response.data;
+  } catch (error) {
+    const message = error.response?.data?.message || "Failed to fetch agent staff referral details.";
     throw new Error(message);
   }
 };
