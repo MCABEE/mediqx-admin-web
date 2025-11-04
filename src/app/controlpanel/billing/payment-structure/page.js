@@ -243,12 +243,12 @@ function Page() {
               })
             }
           >
-            <td className="p-2">Home Nursing</td>
-            <td className="border-l-4 border-[#C0D8F6] p-2">₹1000</td>
-            <td className="border-l-4 border-[#C0D8F6] p-2">₹950</td>
-            <td className="border-l-4 border-[#C0D8F6] p-2">₹700</td>
-            <td className="border-l-4 border-[#C0D8F6] p-2">₹100</td>
-            <td className="border-l-4 border-[#C0D8F6] p-2">₹50</td>
+            <td className="p-2 text-center">Home Nursing</td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹1000</td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹950</td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹700</td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹100</td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹50</td>
           </tr>
         </tbody>
       </table>
