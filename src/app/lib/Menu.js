@@ -34,8 +34,25 @@ export const menus = [
   {
     id: 5,
     name: "Billing",
-    hasSubmenu: false,
-    //link: "profileReports",
+    hasSubmenu: true,
+    link: "/controlpanel/data-manager/billing/payment-structure",
+     submenu: [
+      {
+        id: "5-1",
+        name: "Payment Structure",
+        link: "/controlpanel/billing/payment-structure",
+      },
+      {
+        id: "5-2",
+        name: "Patient Bills",
+        link: "",
+      },
+      {
+        id: "5-3",
+        name: "Staff Payments",
+        link: "",
+      },
+    ]
   },
   {
     id: 6,
