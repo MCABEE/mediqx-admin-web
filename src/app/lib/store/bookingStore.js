@@ -30,10 +30,47 @@ const useBookingStore = create((set, get) => ({
   dutyLogs: [],
 
   // Fetch all bookings (existing)
+  // fetchBookings: async (page = 1, limit = 10, status) => {
+  //   set({ isLoading: true });
+  //   try {
+  //     const data = await getBookingDetails(page, limit, status);
+  //     set({
+  //       bookings: data.bookings || [],
+  //       totalPages: data.totalPages || 0,
+  //       totalBookings: data.total || 0,
+  //       page: data.page,
+  //       limit: data.limit,
+  //       error: null,
+  //     });
+  //   } catch (err) {
+  //     set({ error: err.message });
+  //   } finally {
+  //     set({ isLoading: false });
+  //   }
+  // },
+   filters: {
+    name: "",
+    location: "",
+    date: "",
+  },
+
+  setPage: (page) => set({ page }),
+  setFilters: (filters) =>
+    set((state) => ({
+      filters: { ...state.filters, ...filters },
+    })),
+  clearFilters: () =>
+    set({
+      filters: { name: "", location: "", date: "" },
+    }),
+
+  // ✅ Updated fetch function
   fetchBookings: async (page = 1, limit = 10, status) => {
     set({ isLoading: true });
     try {
-      const data = await getBookingDetails(page, limit, status);
+      const { name, location, date } = useBookingStore.getState().filters;
+      const data = await getBookingDetails(page, limit, status, name, location, date);
+
       set({
         bookings: data.bookings || [],
         totalPages: data.totalPages || 0,
@@ -42,8 +79,10 @@ const useBookingStore = create((set, get) => ({
         limit: data.limit,
         error: null,
       });
+      console.log("Fetched bookings:", data.bookings);
     } catch (err) {
       set({ error: err.message });
+      console.error("Error fetching bookings:", err);
     } finally {
       set({ isLoading: false });
     }
@@ -214,3 +253,4 @@ const useBookingStore = create((set, get) => ({
 }));
 
 export default useBookingStore;
+

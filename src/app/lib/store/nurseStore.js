@@ -10,6 +10,9 @@ import {
   getAssignableNurses,
   getNurseCalendar,
   searchNurses,
+  getNurseProfileById,
+  getNurseQualificationById,
+  getNurseLanguagesById,
 } from "@/api/nurseApi";
 
 const useNurseStore = create(
@@ -19,16 +22,59 @@ const useNurseStore = create(
       isLoading: false,
       error: null,
       page: 1,
-      limit: 10,
+      limit: 50,
       totalPages: 0,
       totalUsers: 0,
       selectedNurse: null,
-      calendarData: null, //
+      calendarData: null,
+      selectedNurseProfile: null,
+      selectedNurseQualification: null,
 
-      fetchNurses: async (page = 1, limit = 10, status) => {
+      // Filters
+      search: "",
+      location: "",
+      qualifications: "",
+      gender: "",
+
+      // Actions
+      setFilter: (key, value) => set({ [key]: value, page: 1 }),
+
+      clearFilters: () =>
+        set({
+          search: "",
+          location: "",
+          qualifications: "",
+          gender: "",
+          page: 1,
+        }),
+
+      setPage: (page) => set({ page }),
+
+      // Fetch Nurses
+      fetchNurses: async (
+        page = get().page,
+        limit = get().limit,
+        status = "ALL",
+        role = "REGISTERED_NURSE",
+        filters
+      ) => {
         set({ isLoading: true, error: null });
+
+        const currentFilters = filters || {
+          search: get().search,
+          location: get().location,
+          qualifications: get().qualifications,
+          gender: get().gender,
+        };
+
         try {
-          const response = await getNurses(page, limit, status);
+          const response = await getNurses(
+            page,
+            limit,
+            status,
+            role,
+            currentFilters
+          );
           const nurseData = response?.data?.data?.users || [];
           set({
             users: nurseData,
@@ -37,20 +83,51 @@ const useNurseStore = create(
             totalPages: response?.data?.data?.totalPages || 0,
             totalUsers: response?.data?.data?.total || 0,
           });
-          console.log("Fetched nurses:", nurseData);
         } catch (error) {
-          set({ error: error.message });
+          set({
+            error: error.message,
+            users: [],
+            totalPages: 0,
+            totalUsers: 0,
+          });
           console.error("Error fetching nurses:", error);
         } finally {
           set({ isLoading: false });
         }
       },
-
       fetchNurseById: async (userId) => {
         set({ isLoading: true, error: null });
         try {
           const nurseDetails = await getNurseById(userId);
           set({ selectedNurse: nurseDetails });
+          console.log("Fetched nurse details:", nurseDetails);
+        } catch (error) {
+          set({ error: error.message });
+          console.error("Error fetching nurse details:", error);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      fetchNurseProfileById: async (userId) => {
+        set({ isLoading: true, error: null });
+        try {
+          const nurseDetails = await getNurseProfileById(userId);
+          set({ selectedNurseProfile: nurseDetails });
+          console.log("Fetched nurse details:", nurseDetails);
+        } catch (error) {
+          set({ error: error.message });
+          console.error("Error fetching nurse details:", error);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      fetchNurseQualificationById: async (userId) => {
+        set({ isLoading: true, error: null });
+        try {
+          const nurseDetails = await getNurseQualificationById(userId);
+          set({ selectedNurseQualification: nurseDetails });
           console.log("Fetched nurse details:", nurseDetails);
         } catch (error) {
           set({ error: error.message });
@@ -130,23 +207,22 @@ const useNurseStore = create(
         }
       },
 
-    
       fetchAssignableNurses: async (params) => {
-    set({ isLoading: true, error: null });
+        set({ isLoading: true, error: null });
 
-    try {
-      const data = await getAssignableNurses(params);
-      set({
-        users: data?.data?.users || [], 
-        totalPages: data?.data?.totalPages || 0,
-        totalUsers: data?.data?.total || 0,
-      });
-    } catch (error) {
-      set({ error: error.message });
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+        try {
+          const data = await getAssignableNurses(params);
+          set({
+            users: data?.data?.users || [],
+            totalPages: data?.data?.totalPages || 0,
+            totalUsers: data?.data?.total || 0,
+          });
+        } catch (error) {
+          set({ error: error.message });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
       fetchNurseCalendar: async (userId, monthStart, monthEnd) => {
         set({ isLoading: true, error: null });
         try {
@@ -161,7 +237,23 @@ const useNurseStore = create(
         }
       },
 
-      fetchNurses: async (page = 1, limit = 10, status, search = "") => {
+      selectedNurseLanguages: null,
+
+      fetchNurseLanguagesById: async (userId) => {
+        set({ isLoading: true, error: null });
+        try {
+          const languageData = await getNurseLanguagesById(userId);
+          set({ selectedNurseLanguages: languageData });
+          console.log("Fetched nurse languages:", languageData);
+        } catch (error) {
+          set({ error: error.message });
+          console.error("Error fetching nurse languages:", error);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      searchNurses: async (page = 1, limit = 10, status, search = "") => {
         set({ isLoading: true, error: null });
         try {
           const response = await searchNurses(page, limit, status, search);

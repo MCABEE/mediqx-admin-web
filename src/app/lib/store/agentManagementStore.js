@@ -1,6 +1,6 @@
 // src/store/agentStore.js
 import { create } from "zustand";
-import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals,updateAgentReferralStatus} from "@/api/agentManagementApi";
+import { registerAgent,getAgents ,getAgentById,updateAgent,updateAgentApprovalStatus,getAgentReferrals,searchStaffReferrals,updateAgentReferralStatus, updateAgentPatientReferralStatus, getAgentPatientReferrals, searchLocationByPincode} from "@/api/agentManagementApi";
 
 const useAgentStore = create((set, get) => ({
   agents: [],
@@ -13,6 +13,7 @@ const useAgentStore = create((set, get) => ({
   staffReferralLoading: false,
   staffReferralError: null,
   staffReferralTotalPages: 1,
+  referralsPatient:[],
 
  
  fetchAgents: async (page = 1, limit = 10, filter = "ALL") => {
@@ -31,7 +32,7 @@ const useAgentStore = create((set, get) => ({
 },
 
 
-    // ✅ Fetch agent by ID
+    // Fetch agent by ID
   fetchAgentById: async (id) => {
     set({ loading: true, error: null });
     try {
@@ -43,7 +44,7 @@ const useAgentStore = create((set, get) => ({
   },
 
 
-  // ✅ Register new agent
+  // Register new agent
   createAgent: async (formData) => {
     set({ loading: true, error: null, successMessage: "" });
     try {
@@ -61,8 +62,8 @@ const useAgentStore = create((set, get) => ({
     }
   },
 
-    // ✅ Update agent
-// ✅ Update agent
+  
+//  Update agent
 updateAgent: async (id, formData) => {
   set({ loading: true, error: null, successMessage: "" });
   try {
@@ -123,14 +124,39 @@ updateAgent: async (id, formData) => {
     }
   },
 
-
- fetchAgentReferrals: async (agentId, page = 1, limit = 10) => {
+updateAgentPatientReferralStatus: async (referralId, status, referralSignupStaffId) => {
   set({ loading: true, error: null });
   try {
-    const response = await getAgentReferrals(agentId, page, limit);
+    const updatedReferral = await updateAgentPatientReferralStatus(referralId, status, referralSignupStaffId);
+
+    // Update local state instead of full refetch
+    set((prev) => ({
+      referralsPatient: prev.referralsPatient.map((ref) =>
+        ref.id === referralId ? updatedReferral : ref
+      ),
+      loading: false,
+    }));
+
+    return { success: true };
+  } catch (err) {
+    set({ error: err.message, loading: false });
+    return { success: false };
+  }
+},
+
+fetchAgentReferrals: async (
+  agentId,
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL"
+) => {
+  set({ loading: true, error: null });
+  try {
+    const response = await getAgentReferrals(agentId, page, limit, referralStatus);
     set({
-      referrals: response.data?.referrals || [],
-      agentInfo: response.data?.agentInfo || null,  // also save agent info if you want
+      referrals: response?.data?.referrals || [],
+      agentInfo: response?.data?.agentInfo || null,
+      totalPages: response?.data?.totalPages || 1,
       loading: false,
     });
   } catch (err) {
@@ -139,6 +165,25 @@ updateAgent: async (id, formData) => {
 },
 
 
+fetchAgentPatientReferrals: async (
+  agentId,
+  page = 1,
+  limit = 10,
+  referralStatus = "ALL"
+) => {
+  set({ loading: true, error: null });
+  try {
+    const response = await getAgentPatientReferrals(agentId, page, limit, referralStatus);
+    set({
+      referralsPatient: response?.data?.referrals || [],
+      agentInfo: response?.data?.agentInfo || null,
+      totalPages: response?.data?.totalPages || 1,
+      loading: false,
+    });
+  } catch (err) {
+    set({ error: err.message, loading: false });
+  }
+},
 
 fetchStaffReferrals: async (referralId, search, page, limit) => {
   set({ staffReferralLoading: true, staffReferralError: null });
@@ -151,6 +196,28 @@ fetchStaffReferrals: async (referralId, search, page, limit) => {
     set({ staffReferralError: error.message, staffReferralLoading: false });
   }
 },
+
+ 
+  locationResults: [],
+  locationLoading: false,
+  locationError: null,
+
+fetchLocationByPincode: async (pincode) => {
+  if (!pincode) return;
+  set({ locationLoading: true, locationError: null });
+
+  try {
+    console.log("Fetching pincode:", pincode); // 👈 Check this
+    const locations = await searchLocationByPincode(pincode);
+    console.log("Fetched locations:", locations); // 👈 See what it returns
+
+    set({ locationResults: locations, locationLoading: false });
+  } catch (err) {
+    console.error("Error fetching locations:", err);
+    set({ locationError: err.message, locationLoading: false });
+  }
+},
+
 
 
 }));

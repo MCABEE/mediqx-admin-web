@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 import { submitNursePageThree } from "@/api/addStaffNurseApi";
+import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 
-function AddNurseAvailability() {
+function AddNurseAvailability({ categoryByProfession,onComplete  }) {
   const today = new Date().toISOString().split("T")[0];
   const { userId } = useNurseRegistrationStore();
 
@@ -18,6 +19,33 @@ function AddNurseAvailability() {
   const [selectedDates, setSelectedDates] = useState({});
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
   const [popupDate, setPopupDate] = useState(null);
+
+  const { listedItems, fetchItems } = useManageProfessionalsStore();
+
+  // Fetch specializations and qualifications when categoryByProfession changes
+  // useEffect(() => {
+  //   if (categoryByProfession) {
+  //     fetchItems("qualifications", 1, 50, categoryByProfession);
+  //     fetchItems("specializations", 1, 50, categoryByProfession);
+  //   }
+  // }, [categoryByProfession, fetchItems]);
+
+  const normalizedCategory = React.useMemo(() => {
+    if (categoryByProfession === "REGISTERED_NURSE") return "REG_NURSES";
+    if (categoryByProfession === "ANCILLARY_PERSONAL") return "ANCILLARY";
+    return categoryByProfession;
+  }, [categoryByProfession]);
+
+  useEffect(() => {
+    if (normalizedCategory) {
+      fetchItems("qualifications", 1, 50, normalizedCategory);
+      fetchItems("specializations", 1, 50, normalizedCategory);
+    }
+  }, [normalizedCategory, fetchItems]);
+
+  // Lists from store, fallback to empty arrays if not loaded yet
+  const qualifications = listedItems.qualifications || [];
+  const specializations = listedItems.specializations || [];
 
   const [slot, setSlot] = useState({
     forenoon: { from: "", to: "" },
@@ -149,8 +177,40 @@ function AddNurseAvailability() {
   };
 
   // Prepare payload according to backend API
+  // const generateAvailabilities = () => {
+  //   const availabilities = [];
+  //   for (const [date, info] of Object.entries(selectedDates)) {
+  //     if (info.fulltime) {
+  //       availabilities.push({
+  //         date,
+  //         isAvailable: true,
+  //         fixedSlots: info.fixedSlot,
+  //         slotOneStart: null,
+  //         slotOneEnd: null,
+  //         slotTwoStart: null,
+  //         slotTwoEnd: null,
+  //       });
+  //     } else {
+  //       // For parttime, actual shifts
+  //       const s1 = info.slots.forenoon || null;
+  //       const s2 = info.slots.afternoon || null;
+  //       availabilities.push({
+  //         date,
+  //         isAvailable: true,
+  //         fixedSlots: null,
+  //         slotOneStart: s1 ? s1.from : null,
+  //         slotOneEnd: s1 ? s1.to : null,
+  //         slotTwoStart: s2 ? s2.from : null,
+  //         slotTwoEnd: s2 ? s2.to : null,
+  //       });
+  //     }
+  //   }
+  //   return availabilities;
+  // };
+
   const generateAvailabilities = () => {
     const availabilities = [];
+    // Add available dates in your current logic
     for (const [date, info] of Object.entries(selectedDates)) {
       if (info.fulltime) {
         availabilities.push({
@@ -163,7 +223,6 @@ function AddNurseAvailability() {
           slotTwoEnd: null,
         });
       } else {
-        // For parttime, actual shifts
         const s1 = info.slots.forenoon || null;
         const s2 = info.slots.afternoon || null;
         availabilities.push({
@@ -177,6 +236,20 @@ function AddNurseAvailability() {
         });
       }
     }
+    // Add unavailable (leave) dates
+    leaveDates.forEach((date) => {
+      availabilities.push({
+        date,
+        isAvailable: false,
+        fixedSlots: null,
+        slotOneStart: null,
+        slotOneEnd: null,
+        slotTwoStart: null,
+        slotTwoEnd: null,
+      });
+    });
+    // Optionally sort by date
+    availabilities.sort((a, b) => a.date.localeCompare(b.date));
     return availabilities;
   };
 
@@ -210,8 +283,8 @@ function AddNurseAvailability() {
 
     const payload = {
       userId,
-      educationQualifications: [qualification],
-      specializations: [specialization],
+      educationQualificationsIds: [qualification],
+      specializationsIds: [specialization],
       workSchedule,
       isRegisteredNurse,
       availabilities: generateAvailabilities(),
@@ -220,9 +293,9 @@ function AddNurseAvailability() {
     try {
       setLoading(true);
       const result = await submitNursePageThree(payload);
-       console.log("✅ Success:", result); 
+      console.log("✅ Success:", result);
       setFormError("");
-      window.location.reload(); 
+      window.location.reload();
     } catch (err) {
       console.error("Submission error", err);
       setFormError(err.message || "Submission failed.");
@@ -238,7 +311,7 @@ function AddNurseAvailability() {
     .sort();
 
   return (
-    <div className="py-10 px-4">
+    <div className="py-10 px-2">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -249,31 +322,48 @@ function AddNurseAvailability() {
 
         <div className="mt-6">
           {/* Qualification */}
+          {/* <select
+            value={qualification}
+            onChange={(e) => setQualification(e.target.value)}
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
+            required
+          >
+        
+            <option disabled value="">
+              Qualification
+            </option>
+            <option value="ANM (Auxiliary Nurse Midwife)">ANM (Auxiliary Nurse Midwife)</option>
+            <option value="GNM (General Nursing and Midwifery)">GNM (General Nursing and Midwifery)</option>
+            <option value="GDA (General Duty Assistant)">GDA (General Duty Assistant)</option>
+            <option value="B.Sc. Nursing">B.Sc. Nursing</option>
+            <option value="Post Basic B.Sc. Nursing">Post Basic B.Sc. Nursing</option>
+            <option value="M.Sc. Nursing">M.Sc. Nursing</option>
+            <option value="Nurse Practitioner (NP)">Nurse Practitioner (NP)</option>
+            
+          </select> */}
+
           <select
             value={qualification}
             onChange={(e) => setQualification(e.target.value)}
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
             required
           >
+            {/* <option disabled value="">
+              Qualification
+            </option>
+            {qualifications.map((q) => (
+              <option key={q.id} value={q.qualification || q}>
+                {q.qualification || q}
+              </option>
+            ))} */}
             <option disabled value="">
               Qualification
             </option>
-            <option value="MSc Nursing">MSc Nursing</option>
-            <option value="BSc Nursing">BSc Nursing</option>
-            <option value="BSc Nursing Pursuing">GNM</option>
-            <option value="Post BSc Nursing">Post BSc Nursing</option>
-            <option value="GNM">GNM</option>
-            <option value="GNM Pursuing">GNM Pursuing</option>
-            <option value="ANM">ANM</option>
-            <option value="GDA (General Duty Assistant)">
-              GDA (General Duty Assistant)
-            </option>
-            <option value="PCA (Personal Care Assistant)">
-              PCA (Personal Care Assistant)
-            </option>
-            <option value="DHA (Diploma in Health Assistant)">
-              DHA (Diploma in Health Assistant)
-            </option>
+            {qualifications.map((q) => (
+              <option key={q.id} value={q.id}>
+                {q.qualification || q}
+              </option>
+            ))}
           </select>
 
           {/* Registered Nurse Checkbox */}
@@ -291,7 +381,7 @@ function AddNurseAvailability() {
           </div>
 
           {/* Specialization */}
-          <div className="pb-3">
+          {/* <div className="pb-3">
             <select
             value={specialization}
             onChange={(e) => setSpecialization(e.target.value)}
@@ -307,6 +397,30 @@ function AddNurseAvailability() {
             <option value="ER Nurse / Trauma Nurse">ER Nurse</option>
             <option value="Pediatric Nurse">Pediatric Nurse</option>
           </select>
+          </div> */}
+          <div className="pb-3">
+            <select
+              value={specialization}
+              onChange={(e) => setSpecialization(e.target.value)}
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none mt-3"
+            >
+              {/* <option disabled value="">
+                Specialization
+              </option>
+              {specializations.map((s) => (
+                <option key={s.id} value={s.specialization || s}>
+                  {s.specialization || s}
+                </option>
+              ))} */}
+              <option disabled value="">
+                Specialization
+              </option>
+              {specializations.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.specialization || s}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Single select for schedule + mode */}
@@ -367,7 +481,7 @@ function AddNurseAvailability() {
         )}
 
         {/* Date range selection */}
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <p className="mt-6 text-[14px] text-black ">
             Set your available days
           </p>
@@ -405,7 +519,59 @@ function AddNurseAvailability() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
+
+        {/* Date range selection */}
+<div className="mt-6">
+  <p className="mt-6 text-[14px] text-black ">
+    Set your available days
+  </p>
+  <div className="flex gap-4 mt-2">
+    <div>
+      <p className="text-[14px] text-gray-600">Choose from Date</p>
+      <input
+        type="date"
+        min={today}
+        value={fromDate}
+        onChange={(e) => {
+          if (!workSchedule) {
+            setFormError("Please select your work schedule before choosing dates.");
+            return;
+          }
+          setFormError(""); // clear error if valid
+          setFromDate(e.target.value);
+          setToDate("");
+          setSelectedDates({});
+          setCurrentMonthIndex(0);
+        }}
+        className="w-[240px] h-[40px] px-2 mt-2 border-1 rounded-[15px] border-[#bbbbbb] outline-none"
+        required
+      />
+    </div>
+    <div>
+      <p className="text-[14px] text-gray-600">Choose To Date</p>
+      <input
+        type="date"
+        min={fromDate || today}
+        value={toDate}
+        onChange={(e) => {
+          if (!workSchedule) {
+            setFormError("Please select your work schedule before choosing dates.");
+            return;
+          }
+          setFormError("");
+          setToDate(e.target.value);
+          setSelectedDates({});
+          setCurrentMonthIndex(0);
+        }}
+        className="w-[240px] h-[40px] px-2 mt-2 border-1 rounded-[15px] border-[#bbbbbb] outline-none"
+        required
+        disabled={!fromDate}
+      />
+    </div>
+  </div>
+</div>
+
 
         {/* Selected Dates display */}
         {selectedDateList.length > 0 && (
@@ -581,52 +747,55 @@ function AddNurseAvailability() {
                   </div>
                 ))} */}
                 {["forenoon", "afternoon"].map((period) => (
-  <div key={period}>
-    <p className="font-medium text-gray-700 capitalize">{period}</p>
-    <div className="flex gap-3 mt-1">
-      <input
-        type="time"
-        value={slot[period].from}
-        onChange={(e) => {
-          const fromTime = e.target.value;
-          const [hoursStr, minutesStr] = fromTime.split(":");
-          let hours = parseInt(hoursStr, 10);
-          let minutes = parseInt(minutesStr, 10);
-          hours += 2;
-          if (hours >= 24) hours -= 24; // wrap around midnight
+                  <div key={period}>
+                    <p className="font-medium text-gray-700 capitalize">
+                      {period}
+                    </p>
+                    <div className="flex gap-3 mt-1">
+                      <input
+                        type="time"
+                        value={slot[period].from}
+                        onChange={(e) => {
+                          const fromTime = e.target.value;
+                          const [hoursStr, minutesStr] = fromTime.split(":");
+                          let hours = parseInt(hoursStr, 10);
+                          let minutes = parseInt(minutesStr, 10);
+                          hours += 2;
+                          if (hours >= 24) hours -= 24; // wrap around midnight
 
-          const toTime = `${hours.toString().padStart(2, "0")}:${minutes
-            .toString()
-            .padStart(2, "0")}`;
+                          const toTime = `${hours
+                            .toString()
+                            .padStart(2, "0")}:${minutes
+                            .toString()
+                            .padStart(2, "0")}`;
 
-          setSlot({
-            ...slot,
-            [period]: {
-              from: fromTime,
-              to: toTime,
-            },
-          });
-        }}
-        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      <input
-        type="time"
-        value={slot[period].to}
-        onChange={(e) =>
-          setSlot({
-            ...slot,
-            [period]: {
-              ...slot[period],
-              to: e.target.value,
-            },
-          })
-        }
-        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </div>
-  </div>
-))}
-
+                          setSlot({
+                            ...slot,
+                            [period]: {
+                              from: fromTime,
+                              to: toTime,
+                            },
+                          });
+                        }}
+                        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                      <input
+                        type="time"
+                        value={slot[period].to}
+                        onChange={(e) =>
+                          setSlot({
+                            ...slot,
+                            [period]: {
+                              ...slot[period],
+                              to: e.target.value,
+                            },
+                          })
+                        }
+                        className="w-1/2 border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
               {errorMsg && (
                 <p className="text-red-500 text-sm mt-2 font-medium">
@@ -657,7 +826,7 @@ function AddNurseAvailability() {
           <button
             type="submit"
             disabled={loading}
-            className="w-[280px] px-6 py-2 bg-[#3674B5] text-white font-semibold rounded-[15px]"
+            className="w-[328px] px-6 py-2 bg-[#3674B5] text-white font-semibold rounded-[15px]"
           >
             {loading ? "Submitting..." : "Save"}
           </button>
@@ -671,3 +840,4 @@ function AddNurseAvailability() {
 }
 
 export default AddNurseAvailability;
+

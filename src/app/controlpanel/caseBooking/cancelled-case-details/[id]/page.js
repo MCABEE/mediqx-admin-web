@@ -36,12 +36,9 @@ const BookingDetailsPage = () => {
   const { fetchBookingById, selectedBooking, isLoading, error } =
     useBookingStore();
 
-
-
   useEffect(() => {
     if (id) fetchBookingById(id);
   }, [id]);
- 
 
   if (isLoading) return <p className="p-8">Loading...</p>;
   if (error) return <p className="p-8 text-red-500">Error: {error}</p>;
@@ -111,10 +108,7 @@ const BookingDetailsPage = () => {
             <span className="w-[250px] font-medium">Residential Address</span>
             <span>{booking.city} </span>
           </div>
-          {/* <div className="flex">
-    <span className="w-[250px] font-medium">Pincode</span>
-    <span>{booking.pincode}</span>
-  </div> */}
+
           <div className="flex">
             <span className="w-[250px] font-medium">Contact person</span>
             <span>{booking.contactPersonName}</span>
@@ -159,15 +153,11 @@ const BookingDetailsPage = () => {
           <div className="flex">
             <span className="w-[200px] font-medium">Duration</span>
             <span>
-              {booking.durationType} 
+              {booking.durationType}
               {/* ({booking.durationValue} ) */}
             </span>
           </div>
 
-          {/* <div className="flex">
-    <span className="w-[200px] font-medium">End Time</span>
-    <span>{formatTime(booking.endTime)}</span>
-  </div> */}
           <div className="flex">
             <span className="w-[200px] font-medium">Frequency</span>
             <span>{booking.weekdays?.join(", ")}</span>
@@ -202,10 +192,6 @@ const BookingDetailsPage = () => {
           </div>
         </div>
       </div>
-
-    
-
-     
     </div>
   );
 };

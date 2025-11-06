@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter,useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navlink from "@/components/staffManagement/Navlink";
 import AvailabilitySchedule from "@/components/staffManagement/AvailabilitySchedule";
@@ -8,12 +8,16 @@ import nurseStore from "@/app/lib/store/nurseStore";
 import EditContactModal from "@/components/staffManagement/NurseEdit/ContactDetails ";
 import EditNurseAvailability from "@/components/staffManagement/NurseEdit/EditNurseAvailability";
 import EditExperincePopup from "@/components/staffManagement/NurseEdit/EditExperincePopup";
+import NurseFileSection from "@/components/staffManagement/NurseFileSection";
 
 function StaffDetailPage() {
   const router = useRouter();
   const { id } = useParams();
   const userId = id;
-  const { fetchNurseById, selectedNurse, verifyNurse } = nurseStore();
+  const searchParams = useSearchParams();
+  
+    const role = searchParams.get("role") || "NURSE";
+  const { fetchNurseById, selectedNurse, verifyNurse,fetchNurseLanguagesById,selectedNurseLanguages  } = nurseStore();
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
   const [preview, setPreview] = useState({
@@ -44,9 +48,16 @@ function StaffDetailPage() {
   const [editAvailabilityPopup, setEditAvailabilityPopup] = useState(false);
   const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
 
+  
+
   useEffect(() => {
-    if (userId) fetchNurseById(userId);
+    if (userId){
+       fetchNurseById(userId);
+       fetchNurseLanguagesById(userId);
+    }
   }, [userId]);
+  console.log(selectedNurseLanguages);
+  
 
   useEffect(() => {
     if (selectedNurse) {
@@ -89,7 +100,12 @@ function StaffDetailPage() {
       <Navlink />
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
-        <div onClick={() => router.back()} className="cursor-pointer">
+        <div
+          onClick={() =>
+            router.push(`/controlpanel/staffManagement/allStaff?role=${role}`)
+          }
+          className="cursor-pointer"
+        >
           Back
         </div>
       </div>
@@ -120,24 +136,16 @@ function StaffDetailPage() {
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Gender</span>
-            <span>{selectedNurse.gender}</span>
+            <div className="grow">{selectedNurse.gender}</div>
           </div>
+      
+        
+         
           <div className="flex gap-[18px]">
-            <span className="w-[280px]">State</span>
-            <span>{address.state}</span>
+            <div className="w-[280px]">Address</div>
+            <div className="flex-1">{address.fullAddress}</div>
           </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">District</span>
-            <span>{address.district}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">City</span>
-            <span>{address.city}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">Pin Code</span>
-            <span>{address.pincode}</span>
-          </div>
+         
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Email</span>
@@ -147,7 +155,7 @@ function StaffDetailPage() {
             <span className="w-[280px]">Phone Number</span>
             <span>{selectedNurse.mobileNumber}</span>
           </div>
-           <div className="flex gap-[18px]">
+          <div className="flex gap-[18px]">
             <span className="w-[280px]">DOB</span>
             <span>
               {selectedNurse.dob
@@ -170,6 +178,35 @@ function StaffDetailPage() {
 
           {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
         </div>
+
+
+                <div className="flex justify-between px-[39px]">
+          <h1 className="text-[16px] font-semibold text-black py-[18px]">
+            Languages 
+          </h1>
+          {/* <button
+            
+            className="cursor-pointer hover:scale-110"
+          >
+            <img src="/edit-btn.svg" className="size-6" alt="edit" />
+          </button> */}
+        </div>
+        <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
+         <div className="flex gap-[18px]">
+  <span className="w-[280px]">Languages</span>
+ 
+  <span>
+  {selectedNurseLanguages?.userLanguages?.length > 0
+    ? selectedNurseLanguages.userLanguages.map(lang => lang.language).join(", ")
+    : "-"}
+</span>
+
+</div>
+
+         
+
+          {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
+        </div>
         {/* Basic Details */}
         <div className="px-[39px] pt-[15px]">
           <div className="flex items-center justify-end">
@@ -181,8 +218,7 @@ function StaffDetailPage() {
             </button> */}
           </div>
           {/* Availability */}
-          <AvailabilitySchedule availabilities={availabilities}
-           />
+          <AvailabilitySchedule availabilities={availabilities} />
           <div className="flex items-center justify-end mt-6">
             <button
               onClick={() => setIsExperincePopUp(true)}
@@ -223,13 +259,10 @@ function StaffDetailPage() {
               <span>{qualifications.department || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
-              <span className="w-[280px]">State</span>
-              <span>{qualifications.providerState || "Nil"}</span>
-            </div>
-            <div className="flex gap-[18px]">
               <span className="w-[280px]">Location</span>
-              <span>{qualifications.providerLocation || "Nil"}</span>
+              <span className="flex-1">{qualifications.providerAddress || "Nil"}</span>
             </div>
+
 
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
@@ -283,7 +316,7 @@ function StaffDetailPage() {
           </div>
         </div>
         {/* File Uploads */}
-        {[
+        {/* {[
           { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
           { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
           {
@@ -307,7 +340,7 @@ function StaffDetailPage() {
           return (
             <div
               key={type}
-              className="flex flex-col bg-[#EBF2F8] px-[39px] py-6 gap-2 "
+              className="flex flex-col bg-[#EBF2F8] px-[39px] py-6 gap-2"
             >
               <span className="w-[300px] text-black">{label}</span>
               {file ? (
@@ -354,9 +387,19 @@ function StaffDetailPage() {
               )}
             </div>
           );
-        })}
-        {/* Contact Details with edit */}
-        {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
+        })} */}
+        <NurseFileSection
+        userId={nurseData.userId}
+        educationQualificationId={qualifications.id}
+
+  files={files}
+  qualifications={qualifications}
+  url={url}
+  setPreview={setPreview}
+/>
+        
+
+       
       </div>
 
       {/* Confirm Modal */}
@@ -368,7 +411,7 @@ function StaffDetailPage() {
             </h2>
             <p className="text-black">
               Are you sure you want to{" "}
-              <strong>{modalData.action.toLowerCase()}</strong> nurse{" "}
+              <strong>{modalData.action?.toLowerCase()}</strong> nurse{" "}
               <strong>{selectedNurse.fullName}</strong>?
             </p>
             <div className="flex justify-center gap-4 mt-6">
@@ -376,7 +419,9 @@ function StaffDetailPage() {
                 onClick={async () => {
                   await verifyNurse(userId, modalData.action);
                   setModalData({ show: false, action: "" });
-                  router.push("/controlpanel/staffManagement");
+                  // router.push("/controlpanel/staffManagement");
+                   router.push(`/controlpanel/staffManagement?role=${role}`)
+                  router.back()
                 }}
                 className="px-4 py-2 bg-[#3674B5] text-white rounded-md cursor-pointer"
               >
@@ -422,6 +467,7 @@ function StaffDetailPage() {
         show={isEditModalOpen}
         contact={editedContact}
         userId={userId}
+        role={selectedNurse.role}
         onChange={setEditedContact}
         initialContact={selectedNurse}
         onCancel={() => setIsEditModalOpen(false)}
@@ -440,6 +486,8 @@ function StaffDetailPage() {
           qualifications={qualifications}
           nurseData={nurseData}
           userId={userId}
+        role={selectedNurse.role}
+
           onClose={() => setIsExperincePopUp(false)}
         />
       )}

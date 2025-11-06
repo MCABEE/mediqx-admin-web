@@ -1,144 +1,10 @@
-// "use client";
-// import React, { useState, useEffect } from "react";
-
-// const InputGroup = ({ label, type = "text", name, value, onChange }) => (
-//   <div className="flex flex-col gap-[6px]">
-//     <label className="text-sm font-medium text-[#1F2937]">{label}</label>
-//     <input
-//       type={type}
-//       name={name}
-//       value={value}
-//       onChange={onChange}
-//       className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
-//     />
-//   </div>
-// );
-
-// const EditBookingPopup = ({ initialData, onClose, onSave }) => {
-//   const [form, setForm] = useState({
-//     diagnosis: "",
-//     startDate: "",
-//     serviceType: "",
-//     durationType: "",
-//     durationValue: "",
-//     weekdays: [],
-//     flexibility: "",
-//     startTime: "",
-//     endTime: "",
-//   });
-
-//   useEffect(() => {
-//     if (initialData) {
-//       setForm({
-//         ...initialData,
-//         startDate: initialData.startDate?.slice(0, 10),
-//         startTime: initialData.startTime?.slice(11, 16),
-//         endTime: initialData.endTime?.slice(11, 16),
-//       });
-//     }
-//   }, [initialData]);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setForm((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleSave = () => {
-//     onSave(form);
-//   };
-
-//   return (
-//     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-center items-center px-4">
-//       <div className="bg-white w-full max-w-xl rounded-xl shadow-lg p-6 sm:p-8">
-//         {/* Header */}
-//         <div className="flex justify-between items-center border-b pb-4 mb-6">
-//           <h2 className="text-xl font-semibold text-[#111827]">
-//             Edit Service Details
-//           </h2>
-//           <button
-//             onClick={onClose}
-//             className="text-gray-500 hover:text-red-500 text-xl transition"
-//             aria-label="Close"
-//           >
-//             &times;
-//           </button>
-//         </div>
-
-//         {/* Form */}
-//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-//           <InputGroup
-//             label="Diagnosis"
-//             name="diagnosis"
-//             value={form.diagnosis}
-//             onChange={handleChange}
-//           />
-//           <InputGroup
-//             label="Start Date"
-//             name="startDate"
-//             type="date"
-//             value={form.startDate}
-//             onChange={handleChange}
-//           />
-//           <InputGroup
-//             label="Service Type"
-//             name="serviceType"
-//             value={form.serviceType}
-//             onChange={handleChange}
-//           />
-//           <InputGroup
-//             label="Duration Type"
-//             name="durationType"
-//             value={form.durationType}
-//             onChange={handleChange}
-//           />
-//           <InputGroup
-//             label="Duration Value (weeks)"
-//             type="number"
-//             name="durationValue"
-//             value={form.durationValue}
-//             onChange={handleChange}
-//           />
-//           <InputGroup
-//             label="Start Time"
-//             type="time"
-//             name="startTime"
-//             value={form.startTime}
-//             onChange={handleChange}
-//           />
-//           <InputGroup
-//             label="End Time"
-//             type="time"
-//             name="endTime"
-//             value={form.endTime}
-//             onChange={handleChange}
-//           />
-//         </div>
-
-//         {/* Footer Buttons */}
-//         <div className="flex justify-end gap-3 mt-8">
-//           <button
-//             onClick={onClose}
-//             className="px-5 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition"
-//           >
-//             Cancel
-//           </button>
-//           <button
-//             onClick={handleSave}
-//             className="px-6 py-2 rounded-md bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition"
-//           >
-//             Save Changes
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default EditBookingPopup;
-
 "use client";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import React, { useState, useEffect } from "react";
+import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
+import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
+import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
+import useLanguageStore from "@/app/lib/store/languageStore";
 
 // Input Group Component
 const InputGroup = ({ label, type = "text", name, value, onChange }) => (
@@ -155,49 +21,176 @@ const InputGroup = ({ label, type = "text", name, value, onChange }) => (
 );
 
 const EditBookingPopup = ({ initialData, onClose, onSave }) => {
+  const { listedServices, fetchServices } = usePatientServiceStore();
+  const { listedHealthStatus, fetchHealthStatus } = useHealthStatusStore();
+  const { listedDiagnoses, fetchDiagnosesList } = useDiagnosisStore();
+  const {
+    listedLanguages,
+    fetchLanguages,
+    isLoading: isLangLoading,
+    error: langErrorFetch,
+  } = useLanguageStore();
+
+  console.log(initialData);
+
+
+
+
   const { updateExistingBooking } = useBookingStore();
-  const [form, setForm] = useState({
-    // Patient Details
-    fullName: "",
-    gender: "",
-    age: "",
-    height: "",
-    weight: "",
-    healthStatus: "",
-    stayAt: "",
-    city: "",
-    contactPersonName: "",
-    contactPersonRelation: "",
-    contactPersonEmail: "",
-    contactPersonMobileNumber: "",
+  // const [form, setForm] = useState({
+  //   // Patient Details
+  //   fullName: "",
+  //   gender: "",
+  //   age: "",
+  //   height: "",
+  //   weight: "",
+  //   diagnosisId: "",
+  //   healthStatusId: "",
+  //   stayAt: "",
+  //   city: "",
+  //   contactPersonName: "",
+  //   contactPersonRelation: "",
+  //   contactPersonEmail: "",
+  //   contactPersonMobileNumber: "",
 
-    // Service Details
-    diagnosis: "",
-    startDate: "",
-    serviceType: "",
-    durationType: "",
-    durationValue: "",
-    weekdays: [],
-    flexibility: "",
-    startTime: "",
-    endTime: "",
-    scheduleType: "",
+  //   // Service Details
 
-    // Staff Preferences
-    preferredGender: "",
-    preferredLanguages: [],
-  });
+  //   startDate: "",
+  //   serviceTypeId: "",
+  //   durationType: "",
+  //   durationValue: "",
+  //   weekdays: [],
+  //   flexibility: "",
+  //   startTime: "",
+  //   endTime: "",
+  //   scheduleType: "",
+
+  //   // Staff Preferences
+  //   preferredGender: "",
+  //   preferredLanguages: [],
+  // });
+const [form, setForm] = useState({
+  fullName: "",
+  gender: "",
+  age: "",
+  height: "",
+  weight: "",
+  diagnosisId: "",
+  healthStatusId: "",
+  stayAt: "",
+  city: "",
+  contactPersonName: "",
+  contactPersonRelation: "",
+  contactPersonEmail: "",
+  contactPersonMobileNumber: "",
+  startDate: "",
+  serviceTypeId: "",
+  durationType: "",
+  durationValue: "",
+  weekdays: [],
+  flexibility: "",
+  startTime: "",
+  endTime: "",
+  scheduleType: "",
+  preferredGender: "",
+  preferredLanguages: [],
+});
+
+// ✅ Move this AFTER useState
+useEffect(() => {
+  if (!form.startTime || !form.scheduleType) return;
+
+  const [hours, minutes] = form.startTime.split(":").map(Number);
+  const start = new Date();
+  start.setHours(hours);
+  start.setMinutes(minutes);
+
+  let end = new Date(start);
+
+  switch (form.scheduleType) {
+    case "FULL_TIME_24_HOURS":
+      end.setHours(end.getHours() + 24);
+      break;
+    case "DAY_SHIFT_12_HOURS":
+    case "NIGHT_SHIFT_12_HOURS":
+      end.setHours(end.getHours() + 12);
+      break;
+    case "CUSTOM_HOURS":
+    default:
+      return;
+  }
+
+  const formattedEnd = end.toTimeString().slice(0, 5);
+  setForm((prev) => ({ ...prev, endTime: formattedEnd }));
+}, [form.startTime, form.scheduleType]);
+  useEffect(() => {
+    fetchServices(1, 50); // load services
+    fetchHealthStatus(1, 50); // load health statuses
+    fetchDiagnosesList(1, 50); // load diagnoses
+  }, [fetchServices, fetchHealthStatus, fetchDiagnosesList]);
+
+  console.log(listedServices);
+  console.log(listedHealthStatus);
+  console.log(listedDiagnoses);
 
   useEffect(() => {
-    if (initialData) {
-      setForm({
-        ...initialData,
-        startDate: initialData.startDate?.slice(0, 10) || "",
-        startTime: initialData.startTime?.slice(11, 16) || "",
-        endTime: initialData.endTime?.slice(11, 16) || "",
-      });
-    }
-  }, [initialData]);
+    fetchLanguages(1, 100);
+  }, [fetchLanguages]);
+
+  // Prefill form when initialData and API lists are ready
+  useEffect(() => {
+    if (!initialData || !listedLanguages) return;
+
+    const diagnosisOption = listedDiagnoses?.find(
+      (d) => d.diagnosis === initialData.diagnosis
+    );
+    const serviceOption = listedServices?.find(
+      (s) => s.service === initialData.serviceType
+    );
+    const healthStatusOption = listedHealthStatus?.find(
+      (h) => h.status === initialData.healthStatus
+    );
+
+    setForm((prev) => ({
+      ...prev,
+      userId: initialData.userId || "",
+      fullName: initialData.fullName || "",
+      gender: initialData.gender || "",
+      age: initialData.age || "",
+      height: initialData.height || "",
+      weight: initialData.weight || "",
+      diagnosisId: diagnosisOption?.id || "",
+      serviceTypeId: serviceOption?.id || "",
+      healthStatusId: healthStatusOption?.id || "",
+      stayAt: initialData.stayAt || "",
+      fullAddress: initialData.fullAddress || "",
+      contactPersonName: initialData.contactPersonName || "",
+      contactPersonRelation: initialData.contactPersonRelation || "",
+      contactPersonEmail: initialData.contactPersonEmail || "",
+      contactPersonMobileNumber: initialData.contactPersonMobileNumber || "",
+      startDate: initialData.startDate?.slice(0, 10) || "",
+      startTime: initialData.startTime?.slice(11, 16) || "",
+      endTime: initialData.endTime?.slice(11, 16) || "",
+      durationType: initialData.durationType || "",
+      durationValue: initialData.durationValue || "",
+      weekdays: initialData.weekdays || [],
+      flexibility: initialData.flexibility || "",
+      scheduleType: initialData.scheduleType || "",
+      preferredGender: initialData.preferredGender || "",
+      // preferredLanguages: initialData.preferredLanguages || [],
+      preferredLanguages:
+        initialData.preferredLanguages?.map((l) => ({
+          id: l.id,
+          language: l.language,
+        })) || [],
+    }));
+  }, [
+    initialData,
+    listedLanguages,
+    listedDiagnoses,
+    listedServices,
+    listedHealthStatus,
+  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -205,19 +198,28 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
   };
 
   const handleSave = async () => {
-    const bookingId = form.id;
+    const bookingId = initialData.id;
+    console.log(bookingId);
+
     const payload = {
+      ...form,
+      diagnosis: listedDiagnoses.find((d) => d.id === form.diagnosisId)
+        ?.diagnosis,
+      serviceType: listedServices.find((s) => s.id === form.serviceTypeId)
+        ?.service,
+      healthStatus: listedHealthStatus.find((h) => h.id === form.healthStatusId)
+        ?.status,
       userId: form.userId,
       patientName: form.fullName,
       gender: form.gender,
       age: Number(form.age),
       height: Number(form.height),
       weight: Number(form.weight),
-      diagnosis: form.diagnosis,
-      healthStatus: form.healthStatus,
+      // diagnosis: form.diagnosis,
+      // healthStatus: form.healthStatus,
       stayAt: form.stayAt,
-      serviceType: form.serviceType,
-      location: form.city,
+      // serviceType: form.serviceType,
+      officialAddress: form.fullAddress,
       // pincode: "123456",
       contactPersonName: form.contactPersonName,
       contactPersonRelation: form.contactPersonRelation,
@@ -230,7 +232,10 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
       endTime: form.endTime,
       weekdays: form.weekdays,
       flexibility: form.flexibility,
-      preferredLanguages: form.preferredLanguages,
+      // preferredLanguages: form.preferredLanguages,
+      // preferredLanguageId: form.preferredLanguages,
+      preferredLanguageId: form.preferredLanguages.map((l) => l.id),
+
       preferredGender: form.preferredGender,
       scheduleType: form.scheduleType,
     };
@@ -306,41 +311,19 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               Health Status
             </label>
             <select
-              name="healthStatus"
-              value={form.healthStatus}
+              name="healthStatusId"
+              value={form.healthStatusId}
               onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
             >
               <option value="" disabled>
-                Select Health Status / Activity
+                Select Health Status
               </option>
-              <option value="Bedridden Patients">Bedridden Patients</option>
-              <option value="Patients with Limited Mobility">
-                Patients with Limited Mobility
-              </option>
-              <option value="Tube-fed Patients">Tube-fed Patients</option>
-              <option value="Patients with Indwelling Catheters">
-                Patients with Indwelling Catheters
-              </option>
-              <option value="Patients with Tracheostomy / Ventilator">
-                Patients with Tracheostomy / Ventilator
-              </option>
-              <option value="Post-Surgical Recovery Patients">
-                Post-Surgical Recovery Patients
-              </option>
-              <option value="Elderly with Chronic Conditions (Geriatric Care)">
-                Elderly with Chronic Conditions (Geriatric Care)
-              </option>
-              <option value="Patients Requiring Palliative / Hospice Care">
-                Patients Requiring Palliative / Hospice Care
-              </option>
-              <option value="Patients on IV Therapy / Home Infusion">
-                Patients on IV Therapy / Home Infusion
-              </option>
-              <option value="Post-COVID or Respiratory Rehab Patients">
-                Post-COVID or Respiratory Rehab Patients
-              </option>
+              {listedHealthStatus?.map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.status}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -366,9 +349,9 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
           </div>
 
           <InputGroup
-            label="City"
-            name="city"
-            value={form.city}
+            label="Residential Address"
+            name="fullAddress"
+            value={form.fullAddress}
             onChange={handleChange}
           />
           <InputGroup
@@ -444,57 +427,19 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               Diagnosis
             </label>
             <select
-              name="diagnosis"
-              id="diagnosis"
-              value={form.diagnosis}
+              name="diagnosisId"
+              value={form.diagnosisId}
               onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
             >
               <option value="" disabled>
-                Select diagnosis
+                Select Diagnosis
               </option>
-              <option value="Pediatric Cancers">Pediatric Cancers</option>
-              <option value="Neuroendocrine Tumors (NETs)">
-                Neuroendocrine Tumors (NETs)
-              </option>
-              <option value="Bone and Soft Tissue Tumors">
-                Bone and Soft Tissue Tumors
-              </option>
-              <option value="Skin Cancers">Skin Cancers</option>
-              <option value="Gynecologic Cancers">Gynecologic Cancers</option>
-              <option value="Genitourinary (GU) Cancers">
-                Genitourinary (GU) Cancers
-              </option>
-              <option value="Gastrointestinal (GI) Cancers">
-                Gastrointestinal (GI) Cancers
-              </option>
-              <option value="Hematologic Cancers (Blood & Bone Marrow)">
-                Hematologic Cancers (Blood & Bone Marrow)
-              </option>
-              <option value="Breast Cancer">Breast Cancer</option>
-              <option value="Head & Neck Cancers">Head & Neck Cancers</option>
-              <option value="Respiratory System">Respiratory System</option>
-              <option value="Central Nervous System (CNS) Cancers">
-                Central Nervous System (CNS) Cancers
-              </option>
-              <option value="Hematology / Oncology">
-                Hematology / Oncology
-              </option>
-              <option value="Obstetric / Gynecology">
-                Obstetric / Gynecology
-              </option>
-              <option value="Pediatrics">Pediatrics</option>
-              <option value="Psychiatry">Psychiatry</option>
-              <option value="Orthopedic / Trauma">Orthopedic / Trauma</option>
-              <option value="Infectious Disease">Infectious Disease</option>
-              <option value="Renal / Endocrine / Metabolic">
-                Renal / Endocrine / Metabolic
-              </option>
-              <option value="Gastrointestinal">Gastrointestinal</option>
-              <option value="Neurology">Neurology</option>
-              <option value="Pulmonary">Pulmonary</option>
-              <option value="Cardiovascular">Cardiovascular</option>
+              {listedDiagnoses?.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.diagnosis}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -510,31 +455,19 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               Service Type
             </label>
             <select
-              name="serviceType"
-              value={form.serviceType}
+              name="serviceTypeId"
+              value={form.serviceTypeId}
               onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
             >
               <option value="" disabled>
                 Service Required
               </option>
-              <option value="DOCTOR_VISIT">Doctor Visit</option>
-              <option value="NURSING_SERVICE_AT_HOME">
-                Nursing service at home
-              </option>
-              <option value="NURSING_ASSISTANCE_AT_HOME">
-                Nursing Assistance at home
-              </option>
-              <option value="NURSING_ASSISTANCE_VISIT">
-                Nursing assistance Visit
-              </option>
-              <option value="NURSING_VISIT">Nursing visit</option>
-              <option value="THERAPY">Therapy</option>
-              <option value="DIAGNOSTIC_SERVICES_AT_HOME">
-                Diagnostic services at home
-              </option>
-              <option value="OTHER">Other</option>
+              {listedServices?.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.service}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -547,7 +480,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               value={form.durationType}
               onChange={handleChange}
               required
-              className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+              className="w-[328px] py-2 rounded-md text-sm px-4 border border-gray-300 placeholder:text-black outline-none"
             >
               <option value="" disabled>
                 Single Visit / Periodically
@@ -567,7 +500,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
             value={form.durationValue}
             onChange={handleChange}
           />
-          <InputGroup
+          {/* <InputGroup
             label="Start Time"
             name="startTime"
             type="time"
@@ -580,7 +513,34 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
             type="time"
             value={form.endTime}
             onChange={handleChange}
-          />
+          /> */}
+
+          {/* Start Time */}
+<InputGroup
+  label="Start Time"
+  name="startTime"
+  type="time"
+  value={form.startTime}
+  onChange={handleChange}
+/>
+
+{/* End Time */}
+<div className="flex flex-col gap-[6px]">
+  <label className="text-sm font-medium text-[#1F2937]">End Time</label>
+  <input
+    type="time"
+    name="endTime"
+    value={form.endTime}
+    onChange={handleChange}
+    disabled={
+      form.scheduleType !== "CUSTOM_HOURS" // only editable if custom
+    }
+    className={`w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm ${
+      form.scheduleType !== "CUSTOM_HOURS" ? "bg-gray-100" : ""
+    }`}
+  />
+</div>
+
           <div className="flex flex-col gap-[6px]">
             <label className="text-sm font-medium text-[#1F2937]">
               Flexibility
@@ -616,7 +576,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               </option>
               <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
               <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
-              <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option>
+              {/* <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option> */}
               <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
               <option value="CUSTOM_HOURS">Custom Hours</option>
             </select>
@@ -687,7 +647,7 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
           </div>
 
           {/* Read-only Input showing comma-separated selected languages */}
-          <div>
+          {/* <div>
             <InputGroup
               label="Preferred Languages (comma separated)"
               name="preferredLanguages"
@@ -696,7 +656,6 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
               readOnly
             />
 
-            {/* Checkbox group for selecting preferred languages */}
             <div className="grid grid-cols-2 gap-2 my-4">
               {[
                 "HINDI",
@@ -723,6 +682,97 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
                   {lang}
                 </label>
               ))}
+            </div>
+          </div> */}
+          {/* Preferred Languages */}
+          {/* Preferred Languages */}
+          {/* Preferred Languages */}
+          <div>
+            <label className="text-sm font-medium text-[#1F2937] mb-1 block">
+              Preferred Languages
+            </label>
+            {/* Readonly input showing selected language names */}
+            {/* <input
+              type="text"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm "
+              readOnly
+              value={
+                listedLanguages
+                  ?.filter((l) => form.preferredLanguages.includes(l.id))
+                  .map((l) => l.language)
+                  .join(", ") || ""
+              }
+            /> */}
+            <input
+              type="text"
+              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm"
+              readOnly
+              value={form.preferredLanguages.map((l) => l.language).join(", ")}
+            />
+
+            {isLangLoading && (
+              <p className="text-gray-500">Loading languages...</p>
+            )}
+            {langErrorFetch && (
+              <p className="text-red-500">Failed to load languages</p>
+            )}
+
+            <div className="grid grid-cols-2 gap-2 my-4">
+              {/* {listedLanguages?.map((lang) => (
+                <label key={lang.id} className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.preferredLanguages?.includes(lang.id)}
+                    onChange={() => {
+                      const updated = form.preferredLanguages.includes(lang.id)
+                        ? form.preferredLanguages.filter((id) => id !== lang.id)
+                        : [...form.preferredLanguages, lang.id];
+                      setForm((prev) => ({
+                        ...prev,
+                        preferredLanguages: updated,
+                      }));
+                    }}
+                  />
+                  {lang.language}
+                </label>
+              ))} */}
+
+              {listedLanguages?.map((lang) => {
+                const isChecked = form?.preferredLanguages?.some(
+                  (l) => l.id.toString() === lang.id.toString()
+                );
+
+                return (
+                  <label
+                    key={lang.id}
+                    className="inline-flex items-center gap-2"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={!!isChecked}
+                      onChange={() => {
+                        setForm((prev) => {
+                          const already = prev.preferredLanguages.some(
+                            (l) => l.id.toString() === lang.id.toString()
+                          );
+                          return {
+                            ...prev,
+                            preferredLanguages: already
+                              ? prev.preferredLanguages.filter(
+                                  (l) => l.id.toString() !== lang.id.toString()
+                                )
+                              : [
+                                  ...prev.preferredLanguages,
+                                  { id: lang.id, language: lang.language },
+                                ],
+                          };
+                        });
+                      }}
+                    />
+                    {lang.language}
+                  </label>
+                );
+              })}
             </div>
           </div>
         </div>

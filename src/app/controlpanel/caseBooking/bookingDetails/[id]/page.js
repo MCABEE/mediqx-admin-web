@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams,useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Navlink from "@/components/caseBooking/NavLink";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import ConfirmPopup from "@/components/caseBooking/ConfirmPopup";
@@ -36,7 +36,8 @@ const formatTime = (isoString) => {
 
 const BookingDetailsPage = () => {
   const { id } = useParams();
-  const { fetchBookingById, selectedBooking, isLoading, error } =  useBookingStore();
+  const { fetchBookingById, selectedBooking, isLoading, error } =
+    useBookingStore();
 
   const [showPopup, setShowPopup] = useState(false);
   const [showCancelPopup, setShowCancelPopup] = useState(false);
@@ -53,7 +54,7 @@ const BookingDetailsPage = () => {
     router.push("/controlpanel/caseBooking/newBooking");
   };
 
-  const { cancelBooking } = useBookingStore(); // ✅ use the cancelBooking action
+  const { cancelBooking } = useBookingStore(); //  the cancelBooking action
 
   const handleCancelClick = () => {
     setShowCancelPopup(true);
@@ -80,14 +81,15 @@ const BookingDetailsPage = () => {
   const handleEditClose = () => setShowEditPopup(false);
 
   const handleEditSave = async (updatedData) => {
-  setShowEditPopup(false); // Close the popup
-  await fetchBookingById(id); // Re-fetch the booking to reflect updates
-};
+    setShowEditPopup(false); // Close the popup
+    await fetchBookingById(id); // Re-fetch the booking to reflect updates
+  };
   if (isLoading) return <p className="p-8">Loading...</p>;
   if (error) return <p className="p-8 text-red-500">Error: {error}</p>;
   if (!selectedBooking) return <p className="p-8">No booking found.</p>;
 
   const booking = selectedBooking;
+  console.log(booking);
 
   return (
     <div>
@@ -148,13 +150,14 @@ const BookingDetailsPage = () => {
             <span>{booking.stayAt}</span>
           </div>
           <div className="flex">
-            <span className="w-[250px] font-medium">Residential Address</span>
-            <span>{booking.city} </span>
+            <span className="w-[250px] font-medium">
+              Residential Address
+              <br />
+              (Billing Address)
+            </span>
+            <span>{booking.fullAddress} </span>
           </div>
-          {/* <div className="flex">
-    <span className="w-[250px] font-medium">Pincode</span>
-    <span>{booking.pincode}</span>
-  </div> */}
+
           <div className="flex">
             <span className="w-[250px] font-medium">Contact person</span>
             <span>{booking.contactPersonName}</span>
@@ -202,16 +205,9 @@ const BookingDetailsPage = () => {
           </div>
           <div className="flex">
             <span className="w-[200px] font-medium">Duration</span>
-            <span>
-              {booking.durationType} 
-              {/* ({booking.durationValue} ) */}
-            </span>
+            <span>{booking.durationType}</span>
           </div>
 
-          {/* <div className="flex">
-    <span className="w-[200px] font-medium">End Time</span>
-    <span>{formatTime(booking.endTime)}</span>
-  </div> */}
           <div className="flex">
             <span className="w-[200px] font-medium">Frequency</span>
             <span>{booking.weekdays?.join(", ")}</span>
@@ -242,39 +238,41 @@ const BookingDetailsPage = () => {
           </div>
           <div className="flex flex-col gap-[10px] text-[16px] text-black">
             <span>{booking.preferredGender || "-"}</span>
-            <span>{booking.preferredLanguages?.join(", ") || "-"}</span>
+            <span>
+              {booking.preferredLanguages?.length
+                ? booking.preferredLanguages
+                    .map((lang) => lang.language)
+                    .join(", ")
+                : "-"}
+            </span>
           </div>
         </div>
       </div>
 
-       <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
+      <div className="w-full mt-2 bg-white rounded-[15px] border border-[#BBBBBB]">
         <div className="w-full h-[72px] flex items-center justify-between bg-white px-8 rounded-t-[15px] border-b-2">
-          <h1 className="text-[16px] font-semibold text-black">
-            Location
-          </h1>
+          <h1 className="text-[16px] font-semibold text-black">Location</h1>
           <button
-  onClick={() => setShowLocationPopup(true)}
-  className="bg-[#C0D8F6] text-black px-4 py-1 rounded-md mt-2 w-[150px] cursor-pointer"
->
-  Update Location
-</button>
+            onClick={() => setShowLocationPopup(true)}
+            className="bg-[#C0D8F6] text-black px-4 py-1 rounded-md mt-2 w-[150px] cursor-pointer"
+          >
+            Update Location
+          </button>
         </div>
         <div className="flex gap-12 p-8">
-  <div className="flex flex-col gap-[10px] text-[16px] text-black">
-    <span>Current Location</span>
-  </div>
-  <div className="flex flex-col gap-[10px] text-[16px] text-black">
-    {booking.latitude && booking.longitude ? (
-      <>
-        <span>Available</span>
-        
-      </>
-    ) : (
-      <span>NA</span>
-    )}
-  </div>
-</div>
-
+          <div className="flex flex-col gap-[10px] text-[16px] text-black">
+            <span>Current Location</span>
+          </div>
+          <div className="flex flex-col gap-[10px] text-[16px] text-black">
+            {booking.currentServiceAddress ? (
+              <>
+                <span>{booking.currentServiceAddress}</span>
+              </>
+            ) : (
+              <span>NA</span>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* ACTION BUTTONS */}
@@ -329,15 +327,14 @@ const BookingDetailsPage = () => {
         />
       )}
       {showLocationPopup && (
-  <UpdateLocationPopup
-  bookingId={selectedBooking?.id}
-  currentLat={selectedBooking?.latitude}
-  currentLng={selectedBooking?.longitude}
-  onClose={() => setShowLocationPopup(false)}
-  onUpdated={() => fetchBookingById(selectedBooking.id)}
-/>
-)}
-
+        <UpdateLocationPopup
+          bookingId={selectedBooking?.id}
+          currentLat={selectedBooking?.latitude}
+          currentLng={selectedBooking?.longitude}
+          onClose={() => setShowLocationPopup(false)}
+          onUpdated={() => fetchBookingById(selectedBooking.id)}
+        />
+      )}
     </div>
   );
 };

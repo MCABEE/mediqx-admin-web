@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navlink from "@/components/caseBooking/NavLink";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import { useRouter } from "next/navigation";
@@ -14,40 +14,48 @@ const Page = () => {
     error,
     setPage,
     totalBookings,
+    filters,
+    setFilters,
+    clearFilters,
   } = useBookingStore();
 
+  const [status] = useState("NEW");
+  const router = useRouter();
+
   useEffect(() => {
-    fetchBookings(page, 10, "NEW");
-  }, [page]);
+    fetchBookings(page, 50, status);
+  }, [page, status, filters]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ [name]: value });
+  };
 
   const groupedBookings = groupBookingsByDate(bookings);
-  const router = useRouter();
+
   return (
-    <div>
+    <div className="p-4">
       <Navlink />
-      {/* Filter header */}
-      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex justify-between  px-6  rounded-[15px] mt-2">
-        <div className="flex text-black font-semibold gap-[48px] pt-[23px] pb-[19px]">
-          <p>By Patient</p>
-          <p>By Referral</p>
-          <p>All</p>
-        </div>
-        <div className="flex gap-2 justify-center items-center">
-          <p className="text-black font-semibold pt-[23px] pb-[19px]">Clear</p>
-          <input type="checkbox" className="size-[20px]" />
-        </div>
-      </div>
 
       {/* Total count */}
-      <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[23px] pb-[19px]  px-6 text-black font-semibold text-[32px] flex justify-between">
+      <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 py-4 px-6 text-black font-semibold text-[28px] flex justify-between items-center">
         <p>{totalBookings}</p>
+        <button
+          onClick={() => {
+            clearFilters();
+            fetchBookings(1, 10, status);
+          }}
+          className="bg-[#C0D8F6] px-4 py-2 rounded-md text-sm font-medium hover:bg-[#aac4ec]"
+        >
+          Clear Filters
+        </button>
       </div>
 
       {/* Bookings table */}
-      <table className="w-full border-spacing-y-2 border-separate text-black">
+      <table className="w-full border-spacing-y-2 border-separate text-black mt-4">
         <thead className="bg-[#C0D8F6]">
-          <tr className="p-2">
-            <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">No</th>
+          <tr>
+            <th className="text-base rounded-l-2xl p-2">No</th>
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">
               Patient Name
             </th>
@@ -61,14 +69,52 @@ const Page = () => {
               Type
             </th>
           </tr>
+
+          {/* ✅ Filter row */}
+          <tr className="bg-[#F9FBFF] border-b border-[#E0E6EF]">
+            <th></th>
+            <th className="p-2">
+              <input
+                type="text"
+                name="name"
+                value={filters.name}
+                onChange={handleInputChange}
+                placeholder="Search by name"
+                className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150"
+              />
+            </th>
+            <th className="p-2">
+              <input
+                type="text"
+                name="location"
+                value={filters.location}
+                onChange={handleInputChange}
+                placeholder="Search by location"
+                className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150"
+              />
+            </th>
+            <th className="p-2">
+              <input
+                type="date"
+                name="date"
+                value={filters.date}
+                onChange={handleInputChange}
+                className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150 text-gray-600"
+              />
+            </th>
+            <th></th>
+          </tr>
         </thead>
+
         <tbody>
           {isLoading ? (
-            <tr>
-              <td colSpan="5" className="text-center py-6">
-                Loading...
-              </td>
-            </tr>
+            [...Array(5)].map((_, i) => (
+              <tr key={i} className="animate-pulse bg-gray-100">
+                <td colSpan="5" className="p-4">
+                  <div className="h-4 bg-gray-300 rounded w-3/4 mx-auto"></div>
+                </td>
+              </tr>
+            ))
           ) : error ? (
             <tr>
               <td colSpan="5" className="text-center py-6 text-red-500">
@@ -103,7 +149,7 @@ const Page = () => {
                     }
                   >
                     <td className="p-2">{i + 1}</td>
-                    <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
+                    <td className="border-l-4 border-[#C0D8F6] p-2">
                       {booking.fullName}
                     </td>
                     <td className="border-l-4 border-[#C0D8F6] p-2">
@@ -111,12 +157,13 @@ const Page = () => {
                     </td>
                     <td className="border-l-4 border-[#C0D8F6] p-2">
                       {new Date(booking.startDate).toLocaleDateString("en-IN", {
-                        day: "numeric",
+                        day: "2-digit",
                         month: "short",
+                        year: "numeric",
                       })}
                     </td>
                     <td className="border-l-4 border-[#C0D8F6] p-2">
-                      {booking.referralSource}
+                      {booking.referralSource || "-"}
                     </td>
                   </tr>
                 ))}
@@ -152,7 +199,7 @@ const Page = () => {
 
 export default Page;
 
-// 👇 Place this helper inside the same file or a separate utils file
+// ✅ Group helper
 const groupBookingsByDate = (bookings) => {
   return bookings.reduce((acc, booking) => {
     const dateKey = new Date(

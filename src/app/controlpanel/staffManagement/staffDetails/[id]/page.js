@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navlink from "@/components/staffManagement/Navlink";
 import AvailabilitySchedule from "@/components/staffManagement/AvailabilitySchedule";
@@ -8,12 +8,22 @@ import nurseStore from "@/app/lib/store/nurseStore";
 import EditContactModal from "@/components/staffManagement/NurseEdit/ContactDetails ";
 import EditNurseAvailability from "@/components/staffManagement/NurseEdit/EditNurseAvailability";
 import EditExperincePopup from "@/components/staffManagement/NurseEdit/EditExperincePopup";
+import NurseFileSection from "@/components/staffManagement/NurseFileSection";
 
 function StaffDetailPage() {
   const router = useRouter();
   const { id } = useParams();
   const userId = id;
-  const { fetchNurseById, selectedNurse, verifyNurse } = nurseStore();
+  const searchParams = useSearchParams();
+
+  const role = searchParams.get("role") || "NURSE";
+  const {
+    fetchNurseById,
+    selectedNurse,
+    verifyNurse,
+    fetchNurseLanguagesById,
+    selectedNurseLanguages,
+  } = nurseStore();
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
   const [preview, setPreview] = useState({
@@ -45,7 +55,10 @@ function StaffDetailPage() {
   const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
 
   useEffect(() => {
-    if (userId) fetchNurseById(userId);
+    if (userId) {
+      fetchNurseById(userId);
+      fetchNurseLanguagesById(userId);
+    }
   }, [userId]);
 
   useEffect(() => {
@@ -53,8 +66,8 @@ function StaffDetailPage() {
       setEditedContact({
         gender: selectedNurse.gender || "",
         dob: selectedNurse.dob
-    ? new Date(selectedNurse.dob).toISOString().split("T")[0]
-    : "",
+          ? new Date(selectedNurse.dob).toISOString().split("T")[0]
+          : "",
         fullName: selectedNurse.fullName || "",
         email: selectedNurse.email || "",
         mobileNumber: selectedNurse.mobileNumber || "",
@@ -63,12 +76,9 @@ function StaffDetailPage() {
         workSchedule: nurseData.workSchedule || "",
         address: {
           addressId: selectedNurse.address?.id || "",
-          state: selectedNurse.address?.state || "",
-          district: selectedNurse.address?.district || "",
-          city: selectedNurse.address?.city || "",
-          lineFirst: selectedNurse.address?.lineFirst || "",
-          lineSecond: selectedNurse.address?.lineSecond || "",
-          pincode: selectedNurse.address?.pincode || "",
+          fullAddress: selectedNurse.address?.fullAddress || "",
+          latitude: selectedNurse.address?.latitude || "",
+          longitude: selectedNurse.address?.longitude || "",
         },
       });
     }
@@ -83,7 +93,7 @@ function StaffDetailPage() {
   const files = selectedNurse.files || [];
   const availabilities = selectedNurse.availabilities || [];
   const qualifications = selectedNurse.qualifications[0] || {};
-
+  console.log(qualifications);
   const isImage = (fileName) => /\.(jpe?g|png|webp|gif)$/i.test(fileName);
 
   return (
@@ -91,9 +101,14 @@ function StaffDetailPage() {
       <Navlink />
 
       <div className="w-full bg-white border border-[#888888] text-base text-black font-semibold px-6 py-3 rounded-[15px] mt-4">
-        <Link href="/controlpanel/staffManagement" className="cursor-pointer">
+        <div
+          onClick={() =>
+            router.push(`/controlpanel/staffManagement?role=${role}`)
+          }
+          className="cursor-pointer"
+        >
           Back
-        </Link>
+        </div>
       </div>
 
       <div className="bg-white border border-[#BBBBBB] rounded-[15px] mt-4 mb-6">
@@ -122,23 +137,12 @@ function StaffDetailPage() {
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Gender</span>
-            <span>{selectedNurse.gender}</span>
+            <div className="grow">{selectedNurse.gender}</div>
           </div>
+
           <div className="flex gap-[18px]">
-            <span className="w-[280px]">State</span>
-            <span>{address.state}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">District</span>
-            <span>{address.district}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">City</span>
-            <span>{address.city}</span>
-          </div>
-          <div className="flex gap-[18px]">
-            <span className="w-[280px]">Pin Code</span>
-            <span>{address.pincode}</span>
+            <div className="w-[280px]">Address</div>
+            <div className="flex-1">{address.fullAddress}</div>
           </div>
 
           <div className="flex gap-[18px]">
@@ -168,6 +172,32 @@ function StaffDetailPage() {
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Fulltime / Part time</span>
             <span>{nurseData.workSchedule}</span>
+          </div>
+
+          {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
+        </div>
+        <div className="flex justify-between px-[39px]">
+          <h1 className="text-[16px] font-semibold text-black py-[18px]">
+            Languages
+          </h1>
+          {/* <button
+            
+            className="cursor-pointer hover:scale-110"
+          >
+            <img src="/edit-btn.svg" className="size-6" alt="edit" />
+          </button> */}
+        </div>
+        <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
+          <div className="flex gap-[18px]">
+            <span className="w-[280px]">Languages</span>
+
+            <span>
+              {selectedNurseLanguages?.userLanguages?.length > 0
+                ? selectedNurseLanguages.userLanguages
+                    .map((lang) => lang.language)
+                    .join(", ")
+                : "-"}
+            </span>
           </div>
 
           {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
@@ -224,12 +254,10 @@ function StaffDetailPage() {
               <span>{qualifications.department || "Nil"}</span>
             </div>
             <div className="flex gap-[18px]">
-              <span className="w-[280px]">State</span>
-              <span>{qualifications.providerState || "Nil"}</span>
-            </div>
-            <div className="flex gap-[18px]">
               <span className="w-[280px]">Location</span>
-              <span>{qualifications.providerLocation || "Nil"}</span>
+              <span className="flex-1">
+                {qualifications.providerAddress || "Nil"}
+              </span>
             </div>
 
             <div className="flex gap-[18px]">
@@ -284,7 +312,7 @@ function StaffDetailPage() {
           </div>
         </div>
         {/* File Uploads */}
-        {[
+        {/* {[
           { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
           { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
           {
@@ -355,7 +383,17 @@ function StaffDetailPage() {
               )}
             </div>
           );
-        })}
+        })} */}
+
+        <NurseFileSection
+          userId={nurseData.userId}
+          educationQualificationId={qualifications.id}
+          files={files}
+          qualifications={qualifications}
+          url={url}
+          setPreview={setPreview}
+        />
+
         {/* Contact Details with edit */}
         {/* <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Referral</h1>  */}
 
@@ -391,7 +429,7 @@ function StaffDetailPage() {
             </h2>
             <p className="text-black">
               Are you sure you want to{" "}
-              <strong>{modalData.action.toLowerCase()}</strong> nurse{" "}
+              <strong>{modalData.action?.toLowerCase()}</strong> nurse{" "}
               <strong>{selectedNurse.fullName}</strong>?
             </p>
             <div className="flex justify-center gap-4 mt-6">
@@ -399,7 +437,7 @@ function StaffDetailPage() {
                 onClick={async () => {
                   await verifyNurse(userId, modalData.action);
                   setModalData({ show: false, action: "" });
-                  router.push("/controlpanel/staffManagement");
+                  router.push(`/controlpanel/staffManagement?role=${role}`);
                 }}
                 className="px-4 py-2 bg-[#3674B5] text-white rounded-md cursor-pointer"
               >
@@ -417,7 +455,7 @@ function StaffDetailPage() {
       )}
 
       {/* Preview Modal */}
-      {preview.show && (
+      {/* {preview.show && (
         <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
           <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
             <button
@@ -439,30 +477,66 @@ function StaffDetailPage() {
             )}
           </div>
         </div>
+      )} */}
+      {preview.show && (
+        <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
+          <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
+            <button
+              onClick={() =>
+                setPreview({ show: false, fileUrl: "", isImage: false })
+              }
+              className=" w-7  h-7 absolute top-0 -right-8 bg-[#ffff] rounded-full text-gray-500 hover:text-black text-xl font-semibold cursor-pointer"
+            >
+              ✕
+            </button>
+
+            {preview.isImage ? (
+              <img
+                src={preview.fileUrl}
+                alt="Preview"
+                className="max-w-full max-h-[80vh] mx-auto"
+              />
+            ) : (
+              <div className="w-full h-[80vh]">
+                <embed
+                  src={preview.fileUrl}
+                  type="application/pdf"
+                  width="100%"
+                  height="100%"
+                />
+                {/* <p className="text-center mt-2">
+            If you cannot see the PDF, <a href={preview.fileUrl} target="_blank" rel="noopener noreferrer">download it here</a>.
+          </p> */}
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       <EditContactModal
         show={isEditModalOpen}
         contact={editedContact}
         userId={userId}
+        role={selectedNurse.role}
         onChange={setEditedContact}
         initialContact={selectedNurse}
         onCancel={() => setIsEditModalOpen(false)}
       />
 
-      {editAvailabilityPopup && (
+      {/* {editAvailabilityPopup && (
         <EditNurseAvailability
           availabilities={availabilities}
           userId={userId}
           onClose={() => setEditAvailabilityPopup(false)}
         />
-      )}
+      )} */}
 
       {isEditExperincePopUp && (
         <EditExperincePopup
           qualifications={qualifications}
           nurseData={nurseData}
           userId={userId}
+          role={selectedNurse.role}
           onClose={() => setIsExperincePopUp(false)}
         />
       )}

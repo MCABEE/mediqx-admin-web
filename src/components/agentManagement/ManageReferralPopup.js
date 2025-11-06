@@ -315,13 +315,13 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
           <h1 className="text-black font-semibold">Manage Referral Information</h1>
 
           {/* Readonly fields */}
-          <select
+          {/* <select
             disabled
             className="w-full h-[40px] border-1 border-[#BBBBBB] rounded-[15px] px-4 bg-gray-100 cursor-not-allowed"
             value={referral?.referralType || ""}
           >
             <option>{referral?.referralType || "Type of Referral"}</option>
-          </select>
+          </select> */}
 
           <input
             type="text"
@@ -331,20 +331,19 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
             value={referral?.fullName || ""}
           />
 
-          <select
+          <input
             disabled
             className="w-full h-[40px] border-1 border-[#BBBBBB] rounded-[15px] px-4 bg-gray-100 cursor-not-allowed"
-            value={referral?.qualificationOrService || ""}
-          >
-            <option>{referral?.qualificationOrService || "Qualification"}</option>
-          </select>
+            value={referral?.qualifications?.[0]?.qualification || ""}
+          />
+           
 
           <input
             type="tel"
             disabled
             className="w-full h-[40px] border-1 border-[#BBBBBB] rounded-[15px] px-4 bg-gray-100 cursor-not-allowed"
             placeholder="Phone Number"
-            value={referral?.contactNumber || ""}
+            value={referral?.mobileNumber || ""}
           />
         </div>
 

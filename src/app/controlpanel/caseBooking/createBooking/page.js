@@ -1,13 +1,18 @@
 "use client";
 
 import Navlink from "@/components/caseBooking/NavLink";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useBookingStore from "@/app/lib/store/bookingStore";
+import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
+import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
+import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
+import useLanguageStore from "@/app/lib/store/languageStore";
 
 const CaseBookingPage = () => {
   const { submitBooking } = useBookingStore();
   const [langError, setLangError] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [selectedDiagnosis, setSelectedDiagnosis] = useState("");
 
   const [form, setForm] = useState({
     patientName: "",
@@ -38,11 +43,114 @@ const CaseBookingPage = () => {
   const [flexibility, setFlexibility] = useState("");
   const [preferredGender, setPreferredGender] = useState("");
   const [preferredLanguages, setPreferredLanguages] = useState([]);
+  const {
+    listedLanguages,
+    fetchLanguages,
+    isLoading: isLangLoading,
+    error: langErrorFetch,
+  } = useLanguageStore();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+  useEffect(() => {
+    fetchLanguages(1, 100);
+  }, [fetchLanguages]);
+
+  // Health Status store
+  const {
+    listedServices: healthStatuses,
+    fetchServices: fetchHealthStatuses,
+    isLoading: isHealthLoading,
+    error: healthError,
+  } = useHealthStatusStore();
+
+  // Patient Services store
+  const {
+    listedServices: patientServices,
+    fetchServices: fetchPatientServices,
+    isLoading: isServicesLoading,
+    error: servicesError,
+  } = usePatientServiceStore();
+
+  useEffect(() => {
+    fetchHealthStatuses(1, 100);
+    fetchPatientServices(1, 100);
+  }, [fetchHealthStatuses, fetchPatientServices]);
+
+  const handleDiagnosisChange = (e) => {
+    setSelectedDiagnosis(e.target.value);
   };
+
+  // Diagnoses store
+  const { listedDiagnoses, fetchDiagnosesList, isLoading, error } =
+    useDiagnosisStore();
+
+  useEffect(() => {
+    fetchDiagnosesList(1, 50);
+  }, [fetchDiagnosesList]);
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setForm((prev) => ({ ...prev, [name]: value }));
+  // };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  // Handle scheduleType changes
+  if (name === "scheduleType") {
+    let startTime = "";
+    let endTime = "";
+
+    switch (value) {
+      case "FULL_TIME_24_HOURS":
+        startTime = "00:00";
+        endTime = "23:59";
+        break;
+      case "DAY_SHIFT_12_HOURS":
+        startTime = "08:00";
+        endTime = "20:00";
+        break;
+      case "NIGHT_SHIFT_12_HOURS":
+        startTime = "20:00";
+        endTime = addHoursToTime(startTime, 12); // handles midnight rollover
+        break;
+      case "CUSTOM_HOURS":
+        startTime = "";
+        endTime = "";
+        break;
+    }
+
+    setForm((prev) => ({ ...prev, scheduleType: value, startTime, endTime }));
+    return;
+  }
+
+  // Auto-update endTime if startTime changes and scheduleType is not CUSTOM_HOURS
+  if (name === "startTime" && form.scheduleType && form.scheduleType !== "CUSTOM_HOURS") {
+    let endTime = form.endTime;
+
+    if (form.scheduleType === "DAY_SHIFT_12_HOURS" || form.scheduleType === "NIGHT_SHIFT_12_HOURS") {
+      endTime = addHoursToTime(value, 12);
+    } else if (form.scheduleType === "FULL_TIME_24_HOURS") {
+      endTime = addHoursToTime(value, 24);
+    }
+
+    setForm((prev) => ({ ...prev, startTime: value, endTime }));
+    return;
+  }
+
+  // Default case: just update the changed field
+  setForm((prev) => ({ ...prev, [name]: value }));
+};
+
+// Utility to add hours to time string
+const addHoursToTime = (timeStr, hoursToAdd) => {
+  if (!timeStr) return "";
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  const date = new Date();
+  date.setHours(hours + hoursToAdd);
+  date.setMinutes(minutes);
+  const newHours = String(date.getHours()).padStart(2, "0");
+  const newMinutes = String(date.getMinutes()).padStart(2, "0");
+  return `${newHours}:${newMinutes}`;
+};
 
   const toggleArray = (value, array, setArray) => {
     if (array.includes(value)) {
@@ -64,6 +172,9 @@ const CaseBookingPage = () => {
 
     const payload = {
       ...form,
+      diagnosisId: selectedDiagnosis,
+      serviceTypeId: form.serviceType,
+      healthStatusId: form.healthStatus,
       contactPersonMobileNumber: form.contactPersonMobileNumber.startsWith(
         "+91"
       )
@@ -78,11 +189,15 @@ const CaseBookingPage = () => {
         visitType === "ONE_TIME_VISIT" ? "0" : Number(form.durationValue),
       weekdays,
       flexibility,
-      preferredLanguages,
+      preferredLanguageId: preferredLanguages,
       preferredGender,
-      serviceType: form.serviceType,
       durationValue: form.durationValue || 1,
+      officialAddress: form.location,
     };
+    delete payload.diagnosis;
+    delete payload.serviceType;
+    delete payload.healthStatus;
+    delete payload.location;
 
     const result = await submitBooking(payload);
 
@@ -95,7 +210,6 @@ const CaseBookingPage = () => {
         age: "",
         height: "",
         weight: "",
-        diagnosis: "",
         healthStatus: "",
         stayAt: "",
         serviceType: "",
@@ -117,6 +231,7 @@ const CaseBookingPage = () => {
       setFlexibility("");
       setPreferredGender("");
       setPreferredLanguages([]);
+      setSelectedDiagnosis("");
     } else {
       setSuccessMessage(" Failed to create booking. Please try again.");
     }
@@ -136,6 +251,7 @@ const CaseBookingPage = () => {
         onSubmit={handleSubmit}
         className="w-full mt-2 bg-white rounded-[15px] border-[1px] border-[#BBBBBB] mb-4"
       >
+        {/* Patient Details */}
         <div className="w-full h-[72px] flex items-center bg-white px-8 rounded-t-[15px] border-[#BBBBBB] border-b-[1px] ">
           <h1 className="text-[16px] font-semibold text-black">
             Patient Details
@@ -160,7 +276,7 @@ const CaseBookingPage = () => {
               required
               className="w-1/2 h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Gender
               </option>
               <option value="MALE">Male</option>
@@ -197,35 +313,31 @@ const CaseBookingPage = () => {
             />
           </div>
 
+          {/*  Patient Services dropdown */}
           <select
             name="serviceType"
             value={form.serviceType}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300  outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="" selected disabled>
-              Service Required
+            <option value="" disabled>
+              Select Service Type
             </option>
-
-            <option value="DOCTOR_VISIT">Doctor Visit</option>
-            <option value="NURSING_SERVICE_AT_HOME">
-              Nursing service at home
-            </option>
-            <option value="NURSING_ASSISTANCE_AT_HOME">
-              Nursing Assistance at home
-            </option>
-            <option value="NURSING_ASSISTANCE_VISIT">
-              Nursing assistance Visit
-            </option>
-            <option value="NURSING_VISIT">Nursing visit</option>
-            <option value="THERAPY">Therapy</option>
-            <option value="DIAGNOSTIC_SERVICES_AT_HOME">
-              Diagnostic services at home
-            </option>
-            <option value="OTHER">Other</option>
+            {isServicesLoading && <option disabled>Loading...</option>}
+            {!isServicesLoading && servicesError && (
+              <option disabled>Error loading services</option>
+            )}
+            {!isServicesLoading &&
+              !servicesError &&
+              patientServices.map((service) => (
+                <option key={service.id} value={service.id}>
+                  {service.service}
+                </option>
+              ))}
           </select>
 
+          {/* Health Status */}
           <select
             name="healthStatus"
             value={form.healthStatus}
@@ -233,36 +345,20 @@ const CaseBookingPage = () => {
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="" selected disabled>
+            <option value="" disabled>
               Current HealthStatus / Activity
             </option>
-            <option value="Bedridden Patients">Bedridden Patients</option>
-            <option value="Patients with Limited Mobility">
-              {" "}
-              Patients with Limited Mobility{" "}
-            </option>
-            <option value="Tube-fed Patients">Tube-fed Patients</option>
-            <option value="Patients with Indwelling Catheters">
-              Patients with Indwelling Catheters
-            </option>
-            <option value="Patients with Tracheostomy / Ventilator">
-              Patients with Tracheostomy / Ventilator
-            </option>
-            <option value="Post-Surgical Recovery Patients">
-              Post-Surgical Recovery Patients
-            </option>
-            <option value="Elderly with Chronic Conditions (Geriatric Care)">
-              Elderly with Chronic Conditions (Geriatric Care)
-            </option>
-            <option value="Patients Requiring Palliative / Hospice Care">
-              Patients Requiring Palliative / Hospice Care
-            </option>
-            <option value="Patients on IV Therapy / Home Infusion">
-              Patients on IV Therapy / Home Infusion
-            </option>
-            <option value="Post-COVID or Respiratory Rehab Patients">
-              Post-COVID or Respiratory Rehab Patients
-            </option>
+            {isHealthLoading && <option disabled>Loading...</option>}
+            {healthError && !isHealthLoading && (
+              <option disabled>Error loading health statuses</option>
+            )}
+            {!isHealthLoading &&
+              !healthError &&
+              healthStatuses.map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.status}
+                </option>
+              ))}
           </select>
 
           <select
@@ -272,40 +368,26 @@ const CaseBookingPage = () => {
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="" selected disabled>
+            <option value="" disabled>
               Now Patient stayed at
             </option>
+
             <option value="HOSPITAL">Hospital</option>
             <option value="RESIDENCE">Residence</option>
             <option value="CARE_HOME">Care Home</option>
-            <option value="PSYCHIATRIC_HOME">Psychiatric Homes</option>
+            <option value="PSYCHIATRIC_HOMES">Psychiatric Homes</option>
+            <option value="WORK">Work</option>
+            <option value="CLINIC">Clinic</option>
+            <option value="OTHER">Other</option>
           </select>
 
           <textarea
             name="location"
             value={form.location}
             onChange={handleChange}
-            placeholder="Residential Address"
+            placeholder="Residential Address (billing address)"
             required
             className="w-[328px] h-[80px] rounded-[15px] px-4 border border-gray-300 pt-2 placeholder:text-black outline-none"
-          />
-
-          <input
-            type="text"
-            name="pincode"
-            value={form.pincode}
-            onChange={(e) => {
-              const val = e.target.value;
-              if (/^\d{0,6}$/.test(val)) {
-                handleChange(e);
-              }
-            }}
-            placeholder="Pincode"
-            required
-            inputMode="numeric"
-            pattern="\d{6}"
-            maxLength={6}
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           />
 
           <input
@@ -386,75 +468,31 @@ const CaseBookingPage = () => {
           <h1 className="text-[16px] font-semibold text-black mt-4">
             Service Details
           </h1>
-          {/* <input name="diagnosis" value={form.diagnosis} onChange={handleChange} placeholder="Diagnosis" required className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300" /> */}
 
+          {/* Diagnoses dropdown */}
           <select
             name="diagnosis"
-            id="diagnosis"
-            value={form.diagnosis}
-            onChange={handleChange}
             required
+            value={selectedDiagnosis}
+            onChange={(e) => setSelectedDiagnosis(e.target.value)}
             className="w-[328px] h-[40px] rounded-[15px] text-[14px] border border-[#BBBBBB] px-4 text-black outline-none"
           >
-            <option value="" disabled selected>
-              Diagnosis
+            <option value="" disabled>
+              Select Diagnosis
             </option>
-            <option value="Pediatric Cancers">Pediatric Cancers</option>
-            <option value="Neuroendocrine Tumors (NETs)">
-              Neuroendocrine Tumors (NETs)
-            </option>
-            <option value="Bone and Soft Tissue Tumors">
-              Bone and Soft Tissue Tumors
-            </option>
-            <option value="Skin Cancers">Skin Cancers</option>
-            <option value="Gynecologic Cancers">Gynecologic Cancers</option>
-            <option value="Genitourinary (GU) Cancers">
-              Genitourinary (GU) Cancers
-            </option>
-            <option value="Gastrointestinal (GI) Cancers">
-              Gastrointestinal (GI) Cancers
-            </option>
-            <option value="Hematologic Cancers (Blood & Bone Marrow)">
-              Hematologic Cancers (Blood & Bone Marrow)
-            </option>
-            <option value="Breast Cancer">Breast Cancer</option>
-            <option value="Head & Neck Cancers">Head & Neck Cancers</option>
-            <option value="Respiratory System">Respiratory System</option>
-            <option value="Central Nervous System (CNS) Cancers">
-              Central Nervous System (CNS) Cancers
-            </option>
-            <option value="Hematology / Oncology">Hematology / Oncology</option>
-            <option value="Obstetric / Gynecology">
-              Obstetric / Gynecology
-            </option>
-            <option value="Pediatrics">Pediatrics</option>
-            <option value="Psychiatry">Psychiatry</option>
-            <option value="Orthopedic / Trauma">Orthopedic / Trauma</option>
-            <option value="Infectious Disease">Infectious Disease</option>
-            <option value="Renal / Endocrine / Metabolic">
-              Renal / Endocrine / Metabolic
-            </option>
-            <option value="Gastrointestinal">Gastrointestinal</option>
-            <option value="Neurology">Neurology</option>
-            <option value="Pulmonary">Pulmonary</option>
-            <option value="Cardiovascular">Cardiovascular</option>
+            {isLoading && <option disabled>Loading...</option>}
+            {!isLoading && error && (
+              <option disabled>Error loading diagnoses</option>
+            )}
+            {!isLoading &&
+              !error &&
+              listedDiagnoses.map((diag) => (
+                <option key={diag.id} value={diag.id}>
+                  {diag.diagnosis}
+                </option>
+              ))}
           </select>
 
-          {/* <input
-            name="startDate"
-            type={form.startDateInputType || "text"}
-            value={form.startDate}
-            placeholder="Service Period From"
-            onFocus={() =>
-              setForm((prev) => ({
-                ...prev,
-                startDateInputType: "date",
-              }))
-            }
-            onChange={handleChange}
-            required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
-          /> */}
           <input
             name="startDate"
             type={form.startDateInputType || "text"}
@@ -466,7 +504,7 @@ const CaseBookingPage = () => {
                 startDateInputType: "date",
               }))
             }
-            min={new Date().toISOString().split("T")[0]} // 🔹 This disables past dates
+            min={new Date().toISOString().split("T")[0]} // 🔹 disable past dates
             onChange={handleChange}
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
@@ -476,7 +514,7 @@ const CaseBookingPage = () => {
             value={visitType}
             onChange={(e) => setVisitType(e.target.value)}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
             <option value="" disabled>
               Single Visit / Periodically
@@ -487,13 +525,6 @@ const CaseBookingPage = () => {
             <option value="LONG_TERM">Long-term</option>
             <option value="OTHER">Other</option>
           </select>
-          {/* 
-          {visitType !== "One-time visit" && visitType && (
-            <div className="flex items-center gap-2 mb-4">
-              <input name="durationValue" type="number" value={form.durationValue} onChange={handleChange} required className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300" />
-              <span>{durationLabel}</span>
-            </div>
-          )} */}
 
           {visitType && visitType !== "ONE_TIME_VISIT" && (
             <div>
@@ -504,8 +535,7 @@ const CaseBookingPage = () => {
                   value={form.durationValue}
                   onChange={handleChange}
                 >
-                  <option value="" selected disabled>
-                    {" "}
+                  <option value="" disabled>
                     Duration
                   </option>
                   {[1, 2, 3, 4, 5, 6].map((val) => (
@@ -534,15 +564,15 @@ const CaseBookingPage = () => {
             required
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
           >
-            <option value="" selected disabled>
+            <option value="" disabled>
               Daily Schedule Type
             </option>
             <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
             <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
-            {/* <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option> */}
             <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
             <option value="CUSTOM_HOURS">Custom Hours</option>
           </select>
+
           {visitType && visitType !== "ONE_TIME_VISIT" && (
             <div className="grid grid-cols-4 gap-2 mb-4">
               {[
@@ -581,13 +611,7 @@ const CaseBookingPage = () => {
             ))}
           </div>
 
-          {/* <div className="flex gap-4 mb-4">
-            <input name="startTime" type="time" value={form.startTime} onChange={handleChange} required className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300" />
-            <span>To</span>
-            <input name="endTime" type="time" value={form.endTime} onChange={handleChange} required className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300" />
-          </div> */}
-
-          <div className="flex gap-4 mb-4 mt-2">
+          {/* <div className="flex gap-4 mb-4 mt-2">
             <input
               name="startTime"
               type="time"
@@ -606,7 +630,33 @@ const CaseBookingPage = () => {
               className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
             />
             <span className="flex items-center">To</span>
-          </div>
+          </div> */}
+          <div className="flex gap-4 mb-4 mt-2">
+  <input
+    name="startTime"
+    type="time"
+    value={form.startTime}
+    onChange={handleChange}
+    required
+    disabled={!form.scheduleType} // disable if scheduleType is not selected
+    className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+  />
+  <span className="flex items-center pe-4">From</span>
+
+  <input
+    name="endTime"
+    type="time"
+    value={form.endTime}
+    onChange={handleChange}
+    required
+    disabled={form.scheduleType !== "CUSTOM_HOURS"} // editable only for CUSTOM_HOURS
+    className={`w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none ${
+      form.scheduleType !== "CUSTOM_HOURS" ? "bg-gray-100 cursor-not-allowed" : ""
+    }`}
+  />
+  <span className="flex items-center">To</span>
+</div>
+
         </div>
 
         {/* Staff Preferences */}
@@ -629,32 +679,33 @@ const CaseBookingPage = () => {
           <h1 className="text-[16px] font-semibold text-black">
             Preferred Languages
           </h1>
+
           <div className="grid grid-cols-2 gap-2 mb-4">
-            {[
-              "HINDI",
-              "KANNADA",
-              "ENGLISH",
-              "MALAYALAM",
-              "TAMIL",
-              "TELUGU",
-            ].map((lang) => (
-              <label key={lang} className="inline-flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={preferredLanguages.includes(lang)}
-                  onChange={() => {
-                    toggleArray(
-                      lang,
-                      preferredLanguages,
-                      setPreferredLanguages
-                    );
-                    if (preferredLanguages.length > 0) setLangError(false); // clear error on change
-                  }}
-                />
-                {lang}
-              </label>
-            ))}
+            {isLangLoading && <p>Loading languages...</p>}
+            {langErrorFetch && !isLangLoading && (
+              <p className="text-red-500">Failed to load languages.</p>
+            )}
+            {!isLangLoading &&
+              !langErrorFetch &&
+              listedLanguages.map((lang) => (
+                <label key={lang.id} className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={preferredLanguages.includes(lang.id)}
+                    onChange={() => {
+                      toggleArray(
+                        lang.id,
+                        preferredLanguages,
+                        setPreferredLanguages
+                      );
+                      if (preferredLanguages.length > 0) setLangError(false);
+                    }}
+                  />
+                  {lang.language}
+                </label>
+              ))}
           </div>
+
           {langError && (
             <span className="text-red-500 text-sm mb-2">
               Please select at least one preferred language.
