@@ -1,35 +1,20 @@
-"use client";
+"use client"
+import React, { useState } from 'react'
+import AddPaymentPopup from './AddPaymentPopup'
+import ViewPaymentPopup from './ViewPaymentPopup'
 
-import PaymentStructureTable from "@/components/billing/paymentStructure/PaymentStructureTable";
-import React from "react";
+function PaymentStructureTable() {
+      const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [isViewPopupOpen, setIsViewPopupOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
-function Page() {
-
-
+  const handleRowClick = (payment) => {
+    setSelectedPayment(payment);
+    setIsViewPopupOpen(true);
+  };
   return (
     <div>
-      {/* Top Tabs */}
-      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex gap-[40px] px-6 pt-6 rounded-[15px]">
-        {[
-          "Regd Nurse",
-          "Assistant Nurse",
-          "Technicians",
-          "Therapy",
-          "Ancillary Pros",
-        ].map((tab, i) => (
-          <p
-            key={i}
-            className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
-              i === 0 ? "border-b-8 border-[#3674B5]" : ""
-            }`}
-          >
-            {tab}
-          </p>
-        ))}
-      </div>
-
-   <PaymentStructureTable/>
-      {/* Filter Section */}
+           {/* Filter Section */}
       <div className="w-full bg-white border border-[#8888888c] text-base text-black flex justify-between items-center px-6 py-4 mt-2 rounded-[15px]">
         <div className="flex gap-[10px]">
           <select className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4">
@@ -52,9 +37,7 @@ function Page() {
         <thead className="bg-[#C0D8F6]">
           <tr>
             <th className="text-base rounded-l-2xl p-2">Services</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-              Charge
-            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Charge</th>
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">
               Final Bill
             </th>
@@ -86,18 +69,10 @@ function Page() {
             }
           >
             <td className="p-2 text-center">Home Nursing</td>
-            <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-              ₹1000
-            </td>
-            <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-              ₹950
-            </td>
-            <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-              ₹700
-            </td>
-            <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-              ₹100
-            </td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹1000</td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹950</td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹700</td>
+            <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹100</td>
             <td className="border-l-4 text-center border-[#C0D8F6] p-2">₹50</td>
           </tr>
         </tbody>
@@ -115,9 +90,7 @@ function Page() {
       </div>
 
       {/* Popups */}
-      {isAddPopupOpen && (
-        <AddPaymentPopup onClose={() => setIsAddPopupOpen(false)} />
-      )}
+      {isAddPopupOpen && <AddPaymentPopup onClose={() => setIsAddPopupOpen(false)} />}
       {isViewPopupOpen && (
         <ViewPaymentPopup
           payment={selectedPayment}
@@ -125,7 +98,7 @@ function Page() {
         />
       )}
     </div>
-  );
+  )
 }
 
-export default Page;
+export default PaymentStructureTable

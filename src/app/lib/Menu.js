@@ -45,12 +45,12 @@ export const menus = [
       {
         id: "5-2",
         name: "Patient Bills",
-        link: "",
+        link: "/controlpanel/billing/patient-bills/by-dates",
       },
       {
         id: "5-3",
         name: "Staff Payments",
-        link: "",
+        link: "/controlpanel/billing/staff-payments",
       },
     ]
   },

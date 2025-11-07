@@ -35,7 +35,19 @@ function Sidebar() {
     } else if (pathname.includes("/controlpanel/referral-management")) {
       setActive("Referrals Management");
       setOpenSubmenu(null);
-
+      // ✅ Handle billing submenus
+    } else if (pathname.includes("/controlpanel/billing/payment-structure")) {
+      setActive("Payment Structure");
+      setOpenSubmenu("Billing"); // parent
+    } else if (pathname.includes("/controlpanel/billing/staff-payments")) {
+      setActive("Staff Payments");
+      setOpenSubmenu("Billing");
+      } else if (pathname.includes("/controlpanel/billing/staff-payment-details")) {
+      setActive("Staff Payments");
+      setOpenSubmenu("Billing");
+      } else if (pathname.includes("/controlpanel/billing/patient-bills")) {
+      setActive("Patient Bills");
+      setOpenSubmenu("Billing");
       // ✅ Handle data-manager submenus
     } else if (pathname.includes("/controlpanel/data-manager/general-data")) {
       setActive("General Data");
