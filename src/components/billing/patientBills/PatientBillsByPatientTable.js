@@ -29,7 +29,7 @@ function PatientBillsByPatientTable() {
           <tr className="bg-white cursor-pointer hover:bg-[#E8F1FD] transition">
             <td className="p-2 text-center">
               <Link
-                href="/controlpanel/billing/staff-payment-details"
+                href="/controlpanel/billing/patient-bills/patient-bills-details"
                 className="block w-full h-full"
               >
                 George Thomas
