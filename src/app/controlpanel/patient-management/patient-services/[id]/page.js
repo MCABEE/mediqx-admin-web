@@ -2,10 +2,12 @@
 import Navlink from "@/components/patientManagement/Navlink";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useBookingStore from "@/app/lib/store/bookingStore";
+import CreateServiceBookingPopup from "@/components/patientManagement/CreateServiceBookingPopup";
 
 export default function Page() {
+  const [serviceBookingPopup, setServiceBookingPopup] = useState(false);
   const router = useRouter();
   const { id: patientId } = useParams();
 
@@ -153,9 +155,22 @@ export default function Page() {
                 </Link>
               </div>
             </div>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setServiceBookingPopup(true)}
+                className="w-[220px] h-[40px] rounded-[15px] text-white bg-[#3674B5] mt-8 flex items-center justify-center cursor-pointer"
+              >
+                Create Service Booking
+              </button>
+            </div>
           </div>
         );
       })}
+      {serviceBookingPopup && (
+        <CreateServiceBookingPopup
+          onClose={() => setServiceBookingPopup(false)}
+        />
+      )}
     </div>
   );
 }
