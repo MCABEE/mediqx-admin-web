@@ -9,7 +9,7 @@ function Page() {
   return (
     <div>
       {/* Top Tabs */}
-      <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex gap-[40px] px-6 pt-6 rounded-[15px]">
+      {/* <div className="w-full bg-white border border-[#8888888c] text-base text-black font-semibold flex gap-[40px] px-6 pt-6 rounded-[15px]">
         {[
           "Regd Nurse",
           "Assistant Nurse",
@@ -26,7 +26,7 @@ function Page() {
             {tab}
           </p>
         ))}
-      </div>
+      </div> */}
 
    <PaymentStructureTable/>
  
