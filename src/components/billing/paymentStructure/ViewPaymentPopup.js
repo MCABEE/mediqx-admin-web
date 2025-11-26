@@ -2041,7 +2041,7 @@ function ViewPaymentPopup({ payment, onClose }) {
     }
 
     const payload = {
-      
+      id:id,
       role: form.professional || form.role,
       category: form.category,
       dutySchedule: form.dutySchedule,

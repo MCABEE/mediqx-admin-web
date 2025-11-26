@@ -14,9 +14,12 @@ function Sidebar() {
 
   useEffect(() => {
     // Direct matches for parent menus
-    if (pathname.includes("/controlpanel/staffManagement")) {
-      setActive("Staff Management (HR)");
-      setOpenSubmenu(null);
+    if (pathname === "/controlpanel/staffManagement") {
+      setActive("Healthcare Staff");
+      setOpenSubmenu("Staff Management (HR)");
+   } else if (pathname.includes("/controlpanel/staffManagement/supervisor")) {
+      setActive("Supervisors");
+      setOpenSubmenu("Staff Management (HR)");
     } else if (pathname.includes("/controlpanel/agentManagement")) {
       setActive("Agent Management");
       setOpenSubmenu(null);
