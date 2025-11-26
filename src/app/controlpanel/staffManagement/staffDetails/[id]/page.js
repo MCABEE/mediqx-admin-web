@@ -23,7 +23,18 @@ function StaffDetailPage() {
     verifyNurse,
     fetchNurseLanguagesById,
     selectedNurseLanguages,
+    updateNurseGrading
   } = nurseStore();
+const [selectedGrading, setSelectedGrading] = useState("");
+const gradingOptions = [
+  "GRADE_01",
+  "GRADE_02",
+  "GRADE_03",
+  "GRADE_04",
+  "GRADE_05",
+  "GRADE_06",
+  "GRADE_07",
+];
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
   const [preview, setPreview] = useState({
@@ -421,7 +432,7 @@ function StaffDetailPage() {
       </div>
 
       {/* Confirm Modal */}
-      {modalData.show && (
+      {/* {modalData.show && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#9b989876] backdrop-blur-xs z-50">
           <div className="bg-white rounded-xl p-6 w-[400px] text-center shadow-lg text-black">
             <h2 className="text-lg font-semibold mb-4 text-black">
@@ -452,7 +463,75 @@ function StaffDetailPage() {
             </div>
           </div>
         </div>
+      )} */}
+
+      {modalData.show && (
+  <div className="fixed inset-0 flex items-center justify-center bg-[#9b989876] backdrop-blur-xs z-50">
+    <div className="bg-white rounded-xl p-6 w-[400px] text-center shadow-lg text-black">
+      <h2 className="text-lg font-semibold mb-4 text-black">
+        Confirm {modalData.action}
+      </h2>
+
+      <p className="text-black mb-4">
+        Are you sure you want to{" "}
+        <strong>{modalData.action?.toLowerCase()}</strong> nurse{" "}
+        <strong>{selectedNurse.fullName}</strong>?
+      </p>
+
+      {/* 👉 Show grading dropdown only when approving */}
+      {modalData.action === "APPROVED" && (
+        <div className="mb-4 text-left">
+          <label className="text-sm font-medium text-black">Select Grading *</label>
+          <select
+            className="w-full mt-1 p-2 border border-gray-400 rounded-md outline-none"
+            value={selectedGrading}
+            onChange={(e) => setSelectedGrading(e.target.value)}
+          >
+            <option value="">Select grading</option>
+            {gradingOptions.map((grade) => (
+              <option key={grade} value={grade}>
+                {grade}
+              </option>
+            ))}
+          </select>
+        </div>
       )}
+
+      <div className="flex justify-center gap-4 mt-6">
+        <button
+          disabled={modalData.action === "APPROVED" && !selectedGrading}
+          onClick={async () => {
+            // Step 1: grading update first
+            if (modalData.action === "APPROVED") {
+              await updateNurseGrading(userId, selectedGrading);
+            }
+
+            // Step 2: then approve / reject
+            await verifyNurse(userId, modalData.action);
+
+            setModalData({ show: false, action: "" });
+            router.push(`/controlpanel/staffManagement?role=${role}`);
+          }}
+          className={`px-4 py-2 rounded-md cursor-pointer text-white
+            ${modalData.action === "APPROVED" && !selectedGrading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-[#3674B5]"}`
+          }
+        >
+          Yes, Confirm
+        </button>
+
+        <button
+          onClick={() => setModalData({ show: false, action: "" })}
+          className="px-4 py-2 bg-gray-300 rounded-md cursor-pointer"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Preview Modal */}
       {/* {preview.show && (
