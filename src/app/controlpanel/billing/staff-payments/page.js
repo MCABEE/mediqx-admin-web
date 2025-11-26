@@ -9,6 +9,6 @@ function Page() {
       <StaffPaymentsTable />
     </div>
   );
-}
+}   
 
 export default Page;
