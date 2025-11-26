@@ -1404,6 +1404,14 @@ export default function AddPaymentPopup({ onClose }) {
       setLocalError("Please enter the patient payment amount.");
       return false;
     }
+     if (!form.patientReferralValue) {
+      setLocalError("Please enter the patient referral value.");
+      return false;
+    }
+     if (!form.patientReferralValue) {
+      setLocalError("Please enter the staff payment amount.");
+      return false;
+    }
     return true;
   };
 

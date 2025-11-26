@@ -8,8 +8,21 @@ export const menus = [
   {
     id: 1,
     name: "Staff Management (HR)",
-    hasSubmenu: false,
+    hasSubmenu: true,
     link: "/controlpanel/staffManagement",
+    submenu: [
+      {
+        id: "1-1",
+        name: "Supervisors",
+        link: "/controlpanel/staffManagement/supervisor/supervisor-active",
+      },
+       {
+        id: "1-2",
+        name: "Healthcare Staff",
+        link: "/controlpanel/staffManagement",
+      },
+     
+    ],
   },
 
   {
