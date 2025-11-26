@@ -175,19 +175,19 @@ const usePaymentStructureStore = create((set, get) => ({
     }
   },
   // Delete Structure
-  removeStructure: async (id) => {
-    set({ loading: true, error: null });
-    try {
-      await deletePaymentStructure(id);
-      // refetch current page (or go to previous page if last item removed)
-      await get().fetchStructures(get().page);
-    } catch (err) {
-      set({ error: err.message || String(err) });
-      throw err;
-    } finally {
-      set({ loading: false });
-    }
-  },
+removeStructure: async (id) => {
+  set({ loading: true, error: null });
+  try {
+    await deletePaymentStructure(id);
+    await get().fetchStructures(get().page);
+  } catch (err) {
+    set({ error: err.message || String(err) });
+    throw err;
+  } finally {
+    set({ loading: false });
+  }
+}
+
 }));
 
 export default usePaymentStructureStore;
