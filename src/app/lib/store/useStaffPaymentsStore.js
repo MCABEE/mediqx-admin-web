@@ -47,7 +47,7 @@
 // /app/lib/store/useStaffPaymentsStore.js
 "use client";
 
-import { fetchStaffPaymentsReport } from "@/api/staffPaymentsApi";
+import { fetchStaffPaymentDetails, fetchStaffPaymentsReport } from "@/api/staffPaymentsApi";
 import { create } from "zustand";
 
 // Get current month & year
@@ -63,7 +63,12 @@ const useStaffPaymentsStore = create((set, get) => ({
   loading: false,
   error: null,
   report: null,
+ userId: null,
+  page: 1,
+  limit: 10,
 
+  
+  details: null,
   setYear: (year) => set({ year }),
   setMonth: (month) => set({ month }),
   setCategory: (category) => set({ category }),
@@ -84,6 +89,30 @@ const useStaffPaymentsStore = create((set, get) => ({
       set({
         loading: false,
         error: err?.response?.data?.message || "Failed to load report.",
+      });
+    }
+  },
+  setUserId: (id) => set({ userId: id }),
+  setPage: (page) => set({ page }),
+
+  loadDetails: async () => {
+    const { userId, page, limit } = get();
+
+    if (!userId) return;
+
+    try {
+      set({ loading: true, error: null });
+
+      const data = await fetchStaffPaymentDetails({ userId, page, limit });
+
+      set({
+        details: data,
+        loading: false,
+      });
+    } catch (err) {
+      set({
+        loading: false,
+        error: err?.response?.data?.message || "Failed to load staff details.",
       });
     }
   },

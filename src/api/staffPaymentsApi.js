@@ -14,3 +14,16 @@ export const fetchStaffPaymentsReport = async ({ year, month, category }) => {
 
   return response.data.data;
 };
+
+export const fetchStaffPaymentDetails = async ({ userId }) => {
+  const response = await api.get(
+    `/admin/billing/staff-payments/user-payment-data`,
+    {
+      params: { userId },
+    }
+  );
+  console.log(response);
+  
+
+  return response.data.data;
+};
