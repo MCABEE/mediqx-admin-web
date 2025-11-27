@@ -17,17 +17,6 @@ function page() {
        
       </div>
 
-      <div className="px-[38px] mt-4 flex justify-between">
-        <div>
-            <h1 className="text-black font-semibold text-[20px]">
-            George Thomas
-        </h1>
-        <p className="text-black font-semibold">Regd Nurse</p>
-        </div>
-        <h1 className="text-black font-semibold text-[20px]">
-            2025, November
-        </h1>
-      </div>
       <StaffPaymentDetailsTable/>
     </div>
   )

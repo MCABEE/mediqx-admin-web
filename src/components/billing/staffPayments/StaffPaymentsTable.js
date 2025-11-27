@@ -1,10 +1,12 @@
 "use client";
 
 import useStaffPaymentsStore from "@/app/lib/store/useStaffPaymentsStore";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 function StaffPaymentsTable() {
+  const router = useRouter();
+
   const {
     year,
     month,
@@ -17,7 +19,6 @@ function StaffPaymentsTable() {
     setCategory,
     fetchReport,
   } = useStaffPaymentsStore();
-
   useEffect(() => {
     fetchReport();
   }, [year, month, category]);
@@ -132,16 +133,21 @@ function StaffPaymentsTable() {
             <tbody>
               {report.payments?.map((row) => (
                 <tr
-                  key={row.staffId}
-                  className="bg-white cursor-pointer hover:bg-[#E8F1FD] transition"
+                  key={row.staffId} 
+                  className="bg-white cursor-pointer  hover:bg-[#E8F1FD] transition"
+                  onClick={() =>
+                    router.push(
+                      `/controlpanel/billing/staff-payment-details/${row.staffId}`
+                    )
+                  }
                 >
                   <td className="p-2 text-center">
-                    <Link
-                      href={`/controlpanel/billing/staff-payment-details?id=${row.staffId}`}
+                    {/* <Link
+                      href={`/controlpanel/billing/staff-payment-details/${row.staffId}`}
                       className="block w-full h-full"
-                    >
-                      {row.staffName}
-                    </Link>
+                    > */}
+                    {row.staffName}
+                    {/* </Link> */}
                   </td>
 
                   <td className="border-l-4 text-center border-[#C0D8F6] p-2">
