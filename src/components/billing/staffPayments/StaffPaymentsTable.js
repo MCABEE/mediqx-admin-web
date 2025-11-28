@@ -133,11 +133,16 @@ function StaffPaymentsTable() {
             <tbody>
               {report.payments?.map((row) => (
                 <tr
-                  key={row.staffId} 
+                  key={row.staffId}
                   className="bg-white cursor-pointer  hover:bg-[#E8F1FD] transition"
+                  // onClick={() =>
+                  //   router.push(
+                  //     `/controlpanel/billing/staff-payment-details/${row.staffId}`
+                  //   )
+                  // }
                   onClick={() =>
                     router.push(
-                      `/controlpanel/billing/staff-payment-details/${row.staffId}`
+                      `/controlpanel/billing/staff-payment-details/${row.staffId}?year=${year}&month=${month}`
                     )
                   }
                 >
