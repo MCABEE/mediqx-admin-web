@@ -248,3 +248,24 @@ export const getNurseLanguagesById = async (userId) => {
     throw new Error(message);
   }
 };
+
+
+export const updateNurseGrading = async (nurseId, grading) => {
+  try {
+    const response = await api.put(
+      `/admin/nurses/update-grading/${nurseId}`,
+      { grading },
+      {
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to update grading.";
+    throw new Error(message);
+  }
+};

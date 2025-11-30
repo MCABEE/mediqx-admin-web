@@ -8,8 +8,21 @@ export const menus = [
   {
     id: 1,
     name: "Staff Management (HR)",
-    hasSubmenu: false,
+    hasSubmenu: true,
     link: "/controlpanel/staffManagement",
+    submenu: [
+      {
+        id: "1-1",
+        name: "Supervisors",
+        link: "/controlpanel/staffManagement/supervisor/supervisor-active",
+      },
+       {
+        id: "1-2",
+        name: "Healthcare Staff",
+        link: "/controlpanel/staffManagement",
+      },
+     
+    ],
   },
 
   {
@@ -34,8 +47,25 @@ export const menus = [
   {
     id: 5,
     name: "Billing",
-    hasSubmenu: false,
-    //link: "profileReports",
+    hasSubmenu: true,
+    link: "/controlpanel/data-manager/billing/payment-structure",
+     submenu: [
+      {
+        id: "5-1",
+        name: "Payment Structure",
+        link: "/controlpanel/billing/payment-structure",
+      },
+      {
+        id: "5-2",
+        name: "Patient Bills",
+        link: "/controlpanel/billing/patient-bills/by-dates",
+      },
+      {
+        id: "5-3",
+        name: "Staff Payments",
+        link: "/controlpanel/billing/staff-payments",
+      },
+    ]
   },
   {
     id: 6,
@@ -47,7 +77,7 @@ export const menus = [
     id: 7,
     name: "Referrals Management",
     hasSubmenu: false,
-    link: "/controlpanel/referral-management/all-referrals",
+    link: "/controlpanel/referral-management/staff-referrals",
   },
   {
     id: 8,
