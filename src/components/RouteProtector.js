@@ -1,44 +1,29 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import api from "@/api/axiosInstance";
+import { useRouter, usePathname } from "next/navigation";
+import { useAuthStore } from "@/app/lib/store/authStore";
 
-const isValidJWT = (token) => {
-  if (!token || typeof token !== "string") return false;
-  const parts = token.split(".");
-  return parts.length === 3;
-};
-
-const RouteProtector = ({ children }) => {
+export default function RouteProtector({ children }) {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const { accessToken, } = useAuthStore();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
-    if (!token || token.trim() === "" || !isValidJWT(token)) {
-      localStorage.clear();
-      router.push("/");
+    // If no token → redirect to login
+    if (!accessToken ) {
+      if (pathname !== "/") {
+        router.replace("/");
+      }
       return;
     }
 
-    const interceptor = api.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response?.status === 401) {
-          localStorage.clear();
-          router.push("/");
-        }
-        return Promise.reject(error);
-      }
-    );
-
-    return () => {
-      api.interceptors.response.eject(interceptor);
-    };
-  }, [router]);
+    // // If token exists and user visits login page → go to dashboard
+    // if (accessToken) {
+    //   router.replace("/controlpanel/dashboard");
+    // }
+  }, [accessToken, router]);
 
   return <>{children}</>;
-};
-
-export default RouteProtector;
+}
