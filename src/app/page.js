@@ -12,14 +12,19 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login: loginToStore, loadToken } = useAuthStore();
+  const { login: loginToStore, loadToken,accessToken } = useAuthStore();
 
   useEffect(() => {
     loadToken(); 
   }, [loadToken]);
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
+  useEffect(()=>{
+    if (accessToken) {
+      router.replace("/controlpanel/dashboard");
+    }
+  },[accessToken]);
+
+ 
   //   setErrorMessage("");
   //   setLoading(true); 
 

@@ -3,15 +3,19 @@
 import React, { useState } from "react";
 import { IoMdPower } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/app/lib/store/authStore";
 
 const Navbar = () => {
   const router = useRouter();
   const [showLogout, setShowLogout] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  const {logout} =useAuthStore()
+
   const handleLogout = () => {
+    logout();
     localStorage.clear(); // clear token or user data
-    router.push("/"); // redirect
+    router.replace("/"); // redirect
   };
 
   return (
