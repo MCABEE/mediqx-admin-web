@@ -138,6 +138,6 @@ export const menus = [
     id: 13,
     name: "User Access Management",
     hasSubmenu: false,
-    //link: "profileReports",
+    link: "/controlpanel/user-access-management/manage-co-admin",
   },
 ];

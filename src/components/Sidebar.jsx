@@ -38,6 +38,9 @@ function Sidebar() {
     } else if (pathname.includes("/controlpanel/referral-management")) {
       setActive("Referrals Management");
       setOpenSubmenu(null);
+       } else if (pathname.includes("/controlpanel/user-access-management")) {
+      setActive("User Access Management");
+      setOpenSubmenu(null);
       // ✅ Handle billing submenus
     } else if (pathname.includes("/controlpanel/billing/payment-structure")) {
       setActive("Payment Structure");
