@@ -66,6 +66,7 @@ export const useAuthStore = create(
       isAuthenticated: false,
       userId: null,
       isLoggedIn: false,
+       hydrated: false,
 
       // LOGIN
       login: (accessToken, userId) => {
@@ -115,6 +116,9 @@ export const useAuthStore = create(
         isAuthenticated: state.isAuthenticated,
         isLoggedIn: state.isLoggedIn,
       }),
+       onRehydrateStorage: () => (state) => {
+        state.hydrated = true; // mark hydration done
+      },
     }
   )
 );
