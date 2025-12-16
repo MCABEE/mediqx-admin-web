@@ -55,3 +55,40 @@ export const fetchSupervisorDetails = async (id) => {
     throw new Error(msg);
   }
 };
+
+
+
+// UPDATE PAGE 1
+export const updateSupervisorPageOne = async (id, payload) => {
+  const res = await api.put(
+    `/admin/supervisor/supervisors/${id}/update-supervisor-page-1`,
+    payload
+  );
+  return res.data;
+};
+
+// UPDATE PAGE 2
+// export const updateSupervisorPageTwo = async (id, payload) => {
+//   const res = await api.put(
+//     `/admin/supervisor/supervisors/${id}/update-supervisor-page-2`,
+//     payload
+//   );
+//   return res.data;
+// };
+
+
+export const updateSupervisorPageTwo = async (id, payload) => {
+  try {
+    const res = await api.put(
+      `/admin/supervisor/supervisors/${id}/update-supervisor-page-2`,
+      payload
+    );
+    return res.data;
+  } catch (err) {
+    const message =
+      err.response?.data?.message ||
+      err.message ||
+      "Failed to update supervisor experience";
+    throw new Error(message);
+  }
+};

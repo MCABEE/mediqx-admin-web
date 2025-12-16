@@ -192,14 +192,8 @@ export default function Page() {
           <SupervisorUploadCertificate onComplete={() => { /* final step, you may redirect or reset */ }} />
         </div>
 
-        {/* Back button */}
-        {activeStep > 1 && (
-          <div className="mt-4">
-            <button onClick={handlePrevStep} className="px-4 py-2 border rounded-lg">
-              Back
-            </button>
-          </div>
-        )}
+     
+     
       </div>
     </div>
   );
