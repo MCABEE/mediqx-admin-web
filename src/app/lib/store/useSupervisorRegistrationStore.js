@@ -4,6 +4,8 @@ import {
   fetchSupervisors,
   registerSupervisor,
   submitSupervisorPageTwo,
+  updateSupervisorPageOne,
+  updateSupervisorPageTwo,
 } from "@/api/addSupervisorApi";
 import {
   confirmFileUploadAPI,
@@ -165,6 +167,27 @@ const useSupervisorRegistrationStore = create((set, get) => ({
       });
     } catch (err) {
       set({ error: err.message });
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+    updateSupervisorPageOne: async (id, payload) => {
+    await updateSupervisorPageOne(id, payload);
+  },
+
+  // updateSupervisorPageTwo: async (id, payload) => {
+  //   await updateSupervisorPageTwo(id, payload);
+  // },
+
+   updateSupervisorExperience: async (supervisorId, payload) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await updateSupervisorPageTwo(supervisorId, payload);
+      return res;
+    } catch (err) {
+      set({ error: err.message });
+      throw err;
     } finally {
       set({ loading: false });
     }

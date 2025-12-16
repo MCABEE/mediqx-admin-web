@@ -498,19 +498,234 @@
 
 
 
+// "use client";
+// import React, { useState } from "react";
+// import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistrationStore";
+// import { useRouter } from "next/navigation";
+
+
+// function SupervisorUploadCertificate({ onComplete }) {
+//   const {
+//     userId,
+//     generateUploadUrl,
+//     confirmFileUpload,
+//     setUploadedFile,
+//     supervisorId, 
+//   } = useSupervisorRegistrationStore();
+// console.log(supervisorId);
+
+//   const [files, setFiles] = useState({
+//     nursingCertificate: null,
+//     councilRegistration: null,
+//     experienceCertificate: null,
+//     photo: null,
+//   });
+
+//   const [fileNames, setFileNames] = useState({
+//     nursingCertificate: "",
+//     councilRegistration: "",
+//     experienceCertificate: "",
+//     photo: "",
+//   });
+
+//   const [uploading, setUploading] = useState(false);
+//   const [isSubmitted, setIsSubmitted] = useState(false);
+//   const [error, setError] = useState("");
+// const router = useRouter();
+
+//   // ✅ Inputs with disable logic for Experience Certificate
+//   const inputs = [
+//     {
+//       label: "Nursing Certificate",
+//       key: "nursingCertificate",
+//       type: "NURSING_CERTIFICATE",
+//       disabled: false,
+//     },
+//     {
+//       label: "Council Registration",
+//       key: "councilRegistration",
+//       type: "COUNCIL_REGISTRATION",
+//       disabled: false,
+//     },
+//     {
+//       label: "Experience Certificate",
+//       key: "experienceCertificate",
+//       type: "EXPERIENCE_CERTIFICATE",
+//       disabled: !supervisorId, // ✅ disable when supervisorId is missing
+//     },
+//     {
+//       label: "Passport Photo *",
+//       key: "photo",
+//       type: "PASSPORT_IMAGE",
+//       required: true,
+//       disabled: false,
+//     },
+//   ];
+
+//   // Handle file selection
+//   const handleFileSelect = (key, disabled) => (event) => {
+//     if (disabled) return; // ❌ ignore clicks when disabled
+
+//     const file = event.target.files?.[0];
+//     if (!file) return;
+
+//     setFiles((prev) => ({ ...prev, [key]: file }));
+//     setFileNames((prev) => ({ ...prev, [key]: file.name }));
+//   };
+
+//   // Submit Handler
+//   const handleSubmit = async () => {
+//     setError("");
+
+//     if (!userId) {
+//       setError("User ID missing. Please complete basic details first.");
+//       return;
+//     }
+
+//     // Validation for required fields
+//     const missingRequired = inputs.filter((i) => i.required && !files[i.key]);
+//     if (missingRequired.length > 0) {
+//       setError(`${missingRequired.map((m) => m.label).join(", ")} required.`);
+//       return;
+//     }
+
+//     setUploading(true);
+
+//     try {
+//       for (const { key, type, disabled } of inputs) {
+//         if (disabled) continue; // skip disabled fields
+
+//         const file = files[key];
+//         if (!file) continue;
+
+//         const { signedUrl, fileId } = await generateUploadUrl({
+//           fileName: file.name,
+//           contentType: file.type,
+//           type,
+//         });
+
+//         const uploadRes = await fetch(signedUrl, {
+//           method: "PUT",
+//           headers: { "Content-Type": file.type },
+//           body: file,
+//         });
+
+//         if (!uploadRes.ok) {
+//           throw new Error(`Upload failed for ${key}`);
+//         }
+
+//         await confirmFileUpload(fileId, type);
+//         setUploadedFile(key, fileId);
+//       }
+
+//       setIsSubmitted(true);
+//       onComplete?.();
+//       setTimeout(() => {
+//   router.refresh(); // ✅ reloads page data without full reload
+// }, 800);
+//     } catch (err) {
+//       console.error("Upload error:", err);
+//       setError(err.message || "Upload failed. Try again.");
+//     } finally {
+//       setUploading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="pt-[15px] px-4">
+//       <h1 className="text-[16px] font-semibold text-black py-[18px]">
+//         Upload your Documents
+//       </h1>
+
+//       {/* Upload Inputs */}
+//       <div className="flex flex-col gap-5 mb-4">
+//         {inputs.map(({ label, key, disabled }) => (
+//           <label
+//             key={key}
+//             htmlFor={key}
+//             className={`w-[328px] h-[40px] text-black text-[14px] font-light 
+//                        border rounded-[15px] ps-4 pe-4 flex items-center justify-between
+//                        ${
+//                          disabled
+//                            ? "border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed"
+//                            : "border-[#BBBBBB] cursor-pointer"
+//                        }`}
+//           >
+//             <span>{fileNames[key] || label}</span>
+//             <img
+//               src="/upload-btn.svg"
+//               alt="upload"
+//               className={disabled ? "opacity-50" : ""}
+//             />
+
+//             <input
+//               id={key}
+//               type="file"
+//               accept=".pdf,.jpg,.jpeg,.png"
+//               className="hidden"
+//               disabled={disabled}
+//               onChange={handleFileSelect(key, disabled)}
+//             />
+//           </label>
+//         ))}
+//       </div>
+
+//       {/* Submit Button */}
+//       <button
+//         onClick={handleSubmit}
+//         disabled={uploading || isSubmitted}
+//         className={`mt-10 w-[328px] h-[40px] rounded-[15px] flex justify-center items-center 
+//             ${
+//               uploading || isSubmitted
+//                 ? "bg-gray-400 cursor-not-allowed text-white"
+//                 : "bg-[#3674B5] text-white"
+//             }`}
+//       >
+//         {isSubmitted ? "Submitted" : uploading ? "Uploading..." : "Next"}
+//       </button>
+
+//       {error && (
+//         <p className="text-red-600 text-sm sm:text-base font-medium mt-1">
+//           {error}
+//         </p>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default SupervisorUploadCertificate;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 import React, { useState } from "react";
 import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistrationStore";
+import { useRouter } from "next/navigation";
 
 function SupervisorUploadCertificate({ onComplete }) {
   const {
     userId,
+    qualificationId, // ✅ USE THIS
     generateUploadUrl,
     confirmFileUpload,
     setUploadedFile,
-    supervisorId, 
   } = useSupervisorRegistrationStore();
-console.log(supervisorId);
+
+  const router = useRouter();
 
   const [files, setFiles] = useState({
     nursingCertificate: null,
@@ -530,7 +745,7 @@ console.log(supervisorId);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Inputs with disable logic for Experience Certificate
+  /* ---------------- Inputs ---------------- */
   const inputs = [
     {
       label: "Nursing Certificate",
@@ -548,7 +763,7 @@ console.log(supervisorId);
       label: "Experience Certificate",
       key: "experienceCertificate",
       type: "EXPERIENCE_CERTIFICATE",
-      disabled: !supervisorId, // ✅ disable when supervisorId is missing
+      disabled: !qualificationId, // ✅ CORRECT CONDITION
     },
     {
       label: "Passport Photo *",
@@ -559,18 +774,18 @@ console.log(supervisorId);
     },
   ];
 
-  // Handle file selection
-  const handleFileSelect = (key, disabled) => (event) => {
-    if (disabled) return; // ❌ ignore clicks when disabled
+  /* ---------------- File Select ---------------- */
+  const handleFileSelect = (key, disabled) => (e) => {
+    if (disabled) return;
 
-    const file = event.target.files?.[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
-    setFiles((prev) => ({ ...prev, [key]: file }));
-    setFileNames((prev) => ({ ...prev, [key]: file.name }));
+    setFiles((p) => ({ ...p, [key]: file }));
+    setFileNames((p) => ({ ...p, [key]: file.name }));
   };
 
-  // Submit Handler
+  /* ---------------- Submit ---------------- */
   const handleSubmit = async () => {
     setError("");
 
@@ -579,9 +794,11 @@ console.log(supervisorId);
       return;
     }
 
-    // Validation for required fields
-    const missingRequired = inputs.filter((i) => i.required && !files[i.key]);
-    if (missingRequired.length > 0) {
+    const missingRequired = inputs.filter(
+      (i) => i.required && !files[i.key]
+    );
+
+    if (missingRequired.length) {
       setError(`${missingRequired.map((m) => m.label).join(", ")} required.`);
       return;
     }
@@ -590,7 +807,7 @@ console.log(supervisorId);
 
     try {
       for (const { key, type, disabled } of inputs) {
-        if (disabled) continue; // skip disabled fields
+        if (disabled) continue;
 
         const file = files[key];
         if (!file) continue;
@@ -617,6 +834,11 @@ console.log(supervisorId);
 
       setIsSubmitted(true);
       onComplete?.();
+
+      // ✅ Reload after success
+      setTimeout(() => {
+        router.refresh();
+      }, 800);
     } catch (err) {
       console.error("Upload error:", err);
       setError(err.message || "Upload failed. Try again.");
@@ -637,13 +859,13 @@ console.log(supervisorId);
           <label
             key={key}
             htmlFor={key}
-            className={`w-[328px] h-[40px] text-black text-[14px] font-light 
-                       border rounded-[15px] ps-4 pe-4 flex items-center justify-between
-                       ${
-                         disabled
-                           ? "border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed"
-                           : "border-[#BBBBBB] cursor-pointer"
-                       }`}
+            className={`w-[328px] h-[40px] border rounded-[15px]
+              ps-4 pe-4 flex items-center justify-between text-[14px]
+              ${
+                disabled
+                  ? "border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "border-[#BBBBBB] cursor-pointer"
+              }`}
           >
             <span>{fileNames[key] || label}</span>
             <img
@@ -664,24 +886,23 @@ console.log(supervisorId);
         ))}
       </div>
 
-      {/* Submit Button */}
+      {/* Submit */}
       <button
         onClick={handleSubmit}
         disabled={uploading || isSubmitted}
-        className={`mt-10 w-[328px] h-[40px] rounded-[15px] flex justify-center items-center 
-            ${
-              uploading || isSubmitted
-                ? "bg-gray-400 cursor-not-allowed text-white"
-                : "bg-[#3674B5] text-white"
-            }`}
+        className={`mt-10 w-[328px] h-[40px] rounded-[15px]
+          flex justify-center items-center
+          ${
+            uploading || isSubmitted
+              ? "bg-gray-400 cursor-not-allowed text-white"
+              : "bg-[#3674B5] text-white"
+          }`}
       >
         {isSubmitted ? "Submitted" : uploading ? "Uploading..." : "Next"}
       </button>
 
       {error && (
-        <p className="text-red-600 text-sm sm:text-base font-medium mt-1">
-          {error}
-        </p>
+        <p className="text-red-600 text-sm font-medium mt-2">{error}</p>
       )}
     </div>
   );

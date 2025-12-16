@@ -20,7 +20,7 @@ const Navlink = () => {
       >
         Supervisor (Active)
       </Link>
-      <Link
+      {/* <Link
         href=""
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
           
@@ -31,7 +31,7 @@ const Navlink = () => {
       >
        
         All Supervisor
-      </Link>
+      </Link> */}
       <Link
         href="/controlpanel/staffManagement/supervisor/supervisor-approval"
         className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
@@ -40,7 +40,7 @@ const Navlink = () => {
             : "border-b-2 border-transparent"
         }`}
       >
-        For Approvals
+       All Supervisor
       </Link>
       <Link
         href="/controlpanel/staffManagement/supervisor/add-supervisor"
