@@ -592,7 +592,7 @@ export default function SupervisorApprovalDetailsPage() {
           </tr>
         </tbody>
       </table>
-
+ 
       {/* Profile Details */}
       <div className="bg-white border border-[#BBBBBB] rounded-[15px] mt-4 mb-6 pb-4">
         {/* Name Header */}
@@ -733,7 +733,7 @@ export default function SupervisorApprovalDetailsPage() {
         <SupervisorFileSection
   files={supervisor.files}
   qualifications={supervisor.qualifications}
-  url={process.env.NEXT_PUBLIC_FILE_BASE_URL}
+  url={"https://dev-nurse-docs.s3.ap-south-1.amazonaws.com/"}
   setPreview={setPreview}
 />
 

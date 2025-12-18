@@ -120,7 +120,8 @@ export const menus = [
     id: 10,
     name: "Product Management",
     hasSubmenu: false,
-    //link: "profileReports",
+    link:"/controlpanel/product-management/manage-products",
+  
   },
   {
     id: 11,
