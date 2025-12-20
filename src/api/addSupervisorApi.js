@@ -31,7 +31,7 @@ export const submitSupervisorPageTwo = async (payload) => {
 
 
 
-export const fetchSupervisors = async ({ page = 1, limit = 10, filter = "ALL", search = "" }) => {
+export const fetchSupervisors = async ({ page, limit, filter , search = "" }) => {
   try {
     const res = await api.get(
       `/admin/supervisor/supervisors?page=${page}&limit=${limit}&filter=${filter}&search=${search}`

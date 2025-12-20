@@ -114,7 +114,7 @@ export const menus = [
     id: 9,
     name: "Notifications",
     hasSubmenu: false,
-    //link: "profileReports",
+    link: "/controlpanel/notifications/custom-notifications",
   },
   {
     id: 10,
@@ -133,7 +133,7 @@ export const menus = [
     id: 12,
     name: "Rating & Review",
     hasSubmenu: false,
-    //link: "profileReports",
+    link: "/controlpanel/rating-and-review",
   },
   {
     id: 13,
