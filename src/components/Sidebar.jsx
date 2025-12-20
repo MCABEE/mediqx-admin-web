@@ -26,6 +26,9 @@ function Sidebar() {
     } else if (pathname.includes("/controlpanel/caseBooking")) {
       setActive("Service Bookings");
       setOpenSubmenu(null);
+      } else if (pathname.includes("/controlpanel/notifications")) {
+      setActive("Notifications");
+      setOpenSubmenu(null);
       } else if (pathname.includes("/controlpanel/product-management")) {
       setActive("Product Management");
       setOpenSubmenu(null);

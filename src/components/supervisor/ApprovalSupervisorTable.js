@@ -145,7 +145,14 @@ function ApprovalSupervisorTable() {
   } = useSupervisorRegistrationStore();
 
   useEffect(() => {
-    getSupervisors();
+    getSupervisors(
+      {
+    page: 1,
+    limit: 100,
+    filter: "ALL",
+    search: "",
+  }
+    );
   }, [page, search, filter]);
 
   const totalPages = Math.ceil(total / limit);
@@ -262,7 +269,7 @@ function ApprovalSupervisorTable() {
         </table>
 
         {/* Pagination */}
-        <div className="flex justify-between my-4 px-4">
+        {/* <div className="flex justify-between my-4 px-4">
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
@@ -282,7 +289,7 @@ function ApprovalSupervisorTable() {
           >
             Next
           </button>
-        </div>
+        </div> */}
       </div>
     </>
   );

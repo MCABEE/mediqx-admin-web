@@ -130,32 +130,69 @@ const useSupervisorRegistrationStore = create((set, get) => ({
 
    supervisors: [],
   total: 0,
-  page: 1,
-  limit: 10,
-  filter: "ALL",
+  page: "",
+  limit: "",
+  filter: "",
   search: "",
   loading: false,
   error: null,
   supervisor:null,  
 
-  getSupervisors: async () => {
-    const { page, limit, filter, search } = get();
+  // getSupervisors: async () => {
+  //   const { page, limit, filter, search } = get();
 
-    set({ loading: true, error: null });
+  //   set({ loading: true, error: null });
 
-    try {
-      const res = await fetchSupervisors({ page, limit, filter, search });
+  //   try {
+  //     const res = await fetchSupervisors({ page, limit, filter, search });
 
-      set({
-        supervisors: res?.data?.supervisors || [],
-        total: res?.data?.total || 0,
-      });
-    } catch (err) {
-      set({ error: err.message });
-    } finally {
-      set({ loading: false });
-    }
-  },
+  //     set({
+  //       supervisors: res?.data?.supervisors || [],
+  //       total: res?.data?.total || 0,
+  //     });
+  //   } catch (err) {
+  //     set({ error: err.message });
+  //   } finally {
+  //     set({ loading: false });
+  //   }
+  // },
+
+  getSupervisors: async (params = {}) => {
+  const {
+    page = 1,
+    limit = 10,
+    filter = "ALL",
+    search = "",
+  } = params;
+
+  set({
+    page,
+    limit,
+    filter,
+    search,
+    loading: true,
+    error: null,
+  });
+
+  try {
+    const res = await fetchSupervisors({
+      page,
+      limit,
+      filter,
+      search,
+    });
+
+    set({
+      supervisors: res?.data?.supervisors || [],
+      total: res?.data?.total || 0,
+    });
+  } catch (err) {
+    set({ error: err.message });
+  } finally {
+    set({ loading: false });
+  }
+},
+
     getSupervisorDetails: async (id) => {
     set({ loading: true, error: null });
 
