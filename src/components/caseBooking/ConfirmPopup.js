@@ -481,65 +481,82 @@ const ConfirmPopup = ({
             )}
           </div>
 
-          {/* Supervisor Table */}
-          <div className="overflow-x-auto mt-2">
-            <table className="w-full border-spacing-y-2 border-separate text-black">
-              <thead className="bg-[#C0D8F6]">
-                <tr>
-                  <th className="p-2 text-base rounded-l-2xl">No</th>
-                  <th className="p-2 text-base border-l-4 border-[#F0F4F9]">
-                    Supervisor Name
-                  </th>
-                  <th className="p-2 text-base border-l-4 border-[#F0F4F9]">
-                    Location
-                  </th>
-                  <th className="p-2 text-base border-l-4 border-[#F0F4F9] rounded-r-2xl">
-                    Select
-                  </th>
-                </tr>
-              </thead>
+         
+<div className="overflow-x-auto mt-2">
+  
 
-              <tbody className="">
-                {!loading &&
-                  supervisors.map((item, index) => (
-                    <tr
-                      key={item.id}
-                      onClick={() => setSelectedSupervisorId(item.id)}
-                      className="bg-white border-2 border-[#F0F4F9]"
-                    >
-                      <td className="p-2">{index + 1}</td>
-                      <td className="p-2 ">
-                        {item.fullName}
-                      </td>
-                      <td className="p-2">
-                        {item.currentSupervisorsLocation}
-                      </td>
-                      <td className="text-center">
-                        <input
-                          type="radio"
-                          checked={selectedSupervisorId === item.userId}
-                          onChange={() =>
-                            setSelectedSupervisorId(item.userId)
-                          }
-                        />
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
 
-            {errors.supervisorId && (
-              <p className="text-red-500 text-sm mt-2">
-                {errors.supervisorId}
-              </p>
-            )}
-          </div>
+  <div className="overflow-x-auto mt-2">
+  <table className="w-full border-spacing-y-2 border-separate text-black">
+    <thead className="bg-[#C0D8F6] sticky top-0 z-10">
+      <tr>
+        <th className="p-2 text-base rounded-l-2xl">No</th>
+        <th className="p-2 text-base border-l-4 border-[#F0F4F9]">
+          Supervisor Name
+        </th>
+        <th className="p-2 text-base border-l-4 border-[#F0F4F9]">
+          Location
+        </th>
+        <th className="p-2 text-base border-l-4 border-[#F0F4F9] rounded-r-2xl">
+          Select
+        </th>
+      </tr>
+    </thead>
+  </table>
+
+  <div className="max-h-[400px] overflow-y-auto">
+    <table className="w-full border-spacing-y-2 border-separate text-black">
+      <tbody>
+        {!loading &&
+          supervisors.map((item, index) => (
+            <tr
+              key={item.id}
+              onClick={() => setSelectedSupervisorId(item.id)}
+              className="bg-white cursor-pointer"
+            >
+              <td className="p-2 border-2 border-[#F0F4F9] w-[60px]">
+                {index + 1}
+              </td>
+              <td className="p-2 border-2 border-[#F0F4F9]">
+                {item.fullName}
+              </td>
+              <td className="p-2 border-2 border-[#F0F4F9]">
+                {item.currentSupervisorsLocation}
+              </td>
+              <td className="p-2 border-2 border-[#F0F4F9] text-center w-[80px]">
+                <input
+                  type="checkbox"
+                  className="size-[20px] rounded-[5px] border border-[#bbbbbb]"
+                  checked={selectedSupervisorId === item.id}
+                  onChange={() => setSelectedSupervisorId(item.id)}
+                />
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  </div>
+
+  {errors.supervisorId && (
+    <p className="text-red-500 text-sm mt-2">
+      {errors.supervisorId}
+    </p>
+  )}
+</div>
+
+
+  {errors.supervisorId && (
+    <p className="text-red-500 text-sm mt-2">
+      {errors.supervisorId}
+    </p>
+  )}
+</div>
 
           {/* Submit */}
           <div className="flex justify-center items-center mt-8 mb-10">
             <button
               onClick={handleSubmit}
-              className="w-[192px] h-[40px] bg-[#3674B5] text-white rounded-[15px] cursor-pointer"
+              className="w-full h-[40px] bg-[#3674B5] text-white rounded-[15px] cursor-pointer"
             >
               Submit
             </button>
