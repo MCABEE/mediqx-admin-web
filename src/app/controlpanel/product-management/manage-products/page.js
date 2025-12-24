@@ -489,10 +489,14 @@ console.log(products);
   setDeleteId(null); // close popup
 
   try {
-    await deleteProduct(id); // store refreshes automatically
+    await deleteProduct(id);
+   
+    
+  // store refreshes automatically
   } catch (err) {
     alert(err.message);
   }
+    fetchProducts(); 
 };
   return (
     <div>
@@ -582,11 +586,11 @@ console.log(products);
         })}
 
       {/* PAGINATION */}
-      <div className="flex justify-center gap-4 my-6">
+      <div className="flex justify-between items-center gap-4 my-6">
         <button
           disabled={page === 1}
           onClick={() => fetchProducts(page - 1)}
-          className="px-4 py-2 border rounded disabled:opacity-50"
+          className="px-4 py-2 border bg-blue-500 text-white rounded disabled:opacity-50"
         >
           Prev
         </button>
@@ -598,7 +602,7 @@ console.log(products);
         <button
           disabled={page === totalPages}
           onClick={() => fetchProducts(page + 1)}
-          className="px-4 py-2 border rounded disabled:opacity-50"
+          className="px-4 py-2 border bg-blue-500 text-white rounded disabled:opacity-50"
         >
           Next
         </button>
