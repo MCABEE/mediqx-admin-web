@@ -474,24 +474,49 @@ const useProductStore = create((set, get) => ({
   },
 
   /* ---------------- DELETE PRODUCT ---------------- */
-  deleteProduct: async (productId) => {
-    set({ loading: true, error: null });
+  // deleteProduct: async (productId) => {
+  //   set({ loading: true, error: null });
 
-    try {
-      const res = await deleteProductAPI(productId);
-      if (!res.success) throw new Error(res.message);
+  //   try {
+  //     const res = await deleteProductAPI(productId);
+  //     if (!res.success) throw new Error(res.message);
 
-      // ✅ THIS WILL NOW WORK
-      await get().fetchProducts(get().page);
+  //     // ✅ THIS WILL NOW WORK
+  //     await get().fetchProducts(get().page);
 
-      return true;
-    } catch (err) {
-      set({ error: err.message });
-      throw err;
-    } finally {
-      set({ loading: false });
-    }
-  },
+  //     return true;
+  //   } catch (err) {
+  //     set({ error: err.message });
+  //     throw err;
+  //   } finally {
+  //     set({ loading: false });
+  //   }
+  // },
+deleteProduct: async (productId) => {
+  set({ loading: true, error: null });
+
+  try {
+    const res = await deleteProductAPI(productId);
+    if (!res.success) throw new Error(res.message);
+
+    // ✅ IMMEDIATE UI UPDATE (THIS IS THE KEY)
+    set((state) => ({
+      products: state.products.filter(
+        (item) => item.product.id !== productId
+      ),
+    }));
+
+    // ✅ OPTIONAL: refetch to sync pagination
+    await get().fetchProducts(get().page);
+
+    return true;
+  } catch (err) {
+    set({ error: err.message });
+    throw err;
+  } finally {
+    set({ loading: false });
+  }
+},
 
   /* ---------------- FILE UPLOAD ---------------- */
   generateUploadUrl: async ({ productId, fileName, contentType, type }) => {
