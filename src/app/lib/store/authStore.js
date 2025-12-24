@@ -56,6 +56,113 @@
 
 
 
+// import { create } from "zustand";
+// import { persist } from "zustand/middleware";
+
+// export const useAuthStore = create(
+//   persist(
+//     (set) => ({
+//       accessToken: null,
+//       isAuthenticated: false,
+//       userId: null,
+//       isLoggedIn: false,
+//        hydrated: false,
+
+//       // LOGIN
+//     //   login: (accessToken, userId) => {
+//     //     localStorage.setItem("accessToken", accessToken);
+//     // localStorage.setItem("userId", userId);
+//     //     set({
+//     //       accessToken,
+//     //       userId,
+//     //       isAuthenticated: true,
+//     //       isLoggedIn: true,
+//     //     });
+//     //   },
+// login: (accessToken, userId, permissions = []) => {
+//   localStorage.setItem("accessToken", accessToken);
+//   localStorage.setItem("userId", userId);
+//   localStorage.setItem("permissions", JSON.stringify(permissions));
+
+//   set({
+//     accessToken,
+//     userId,
+//     permissions,
+//     isAuthenticated: true,
+//     isLoggedIn: true,
+//   });
+// },
+
+//       // LOGOUT
+//   //     logout: () => {
+//   //         localStorage.removeItem("accessToken");
+//   // localStorage.removeItem("userId");
+//   //       set({
+//   //         accessToken: null,
+//   //         userId: null,
+//   //         isAuthenticated: false,
+//   //         isLoggedIn: false,
+//   //       });
+//   //     },
+
+//   logout: () => {
+//   localStorage.removeItem("accessToken");
+//   localStorage.removeItem("userId");
+//   localStorage.removeItem("permissions");
+
+//   set({
+//     accessToken: null,
+//     userId: null,
+//     permissions: [],
+//     isAuthenticated: false,
+//     isLoggedIn: false,
+//   });
+// },
+
+
+//       // OPTIONAL: Restore manually (not required when using persist)
+//       loadToken: () => {
+//         const accessToken = localStorage.getItem("accessToken");
+//         const userId = localStorage.getItem("userId");
+
+//         if (accessToken && userId) {
+//           set({
+//             accessToken,
+//             userId,
+//             isAuthenticated: true,
+//             isLoggedIn: true,
+//           });
+//         }
+//       },
+//     }),
+
+//     {
+//       name: "auth-storage", // key in localStorage
+//       // partialize: (state) => ({
+//       //   accessToken: state.accessToken,
+//       //   userId: state.userId,
+//       //   isAuthenticated: state.isAuthenticated,
+//       //   isLoggedIn: state.isLoggedIn,
+//       // }),
+//       partialize: (state) => ({
+//   accessToken: state.accessToken,
+//   userId: state.userId,
+//   permissions: state.permissions,
+//   isAuthenticated: state.isAuthenticated,
+//   isLoggedIn: state.isLoggedIn,
+// }),
+//        onRehydrateStorage: () => (state) => {
+//         state.hydrated = true; // mark hydration done
+//       },
+//     }
+//   )
+// );
+
+
+
+
+
+
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -63,44 +170,55 @@ export const useAuthStore = create(
   persist(
     (set) => ({
       accessToken: null,
-      isAuthenticated: false,
       userId: null,
-      isLoggedIn: false,
-       hydrated: false,
+      permissions: [],
 
-      // LOGIN
-      login: (accessToken, userId) => {
+      isAuthenticated: false,
+      isLoggedIn: false,
+      hydrated: false,
+
+      /* ===================== LOGIN ===================== */
+      login: (accessToken, userId, permissions = []) => {
         localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("userId", userId);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("permissions", JSON.stringify(permissions));
+
         set({
           accessToken,
           userId,
+          permissions,
           isAuthenticated: true,
           isLoggedIn: true,
         });
       },
 
-      // LOGOUT
+      /* ===================== LOGOUT ===================== */
       logout: () => {
-          localStorage.removeItem("accessToken");
-  localStorage.removeItem("userId");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("permissions");
+
         set({
           accessToken: null,
           userId: null,
+          permissions: [],
           isAuthenticated: false,
           isLoggedIn: false,
         });
       },
 
-      // OPTIONAL: Restore manually (not required when using persist)
+      /* ===================== RESTORE SESSION ===================== */
       loadToken: () => {
         const accessToken = localStorage.getItem("accessToken");
         const userId = localStorage.getItem("userId");
+        const permissions =
+          JSON.parse(localStorage.getItem("permissions")) || [];
 
         if (accessToken && userId) {
           set({
             accessToken,
             userId,
+            permissions,
             isAuthenticated: true,
             isLoggedIn: true,
           });
@@ -109,16 +227,22 @@ export const useAuthStore = create(
     }),
 
     {
-      name: "auth-storage", // key in localStorage
+      name: "auth-storage",
+
       partialize: (state) => ({
         accessToken: state.accessToken,
         userId: state.userId,
+        permissions: state.permissions,
         isAuthenticated: state.isAuthenticated,
         isLoggedIn: state.isLoggedIn,
       }),
-       onRehydrateStorage: () => (state) => {
-        state.hydrated = true; // mark hydration done
+
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.hydrated = true;
+        }
       },
     }
   )
 );
+

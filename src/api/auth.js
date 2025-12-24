@@ -1,18 +1,44 @@
 import api from "./axiosInstance"; 
 
-export const login = async (mobileNumber, password) => {
-  try {
-    const response = await api.post("/auth/admin/login", {
-      mobileNumber,
-      password,
-    });
-    console.log(response);
+// export const login = async (mobileNumber, password) => {
+//   try {
+//     const response = await api.post("/auth/admin/login", {
+//       mobileNumber,
+//       password,
+//     });
+//     console.log(response);
     
 
-    return response.data; 
+//     return response.data; 
+//   } catch (error) {
+//     const errorMessage =
+//       error.response?.data?.message || "Login failed. Please try again.";
+//     throw new Error(errorMessage);
+//   }
+// };
+
+export const login = async (identifier, password) => {
+  try {
+    const isEmail = /^\S+@\S+\.\S+$/.test(identifier);
+    const isPhone = /^\d{10}$/.test(identifier);
+
+    const payload = { password };
+
+    if (isEmail) {
+      payload.email = identifier;
+    } else if (isPhone) {
+      payload.mobileNumber = `+91${identifier}`; // ✅ hardcoded +91
+    } else {
+      throw new Error("Enter valid email or 10 digit mobile number");
+    }
+
+    const response = await api.post("/auth/admin/login", payload);
+    return response.data;
   } catch (error) {
     const errorMessage =
-      error.response?.data?.message || "Login failed. Please try again.";
+      error.response?.data?.message ||
+      error.message ||
+      "Login failed. Please try again.";
     throw new Error(errorMessage);
   }
 };
