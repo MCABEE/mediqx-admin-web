@@ -288,6 +288,7 @@ export const menus = [
   {
     id: 11,
     name: "Ledger Management",
+    link: "/controlpanel/ledger-management/bookings",
     hasSubmenu: false,
     permission: "LEDGER_MANAGEMENT",
   },
