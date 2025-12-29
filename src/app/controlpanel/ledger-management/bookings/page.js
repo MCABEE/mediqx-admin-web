@@ -2,185 +2,212 @@
 "use client";
 
 import Navlink from "@/components/ledgerManagement/Navlink";
-import React, { useState } from "react";
+import useLedgerStore from "@/app/lib/store/useLedgerStore";
+import React, { useEffect } from "react";
 import { IoCheckmark } from "react-icons/io5";
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState("total");
+  const {
+    bookings,
+    counts,
+    loading,
+    year,
+    month,
+    filter,
+    page,
+    totalPages,
+    setYear,
+    setMonth,
+    setFilter,
+    setPage,
+    fetchBookings,
+  } = useLedgerStore();
 
   const monthNames = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December",
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
   ];
+
+  /* Fetch on change */
+  useEffect(() => {
+    fetchBookings();
+  }, [year, month, filter, page]);
 
   return (
     <div>
-        <Navlink/>
-      {/* ------------------ Year + Month Filter ------------------ */}
-      <div className="w-full bg-white border border-[#8888888c] flex justify-between items-center px-6 py-4 mt-2 rounded-[15px]">
-        <div className="flex gap-[10px]">
-          <select className="w-[192px] h-[40px] rounded-[15px] border px-4">
+      <Navlink />
+
+      {/* -------- YEAR + MONTH -------- */}
+      <div className="w-full bg-white border flex justify-between px-6 py-4 mt-2 rounded-[15px]">
+        <div className="flex gap-3">
+          <select
+            value={year}
+            onChange={(e) => {
+              setPage(1);
+              setYear(Number(e.target.value));
+            }}
+            className="w-[192px] h-[40px] rounded-[15px] border px-4"
+          >
             {[2023, 2024, 2025, 2026, 2027].map((y) => (
-              <option key={y}>{y}</option>
+              <option key={y} value={y}>
+                {y}
+              </option>
             ))}
           </select>
 
-          <select className="w-[192px] h-[40px] rounded-[15px] border px-4">
-            {monthNames.map((m, i) => (
-              <option key={i}>{m}</option>
+          <select
+            value={month}
+            onChange={(e) => {
+              setPage(1);
+              setMonth(e.target.value);
+            }}
+            className="w-[192px] h-[40px] rounded-[15px] border px-4"
+          >
+            {monthNames.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
             ))}
           </select>
         </div>
 
-        <h1 className="text-[16px] font-semibold">2024 Dec</h1>
+        <h1 className="font-semibold capitalize">
+          {year} {month}
+        </h1>
       </div>
 
-      {/* ------------------ SUMMARY CARDS ------------------ */}
-      <div className="w-full h-[104px] rounded-[15px] bg-white mt-2 flex cursor-pointer">
+      {/* -------- SUMMARY CARDS (WITH COUNTS) -------- */}
+      <div className="w-full h-[104px] bg-white mt-2 flex rounded-[15px] cursor-pointer">
         <div
-          onClick={() => setActiveTab("total")}
-          className={`py-[24px] px-[37px] font-semibold ${
-            activeTab === "total" ? "text-[#3674B5]" : "text-black"
+          onClick={() => {
+            setPage(1);
+            setFilter("ALL");
+          }}
+          className={`py-6 px-9 font-semibold ${
+            filter === "ALL" ? "text-[#3674B5]" : "text-black"
           }`}
         >
           <p>Total Bookings</p>
-          <p className="text-[24px] text-center">125</p>
+          <p className="text-[24px] text-center">{counts.total}</p>
         </div>
 
         <div
-          onClick={() => setActiveTab("confirmed")}
-          className={`py-[24px] px-[37px] font-semibold ${
-            activeTab === "confirmed" ? "text-[#3674B5]" : "text-black"
+          onClick={() => {
+            setPage(1);
+            setFilter("CONFIRMED");
+          }}
+          className={`py-6 px-9 font-semibold ${
+            filter === "CONFIRMED" ? "text-[#3674B5]" : "text-black"
           }`}
         >
           <p>Confirmed</p>
-          <p className="text-[24px] text-center">125</p>
+          <p className="text-[24px] text-center">{counts.confirmed}</p>
         </div>
 
         <div
-          onClick={() => setActiveTab("cancelled")}
-          className={`py-[24px] px-[37px] font-semibold ${
-            activeTab === "cancelled" ? "text-[#3674B5]" : "text-black"
+          onClick={() => {
+            setPage(1);
+            setFilter("CANCELLED_OR_HOLD");
+          }}
+          className={`py-6 px-9 font-semibold ${
+            filter === "CANCELLED_OR_HOLD" ? "text-[#3674B5]" : "text-black"
           }`}
         >
           <p>Cancelled / Hold</p>
-          <p className="text-[24px] text-center">125</p>
+          <p className="text-[24px] text-center">{counts.cancelledOrHold}</p>
         </div>
       </div>
 
-      {/* ------------------ TABLES ------------------ */}
-
-      {/* ===== TOTAL BOOKINGS TABLE ===== */}
-      {activeTab === "total" && (
-          <table className="w-full border-spacing-y-2 border-separate text-black mt-4">
-            <thead className="bg-[#C0D8F6]">
-              <tr>
-                <th className="text-base rounded-l-2xl p-2">Patient Name</th>
-                <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-                  Status
-                </th>
-                <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-                  Direct
-                </th>
-                <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-                  Referral
-                </th>
-                <th className="text-base border-l-4 rounded-r-2xl border-[#F0F4F9] p-2">
-                  Referred By
-                </th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr className="bg-white cursor-pointer  hover:bg-[#E8F1FD] transition">
-                <td className="p-2 text-center">
-                  ertyu
-                  {/* </Link> */}
-                </td>
-
-                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-                  789
-                </td>
-                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-                  <IoCheckmark />
-                </td>
-                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-                  <IoCheckmark />
-                </td>
-                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-                  789
-                </td>
-              </tr>
-            </tbody>
-          </table>
-      )}
-
-      {/* ===== CONFIRMED TABLE ===== */}
-      {activeTab === "confirmed" && (
-         <table className="w-full border-spacing-y-2 border-separate text-black mt-4">
+      {/* -------- TABLE -------- */}
+      {!loading && (
+        <table className="w-full border-separate border-spacing-y-2 my-4">
           <thead className="bg-[#C0D8F6]">
             <tr>
-              <th className="text-base rounded-l-2xl p-2">Patient Name</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-                Services
-              </th>
-              <th className="text-base border-l-4 rounded-r-2xl border-[#F0F4F9] p-2">
-                Status
+              <th className="rounded-l-2xl p-2">Patient Name</th>
+              <th className="border-l-4 border-[#F0F4F9] p-2">Service</th>
+              <th className="border-l-4 border-[#F0F4F9] p-2">Direct </th>
+
+              <th className="border-l-4 border-[#F0F4F9] p-2">Referral</th>
+              <th className="border-l-4 border-[#F0F4F9] p-2">Status</th>
+
+              <th className="border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
+                Referred By
               </th>
             </tr>
           </thead>
-
           <tbody>
-            <tr className="bg-white cursor-pointer  hover:bg-[#E8F1FD] transition">
-              <td className="p-2 text-center">
-                hfhf
-                {/* </Link> */}
-              </td>
+            {bookings.map((b) => (
+              <tr key={b.id} className="bg-white hover:bg-[#E8F1FD]">
+                <td className="text-center p-2">{b.patientName}</td>
+                <td className="border-l-4  border-[#C0D8F6] text-center p-2">
+                  {b.services}
+                </td>
+                <td className="border-l-4  border-[#C0D8F6] text-center p-2 ps-8">
+                  {b.direct === true ? (
+                    <IoCheckmark className="text-[16px]" />
+                  ) : (
+                    ""
+                  )}
+                </td>
+                <td className="border-l-4  border-[#C0D8F6] text-center p-2 ps-8">
+                  {b.referral === true ? (
+                    <IoCheckmark className="text-[16px]" />
+                  ) : (
+                    ""
+                  )}
+                </td>
+                <td className="border-l-4  border-[#C0D8F6] text-center p-2">
+                  {b.status}
+                </td>
+                <td className="border-l-4  border-[#C0D8F6] text-center p-2">
+                  {b.referredBy === null ? "" : b.referredBy}
+                </td>
+              </tr>
+            ))}
 
-              <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-                23
-              </td>
-
-              <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-                123
-              </td>
-            </tr>
+            {bookings.length === 0 && (
+              <tr>
+                <td colSpan={3} className="text-center py-6 text-gray-500">
+                  No bookings found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}
 
-      {/* ===== CANCELLED BOOKINGS TABLE ===== */}
-      {activeTab === "cancelled" && (
-         <table className="w-full border-spacing-y-2 border-separate text-black mt-4">
-            <thead className="bg-[#C0D8F6]">
-              <tr>
-                <th className="text-base rounded-l-2xl p-2">Patient Name</th>
-                <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-                  Service
-                </th>
-                <th className="text-base border-l-4 rounded-r-2xl border-[#F0F4F9] p-2">
-                  Referral
-                </th>
-              </tr>
-            </thead>
+      {!loading && totalPages > 1 && (
+        <div className="flex justify-between items-center gap-4 mt-2">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="px-4 py-2 rounded-md border disabled:opacity-50 bg-blue-400 text-white"
+          >
+            Prev
+          </button>
 
-            <tbody>
-              <tr className="bg-white cursor-pointer  hover:bg-[#E8F1FD] transition">
-                <td className="p-2 text-center">
-                  ertyu
-                  {/* </Link> */}
-                </td>
+          <span className="font-semibold">
+            Page {page} of {totalPages}
+          </span>
 
-                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-                  345
-                </td>
-
-                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-                  <IoCheckmark />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="px-4 py-2 rounded-md border disabled:opacity-50 bg-blue-400 text-white"
+          >
+            Next
+          </button>
+        </div>
       )}
     </div>
   );
