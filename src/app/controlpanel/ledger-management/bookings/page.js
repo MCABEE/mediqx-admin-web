@@ -48,7 +48,7 @@ export default function Page() {
       <Navlink />
 
       {/* -------- YEAR + MONTH -------- */}
-      <div className="w-full bg-white border flex justify-between px-6 py-4 mt-2 rounded-[15px]">
+      <div className="w-full bg-white border border-[#8888888c]  flex justify-between px-6 py-4 mt-2 rounded-[15px]">
         <div className="flex gap-3">
           <select
             value={year}
@@ -56,7 +56,7 @@ export default function Page() {
               setPage(1);
               setYear(Number(e.target.value));
             }}
-            className="w-[192px] h-[40px] rounded-[15px] border px-4"
+            className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c]  px-4"
           >
             {[2023, 2024, 2025, 2026, 2027].map((y) => (
               <option key={y} value={y}>
@@ -71,7 +71,7 @@ export default function Page() {
               setPage(1);
               setMonth(e.target.value);
             }}
-            className="w-[192px] h-[40px] rounded-[15px] border px-4"
+            className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c]  px-4"
           >
             {monthNames.map((m) => (
               <option key={m} value={m}>
