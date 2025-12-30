@@ -159,3 +159,6 @@ export const updateProduct = async (productId, payload) => {
     );
   }
 };
+
+
+

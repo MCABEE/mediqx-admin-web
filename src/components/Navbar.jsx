@@ -23,7 +23,7 @@ const Navbar = () => {
       <img
         src="/logo.svg"
         alt="Logo"
-        className="pt-[22px] pb-[11px] w-[200px] h-[65px]"
+        className="pt-[18px] pb-[11px] w-[100px] h-[65px]"
       />
 
       <div className="flex gap-4 items-center relative">
