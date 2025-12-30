@@ -31,7 +31,7 @@ const Navlink = () => {
         Add Product
       </Link>
       <Link
-        href="/controlpanel/product-management/add-products"
+        href="/controlpanel/product-management/bookings"
        
          className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
           pathname === "/controlpanel/product-management/bookings" ||

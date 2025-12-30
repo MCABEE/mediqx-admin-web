@@ -400,6 +400,9 @@ function Sidebar() {
     } else if (pathname.includes("/controlpanel/referral-management")) {
       setActive("Referrals Management");
       setOpenSubmenu(null);
+      } else if (pathname.includes("/controlpanel/ledger-management")) {
+      setActive("Ledger Management");
+      setOpenSubmenu(null);
     } else if (
       pathname.includes("/controlpanel/user-access-management")
     ) {
