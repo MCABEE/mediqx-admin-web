@@ -140,9 +140,12 @@
 
 import { create } from "zustand";
 import {
+  fetchPatientBillProducts,
   fetchPatientBills,
+  fetchPatientBillsByService,
   fetchPatientBillServiceDetails,
   fetchPatientBillServices,
+  getPatientBillsByService,
 } from "@/api/patientBillsApi";
 
 const usePatientBillsStore = create((set, get) => ({
@@ -237,6 +240,81 @@ console.log(res);
       set({ loading: false });
     }
   },
+
+
+
+
+
+
+   bills: [],
+  page: 1,
+  totalPages: 1,
+  loading: false,
+
+  year: 2025,
+  month: "December",
+  search: "",
+  summary:"",
+
+  setYear: (year) => set({ year }),
+  setMonth: (month) => set({ month }),
+  setSearch: (search) => set({ search }),
+
+  fetchBillsByService: async (page = 1) => {
+    const { year, month, search } = get();
+
+    set({ loading: true });
+
+    try {
+      const res = await fetchPatientBillsByService({
+        page,
+        limit: 10,
+        year,
+        month,
+        search,
+      });
+console.log(res);
+
+      set({
+        bills: res.data.bills,
+        summary:res.data.summary,
+        page: res.data.page,
+        totalPages: res.data.totalPages,
+      });
+    } catch (err) {
+      console.error("Fetch patient bills by date error:", err);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+
+
+
+
+  products: [],
+  productsLoading: false,
+
+  setStatus: (status) => set({ status }),
+  fetchProducts: async (patientId) => {
+    if (!patientId) return;
+
+    set({ productsLoading: true });
+
+    try {
+      const res = await fetchPatientBillProducts(patientId);
+
+      set({
+        products: res.data.products,
+      });
+    } finally {
+      set({ productsLoading: false });
+    }
+  },
+
+
+
+
 }));
 
 export default usePatientBillsStore;

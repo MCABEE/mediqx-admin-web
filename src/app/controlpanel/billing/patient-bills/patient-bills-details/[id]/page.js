@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import usePatientBillsStore from "@/app/lib/store/patientBillingStore";
+import PatientProductsTable from "@/components/billing/patientBills/PatientProductsTable";
 
 export default function Page() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function Page() {
     "Services Ongoing",
     "To be start",
     "Completed",
-    "Products",
+    "Cancelled",
     "All",
   ];
 
@@ -33,7 +34,7 @@ export default function Page() {
     "Services Ongoing": "ASSIGNED",
     "To be start": "APPROVED",
     Completed: "COMPLETED",
-    Products: "ALL",
+    Cancelled: "CANCELLED",
     All: "ALL",
   };
 
@@ -163,6 +164,10 @@ export default function Page() {
           Next
         </button>
       </div>
+
+
+
+      <PatientProductsTable patientId={patientId} />
     </div>
   );
 }
