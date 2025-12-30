@@ -83,3 +83,79 @@ export const deleteProductAPI = async (productId) => {
     );
   }
 };
+
+export const fetchProductBookings = async ({
+  page = 1,
+  limit = 10,
+}) => {
+  try {
+    const res = await api.get("/admin/products/bookings", {
+      params: {
+        page,
+        limit,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message ||
+        "Failed to fetch product bookings"
+    );
+  }
+};
+
+
+
+
+
+export const fetchProductBookingDetails = async (patientId) => {
+  try {
+    const res = await api.get(
+      "/admin/products/bookings/details",
+      {
+        params: {
+          patientId,
+        },
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message ||
+        "Failed to fetch product booking details"
+    );
+  }
+};
+export const updateProductSalesStatus = async (
+  productCartId,
+  salesStatus
+) => {
+  try {
+    const res = await api.put(
+      `/admin/products/bookings/${productCartId}/sales-status`,
+      { salesStatus }
+    );
+
+    return res.data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message ||
+        "Failed to update sales status"
+    );
+  }
+};
+export const updateProduct = async (productId, payload) => {
+  try {
+    const res = await api.put(
+      `/admin/products/${productId}`,
+      payload
+    );
+    return res.data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message || "Failed to update product"
+    );
+  }
+};
