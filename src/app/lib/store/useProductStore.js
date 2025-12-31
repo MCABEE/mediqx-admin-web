@@ -89,22 +89,48 @@ const useProductStore = create((set, get) => ({
   //     set({ loading: false });
   //   }
   // },
+// deleteProduct: async (productId) => {
+//   set({ loading: true, error: null });
+
+//   try {
+//     const res = await deleteProductAPI(productId);
+//     if (!res.success) throw new Error(res.message);
+
+//     // ✅ IMMEDIATE UI UPDATE (THIS IS THE KEY)
+//     set((state) => ({
+//       products: state.products.filter(
+//         (item) => item.product.id !== productId
+//       ),
+//     }));
+
+//     // ✅ OPTIONAL: refetch to sync pagination
+//     await get().fetchProducts(get().page);
+
+//     return true;
+//   } catch (err) {
+//     set({ error: err.message });
+//     throw err;
+//   } finally {
+//     set({ loading: false });
+//   }
+// },
 deleteProduct: async (productId) => {
   set({ loading: true, error: null });
 
   try {
     const res = await deleteProductAPI(productId);
-    if (!res.success) throw new Error(res.message);
 
-    // ✅ IMMEDIATE UI UPDATE (THIS IS THE KEY)
+    // ✅ correct success check
+    if (res.status !== "success") {
+      throw new Error(res.message || "Failed to delete product");
+    }
+
+    // ✅ update UI immediately
     set((state) => ({
       products: state.products.filter(
         (item) => item.product.id !== productId
       ),
     }));
-
-    // ✅ OPTIONAL: refetch to sync pagination
-    await get().fetchProducts(get().page);
 
     return true;
   } catch (err) {

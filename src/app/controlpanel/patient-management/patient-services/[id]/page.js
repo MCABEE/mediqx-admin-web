@@ -155,22 +155,22 @@ export default function Page() {
                 </Link>
               </div>
             </div>
-            <div className="flex justify-end">
+            {/* <div className="flex justify-end">
               <button
                 onClick={() => setServiceBookingPopup(true)}
                 className="w-[220px] h-[40px] rounded-[15px] text-white bg-[#3674B5] mt-8 flex items-center justify-center cursor-pointer"
               >
                 Create Service Booking
               </button>
-            </div>
+            </div> */}
           </div>
         );
       })}
-      {serviceBookingPopup && (
+      {/* {serviceBookingPopup && (
         <CreateServiceBookingPopup
           onClose={() => setServiceBookingPopup(false)}
         />
-      )}
+      )} */}
     </div>
   );
 }
