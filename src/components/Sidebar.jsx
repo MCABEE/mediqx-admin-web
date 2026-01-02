@@ -403,6 +403,9 @@ function Sidebar() {
       } else if (pathname.includes("/controlpanel/ledger-management")) {
       setActive("Ledger Management");
       setOpenSubmenu(null);
+         } else if (pathname.includes("/controlpanel/rating-and-review")) {
+      setActive("Rating & Review");
+      setOpenSubmenu(null);
     } else if (
       pathname.includes("/controlpanel/user-access-management")
     ) {
