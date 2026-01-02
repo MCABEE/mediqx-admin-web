@@ -14,6 +14,7 @@ import {
   updateBookingLocation,
   getBookingsByPatientId,
   getDutyLogs,
+  createBookingApi,
 } from "@/api/bookingApi";
 
 const useBookingStore = create((set, get) => ({
@@ -250,6 +251,35 @@ const useBookingStore = create((set, get) => ({
       set({ error: err.message, isLoading: false });
     }
   },
+
+
+
+
+
+  loading: false,
+  success: false,
+  error: null,
+  createBooking: async ({ userId, payload }) => {
+    console.log(userId);
+    set({ loading: true, error: null, success: false });
+    try {
+      await createBookingApi({ userId, payload });
+      set({ loading: false, success: true });
+      return { success: true };
+    } catch (err) {
+      set({
+        loading: false,
+        error: err?.response?.data?.message || "Booking failed",
+      });
+      return { success: false };
+    }
+  },
+  resetBookingState: () =>
+    set({
+      loading: false,
+      success: false,
+      error: null,
+    }),
 }));
 
 export default useBookingStore;
