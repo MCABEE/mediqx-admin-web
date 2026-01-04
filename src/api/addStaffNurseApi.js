@@ -44,7 +44,7 @@ export const generateFileUploadUrlAPI = async ({
   fileName,
   contentType,
   type,
-}) => {
+}) => { 
   try {
     const response = await api.post("/files/upload/generate", {
       userId,

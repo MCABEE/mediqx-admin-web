@@ -1,23 +1,83 @@
-import Link from 'next/link'
-import React from 'react'
 
-function PatientBillsByDateTable() {
+"use client";
+
+import Link from "next/link";
+import { useEffect } from "react";
+import usePatientBillsStore from "@/app/lib/store/patientBillingStore";
+import { useRouter } from "next/navigation";
+
+export default function PatientBillsByDateTable() {
+  const {
+    bills,
+    page,
+    totalPages,
+    loading,
+    year,
+    month,
+    setYear,
+    setMonth,
+    fetchBillsByService,
+    summary,
+  } = usePatientBillsStore();
+  console.log(summary);
+const router = useRouter();
+  const years = [2023, 2024, 2025];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  /* Fetch data when year/month/page changes */
+  useEffect(() => {
+    fetchBillsByService(1);
+  }, [year, month]);
+
   return (
-      <div>
-      {/* Filter Section */}
+    <div>
+      {/* FILTER SECTION */}
       <div className="w-full bg-white border border-[#8888888c] text-base text-black flex justify-between items-center px-6 py-4 mt-2 rounded-[15px]">
         <div className="flex gap-[10px]">
-          <select className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4">
-            <option>Year</option>
+          <select
+            value={year}
+            onChange={(e) => setYear(Number(e.target.value))}
+            className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4"
+          >
+            {years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
           </select>
-          <select className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4">
-            <option>Month</option>
+
+          <select
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4"
+          >
+            {months.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
           </select>
         </div>
-        <h1 className="text-black text-[16px] font-semibold">2025, November</h1>
+
+        <h1 className="text-black text-[16px] font-semibold">
+          {year}, {month}
+        </h1>
       </div>
 
-      {/* Table */}
+      {/* TABLE */}
       <table className="w-full border-spacing-y-2 border-separate text-black mt-2">
         <thead className="bg-[#C0D8F6]">
           <tr>
@@ -37,44 +97,140 @@ function PatientBillsByDateTable() {
           </tr>
         </thead>
 
-        <tbody>
-          {/* Example Row */}
-          <tr className="bg-white cursor-pointer hover:bg-[#E8F1FD] transition">
-            <td className="p-2 text-center">
-              <Link
-                href="/controlpanel/billing/staff-payment-details"
-                className="block w-full h-full"
+        {/* <tbody>
+          {loading && (
+            <tr>
+              <td colSpan={5} className="text-center p-4">
+                Loading...
+              </td>
+            </tr>
+          )}
+
+          {!loading && bills.length === 0 && (
+            <tr>
+              <td colSpan={5} className="text-center p-4">
+                No records found
+              </td>
+            </tr>
+          )}
+
+          {!loading &&
+            bills.map((item) => (
+              <tr
+                key={item.serviceTypeId}
+                className="bg-white cursor-pointer hover:bg-[#E8F1FD] transition"
               >
-                George Thomas
-              </Link>
-            </td>
-            <td className="border-l-4 text-center border-[#C0D8F6] p-2">24</td>
-            <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-              35500.00
-            </td>
-            <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-              3500.00
-            </td>
-            <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-              32000.00
-            </td>
-          </tr>
-        </tbody>
+                <td className="p-2 text-center">
+                  <Link
+                    href={`/controlpanel/billing/patient-bills/patient-bill-detailView/${item.serviceTypeId}`}
+                    className="block w-full h-full text-blue-600 hover:underline"
+                  >
+                    {item.patientName}
+                  </Link>
+                </td>
+                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+                  {item.serviceTypeName}
+                </td>
+                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+                  {item.payment}
+                </td>
+                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+                  {item.discount}
+                </td>
+                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+                  {item.netPay}
+                </td>
+              </tr>
+            ))}
+        </tbody> */}
+        
+<tbody>
+  {loading && (
+    <tr>
+      <td colSpan={5} className="text-center p-4">
+        Loading...
+      </td>
+    </tr>
+  )}
+
+  {!loading && bills.length === 0 && (
+    <tr>
+      <td colSpan={5} className="text-center p-4">
+        No records found
+      </td>
+    </tr>
+  )}
+
+  {!loading &&
+    bills.map((item) => (
+      <tr
+        key={item.serviceId}
+        onClick={() =>
+          router.push(
+            `/controlpanel/billing/patient-bills/patient-bill-detailView/${item.serviceId}`
+          )
+        }
+        className="bg-white cursor-pointer hover:bg-[#E8F1FD] transition"
+      >
+        <td className="p-2 text-center  font-medium">
+          {item.patientName}
+        </td>
+        <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+          {item.serviceTypeName}
+        </td>
+        <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+          {item.payment}
+        </td>
+        <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+          {item.discount}
+        </td>
+        <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+          {item.netPay}
+        </td>
+      </tr>
+    ))}
+</tbody>
       </table>
 
-      {/* Pagination */}
+      {/* PAGINATION */}
       <div className="flex justify-between my-4 gap-4">
-        <button className="bg-[#C0D8F6] px-4 py-2 rounded disabled:opacity-50">
+        <button
+          disabled={page === 1}
+          onClick={() => fetchBills(page - 1)}
+          className="bg-[#C0D8F6] px-4 py-2 rounded disabled:opacity-50"
+        >
           Previous
         </button>
-        <span className="text-black font-semibold text-lg">2 / 3</span>
-        <button className="bg-[#C0D8F6] px-4 py-2 rounded disabled:opacity-50">
+
+        <span className="text-black font-semibold text-lg">
+          {page} / {totalPages}
+        </span>
+
+        <button
+          disabled={page === totalPages}
+          onClick={() => fetchBills(page + 1)}
+          className="bg-[#C0D8F6] px-4 py-2 rounded disabled:opacity-50"
+        >
           Next
         </button>
       </div>
 
+      <div className="h-[48px] bg-[#C0D8F6] flex justify-between items-center px-6 rounded-md mt-4 font-semibold">
+        <span>Total Services</span>
+        <span>{summary?.totalServices}</span>
+      </div>
+      <div className="h-[48px] bg-[#C0D8F6] flex justify-between items-center px-6 rounded-md mt-4 font-semibold">
+        <span>Total Payment</span>
+        <span>{summary?.totalPayment}</span>
+      </div>
+      <div className="h-[48px] bg-[#C0D8F6] flex justify-between items-center px-6 rounded-md mt-4 font-semibold">
+        <span>Total Discount</span>
+        <span>{summary?.totalDiscount}</span>
+      </div>
+      <div className="h-[48px] bg-[#C0D8F6] flex justify-between items-center px-6 rounded-md mt-4 font-semibold">
+        <span>Total Net Pay</span>
+        <span>{summary?.totalNetPay}</span>
+      </div>
     </div>
-  )
+  );
 }
-
-export default PatientBillsByDateTable

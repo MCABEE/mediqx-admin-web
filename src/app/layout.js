@@ -30,9 +30,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased px-[20px] xl:px-[80px] 2xl:px-[196px] `}
       >
-        {/* <RouteProtector> */}
+        <RouteProtector>
         {children}
-        {/* </RouteProtector> */}
+        </RouteProtector>
       </body>
     </html>
   );
