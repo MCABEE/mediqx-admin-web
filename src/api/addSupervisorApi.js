@@ -92,3 +92,47 @@ export const updateSupervisorPageTwo = async (id, payload) => {
     throw new Error(message);
   }
 };
+
+
+
+/**
+ * Get supervisor billing services
+ */
+export const getSupervisorBilling = async ({
+  supervisorId,
+  year,
+  month,
+  page = 1,
+  limit = 10,
+}) => {
+  const response = await api.get(`/admin/supervisor/supervisors/billing`, {
+    params: {
+      supervisorId,
+      year,
+      month,
+      page,
+      limit,
+    },
+    headers: {
+      accept: "application/json",
+    },
+  });
+
+  return response.data.data;
+};
+
+/**
+ * Get supervisor service details by serviceId
+ */
+export const getSupervisorServiceDetails = async (serviceId) => {
+  const response = await api.get(
+    `/admin/supervisor/supervisors/services/${serviceId}`,
+    {
+      headers: {
+        accept: "application/json",
+      },
+    }
+  );
+
+  return response.data.data;
+};

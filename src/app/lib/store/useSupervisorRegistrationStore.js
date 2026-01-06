@@ -2,6 +2,8 @@ import { create } from "zustand";
 import {
   fetchSupervisorDetails,
   fetchSupervisors,
+  getSupervisorBilling,
+  getSupervisorServiceDetails,
   registerSupervisor,
   submitSupervisorPageTwo,
   updateSupervisorPageOne,
@@ -230,6 +232,95 @@ const useSupervisorRegistrationStore = create((set, get) => ({
     }
   },
 
+
+
+    supervisorName: "",
+  services: [],
+  page: 1,
+  limit: 10,
+  totalServices: 0,
+  totalPages: 1,
+  loading: false,
+  error: null,
+
+  fetchSupervisorBilling: async ({
+    supervisorId,
+    year,
+    month,
+    page = 1,
+    limit = 10,
+  }) => {
+    set({ loading: true, error: null });
+
+    try {
+      const data = await getSupervisorBilling({
+        supervisorId,
+        year,
+        month,
+        page,
+        limit,
+      });
+
+      set({
+        supervisorName: data?.supervisorName || "",
+        services: data?.services || [],
+        totalServices: data?.totalServices || 0,
+        page: data?.page || page,
+        limit: data?.limit || limit,
+        totalPages: data?.totalPages || 1,
+        loading: false,
+      });
+    } catch (err) {
+      set({
+        error: err?.message || "Failed to fetch supervisor billing",
+        loading: false,
+      });
+    }
+  },
+
+  resetSupervisorBilling: () =>
+    set({
+      supervisorName: "",
+      services: [],
+      page: 1,
+      limit: 10,
+      totalServices: 0,
+      totalPages: 1,
+      loading: false,
+      error: null,
+    }),
+
+serviceDetails: null,
+  productDetails: [],
+  loading: false,
+  error: null,
+
+  fetchSupervisorServiceDetails: async (serviceId) => {
+    set({ loading: true, error: null });
+
+    try {
+      const data = await getSupervisorServiceDetails(serviceId);
+
+      set({
+        serviceDetails: data?.serviceDetails || null,
+        productDetails: data?.productDetails || [],
+        loading: false,
+      });
+    } catch (err) {
+      set({
+        error: err?.message || "Failed to fetch service details",
+        loading: false,
+      });
+    }
+  },
+
+  resetSupervisorServiceDetails: () =>
+    set({
+      serviceDetails: null,
+      productDetails: [],
+      loading: false,
+      error: null,
+    }),
   setPage: (page) => set({ page }),
   setSearch: (search) => set({ search }),
   setFilter: (filter) => set({ filter }),

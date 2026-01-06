@@ -166,12 +166,12 @@ function ApprovalSupervisorTable() {
       {/* Total Count + Filters */}
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-4 pb-4 px-6 text-black font-semibold text-[32px] flex justify-between items-center">
         <p>{total}</p>
-        <button
+        {/* <button
           onClick={clearFilters}
           className="bg-[#C0D8F6] px-4 py-2 rounded-md text-sm font-medium hover:bg-[#aac4ec]"
         >
           Clear Filters
-        </button>
+        </button> */}
       </div>
 
       {/* Table */}
@@ -189,7 +189,7 @@ function ApprovalSupervisorTable() {
             </tr>
 
             {/* Filter Row */}
-            <tr className="bg-white">
+            {/* <tr className="bg-white">
               <td></td>
 
               <td className="p-2 border-l-4 border-[#F0F4F9]">
@@ -229,7 +229,7 @@ function ApprovalSupervisorTable() {
                   className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm"
                 />
               </td>
-            </tr>
+            </tr> */}
           </thead>
 
           <tbody>
