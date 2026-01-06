@@ -181,14 +181,6 @@
 
 // export default Sidebar;
 
-
-
-
-
-
-
-
-
 // "use client";
 
 // import React, { useState, useEffect, useMemo } from "react";
@@ -328,13 +320,6 @@
 
 // export default Sidebar;
 
-
-
-
-
-
-
-
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -371,9 +356,7 @@ function Sidebar() {
     if (pathname === "/controlpanel/staffManagement") {
       setActive("Healthcare Staff");
       setOpenSubmenu("Staff Management (HR)");
-    } else if (
-      pathname.includes("/controlpanel/staffManagement/supervisor")
-    ) {
+    } else if (pathname.includes("/controlpanel/staffManagement/supervisor")) {
       setActive("Supervisors");
       setOpenSubmenu("Staff Management (HR)");
     } else if (pathname.includes("/controlpanel/agentManagement")) {
@@ -400,59 +383,42 @@ function Sidebar() {
     } else if (pathname.includes("/controlpanel/referral-management")) {
       setActive("Referrals Management");
       setOpenSubmenu(null);
-      } else if (pathname.includes("/controlpanel/ledger-management")) {
+    } else if (pathname.includes("/controlpanel/ledger-management")) {
       setActive("Ledger Management");
       setOpenSubmenu(null);
-         } else if (pathname.includes("/controlpanel/rating-and-review")) {
+    } else if (pathname.includes("/controlpanel/ambulances")) {
+      setActive("Ambulances");
+      setOpenSubmenu(null);
+    } else if (pathname.includes("/controlpanel/rating-and-review")) {
       setActive("Rating & Review");
       setOpenSubmenu(null);
-    } else if (
-      pathname.includes("/controlpanel/user-access-management")
-    ) {
+    } else if (pathname.includes("/controlpanel/user-access-management")) {
       setActive("User Access Management");
       setOpenSubmenu(null);
-    }
+    } else if (pathname.includes("/controlpanel/billing/payment-structure")) {
 
     /* ---------- Billing ---------- */
-    else if (
-      pathname.includes("/controlpanel/billing/payment-structure")
-    ) {
       setActive("Payment Structure");
       setOpenSubmenu("Billing");
     } else if (
       pathname.includes("/controlpanel/billing/staff-payments") ||
-      pathname.includes(
-        "/controlpanel/billing/staff-payment-details"
-      )
+      pathname.includes("/controlpanel/billing/staff-payment-details")
     ) {
       setActive("Staff Payments");
       setOpenSubmenu("Billing");
-    } else if (
-      pathname.includes("/controlpanel/billing/patient-bills")
-    ) {
+    } else if (pathname.includes("/controlpanel/billing/patient-bills")) {
       setActive("Patient Bills");
       setOpenSubmenu("Billing");
-    }
+    } else if (pathname.includes("/controlpanel/data-manager/general-data")) {
 
     /* ---------- Data Manager ---------- */
-    else if (
-      pathname.includes(
-        "/controlpanel/data-manager/general-data"
-      )
-    ) {
       setActive("General Data");
       setOpenSubmenu("Data Manager");
-    } else if (
-      pathname.includes(
-        "/controlpanel/data-manager/patient-data"
-      )
-    ) {
+    } else if (pathname.includes("/controlpanel/data-manager/patient-data")) {
       setActive("Patient Data");
       setOpenSubmenu("Data Manager");
     } else if (
-      pathname.includes(
-        "/controlpanel/data-manager/professionals-data"
-      )
+      pathname.includes("/controlpanel/data-manager/professionals-data")
     ) {
       setActive("Professionals Data");
       setOpenSubmenu("Data Manager");
@@ -462,9 +428,7 @@ function Sidebar() {
   /* ===================== HANDLERS ===================== */
   const handleMenuClick = (item) => {
     if (item.hasSubmenu) {
-      setOpenSubmenu(
-        openSubmenu === item.name ? null : item.name
-      );
+      setOpenSubmenu(openSubmenu === item.name ? null : item.name);
     } else {
       setActive(item.name);
       item.link && router.push(item.link);
@@ -487,9 +451,7 @@ function Sidebar() {
               onClick={() => handleMenuClick(item)}
               className={`rounded-lg flex items-center justify-between mt-5 cursor-pointer ${
                 active === item.name ||
-                item.submenu?.some(
-                  (sub) => sub.name === active
-                )
+                item.submenu?.some((sub) => sub.name === active)
                   ? "text-[#3674B5] font-semibold bg-[#F0F4F9] p-2"
                   : "text-black"
               }`}
@@ -499,36 +461,33 @@ function Sidebar() {
               {item.hasSubmenu && (
                 <IoIosArrowDown
                   className={`transition-transform duration-300 ${
-                    openSubmenu === item.name
-                      ? "rotate-180"
-                      : ""
+                    openSubmenu === item.name ? "rotate-180" : ""
                   }`}
                 />
               )}
             </div>
 
             {/* Submenu */}
-            {item.hasSubmenu &&
-              openSubmenu === item.name && (
-                <div className="ml-6 mt-2">
-                  {item.submenu.map((sub) => (
-                    <div
-                      key={sub.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSubmenuClick(sub);
-                      }}
-                      className={`p-2 rounded-lg cursor-pointer ${
-                        active === sub.name
-                          ? "bg-[#E6ECF5] text-[#3674B5]"
-                          : "text-gray-600 hover:bg-[#F7F9FC]"
-                      }`}
-                    >
-                      {sub.name}
-                    </div>
-                  ))}
-                </div>
-              )}
+            {item.hasSubmenu && openSubmenu === item.name && (
+              <div className="ml-6 mt-2">
+                {item.submenu.map((sub) => (
+                  <div
+                    key={sub.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSubmenuClick(sub);
+                    }}
+                    className={`p-2 rounded-lg cursor-pointer ${
+                      active === sub.name
+                        ? "bg-[#E6ECF5] text-[#3674B5]"
+                        : "text-gray-600 hover:bg-[#F7F9FC]"
+                    }`}
+                  >
+                    {sub.name}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
