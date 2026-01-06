@@ -306,4 +306,11 @@ export const menus = [
     hasSubmenu: false,
     permission: "USER_ACCESS_MANAGEMENT",
   },
+  {
+    id: 14,
+    name: "Ambulances",
+    link: "/controlpanel/ambulances/new-listing",
+    hasSubmenu: false,
+    permission: "RATING_REVIEW",
+  },
 ];
