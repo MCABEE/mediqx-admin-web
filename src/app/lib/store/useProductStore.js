@@ -29,30 +29,58 @@ const useProductStore = create((set, get) => ({
   },
 
   /* ---------------- FETCH PRODUCTS ---------------- */
-  fetchProducts: async (page = 1) => {
-    set({ loading: true, error: null });
+  // fetchProducts: async (page = 1) => {
+  //   set({ loading: true, error: null });
 
-    try {
-      const res = await fetchProductsAPI({
-        page,
-        limit: get().limit,
-      });
+  //   try {
+  //     const res = await fetchProductsAPI({
+  //       page,
+  //       limit: get().limit,
+  //     });
 
-      if (!res.success) throw new Error(res.message);
+  //     if (!res.success) throw new Error(res.message);
 
-      set({
-        products: res.data,
-        page: res.page,
-        limit: res.limit,
-        total: res.total,
-        totalPages: res.totalPages,
-      });
-    } catch (err) {
-      set({ error: err.message });
-    } finally {
-      set({ loading: false });
-    }
-  },
+  //     set({
+  //       products: res.data,
+  //       page: res.page,
+  //       limit: res.limit,
+  //       total: res.total,
+  //       totalPages: res.totalPages,
+  //     });
+  //   } catch (err) {
+  //     set({ error: err.message });
+  //   } finally {
+  //     set({ loading: false });
+  //   }
+  // },
+
+
+
+  fetchProducts: async (page = 1, search = "") => {
+  set({ loading: true, error: null });
+
+  try {
+    const res = await fetchProductsAPI({
+      page,
+      limit: get().limit,
+      search,
+    });
+
+    if (!res.success) throw new Error(res.message);
+
+    set({
+      products: res.data,
+      page: res.page,
+      limit: res.limit,
+      total: res.total,
+      totalPages: res.totalPages,
+    });
+  } catch (err) {
+    set({ error: err.message });
+  } finally {
+    set({ loading: false });
+  }
+},
 
   /* ---------------- CREATE PRODUCT ---------------- */
   addProduct: async (payload) => {
