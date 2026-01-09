@@ -139,7 +139,7 @@ export const fetchProductBookingDetails = async (patientId) => {
       "/admin/products/bookings/details",
       {
         params: {
-          patientId,
+          productCartId:patientId,
         },
       }
     );

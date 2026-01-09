@@ -15,6 +15,7 @@ import {
   getBookingsByPatientId,
   getDutyLogs,
   createBookingApi,
+  fetchBillingByServiceIdAPI,
 } from "@/api/bookingApi";
 
 const useBookingStore = create((set, get) => ({
@@ -277,9 +278,47 @@ const useBookingStore = create((set, get) => ({
   resetBookingState: () =>
     set({
       loading: false,
-      success: false,
+      success: false, 
       error: null,
     }),
+
+
+
+
+
+
+ billingDetails: null,
+  isLoading: false,
+  error: null,
+
+  fetchBillingByServiceId: async (serviceId) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const res = await fetchBillingByServiceIdAPI(serviceId);
+
+      // If null → no billing exists yet
+      set({
+        billingDetails: res?.data || null,
+        isLoading: false,
+      });
+
+      return res?.data || null;
+    } catch (err) {
+      set({
+        error:
+          err?.response?.data?.message ||
+          "Failed to fetch billing details",
+        isLoading: false,
+      });
+      throw err;
+    }
+  },
+
+  clearBilling: () => set({ billingDetails: null }),
+
+
+
 }));
 
 export default useBookingStore;
