@@ -163,6 +163,7 @@ export const getAssignableNurses = async ({
   page = 1,
   limit = 10,
   role,
+  grade,
   gender,
   languages,
   date,
@@ -182,6 +183,7 @@ export const getAssignableNurses = async ({
         page,
         limit,
         role,
+        grade,
         gender,
         languages, // pass array or string as is
         date,

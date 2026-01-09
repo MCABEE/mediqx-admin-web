@@ -193,3 +193,21 @@ export const createBookingApi = async ({ userId, payload }) => {
   );
   return response.data;
 };
+
+
+
+
+export const fetchBillingByServiceIdAPI = async (serviceId) => {
+  try {
+    const res = await api.get(
+      `/admin/billing/patient-bills/service/${serviceId}`
+    );
+    return res.data;
+  } catch (err) {
+   
+    if (err?.response?.status === 404) {
+      return null;
+    }
+    throw err;
+  }
+};
