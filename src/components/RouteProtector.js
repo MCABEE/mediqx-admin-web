@@ -1,44 +1,75 @@
+// "use client";
+
+// import { useEffect } from "react";
+// import { useRouter, usePathname } from "next/navigation";
+// import { useAuthStore } from "@/app/lib/store/authStore";
+
+// export default function RouteProtector({ children }) {
+//   const router = useRouter();
+//   const pathname = usePathname();
+
+//   const { accessToken, } = useAuthStore();
+
+//   useEffect(() => {
+//     // If no token → redirect to login
+//     if (!accessToken ) {
+//       if (pathname !== "/") {
+//         router.replace("/");
+//       }
+//         router.replace("/");
+
+//       return;
+//     }
+
+//     // // If token exists and user visits login page → go to dashboard
+//     // if (accessToken) {
+//     //   router.replace("/controlpanel/dashboard");
+//     // }
+//   }, [accessToken, router]);
+
+//   return <>{children}</>;
+// }
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import api from "@/api/axiosInstance";
+import { useRouter, usePathname } from "next/navigation";
+import { useAuthStore } from "@/app/lib/store/authStore";
 
-const isValidJWT = (token) => {
-  if (!token || typeof token !== "string") return false;
-  const parts = token.split(".");
-  return parts.length === 3;
-};
-
-const RouteProtector = ({ children }) => {
+export default function RouteProtector({ children }) {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const { accessToken, hydrated } = useAuthStore();
+
+  // Always call hooks first — NO conditional returns above this.
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+    if (!hydrated) return; // Wait for store to hydrate
 
-    if (!token || token.trim() === "" || !isValidJWT(token)) {
-      localStorage.clear();
-      router.push("/");
+    if (!accessToken) {
+      if (pathname !== "/") router.replace("/");
       return;
     }
 
-    const interceptor = api.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response?.status === 401) {
-          localStorage.clear();
-          router.push("/");
-        }
-        return Promise.reject(error);
-      }
-    );
+    if (pathname === "/") {
+      router.replace("/controlpanel/dashboard");
+    }
+  }, [hydrated, accessToken, pathname]);
 
-    return () => {
-      api.interceptors.response.eject(interceptor);
-    };
-  }, [router]);
+  // Safe to conditionally render UI AFTER hooks
+  if (!hydrated) {
+    return null; // can show a loader too
+  }
 
   return <>{children}</>;
-};
-
-export default RouteProtector;
+}

@@ -14,6 +14,8 @@ import {
   updateBookingLocation,
   getBookingsByPatientId,
   getDutyLogs,
+  createBookingApi,
+  fetchBillingByServiceIdAPI,
 } from "@/api/bookingApi";
 
 const useBookingStore = create((set, get) => ({
@@ -250,6 +252,73 @@ const useBookingStore = create((set, get) => ({
       set({ error: err.message, isLoading: false });
     }
   },
+
+
+
+
+
+  loading: false,
+  success: false,
+  error: null,
+  createBooking: async ({ userId, payload }) => {
+    console.log(userId);
+    set({ loading: true, error: null, success: false });
+    try {
+      await createBookingApi({ userId, payload });
+      set({ loading: false, success: true });
+      return { success: true };
+    } catch (err) {
+      set({
+        loading: false,
+        error: err?.response?.data?.message || "Booking failed",
+      });
+      return { success: false };
+    }
+  },
+  resetBookingState: () =>
+    set({
+      loading: false,
+      success: false, 
+      error: null,
+    }),
+
+
+
+
+
+
+ billingDetails: null,
+  isLoading: false,
+  error: null,
+
+  fetchBillingByServiceId: async (serviceId) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const res = await fetchBillingByServiceIdAPI(serviceId);
+
+      // If null → no billing exists yet
+      set({
+        billingDetails: res?.data || null,
+        isLoading: false,
+      });
+
+      return res?.data || null;
+    } catch (err) {
+      set({
+        error:
+          err?.response?.data?.message ||
+          "Failed to fetch billing details",
+        isLoading: false,
+      });
+      throw err;
+    }
+  },
+
+  clearBilling: () => set({ billingDetails: null }),
+
+
+
 }));
 
 export default useBookingStore;

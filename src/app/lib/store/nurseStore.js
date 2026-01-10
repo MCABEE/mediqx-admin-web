@@ -13,6 +13,7 @@ import {
   getNurseProfileById,
   getNurseQualificationById,
   getNurseLanguagesById,
+  updateNurseGrading,
 } from "@/api/nurseApi";
 
 const useNurseStore = create(
@@ -267,6 +268,20 @@ const useNurseStore = create(
           });
         } catch (error) {
           set({ error: error.message });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      updateNurseGrading: async (userId, grading) => {
+        set({ isLoading: true, error: null });
+        try {
+          const result = await updateNurseGrading(userId, grading);
+          console.log("Grading updated:", result);
+          return result;
+        } catch (error) {
+          set({ error: error.message });
+          throw new Error(error.message);
         } finally {
           set({ isLoading: false });
         }

@@ -176,3 +176,38 @@ export const getDutyLogs = async (serviceId, page = 1, limit = 10) => {
   );
   return response.data.data;
 };
+
+
+
+export const createBookingApi = async ({ userId, payload }) => {
+  const response = await api.post(
+    "/admin/bookings/create",
+    payload,
+    {
+      params: { userId }, // :white_tick: REQUIRED BY BACKEND
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+
+
+
+export const fetchBillingByServiceIdAPI = async (serviceId) => {
+  try {
+    const res = await api.get(
+      `/admin/billing/patient-bills/service/${serviceId}`
+    );
+    return res.data;
+  } catch (err) {
+   
+    if (err?.response?.status === 404) {
+      return null;
+    }
+    throw err;
+  }
+};

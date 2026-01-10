@@ -163,6 +163,7 @@ export const getAssignableNurses = async ({
   page = 1,
   limit = 10,
   role,
+  grade,
   gender,
   languages,
   date,
@@ -182,6 +183,7 @@ export const getAssignableNurses = async ({
         page,
         limit,
         role,
+        grade,
         gender,
         languages, // pass array or string as is
         date,
@@ -245,6 +247,27 @@ export const getNurseLanguagesById = async (userId) => {
   } catch (error) {
     const message =
       error.response?.data?.message || "Failed to fetch nurse languages.";
+    throw new Error(message);
+  }
+};
+
+
+export const updateNurseGrading = async (nurseId, grading) => {
+  try {
+    const response = await api.put(
+      `/admin/nurses/update-grading/${nurseId}`,
+      { grading },
+      {
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Failed to update grading.";
     throw new Error(message);
   }
 };
