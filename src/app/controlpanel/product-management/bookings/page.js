@@ -31,13 +31,13 @@ function Page() {
           <tr>
             <th className="text-base rounded-l-2xl p-2">No</th>
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-              Patient Name
+              Patient / Customer Name
             </th>
             <th className="text-base border-l-4 border-[#F0F4F9] p-2">
               Products
             </th>
             <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
-              Supervisor Name
+              Source
             </th>
           </tr>
         </thead>
@@ -71,7 +71,7 @@ function Page() {
                 key={item.id}
                 onClick={() =>
                   router.push(
-                    `/controlpanel/product-management/booking-details/${item.patientId}`
+                    `/controlpanel/product-management/booking-details/${item.productCartId}`
                   )
                 }
                 className="bg-white hover:bg-[#E8F1FD] transition cursor-pointer"
@@ -83,10 +83,10 @@ function Page() {
                   {item.patientName}
                 </td>
                 <td className="p-2 border-l-4 text-center border-[#C0D8F6]">
-                  {item.products}
+                  {item.productName}
                 </td>
                 <td className="p-2 border-l-4 text-center border-[#C0D8F6]">
-                  {item.supervisorName || "-"}
+                  {item.sourceType || "-"}
                 </td>
               </tr>
             ))}

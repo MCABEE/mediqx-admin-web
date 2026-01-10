@@ -47,10 +47,35 @@ export const confirmFileUploadAPI = async (fileId, type) => {
 
 
 
-export const fetchProductsAPI = async ({ page, limit }) => {
+// export const fetchProductsAPI = async ({ page, limit }) => {
+//   try {
+//     const res = await api.get(
+//       `/admin/products?page=${page}&limit=${limit}`
+//     );
+
+//     return {
+//       success: true,
+//       data: res.data.data.products,
+//       total: res.data.data.total,
+//       page: res.data.data.page,
+//       limit: res.data.data.limit,
+//       totalPages: res.data.data.totalPages,
+//     };
+//   } catch (err) {
+//     return {
+//       success: false,
+//       message:
+//         err.response?.data?.message || "Failed to fetch products",
+//     };
+//   }
+// };
+
+
+
+export const fetchProductsAPI = async ({ page, limit, search }) => {
   try {
     const res = await api.get(
-      `/admin/products?page=${page}&limit=${limit}`
+      `/admin/products?page=${page}&limit=${limit}&search=${search || ""}`
     );
 
     return {
@@ -69,7 +94,6 @@ export const fetchProductsAPI = async ({ page, limit }) => {
     };
   }
 };
-
 
 
 
@@ -115,7 +139,7 @@ export const fetchProductBookingDetails = async (patientId) => {
       "/admin/products/bookings/details",
       {
         params: {
-          patientId,
+          productCartId:patientId,
         },
       }
     );

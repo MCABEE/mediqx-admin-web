@@ -225,6 +225,8 @@ const AssignStaffPage = () => {
   const latitude = searchParams.get("latitude");
   const longitude = searchParams.get("longitude");
   const role = searchParams.get("role");
+  const grade = searchParams.get("grade");
+
   const durationValue = searchParams.get("durationValue");
   const durationType = searchParams.get("durationType");
   const scheduleType = searchParams.get("scheduleType");
@@ -271,6 +273,7 @@ const AssignStaffPage = () => {
       page: currentPage,
       limit: 50,
       role,
+      grade,
       gender,
       date: from,
       radius,
@@ -304,6 +307,7 @@ const AssignStaffPage = () => {
     currentPage,
     radius,
     role,
+    grade,
     gender,
     durationType,
     durationValue,
