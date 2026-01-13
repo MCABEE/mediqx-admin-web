@@ -76,13 +76,13 @@
 //                   {product.productName}
 //                 </p>
 //                 {/* ACTIONS */}
-//                 <div className="flex justify-end gap-2 pe-4">
-//                   {/* <button
-//                   onClick={() => setEditItem(item)}
-//                   className="w-[96px] h-[40px] bg-[#3674B5] text-white rounded-[15px]"
-//                 >
-//                   Edit
-//                 </button> */}
+                // <div className="flex justify-end gap-2 pe-4">
+                //   {/* <button
+                //   onClick={() => setEditItem(item)}
+                //   className="w-[96px] h-[40px] bg-[#3674B5] text-white rounded-[15px]"
+                // >
+                //   Edit
+                // </button> */}
 
 //                   <button
 //                     onClick={() => setDeleteId(product.id)}
@@ -230,6 +230,7 @@ import React, { useEffect, useState } from "react";
 import useProductStore from "@/app/lib/store/useProductStore";
 import DeleteConfirmPopup from "@/components/productManagement/DeleteConfirmPopup";
 import { MdDelete } from "react-icons/md";
+import { MdModeEditOutline } from "react-icons/md";
 import EditProductPopup from "@/components/productManagement/EditProductPopup";
 
 export default function Page() {
@@ -309,12 +310,22 @@ export default function Page() {
 
                 {/* ACTIONS */}
                 <div className="flex justify-end gap-2 pe-4">
+
+                     <button
+                  onClick={() => setEditItem(item)}
+                  className="text-xl text-[#3674B5] rounded-[15px]  hover:scale-110 cursor-pointer"
+                >
+                  <MdModeEditOutline/>
+                </button>
                   <button
                     onClick={() => setDeleteId(product.id)}
                     className="text-xl text-[#ff0000a9] rounded-[15px] hover:scale-110 cursor-pointer"
                   >
                     <MdDelete />
                   </button>
+
+                  
+               
                 </div>
               </div>
 
@@ -410,19 +421,62 @@ export default function Page() {
 
       {/* EDIT POPUP */}
       {editItem && (
-        <EditProductPopup
-          product={editItem.product}
-          loading={editingId === editItem.product.id}
-          onCancel={() => setEditItem(null)}
-          onSave={async (payload) => {
-            await updateProduct(editItem.product.id, {
-              ...payload,
-              healthStatusIds: editItem.healthStatuses.map((h) => h.id),
-              diagnosisIds: editItem.diagnoses.map((d) => d.id),
-            });
-            setEditItem(null);
-          }}
-        />
+        // <EditProductPopup
+        //   product={editItem.product}
+        //   loading={editingId === editItem.product.id}
+        //   onCancel={() => setEditItem(null)}
+        //   onSave={async (payload) => {
+        //     await updateProduct(editItem.product.id, {
+        //       ...payload,
+        //       healthStatusIds: editItem.healthStatuses.map((h) => h.id),
+        //       diagnosisIds: editItem.diagnoses.map((d) => d.id),
+        //     });
+        //     setEditItem(null);
+        //   }}
+        // />
+
+//         <EditProductPopup
+//   product={editItem.product}
+//   loading={editingId === editItem.product.id}
+
+//   selectedHealthStatusIds={editItem.healthStatuses.map(h => h.id)}
+//   selectedDiagnosisIds={editItem.diagnoses.map(d => d.id)}
+
+//   onCancel={() => setEditItem(null)}
+//   onSave={async (payload) => {
+//     await updateProduct(editItem.product.id, {
+//       ...payload,
+//       healthStatusIds: payload.healthStatusIds,
+//       diagnosisIds: payload.diagnosisIds,
+//     });
+//     setEditItem(null);
+//   }}
+// />
+
+<EditProductPopup
+  product={editItem.product}
+  loading={editingId === editItem.product.id}
+
+  selectedHealthStatusIds={editItem.healthStatuses.map(h => h.id)}
+  selectedDiagnosisIds={editItem.diagnoses.map(d => d.id)}
+
+  onCancel={() => setEditItem(null)}
+  onSave={async (payload) => {
+    await updateProduct(editItem.product.id, {
+      ...payload,
+      healthStatusIds: payload.healthStatusIds,
+      diagnosisIds: payload.diagnosisIds,
+    });
+
+    // ✅ REFRESH LIST WITH CURRENT PAGE
+    await fetchProducts(page, search);
+
+    // ✅ CLOSE POPUP
+    setEditItem(null);
+  }}
+/>
+
+
       )}
     </div>
   );

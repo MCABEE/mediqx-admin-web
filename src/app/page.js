@@ -189,13 +189,13 @@ export default function Home() {
       // ✅ only send identifier + password
       const data = await login(identifier, password);
 
-      const { accessToken, userId, permissions } = data.data;
+      const { accessToken, userId, permissions,username,isMainAdmin } = data.data;
 
       if (!accessToken || !userId) {
         throw new Error("Invalid login response");
       }
 
-      loginToStore(accessToken, userId, permissions);
+      loginToStore(accessToken, userId, permissions,username,isMainAdmin );
       router.push("/controlpanel/dashboard");
     } catch (err) {
       setErrorMessage(err.message);
