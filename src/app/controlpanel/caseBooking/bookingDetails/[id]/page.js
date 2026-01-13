@@ -157,17 +157,15 @@ const BookingDetailsPage = () => {
             </span>
             <span>{booking.fullAddress} </span>
           </div> */}
-<div className="grid grid-cols-[250px_1fr]">
-  <span className="font-medium">
-    Residential Address
-    <br />
-    (Billing Address)
-  </span>
+          <div className="grid grid-cols-[250px_1fr]">
+            <span className="font-medium">
+              Residential Address
+              <br />
+              (Billing Address)
+            </span>
 
-  <span className="break-words">
-    {booking.fullAddress}
-  </span>
-</div>
+            <span className="break-words">{booking.fullAddress}</span>
+          </div>
 
           <div className="flex">
             <span className="w-[250px] font-medium">Contact person</span>
