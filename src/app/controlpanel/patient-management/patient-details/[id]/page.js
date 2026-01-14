@@ -101,15 +101,27 @@ const BookingDetailsPage = () => {
             <span className="w-[250px] font-medium">Now Patient stayed at</span>
             <span>{booking.stayAt}</span>
           </div>
-         <div className="flex">
+         {/* <div className="flex">
             <span className="w-[250px] font-medium">
               Residential Address
-              <br />
+              <br /> 
               (Billing Address)
             </span>
             <span>{booking.fullAddress} </span>
-          </div>
+          </div> */}
          
+         <div className="flex items-start ">
+  <span className="min-w-[250px] font-medium shrink-0">
+    Residential Address
+    <br />
+    (Billing Address)
+  </span>
+
+  <span className="flex-1 break-words">
+    {booking.fullAddress}
+  </span>
+</div>
+
           <div className="flex">
             <span className="w-[250px] font-medium">Contact person</span>
             <span>{booking.contactPersonName}</span>

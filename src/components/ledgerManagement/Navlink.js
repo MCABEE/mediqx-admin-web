@@ -29,7 +29,7 @@ const Navlink = () => {
         >
         Billings
       </Link>
-      <Link
+      {/* <Link
         href="/controlpanel/ledger-management/medical-notes"
        
          className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
@@ -41,7 +41,7 @@ const Navlink = () => {
 
       >
        Medical Notes
-      </Link>
+      </Link> */}
        <Link
         href="/controlpanel/ledger-management/staff-payments"
        
