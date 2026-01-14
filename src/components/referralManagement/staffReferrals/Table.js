@@ -225,13 +225,18 @@ const Table = () => {
   }, [page, status, referredBy, specialization, search, fetchAgentStaffReferrals]);
 
   // Group referrals by date
-  const groupedReferrals =
-    referralsStaff?.reduce((acc, ref) => {
-      const date = new Date(ref.createdAt).toLocaleDateString("en-GB");
-      if (!acc[date]) acc[date] = [];
-      acc[date].push(ref);
-      return acc;
-    }, {}) || {};
+const groupedReferrals =
+  referralsStaff?.reduce((acc, ref) => {
+    // use ISO date (YYYY-MM-DD) as key
+    const dateKey = new Date(ref.createdAt)
+      .toISOString()
+      .split("T")[0];
+
+    if (!acc[dateKey]) acc[dateKey] = [];
+    acc[dateKey].push(ref);
+
+    return acc;
+  }, {}) || {};
 
   return (
     <div>
