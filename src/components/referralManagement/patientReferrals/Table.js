@@ -227,13 +227,18 @@ const PatientReferralTable = () => {
   }, [page, status, referredBy, serviceType, search, fetchAgentPatientReferrals]);
 
   // ✅ Group by created date
-  const groupedReferrals =
-    referralsPatient?.reduce((acc, ref) => {
-      const date = new Date(ref.createdAt).toLocaleDateString("en-GB");
-      if (!acc[date]) acc[date] = [];
-      acc[date].push(ref);
-      return acc;
-    }, {}) || {};
+const groupedReferrals =
+  referralsPatient?.reduce((acc, ref) => {
+    const dateKey = new Date(ref.createdAt)
+      .toISOString()
+      .split("T")[0]; // YYYY-MM-DD
+
+    if (!acc[dateKey]) acc[dateKey] = [];
+    acc[dateKey].push(ref);
+
+    return acc;
+  }, {}) || {};
+
 
   return (
     <div>
