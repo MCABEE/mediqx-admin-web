@@ -71,7 +71,7 @@ function StaffPaymentsTable() {
             onChange={(e) => setYear(Number(e.target.value))}
             className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4"
           >
-            {Array.from({ length: 5 }).map((_, i) => (
+            {Array.from({ length: 13 }).map((_, i) => (
               <option key={i} value={2023 + i}>
                 {2023 + i}
               </option>
