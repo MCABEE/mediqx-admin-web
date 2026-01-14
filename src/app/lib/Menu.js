@@ -311,6 +311,6 @@ export const menus = [
     name: "Ambulances",
     link: "/controlpanel/ambulances/new-listing",
     hasSubmenu: false,
-    permission: "RATING_REVIEW",
+    permission: "AMBULANCE",
   },
 ];
