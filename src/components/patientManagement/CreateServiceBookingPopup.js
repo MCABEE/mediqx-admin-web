@@ -147,10 +147,17 @@ export default function CreateServiceBookingPopup({ open, onClose }) {
       startDate: new Date(form.startDate + "T00:00:00").toISOString(),
     };
     // :white_tick: ONLY include duration fields when NOT one-time visit
-    if (form.durationType !== "ONE_TIME_VISIT") {
-      payload.durationValue = Number(form.durationValue);
-      payload.weekdays = weekdays;
-    }
+    // if (form.durationType !== "ONE_TIME_VISIT") {
+    //   payload.durationValue = Number(form.durationValue);
+    //   payload.weekdays = weekdays;
+    // }
+
+    if (form.durationType === "ONE_TIME_VISIT") {
+  payload.durationValue = 1;
+} else {
+  payload.durationValue = Number(form.durationValue);
+  payload.weekdays = weekdays;
+}
     console.log("FINAL PAYLOAD :point_right:", payload);
     const res = await createBooking({
       userId: patientId, // sent as query param
@@ -238,13 +245,23 @@ export default function CreateServiceBookingPopup({ open, onClose }) {
             onChange={handleChange}
             error={errors.scheduleType}
           />
-          <Input
+          {/* <Input
             label="Start Date"
             type="date"
             name="startDate"
             onChange={handleChange}
             error={errors.startDate}
-          />
+          /> */}
+
+          <Input
+  label="Start Date"
+  type="date"
+  name="startDate"
+  value={form.startDate}
+  onChange={handleChange}
+  error={errors.startDate}
+/>
+
           <Select
             label="Duration Type"
             name="durationType"
