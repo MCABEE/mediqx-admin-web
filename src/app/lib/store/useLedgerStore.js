@@ -379,8 +379,8 @@ const useLedgerStore = create((set, get) => ({
   total: 0,
   totalPages: 1,
 
-  year: 2025,
-  month: "November",
+  year: 2026,
+  month: "January",
   filter: "ALL", // ALL | SOLD | CANCELLED | ON_HOLD
 
   /* ---------------- SETTERS ---------------- */
