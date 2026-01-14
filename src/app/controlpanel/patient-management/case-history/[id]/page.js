@@ -188,7 +188,7 @@ export default function Page() {
           {logsArray.map((log) => (
             <div
               key={log.id}
-              className="w-full bg-[#FEF2FF] border border-[#DDDDDD] rounded-[10px] mt-[10px] divide-y divide-[#DDDDDD]"
+              className="w-full bg-[#FEF2FF] border border-[#DDDDDD] rounded-[10px] mt-[10px] mb-10 divide-y divide-[#DDDDDD]"
             >
               <div className="w-full flex justify-between px-[40px] py-[12px] text-[16px] font-semibold gap-4">
                 <p>
@@ -206,6 +206,19 @@ export default function Page() {
                   <p className="w-[300px]">Arrival</p>
                   {log.reachedLocationAt
                     ? new Date(log.reachedLocationAt).toLocaleTimeString(
+                        "en-US",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        }
+                      )
+                    : "-"}
+                </div>
+                  <div className="flex px-[40px] py-[12px]">
+                  <p className="w-[300px]">Completed</p>
+                  {log.completedAt
+                    ? new Date(log.completedAt).toLocaleTimeString(
                         "en-US",
                         {
                           hour: "2-digit",

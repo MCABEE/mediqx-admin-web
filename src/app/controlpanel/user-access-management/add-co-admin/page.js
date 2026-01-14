@@ -331,6 +331,8 @@ export default function Page() {
     { key: "PRODUCT_MANAGEMENT", label: "Product Management" },
     { key: "LEDGER_MANAGEMENT", label: "Ledger Management" },
     { key: "USER_ACCESS_MANAGEMENT", label: "User Access Management" },
+    { key: "AMBULANCE", label: "Ambulance" },
+
   ];
 
   const { addCoAdmin, loading } = useUserAccessStore();
