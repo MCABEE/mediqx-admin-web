@@ -1,4 +1,3 @@
-
 "use client";
 
 import Navlink from "@/components/ledgerManagement/Navlink";
@@ -38,6 +37,13 @@ export default function Page() {
     "december",
   ];
 
+  /* Set default filter on load */
+
+  useEffect(() => {
+    setFilter("ALL");
+    setPage(1);
+  }, []);
+
   /* Fetch on change */
   useEffect(() => {
     fetchBookings();
@@ -58,7 +64,10 @@ export default function Page() {
             }}
             className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c]  px-4"
           >
-            {[2023, 2024, 2025, 2026, 2027,2028,2029,2030,2031,2032,2033,2034,2035].map((y) => (
+            {[
+              2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033,
+              2034, 2035,
+            ].map((y) => (
               <option key={y} value={y}>
                 {y}
               </option>
@@ -150,7 +159,9 @@ export default function Page() {
               <tr key={b.id} className="bg-white hover:bg-[#E8F1FD]">
                 <td className="text-center p-2">{b.patientName}</td>
                 <td className="border-l-4  border-[#C0D8F6] text-center p-2">
-                  {b.services}
+                  {b.services?.length > 40
+                    ? b.services.slice(0, 40) + "..."
+                    : b.services}
                 </td>
                 <td className="border-l-4  border-[#C0D8F6] text-center p-2 ps-8">
                   {b.direct === true ? (

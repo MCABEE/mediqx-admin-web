@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React, { useEffect } from "react";
@@ -24,14 +22,30 @@ export default function Page() {
   } = useLedgerStore();
 
   /* ---------------- SAFE DATA ---------------- */
-  const bills = data?.bills || [];      // from data.items
+  const bills = data?.bills || []; // from data.items
   const summary = data?.summary || {};
   const counts = data?.counts || {};
 
   const monthNames = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
+
+  useEffect(() => {
+    setFilter("ALL");
+    setPage(1);
+  }, []);
+  /* Set default filter on load */
 
   /* ---------------- FETCH ---------------- */
   useEffect(() => {
@@ -54,8 +68,13 @@ export default function Page() {
             }}
             className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c] px-4 outline-none"
           >
-            {[2023, 2024, 2025, 2026, 2027,2028,2029,2030,2031,2032,2033,2034,2035].map((y) => (
-              <option key={y} value={y}>{y}</option>
+            {[
+              2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033,
+              2034, 2035,
+            ].map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
             ))}
           </select>
 
@@ -69,7 +88,9 @@ export default function Page() {
             className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c] px-4 outline-none"
           >
             {monthNames.map((m) => (
-              <option key={m} value={m}>{m}</option>
+              <option key={m} value={m}>
+                {m}
+              </option>
             ))}
           </select>
         </div>
@@ -104,14 +125,10 @@ export default function Page() {
       </div>
 
       {/* ================= LOADING ================= */}
-      {loading && (
-        <p className="text-center py-6">Loading...</p>
-      )}
+      {loading && <p className="text-center py-6">Loading...</p>}
 
       {/* ================= ERROR ================= */}
-      {error && (
-        <p className="text-center text-red-600 py-6">{error}</p>
-      )}
+      {error && <p className="text-center text-red-600 py-6">{error}</p>}
 
       {/* ================= TABLE ================= */}
       {!loading && bills.length > 0 && (
@@ -121,21 +138,24 @@ export default function Page() {
               <tr>
                 <th className="rounded-l-2xl p-2">Patient Name</th>
                 <th className="border-l-4 border-[#F0F4F9]  p-2">Product</th>
-                <th className="border-l-4 border-[#F0F4F9]  p-2">Bill Amount</th>
+                <th className="border-l-4 border-[#F0F4F9]  p-2">
+                  Bill Amount
+                </th>
                 <th className="border-l-4 border-[#F0F4F9]  p-2">Discount</th>
-                <th className="border-l-4  border-[#F0F4F9] rounded-r-2xl p-2">Net Pay</th>
+                <th className="border-l-4  border-[#F0F4F9] rounded-r-2xl p-2">
+                  Net Pay
+                </th>
               </tr>
             </thead>
 
             <tbody>
               {bills.map((row, index) => (
-                <tr
-                  key={index}
-                  className="bg-white hover:bg-[#E8F1FD]"
-                >
+                <tr key={index} className="bg-white hover:bg-[#E8F1FD]">
                   <td className="p-2 text-center">{row.patientName}</td>
                   <td className="border-l-4 border-[#C0D8F6] text-center p-2">
-                    {row.product}
+                    {row.product?.length > 40
+                      ? row.product.slice(0, 40) + "..."
+                      : row.product}
                   </td>
                   <td className="border-l-4 border-[#C0D8F6] text-center p-2">
                     ₹{row.billAmount ?? row.payment ?? 0}
@@ -196,9 +216,7 @@ export default function Page() {
 
       {/* ================= EMPTY ================= */}
       {!loading && bills.length === 0 && (
-        <p className="text-center py-6 text-gray-500">
-          No records found
-        </p>
+        <p className="text-center py-6 text-gray-500">No records found</p>
       )}
     </div>
   );
