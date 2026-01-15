@@ -43,7 +43,7 @@ const Navlink = () => {
       >
        Bookings
       </Link>
-        {/* <Link
+        <Link
         href="/controlpanel/product-management/add-banner"
        
          className={`h-full box-border flex justify-center items-center text-base text-black cursor-pointer px-2 pb-4 ${
@@ -55,7 +55,7 @@ const Navlink = () => {
 
       >
        Add Banner
-      </Link> */}
+      </Link>
     
     </div>
   );
