@@ -1,187 +1,3 @@
-
-
-
-
-
-
-// "use client";
-
-// import useReferralManagementStore from "@/app/lib/store/staffReferralStore";
-// import Link from "next/link";
-// import React, { useEffect, useState } from "react";
-
-// const Table = () => {
-//   const {
-//     referralsStaff,
-//     totalPages,
-//     loading,
-//     error,
-//     fetchAgentStaffReferrals,
-//   } = useReferralManagementStore();
-
-//   const [page, setPage] = useState(1);
-//   const [filter, setFilter] = useState("ALL");
-//   const limit = 10;
-
-//   const goToNextPage = () => {
-//     if (page < totalPages) setPage(page + 1);
-//   };
-
-//   const goToPrevPage = () => {
-//     if (page > 1) setPage(page - 1);
-//   };
-
-//   useEffect(() => {
-//     fetchAgentStaffReferrals(page, limit, filter);
-//   }, [page, filter, fetchAgentStaffReferrals]);
-
-//   // Group referrals by date
-//   const groupedReferrals = referralsStaff?.reduce((acc, ref) => {
-//     const date = new Date(ref.createdAt).toLocaleDateString("en-GB");
-//     if (!acc[date]) acc[date] = [];
-//     acc[date].push(ref);
-//     return acc;
-//   }, {}) || {};
-
-//   return (
-//     <div>
-//       {/* Header */}
-//       <div className="w-full h-[80px] flex items-center justify-between bg-white border border-[#888888] rounded-[15px] mt-2 text-black px-8">
-//         <h1 className="text-[32px] font-semibold">
-//           {referralsStaff?.length || 0}
-//         </h1>
-//       </div>
-
-//       {/* Table */}
-//       <table className="w-full border-spacing-y-2 border-separate text-black mt-4">
-//         <thead className="bg-[#C0D8F6]">
-//           <tr>
-//             <th className="text-base px-2 py-1 rounded-l-2xl">No</th>
-//             <th className="text-base border-l-4 border-[#F0F4F9] px-2 py-1">
-//               Referred By
-//             </th>
-//             <th className="text-base border-l-4 border-[#F0F4F9] px-2 py-1">
-//               Status
-//             </th>
-//             <th className="text-base border-l-4 border-[#F0F4F9] px-2 rounded-r-2xl py-1">
-//               Specialization
-//             </th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {loading && (
-//             <tr>
-//               <td colSpan={5} className="text-center p-4">
-//                 Loading...
-//               </td>
-//             </tr>
-//           )}
-//           {error && (
-//             <tr>
-//               <td colSpan={5} className="text-center text-red-600 p-4">
-//                 {error}
-//               </td>
-//             </tr>
-//           )}
-//           {!loading && Object.keys(groupedReferrals).length === 0 && (
-//             <tr>
-//               <td colSpan={5} className="text-center p-4">
-//                 No referrals found
-//               </td>
-//             </tr>
-//           )}
-
-//           {!loading &&
-//             Object.entries(groupedReferrals).map(([date, refs], dateIndex) => (
-//               <React.Fragment key={dateIndex}>
-//                 <tr>
-//                   <td
-//                     colSpan="5"
-//                     className="rounded-t-2xl p-2 bg-[#C0D8F6] text-[16px] font-semibold"
-//                   >
-//                     {new Date(date).toLocaleDateString("en-GB", {
-//                       year: "numeric",
-//                       month: "long",
-//                       day: "2-digit",
-//                       weekday: "long",
-//                     })}
-//                   </td>
-//                 </tr>
-
-//                 {refs.map((agent, index) => {
-//                   const url = `/controlpanel/referral-management/staff-referrals-details/${agent.id}`;
-//                   return (
-//                     <Link
-//                       key={`${agent.id}-${index}`}
-//                       href={url}
-//                       passHref
-//                       legacyBehavior
-//                     >
-//                       <tr
-//                         className="bg-white cursor-pointer hover:bg-blue-100"
-//                         tabIndex={0}
-//                         role="link"
-//                         onKeyDown={(e) => {
-//                           if (e.key === "Enter" || e.key === " ") {
-//                             e.preventDefault();
-//                             window.location.href = url;
-//                           }
-//                         }}
-//                       >
-//                         <td className="p-2">{(page - 1) * limit + index + 1}</td>
-//                         <td className="border-l-4 border-[#C0D8F6] p-2">
-//                           {agent.referredBy}
-//                         </td>
-//                         <td className="border-l-4 border-[#C0D8F6] p-2">
-//                           {agent.referralStatus || "-"}
-//                         </td>
-//                         <td className="border-l-4 border-[#C0D8F6] p-2">
-//                           {agent.specialization}
-//                         </td>
-//                       </tr>
-//                     </Link>
-//                   );
-//                 })}
-//               </React.Fragment>
-//             ))}
-//         </tbody>
-//       </table>
-
-//       {/* Pagination */}
-//       <div className="flex justify-between items-center mt-4 mb-2">
-//         <button
-//           disabled={page === 1}
-//           onClick={goToPrevPage}
-//           className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-//         >
-//           Previous
-//         </button>
-//         <span>
-//           Page {page} of {totalPages}
-//         </span>
-//         <button
-//           disabled={page === totalPages}
-//           onClick={goToNextPage}
-//           className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-//         >
-//           Next
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Table;
-
-
-
-
-
-
-
-
-
-
 "use client";
 
 import useReferralManagementStore from "@/app/lib/store/staffReferralStore";
@@ -221,28 +37,42 @@ const Table = () => {
   };
 
   useEffect(() => {
-    fetchAgentStaffReferrals(page, limit, status, referredBy, specialization, search);
-  }, [page, status, referredBy, specialization, search, fetchAgentStaffReferrals]);
+    fetchAgentStaffReferrals(
+      page,
+      limit,
+      status,
+      referredBy,
+      specialization,
+      search,
+    );
+  }, [
+    page,
+    status,
+    referredBy,
+    specialization,
+    search,
+    fetchAgentStaffReferrals,
+  ]);
 
   // Group referrals by date
-const groupedReferrals =
-  referralsStaff?.reduce((acc, ref) => {
-    // use ISO date (YYYY-MM-DD) as key
-    const dateKey = new Date(ref.createdAt)
-      .toISOString()
-      .split("T")[0];
+  const groupedReferrals =
+    referralsStaff?.reduce((acc, ref) => {
+      // use ISO date (YYYY-MM-DD) as key
+      const dateKey = new Date(ref.createdAt).toISOString().split("T")[0];
 
-    if (!acc[dateKey]) acc[dateKey] = [];
-    acc[dateKey].push(ref);
+      if (!acc[dateKey]) acc[dateKey] = [];
+      acc[dateKey].push(ref);
 
-    return acc;
-  }, {}) || {};
+      return acc;
+    }, {}) || {};
 
   return (
     <div>
       {/* Header */}
       <div className="w-full flex justify-between items-center bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-4 pb-4 px-6 text-black font-semibold text-[16px]">
-        <p className="font-semibold text-[32px]">{referralsStaff?.length || 0}</p>
+        <p className="font-semibold text-[32px]">
+          {referralsStaff?.length || 0}
+        </p>
         <button
           onClick={clearFilters}
           className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
@@ -256,10 +86,17 @@ const groupedReferrals =
         <thead className="bg-[#C0D8F6]">
           <tr>
             <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">No</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Referred By</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Status</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2 rounded-r-2xl">
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+              Referred By
+            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+              Status
+            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2 ">
               Specialization
+            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2 rounded-r-2xl">
+              Source
             </th>
           </tr>
 
@@ -298,6 +135,7 @@ const groupedReferrals =
                 className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[#3674B5]"
               />
             </th>
+            <th className="p-2 border-l-4 border-[#F0F4F9]"></th>
           </tr>
         </thead>
 
@@ -361,7 +199,9 @@ const groupedReferrals =
                           }
                         }}
                       >
-                        <td className="p-2">{(page - 1) * limit + index + 1}</td>
+                        <td className="p-2">
+                          {(page - 1) * limit + index + 1}
+                        </td>
                         <td className="border-l-4 border-[#C0D8F6] p-2">
                           {agent.referredBy}
                         </td>
@@ -370,6 +210,9 @@ const groupedReferrals =
                         </td>
                         <td className="border-l-4 border-[#C0D8F6] p-2">
                           {agent.specialization}
+                        </td>
+                        <td className="border-l-4 border-[#C0D8F6] p-2">
+                          {agent.referralSourceType}
                         </td>
                       </tr>
                     </Link>

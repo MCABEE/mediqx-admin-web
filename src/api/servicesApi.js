@@ -1,17 +1,6 @@
 import api from "./axiosInstance";
 
-// Create many patient services API call
-// export const createManyPatientServices = async (patientServices) => {
-//   try {
-//     const response = await api.post("/admin/patient-service/create-many", {
-//       patientServices,
-//     });
-//     return response.data; // Adjust based on actual response structure
-//   } catch (error) {
-//     const message = error.response?.data?.message || "Failed to add services.";
-//     throw new Error(message);
-//   }
-// };
+
 
 export const createManyPatientServices = async (patientServices) => {
   try {
