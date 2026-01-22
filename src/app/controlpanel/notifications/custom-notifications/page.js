@@ -74,7 +74,7 @@ export default function Page() {
             <span className="ml-2 font-semibold">All Staff</span>
           </label>
 
-          <div className="grid grid-cols-2 gap-2 ml-2 mt-2">
+          <div className="grid grid-cols-2 text-[14px] gap-2 ml-2 mt-2">
             {[
               "REGISTERED_NURSE",
               "NURSING_ASSISTANTS",
@@ -85,7 +85,7 @@ export default function Page() {
               <label key={role}>
                 <input
                   type="checkbox"
-                  className="size-4"
+                  className="size-3.5"
                   checked={staffRoles.includes(role)}
                   onChange={() => toggleStaffRole(role)}
                 />
@@ -94,49 +94,55 @@ export default function Page() {
             ))}
           </div>
 
-          <label className="block mt-6">
-            <input
-              type="checkbox"
-              className="size-4"
-              checked={allPatients}
-              onChange={toggleAllPatients}
-            />
-            <span className="ml-2 font-semibold">All Patients</span>
-          </label>
+          <div className="grid grid-cols-2">
+            <div>
+              <label className="block mt-6">
+                <input
+                  type="checkbox"
+                  className="size-4"
+                  checked={allPatients}
+                  onChange={toggleAllPatients}
+                />
+                <span className="ml-2 font-semibold">All Patients</span>
+              </label>
 
-          {["ONGOING", "COMPLETED"].map((s) => (
-            <label key={s} className="block ml-4 mt-2">
-              <input
-                type="checkbox"
-                className="size-4"
-                checked={patientStatus.includes(s)}
-                onChange={() => togglePatientStatus(s)}
-              />
-              <span className="ml-2">{s}</span>
-            </label>
-          ))}
+              {["ONGOING", "COMPLETED"].map((s) => (
+                <label key={s} className="block ml-4 mt-2">
+                  <input
+                    type="checkbox"
+                    className="size-3,5"
+                    checked={patientStatus.includes(s)}
+                    onChange={() => togglePatientStatus(s)}
+                  />
+                  <span className="ml-2 text-[14px]">{s}</span>
+                </label>
+              ))}
+            </div>
 
-          <label className="block mt-6">
-            <input
-              type="checkbox"
-              className="size-4"
-              checked={allSupervisors}
-              onChange={toggleAllSupervisors}
-            />
-            <span className="ml-2 font-semibold">All Supervisors</span>
-          </label>
+            <div>
+              <label className="block mt-6">
+                <input
+                  type="checkbox"
+                  className="size-4"
+                  checked={allSupervisors}
+                  onChange={toggleAllSupervisors}
+                />
+                <span className="ml-2 font-semibold">All Supervisors</span>
+              </label>
 
-          {["ACTIVE", "RESIGNED"].map((s) => (
-            <label key={s} className="block ml-4 mt-2">
-              <input
-                type="checkbox"
-                className="size-4"
-                checked={supervisorStatus.includes(s)}
-                onChange={() => toggleSupervisorStatus(s)}
-              />
-              <span className="ml-2">{s}</span>
-            </label>
-          ))}
+              {["ACTIVE", "RESIGNED"].map((s) => (
+                <label key={s} className="block ml-4 mt-2">
+                  <input
+                    type="checkbox"
+                    className="size-3.5"
+                    checked={supervisorStatus.includes(s)}
+                    onChange={() => toggleSupervisorStatus(s)}
+                  />
+                  <span className="ml-2 text-[14px]">{s}</span>
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="w-full bg-white rounded-2xl  mt-2 border border-[#cbc7c7]">
