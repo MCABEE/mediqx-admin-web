@@ -1,6 +1,3 @@
-
-
-
 "use client";
 
 import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistrationStore";

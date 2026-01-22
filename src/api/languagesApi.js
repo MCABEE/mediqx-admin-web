@@ -1,29 +1,5 @@
 import api from "./axiosInstance";
 
-// export const addLanguages = async (languages) => {
-//   try {
-//     const response = await api.post(
-//       "/admin/languages/create-many",
-//       { languages },
-//       {
-//         headers: {
-//           accept: "application/json",
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-    
-//     const message = error.response?.data?.message || "Failed to add languages.";
-//     throw new Error(message);
-//   }
-// };
-
-
-
-
 export const addLanguages = async (languages) => {
   try {
     const response = await api.post(
@@ -34,7 +10,7 @@ export const addLanguages = async (languages) => {
           accept: "application/json",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     return response.data;
@@ -45,19 +21,22 @@ export const addLanguages = async (languages) => {
   }
 };
 
-
 // Get all languages with pagination
 export const getLanguages = async (page = 1, limit = 10) => {
   try {
-    const response = await api.get(`/admin/languages?page=${page}&limit=${limit}`, {
-      headers: { accept: "application/json" }
-    });
+    const response = await api.get(
+      `/admin/languages?page=${page}&limit=${limit}`,
+      {
+        headers: { accept: "application/json" },
+      },
+    );
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to fetch languages.");
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch languages.",
+    );
   }
 };
-
 
 export const deleteLanguage = async (id) => {
   try {
@@ -68,10 +47,11 @@ export const deleteLanguage = async (id) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to delete language.");
+    throw new Error(
+      error.response?.data?.message || "Failed to delete language.",
+    );
   }
 };
-
 
 export const updateLanguage = async (id, data) => {
   try {
@@ -83,6 +63,8 @@ export const updateLanguage = async (id, data) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to update language.");
+    throw new Error(
+      error.response?.data?.message || "Failed to update language.",
+    );
   }
 };
