@@ -488,13 +488,13 @@ useEffect(() => {
               <option value="ONE_TIME_VISIT">One-time visit</option>
               <option value="FEW_DAYS">Few Days</option>
               <option value="FEW_WEEKS">Few Weeks</option>
-              <option value="LONG_TERM">Long-term</option>
+              <option value="LONG_TERM">Long-term(Month)</option>
               <option value="OTHER">Other</option>
             </select>
           </div>
 
           <InputGroup
-            label="Duration Value (weeks)"
+            label="Duration Value"
             name="durationValue"
             type="number"
             value={form.durationValue}
