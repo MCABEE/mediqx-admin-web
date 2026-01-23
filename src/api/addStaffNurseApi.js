@@ -108,3 +108,19 @@ export const processExcelUploadAPI = async (fileId) => {
     };
   }
 };
+
+
+
+export const deleteUploadedFile = async (fileId) => {
+  const res = await api.delete(
+    `/files/upload/delete`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
+      },
+      data: { fileId },
+    }
+  );
+  return res.data;
+};
