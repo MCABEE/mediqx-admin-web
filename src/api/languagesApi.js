@@ -68,3 +68,28 @@ export const updateLanguage = async (id, data) => {
     );
   }
 };
+
+
+
+
+//update langguage for nurses
+
+export const updateNurseLanguages = async (userId, languageIds) => {
+  const payload = {
+    languages: languageIds.map((id) => ({
+      languageId: id,
+    })),
+  };
+
+  const res = await api.put(
+    `/admin/nurses/language/${userId}`,
+    payload,
+    {
+      headers: {
+        accept: "application/json",
+      },
+    }
+  );
+
+  return res.data;
+};

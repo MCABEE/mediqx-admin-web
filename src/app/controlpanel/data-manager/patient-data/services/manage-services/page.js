@@ -39,10 +39,10 @@ function ManageServicesPage() {
     listedServices,
     isLoading,
     error,
-    page,
+
     totalPages,
     fetchServices,
-    setPage,
+
     updateServiceById,
     deleteServiceById,
   } = usePatientServiceStore();
@@ -52,9 +52,10 @@ function ManageServicesPage() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [editServiceName, setEditServiceName] = useState("");
   const [apiError, setApiError] = useState("");
-
+  const [page, setPage] = useState(1);
+  const limit = 10;
   useEffect(() => {
-    fetchServices(page, 10);
+    fetchServices(page, limit);
   }, [page, fetchServices]);
 
   // Toggle single checkbox selection
@@ -78,8 +79,16 @@ function ManageServicesPage() {
     for (const id of checkedItems) {
       await deleteServiceById(id);
     }
+
     setCheckedItems([]);
     setIsConfirmOpen(false);
+
+    // If last item on page deleted → go back one page
+    if (listedServices.length === 1 && page > 1) {
+      setPage((p) => p - 1);
+    } else {
+      fetchServices(page, limit);
+    }
   };
 
   // Update service handler
@@ -96,6 +105,7 @@ function ManageServicesPage() {
       await updateServiceById(checkedItems[0], editServiceName);
       setIsEditPopupOpen(false);
       setCheckedItems([]);
+      fetchServices(page, limit);
     } catch (error) {
       if (
         (error.response?.data?.message &&
@@ -164,27 +174,29 @@ function ManageServicesPage() {
             </div>
           ))}
 
-          <div className="flex justify-center items-center gap-2 mt-4">
+        <div className="flex justify-center gap-4 items-center mt-2">
             <button
-              disabled={page <= 1}
-              onClick={() => setPage(page - 1)}
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span>
-              Page {page} of {totalPages}
-            </span>
-            <button
-              disabled={page >= totalPages}
-              onClick={() => setPage(page + 1)}
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
+            disabled={page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
 
-          <div className="flex gap-3 mt-4 px-6">
+          <span>
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            disabled={page >= totalPages}
+            onClick={() => setPage((p) => p + 1)}
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+
+          <div className="flex gap-3 my-4 px-6">
             <button
               className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
               disabled={checkedItems.length !== 1}
