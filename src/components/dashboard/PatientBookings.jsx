@@ -12,6 +12,7 @@ const PatientBookings = ({ data }) => {
     ongoing = 0,
     completed = 0,
     percentageChange = 0,
+    pending=0,
   } = data;
 
   return (
@@ -41,6 +42,8 @@ const PatientBookings = ({ data }) => {
           { label: "Cancelled", value: cancelled },
           { label: "Ongoing", value: ongoing },
           { label: "Completed", value: completed },
+          { label: "Pending", value: pending },
+
         ].map((item, index) => (
           <div key={index} className="flex flex-col text-[#333333] gap-3.5">
             <p className="text-base">{item.label}</p>
