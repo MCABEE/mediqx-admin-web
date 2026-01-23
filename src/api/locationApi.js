@@ -1,26 +1,5 @@
 import api from "./axiosInstance";
 
-// Create multiple locations
-// export const addLocations = async (locations) => {
-//   try {
-//     const response = await api.post(
-//       "/admin/locations/create-many",
-//       { locations },
-//       {
-//         headers: {
-//           accept: "application/json",
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-    
-//     throw new Error(error.response?.data?.message || "Failed to add locations.");
-//   }
-// };
-
 export const addLocations = async (locations) => {
   try {
     console.log("📤 Sending locations to API:", locations);
@@ -32,7 +11,7 @@ export const addLocations = async (locations) => {
           accept: "application/json",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     console.log("✅ API Response:", response.data);
@@ -45,12 +24,17 @@ export const addLocations = async (locations) => {
 // Get locations with pagination
 export const getLocations = async (page = 1, limit = 10) => {
   try {
-    const response = await api.get(`/admin/locations?page=${page}&limit=${limit}`, {
-      headers: { accept: "application/json" },
-    });
+    const response = await api.get(
+      `/admin/locations?page=${page}&limit=${limit}`,
+      {
+        headers: { accept: "application/json" },
+      },
+    );
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to fetch locations.");
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch locations.",
+    );
   }
 };
 
@@ -65,7 +49,9 @@ export const updateLocation = async (id, data) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to update location.");
+    throw new Error(
+      error.response?.data?.message || "Failed to update location.",
+    );
   }
 };
 
@@ -77,6 +63,8 @@ export const deleteLocation = async (id) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to delete location.");
+    throw new Error(
+      error.response?.data?.message || "Failed to delete location.",
+    );
   }
 };

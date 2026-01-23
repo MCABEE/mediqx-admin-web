@@ -28,7 +28,7 @@ const Navlink = () => {
         }`}
         >
        
-        Add Notifications
+        All Notifications
       </Link>
     
     
