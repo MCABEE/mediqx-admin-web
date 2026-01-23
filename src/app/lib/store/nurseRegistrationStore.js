@@ -6,6 +6,7 @@ import {
   generateFileUploadUrlAPI,
   confirmFileUploadAPI,
   processExcelUploadAPI,
+  deleteUploadedFile,
 } from "@/api/addStaffNurseApi";
 
 const useNurseRegistrationStore = create((set, get) => ({
@@ -143,6 +144,18 @@ const useNurseRegistrationStore = create((set, get) => ({
       return res.data;
     } catch (err) {
       console.error("processExcelFile Error:", err);
+      throw err;
+    }
+  },
+
+
+
+    deleteFile: async (fileId) => {
+    try {
+      const res = await deleteUploadedFile(fileId);
+      return res;
+    } catch (err) {
+      console.error("❌ File delete failed:", err);
       throw err;
     }
   },

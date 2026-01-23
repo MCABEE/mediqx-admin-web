@@ -4,6 +4,7 @@ import {
   getLanguages,
   deleteLanguage,
   updateLanguage,
+  updateNurseLanguages,
 } from "@/api/languagesApi";
 
 const useLanguageStore = create((set, get) => ({
@@ -137,6 +138,26 @@ const useLanguageStore = create((set, get) => ({
       set({ isLoading: false });
     }
   },
+
+
+
+
+
+
+  // update languages for nurses
+
+    updateNurseLanguages: async (userId, languageIds) => {
+    try {
+      const res = await updateNurseLanguages(userId, languageIds);
+      return res;
+    } catch (err) {
+      console.error("❌ Failed to update nurse languages", err);
+      throw err;
+    }
+  },
+
+
+
 }));
 
 export default useLanguageStore;
