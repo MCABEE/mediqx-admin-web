@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter,useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navlink from "@/components/staffManagement/Navlink";
 import AvailabilitySchedule from "@/components/staffManagement/AvailabilitySchedule";
@@ -9,15 +9,22 @@ import EditContactModal from "@/components/staffManagement/NurseEdit/ContactDeta
 import EditNurseAvailability from "@/components/staffManagement/NurseEdit/EditNurseAvailability";
 import EditExperincePopup from "@/components/staffManagement/NurseEdit/EditExperincePopup";
 import NurseFileSection from "@/components/staffManagement/NurseFileSection";
+import EditLanguagesPopup from "@/components/staffManagement/NurseEdit/EditLanguagesPopup";
 
 function StaffDetailPage() {
   const router = useRouter();
   const { id } = useParams();
   const userId = id;
   const searchParams = useSearchParams();
-  
-    const role = searchParams.get("role") || "NURSE";
-  const { fetchNurseById, selectedNurse, verifyNurse,fetchNurseLanguagesById,selectedNurseLanguages  } = nurseStore();
+
+  const role = searchParams.get("role") || "NURSE";
+  const {
+    fetchNurseById,
+    selectedNurse,
+    verifyNurse,
+    fetchNurseLanguagesById,
+    selectedNurseLanguages,
+  } = nurseStore();
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
   const [preview, setPreview] = useState({
@@ -28,7 +35,7 @@ function StaffDetailPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedContact, setEditedContact] = useState({
     gender: "",
-    dob:"",
+    dob: "",
     fullName: "",
     email: "",
     mobileNumber: "",
@@ -47,17 +54,15 @@ function StaffDetailPage() {
 
   const [editAvailabilityPopup, setEditAvailabilityPopup] = useState(false);
   const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
-
-  
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    if (userId){
-       fetchNurseById(userId);
-       fetchNurseLanguagesById(userId);
+    if (userId) {
+      fetchNurseById(userId);
+      fetchNurseLanguagesById(userId);
     }
   }, [userId]);
   console.log(selectedNurseLanguages);
-  
 
   useEffect(() => {
     if (selectedNurse) {
@@ -138,14 +143,11 @@ function StaffDetailPage() {
             <span className="w-[280px]">Gender</span>
             <div className="grow">{selectedNurse.gender}</div>
           </div>
-      
-        
-         
+
           <div className="flex gap-[18px]">
             <div className="w-[280px]">Address</div>
             <div className="flex-1">{address.fullAddress}</div>
           </div>
-         
 
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Email</span>
@@ -179,31 +181,29 @@ function StaffDetailPage() {
           {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
         </div>
 
-
-                <div className="flex justify-between px-[39px]">
+        <div className="flex justify-between px-[39px]">
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
-            Languages 
+            Languages
           </h1>
-          {/* <button
-            
+          <button
+            onClick={() => setShowPopup(true)}
             className="cursor-pointer hover:scale-110"
           >
             <img src="/edit-btn.svg" className="size-6" alt="edit" />
-          </button> */}
+          </button>
         </div>
         <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
-         <div className="flex gap-[18px]">
-  <span className="w-[280px]">Languages</span>
- 
-  <span>
-  {selectedNurseLanguages?.userLanguages?.length > 0
-    ? selectedNurseLanguages.userLanguages.map(lang => lang.language).join(", ")
-    : "-"}
-</span>
+          <div className="flex gap-[18px]">
+            <span className="w-[280px]">Languages</span>
 
-</div>
-
-         
+            <span>
+              {selectedNurseLanguages?.userLanguages?.length > 0
+                ? selectedNurseLanguages.userLanguages
+                    .map((lang) => lang.language)
+                    .join(", ")
+                : "-"}
+            </span>
+          </div>
 
           {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
         </div>
@@ -260,9 +260,10 @@ function StaffDetailPage() {
             </div>
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Location</span>
-              <span className="flex-1">{qualifications.providerAddress || "Nil"}</span>
+              <span className="flex-1">
+                {qualifications.providerAddress || "Nil"}
+              </span>
             </div>
-
 
             <div className="flex gap-[18px]">
               <span className="w-[280px]">Working Duration</span>
@@ -276,23 +277,23 @@ function StaffDetailPage() {
                         day: "2-digit",
                         month: "long",
                         year: "numeric",
-                      }
+                      },
                     )
                   : ""}
                 {" - "}
                 {qualifications.onGoing
                   ? "Present"
                   : qualifications.endDate &&
-                    !isNaN(Date.parse(qualifications.endDate))
-                  ? new Date(qualifications.endDate).toLocaleDateString(
-                      "en-GB",
-                      {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      }
-                    )
-                  : ""}
+                      !isNaN(Date.parse(qualifications.endDate))
+                    ? new Date(qualifications.endDate).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        },
+                      )
+                    : ""}
               </span>
             </div>
             {/* <div className="flex gap-[18px]">
@@ -316,90 +317,15 @@ function StaffDetailPage() {
           </div>
         </div>
         {/* File Uploads */}
-        {/* {[
-          { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
-          { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
-          {
-            label: "Experience Certificate",
-            type: "EXPERIENCE_CERTIFICATE",
-            isQualificationFile: true,
-          },
-          { label: "Photo", type: "PASSPORT_IMAGE" },
-        ].map(({ label, type, isQualificationFile }) => {
-          let file;
 
-          if (isQualificationFile) {
-            // Get from qualifications[].files[]
-            const allQualificationFiles = qualifications?.files || [];
-            file = allQualificationFiles.find((f) => f.type === type);
-          } else {
-            // Get from top-level files[]
-            file = files.find((f) => f.type === type);
-          }
-
-          return (
-            <div
-              key={type}
-              className="flex flex-col bg-[#EBF2F8] px-[39px] py-6 gap-2"
-            >
-              <span className="w-[300px] text-black">{label}</span>
-              {file ? (
-                <div className="flex items-center gap-4 ps-[52px]">
-                  <span className="text-gray-700 truncate w-[300px]">
-                    {file.fileName}
-                  </span>
-                  <img src="/pdf.svg" alt="PDF Icon" />
-                  <button
-                    onClick={() =>
-                      setPreview({
-                        show: true,
-                        fileUrl: `${url}${file.key}`,
-                        isImage: isImage(file.fileName),
-                      })
-                    }
-                    className="text-[#1982FE] cursor-pointer"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={async () => {
-                      try {
-                        const response = await fetch(`${url}${file.key}`);
-                        const blob = await response.blob();
-                        const downloadUrl = window.URL.createObjectURL(blob);
-                        const link = document.createElement("a");
-                        link.href = downloadUrl;
-                        link.download = file.fileName;
-                        document.body.appendChild(link);
-                        link.click();
-                        link.remove();
-                      } catch {
-                        alert("Download failed.");
-                      }
-                    }}
-                    className="text-[#1982FE] cursor-pointer"
-                  >
-                    Download
-                  </button>
-                </div>
-              ) : (
-                <span className="text-[#FF0000] ps-10">Not Uploaded</span>
-              )}
-            </div>
-          );
-        })} */}
         <NurseFileSection
-        userId={nurseData.userId}
-        educationQualificationId={qualifications.id}
-
-  files={files}
-  qualifications={qualifications}
-  url={url}
-  setPreview={setPreview}
-/>
-        
-
-       
+          userId={nurseData.userId}
+          educationQualificationId={qualifications.id}
+          files={files}
+          qualifications={qualifications}
+          url={url}
+          setPreview={setPreview}
+        />
       </div>
 
       {/* Confirm Modal */}
@@ -420,8 +346,8 @@ function StaffDetailPage() {
                   await verifyNurse(userId, modalData.action);
                   setModalData({ show: false, action: "" });
                   // router.push("/controlpanel/staffManagement");
-                   router.push(`/controlpanel/staffManagement?role=${role}`)
-                  router.back()
+                  router.push(`/controlpanel/staffManagement?role=${role}`);
+                  router.back();
                 }}
                 className="px-4 py-2 bg-[#3674B5] text-white rounded-md cursor-pointer"
               >
@@ -486,9 +412,27 @@ function StaffDetailPage() {
           qualifications={qualifications}
           nurseData={nurseData}
           userId={userId}
-        role={selectedNurse.role}
-
+          role={selectedNurse.role}
           onClose={() => setIsExperincePopUp(false)}
+        />
+      )}
+
+      {/* {showPopup && (
+        <EditLanguagesPopup
+          selectedNurseLanguages={selectedNurseLanguages}
+          userId={userId}
+          onClose={() => setShowPopup(false)}
+        /> */}
+
+      {showPopup && (
+        <EditLanguagesPopup
+          selectedNurseLanguages={selectedNurseLanguages}
+          userId={userId}
+          onClose={() => setShowPopup(false)}
+          onSuccess={() => {
+            fetchNurseLanguagesById(userId);
+            setShowPopup(false);
+          }}
         />
       )}
     </div>
