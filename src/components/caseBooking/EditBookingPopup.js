@@ -33,96 +33,122 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
 
   console.log(initialData);
 
-
-
-
   const { updateExistingBooking } = useBookingStore();
-  // const [form, setForm] = useState({
-  //   // Patient Details
-  //   fullName: "",
-  //   gender: "",
-  //   age: "",
-  //   height: "",
-  //   weight: "",
-  //   diagnosisId: "",
-  //   healthStatusId: "",
-  //   stayAt: "",
-  //   city: "",
-  //   contactPersonName: "",
-  //   contactPersonRelation: "",
-  //   contactPersonEmail: "",
-  //   contactPersonMobileNumber: "",
+  const [validationError, setValidationError] = useState("");
+  const validateForm = () => {
+    const requiredFields = [
+      { key: "fullName", label: "Full Name" },
+      { key: "age", label: "Age" },
+      { key: "height", label: "Height" },
+      { key: "weight", label: "Weight" },
+      { key: "healthStatusId", label: "Health Status" },
+      { key: "stayAt", label: "Stay At" },
+      { key: "fullAddress", label: "Residential Address" },
+      { key: "contactPersonName", label: "Contact Person Name" },
+      { key: "contactPersonRelation", label: "Contact Person Relation" },
+      { key: "contactPersonEmail", label: "Email" },
 
-  //   // Service Details
+      { key: "contactPersonMobileNumber", label: "Mobile Number" },
+      { key: "diagnosisId", label: "Diagnosis" },
+      { key: "serviceTypeId", label: "Service Type" },
+      { key: "startDate", label: "Start Date" },
+      { key: "durationType", label: "Duration Type" },
+      { key: "durationValue", label: "Duration Value" },
+      { key: "startTime", label: "Start Time" },
+      { key: "scheduleType", label: "Schedule Type" },
+      { key: "flexibility", label: "Flexibility" },
+      { key: "preferredGender", label: "Gender" },
+      { key: "weekdays", label: "Week days" },
+      { key: "preferredLanguages", label: "Preferred Languages" },
+    ];
 
-  //   startDate: "",
-  //   serviceTypeId: "",
-  //   durationType: "",
-  //   durationValue: "",
-  //   weekdays: [],
-  //   flexibility: "",
-  //   startTime: "",
-  //   endTime: "",
-  //   scheduleType: "",
+    for (const field of requiredFields) {
+      const value = form[field.key];
 
-  //   // Staff Preferences
-  //   preferredGender: "",
-  //   preferredLanguages: [],
-  // });
-const [form, setForm] = useState({
-  fullName: "",
-  gender: "",
-  age: "",
-  height: "",
-  weight: "",
-  diagnosisId: "",
-  healthStatusId: "",
-  stayAt: "",
-  city: "",
-  contactPersonName: "",
-  contactPersonRelation: "",
-  contactPersonEmail: "",
-  contactPersonMobileNumber: "",
-  startDate: "",
-  serviceTypeId: "",
-  durationType: "",
-  durationValue: "",
-  weekdays: [],
-  flexibility: "",
-  startTime: "",
-  endTime: "",
-  scheduleType: "",
-  preferredGender: "",
-  preferredLanguages: [],
-});
+      if (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0)
+      ) {
+        return `${field.label} is required`;
+      }
+    }
 
-// ✅ Move this AFTER useState
-useEffect(() => {
-  if (!form.startTime || !form.scheduleType) return;
+    // Extra rules
+    if (form.age <= 0) return "Age must be greater than 0";
+    if (form.height <= 0) return "Height must be greater than 0";
+    if (form.weight <= 0) return "Weight must be greater than 0";
+    // if (!/^\d{10}$/.test(form.contactPersonMobileNumber))
+    //   return "Enter a valid 10-digit mobile number";
 
-  const [hours, minutes] = form.startTime.split(":").map(Number);
-  const start = new Date();
-  start.setHours(hours);
-  start.setMinutes(minutes);
+    if (!/^\+91\d{10}$/.test(form.contactPersonMobileNumber))
+      return "Enter valid mobile number with +91";
 
-  let end = new Date(start);
+    if (
+      form.scheduleType === "CUSTOM_HOURS" &&
+      form.startTime >= form.endTime
+    ) {
+      return "End Time must be after Start Time";
+    }
 
-  switch (form.scheduleType) {
-    case "FULL_TIME_24_HOURS":
-      end.setHours(end.getHours() + 24);
-      break;
-    case "DAY_SHIFT_12_HOURS":
-    case "NIGHT_SHIFT_12_HOURS":
-      end.setHours(end.getHours() + 12);
-      break;
-    case "CUSTOM_HOURS":
-    default:
-      return;
-  }
+    return null;
+  };
 
-  const formattedEnd = end.toTimeString().slice(0, 5);
-  setForm((prev) => ({ ...prev, endTime: formattedEnd }));
-}, [form.startTime, form.scheduleType]);
+  const [form, setForm] = useState({
+    fullName: "",
+    gender: "",
+    age: "",
+    height: "",
+    weight: "",
+    diagnosisId: "",
+    healthStatusId: "",
+    stayAt: "",
+    city: "",
+    contactPersonName: "",
+    contactPersonRelation: "",
+    contactPersonEmail: "",
+    contactPersonMobileNumber: "",
+    startDate: "",
+    serviceTypeId: "",
+    durationType: "",
+    durationValue: "",
+    weekdays: [],
+    flexibility: "",
+    startTime: "",
+    endTime: "",
+    scheduleType: "",
+    preferredGender: "",
+    preferredLanguages: [],
+  });
+
+  // ✅ Move this AFTER useState
+  useEffect(() => {
+    if (!form.startTime || !form.scheduleType) return;
+
+    const [hours, minutes] = form.startTime.split(":").map(Number);
+    const start = new Date();
+    start.setHours(hours);
+    start.setMinutes(minutes);
+
+    let end = new Date(start);
+
+    switch (form.scheduleType) {
+      case "FULL_TIME_24_HOURS":
+        end.setHours(end.getHours() + 24);
+        break;
+      case "DAY_SHIFT_12_HOURS":
+      case "NIGHT_SHIFT_12_HOURS":
+        end.setHours(end.getHours() + 12);
+        break;
+      case "CUSTOM_HOURS":
+      default:
+        return;
+    }
+
+    const formattedEnd = end.toTimeString().slice(0, 5);
+    setForm((prev) => ({ ...prev, endTime: formattedEnd }));
+  }, [form.startTime, form.scheduleType]);
   useEffect(() => {
     fetchServices(1, 50); // load services
     fetchHealthStatus(1, 50); // load health statuses
@@ -142,13 +168,13 @@ useEffect(() => {
     if (!initialData || !listedLanguages) return;
 
     const diagnosisOption = listedDiagnoses?.find(
-      (d) => d.diagnosis === initialData.diagnosis
+      (d) => d.diagnosis === initialData.diagnosis,
     );
     const serviceOption = listedServices?.find(
-      (s) => s.service === initialData.serviceType
+      (s) => s.service === initialData.serviceType,
     );
     const healthStatusOption = listedHealthStatus?.find(
-      (h) => h.status === initialData.healthStatus
+      (h) => h.status === initialData.healthStatus,
     );
 
     setForm((prev) => ({
@@ -198,6 +224,14 @@ useEffect(() => {
   };
 
   const handleSave = async () => {
+    const error = validateForm();
+
+    if (error) {
+      setValidationError(error);
+      return;
+    }
+
+    setValidationError(""); // clear error
     const bookingId = initialData.id;
     console.log(bookingId);
 
@@ -516,30 +550,32 @@ useEffect(() => {
           /> */}
 
           {/* Start Time */}
-<InputGroup
-  label="Start Time"
-  name="startTime"
-  type="time"
-  value={form.startTime}
-  onChange={handleChange}
-/>
+          <InputGroup
+            label="Start Time"
+            name="startTime"
+            type="time"
+            value={form.startTime}
+            onChange={handleChange}
+          />
 
-{/* End Time */}
-<div className="flex flex-col gap-[6px]">
-  <label className="text-sm font-medium text-[#1F2937]">End Time</label>
-  <input
-    type="time"
-    name="endTime"
-    value={form.endTime}
-    onChange={handleChange}
-    disabled={
-      form.scheduleType !== "CUSTOM_HOURS" // only editable if custom
-    }
-    className={`w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm ${
-      form.scheduleType !== "CUSTOM_HOURS" ? "bg-gray-100" : ""
-    }`}
-  />
-</div>
+          {/* End Time */}
+          <div className="flex flex-col gap-[6px]">
+            <label className="text-sm font-medium text-[#1F2937]">
+              End Time
+            </label>
+            <input
+              type="time"
+              name="endTime"
+              value={form.endTime}
+              onChange={handleChange}
+              disabled={
+                form.scheduleType !== "CUSTOM_HOURS" // only editable if custom
+              }
+              className={`w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm ${
+                form.scheduleType !== "CUSTOM_HOURS" ? "bg-gray-100" : ""
+              }`}
+            />
+          </div>
 
           <div className="flex flex-col gap-[6px]">
             <label className="text-sm font-medium text-[#1F2937]">
@@ -646,63 +682,12 @@ useEffect(() => {
             </select>
           </div>
 
-          {/* Read-only Input showing comma-separated selected languages */}
-          {/* <div>
-            <InputGroup
-              label="Preferred Languages (comma separated)"
-              name="preferredLanguages"
-              value={form.preferredLanguages?.join(", ")}
-              onChange={() => {}}
-              readOnly
-            />
-
-            <div className="grid grid-cols-2 gap-2 my-4">
-              {[
-                "HINDI",
-                "KANNADA",
-                "ENGLISH",
-                "MALAYALAM",
-                "TAMIL",
-                "TELUGU",
-              ].map((lang) => (
-                <label key={lang} className="inline-flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={form.preferredLanguages?.includes(lang)}
-                    onChange={() => {
-                      const updated = form.preferredLanguages?.includes(lang)
-                        ? form.preferredLanguages.filter((l) => l !== lang) // remove
-                        : [...(form.preferredLanguages || []), lang]; // add
-                      setForm((prev) => ({
-                        ...prev,
-                        preferredLanguages: updated,
-                      }));
-                    }}
-                  />
-                  {lang}
-                </label>
-              ))}
-            </div>
-          </div> */}
-          {/* Preferred Languages */}
-          {/* Preferred Languages */}
           {/* Preferred Languages */}
           <div>
             <label className="text-sm font-medium text-[#1F2937] mb-1 block">
               Preferred Languages
             </label>
-            {/* Readonly input showing selected language names */}
-            {/* <input
-              type="text"
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm "
-              readOnly
-              value={
-                listedLanguages
-                  ?.filter((l) => form.preferredLanguages.includes(l.id))
-                  .map((l) => l.language)
-                  .join(", ") || ""
-              }
-            /> */}
+
             <input
               type="text"
               className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md text-sm"
@@ -718,28 +703,9 @@ useEffect(() => {
             )}
 
             <div className="grid grid-cols-2 gap-2 my-4">
-              {/* {listedLanguages?.map((lang) => (
-                <label key={lang.id} className="inline-flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={form.preferredLanguages?.includes(lang.id)}
-                    onChange={() => {
-                      const updated = form.preferredLanguages.includes(lang.id)
-                        ? form.preferredLanguages.filter((id) => id !== lang.id)
-                        : [...form.preferredLanguages, lang.id];
-                      setForm((prev) => ({
-                        ...prev,
-                        preferredLanguages: updated,
-                      }));
-                    }}
-                  />
-                  {lang.language}
-                </label>
-              ))} */}
-
               {listedLanguages?.map((lang) => {
                 const isChecked = form?.preferredLanguages?.some(
-                  (l) => l.id.toString() === lang.id.toString()
+                  (l) => l.id.toString() === lang.id.toString(),
                 );
 
                 return (
@@ -753,13 +719,13 @@ useEffect(() => {
                       onChange={() => {
                         setForm((prev) => {
                           const already = prev.preferredLanguages.some(
-                            (l) => l.id.toString() === lang.id.toString()
+                            (l) => l.id.toString() === lang.id.toString(),
                           );
                           return {
                             ...prev,
                             preferredLanguages: already
                               ? prev.preferredLanguages.filter(
-                                  (l) => l.id.toString() !== lang.id.toString()
+                                  (l) => l.id.toString() !== lang.id.toString(),
                                 )
                               : [
                                   ...prev.preferredLanguages,
@@ -792,6 +758,9 @@ useEffect(() => {
             Save Changes
           </button>
         </div>
+        {validationError && (
+          <p className="text-red-600 text-sm font-medium">{validationError}</p>
+        )}
       </div>
     </div>
   );
