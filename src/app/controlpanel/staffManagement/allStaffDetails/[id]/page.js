@@ -296,10 +296,6 @@ function StaffDetailPage() {
                     : ""}
               </span>
             </div>
-            {/* <div className="flex gap-[18px]">
-              <span className="w-[280px]">Working Duration</span>
-              <span>{nurseData.specializations || "Nil"}</span>
-            </div> */}
           </div>
 
           {/* Skills */}
@@ -416,13 +412,6 @@ function StaffDetailPage() {
           onClose={() => setIsExperincePopUp(false)}
         />
       )}
-
-      {/* {showPopup && (
-        <EditLanguagesPopup
-          selectedNurseLanguages={selectedNurseLanguages}
-          userId={userId}
-          onClose={() => setShowPopup(false)}
-        /> */}
 
       {showPopup && (
         <EditLanguagesPopup
