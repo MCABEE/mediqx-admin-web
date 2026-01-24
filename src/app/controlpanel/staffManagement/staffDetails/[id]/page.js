@@ -9,6 +9,7 @@ import EditContactModal from "@/components/staffManagement/NurseEdit/ContactDeta
 import EditNurseAvailability from "@/components/staffManagement/NurseEdit/EditNurseAvailability";
 import EditExperincePopup from "@/components/staffManagement/NurseEdit/EditExperincePopup";
 import NurseFileSection from "@/components/staffManagement/NurseFileSection";
+import EditLanguagesPopup from "@/components/staffManagement/NurseEdit/EditLanguagesPopup";
 
 function StaffDetailPage() {
   const router = useRouter();
@@ -23,18 +24,18 @@ function StaffDetailPage() {
     verifyNurse,
     fetchNurseLanguagesById,
     selectedNurseLanguages,
-    updateNurseGrading
+    updateNurseGrading,
   } = nurseStore();
-const [selectedGrading, setSelectedGrading] = useState("");
-const gradingOptions = [
-  "GRADE_01",
-  "GRADE_02",
-  "GRADE_03",
-  "GRADE_04",
-  "GRADE_05",
-  "GRADE_06",
-  "GRADE_07",
-];
+  const [selectedGrading, setSelectedGrading] = useState("");
+  const gradingOptions = [
+    "GRADE_01",
+    "GRADE_02",
+    "GRADE_03",
+    "GRADE_04",
+    "GRADE_05",
+    "GRADE_06",
+    "GRADE_07",
+  ];
 
   const [modalData, setModalData] = useState({ show: false, action: "" });
   const [preview, setPreview] = useState({
@@ -64,6 +65,7 @@ const gradingOptions = [
 
   const [editAvailabilityPopup, setEditAvailabilityPopup] = useState(false);
   const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -191,12 +193,12 @@ const gradingOptions = [
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
             Languages
           </h1>
-          {/* <button
-            
+          <button
+            onClick={() => setShowPopup(true)}
             className="cursor-pointer hover:scale-110"
           >
             <img src="/edit-btn.svg" className="size-6" alt="edit" />
-          </button> */}
+          </button>
         </div>
         <div className="flex flex-col text-black font-light gap-[18px] px-[39px] pb-[18px] border-b border-[#BBBBBB]">
           <div className="flex gap-[18px]">
@@ -283,29 +285,25 @@ const gradingOptions = [
                         day: "2-digit",
                         month: "long",
                         year: "numeric",
-                      }
+                      },
                     )
                   : ""}
                 {" - "}
                 {qualifications.onGoing
                   ? "Present"
                   : qualifications.endDate &&
-                    !isNaN(Date.parse(qualifications.endDate))
-                  ? new Date(qualifications.endDate).toLocaleDateString(
-                      "en-GB",
-                      {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      }
-                    )
-                  : ""}
+                      !isNaN(Date.parse(qualifications.endDate))
+                    ? new Date(qualifications.endDate).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        },
+                      )
+                    : ""}
               </span>
             </div>
-            {/* <div className="flex gap-[18px]">
-              <span className="w-[280px]">Working Duration</span>
-              <span>{nurseData.specializations || "Nil"}</span>
-            </div> */}
           </div>
 
           {/* Skills */}
@@ -323,78 +321,6 @@ const gradingOptions = [
           </div>
         </div>
         {/* File Uploads */}
-        {/* {[
-          { label: "Nursing Certificate", type: "NURSING_CERTIFICATE" },
-          { label: "Council Registration", type: "COUNCIL_REGISTRATION" },
-          {
-            label: "Experience Certificate",
-            type: "EXPERIENCE_CERTIFICATE",
-            isQualificationFile: true,
-          },
-          { label: "Photo", type: "PASSPORT_IMAGE" },
-        ].map(({ label, type, isQualificationFile }) => {
-          let file;
-
-          if (isQualificationFile) {
-            // Get from qualifications[].files[]
-            const allQualificationFiles = qualifications?.files || [];
-            file = allQualificationFiles.find((f) => f.type === type);
-          } else {
-            // Get from top-level files[]
-            file = files.find((f) => f.type === type);
-          }
-
-          return (
-            <div
-              key={type}
-              className="flex flex-col bg-[#EBF2F8] px-[39px] py-6 gap-2"
-            >
-              <span className="w-[300px] text-black">{label}</span>
-              {file ? (
-                <div className="flex items-center gap-4 ps-[52px]">
-                  <span className="text-gray-700 truncate w-[300px]">
-                    {file.fileName}
-                  </span>
-                  <img src="/pdf.svg" alt="PDF Icon" />
-                  <button
-                    onClick={() =>
-                      setPreview({
-                        show: true,
-                        fileUrl: `${url}${file.key}`,
-                        isImage: isImage(file.fileName),
-                      })
-                    }
-                    className="text-[#1982FE] cursor-pointer"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={async () => {
-                      try {
-                        const response = await fetch(`${url}${file.key}`);
-                        const blob = await response.blob();
-                        const downloadUrl = window.URL.createObjectURL(blob);
-                        const link = document.createElement("a");
-                        link.href = downloadUrl;
-                        link.download = file.fileName;
-                        document.body.appendChild(link);
-                        link.click();
-                        link.remove();
-                      } catch {
-                        alert("Download failed.");
-                      }
-                    }}
-                    className="text-[#1982FE] cursor-pointer"
-                  >
-                    Download
-                  </button>
-                </div>
-              ) : (
-                <span className="text-[#FF0000] ps-10">Not Uploaded</span>
-              )}
-            </div>
-          );
-        })} */}
 
         <NurseFileSection
           userId={nurseData.userId}
@@ -432,28 +358,66 @@ const gradingOptions = [
       </div>
 
       {/* Confirm Modal */}
-      {/* {modalData.show && (
+
+      {modalData.show && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#9b989876] backdrop-blur-xs z-50">
           <div className="bg-white rounded-xl p-6 w-[400px] text-center shadow-lg text-black">
             <h2 className="text-lg font-semibold mb-4 text-black">
               Confirm {modalData.action}
             </h2>
-            <p className="text-black">
+
+            <p className="text-black mb-4">
               Are you sure you want to{" "}
               <strong>{modalData.action?.toLowerCase()}</strong> nurse{" "}
               <strong>{selectedNurse.fullName}</strong>?
             </p>
+
+            {/* 👉 Show grading dropdown only when approving */}
+            {modalData.action === "APPROVED" && (
+              <div className="mb-4 text-left">
+                <label className="text-sm font-medium text-black">
+                  Select Grading *
+                </label>
+                <select
+                  className="w-full mt-1 p-2 border border-gray-400 rounded-md outline-none"
+                  value={selectedGrading}
+                  onChange={(e) => setSelectedGrading(e.target.value)}
+                >
+                  <option value="">Select grading</option>
+                  {gradingOptions.map((grade) => (
+                    <option key={grade} value={grade}>
+                      {grade}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="flex justify-center gap-4 mt-6">
               <button
+                disabled={modalData.action === "APPROVED" && !selectedGrading}
                 onClick={async () => {
+                  // Step 1: grading update first
+                  if (modalData.action === "APPROVED") {
+                    await updateNurseGrading(userId, selectedGrading);
+                  }
+
+                  // Step 2: then approve / reject
                   await verifyNurse(userId, modalData.action);
+
                   setModalData({ show: false, action: "" });
                   router.push(`/controlpanel/staffManagement?role=${role}`);
                 }}
-                className="px-4 py-2 bg-[#3674B5] text-white rounded-md cursor-pointer"
+                className={`px-4 py-2 rounded-md cursor-pointer text-white
+            ${
+              modalData.action === "APPROVED" && !selectedGrading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#3674B5]"
+            }`}
               >
                 Yes, Confirm
               </button>
+
               <button
                 onClick={() => setModalData({ show: false, action: "" })}
                 className="px-4 py-2 bg-gray-300 rounded-md cursor-pointer"
@@ -463,100 +427,10 @@ const gradingOptions = [
             </div>
           </div>
         </div>
-      )} */}
-
-      {modalData.show && (
-  <div className="fixed inset-0 flex items-center justify-center bg-[#9b989876] backdrop-blur-xs z-50">
-    <div className="bg-white rounded-xl p-6 w-[400px] text-center shadow-lg text-black">
-      <h2 className="text-lg font-semibold mb-4 text-black">
-        Confirm {modalData.action}
-      </h2>
-
-      <p className="text-black mb-4">
-        Are you sure you want to{" "}
-        <strong>{modalData.action?.toLowerCase()}</strong> nurse{" "}
-        <strong>{selectedNurse.fullName}</strong>?
-      </p>
-
-      {/* 👉 Show grading dropdown only when approving */}
-      {modalData.action === "APPROVED" && (
-        <div className="mb-4 text-left">
-          <label className="text-sm font-medium text-black">Select Grading *</label>
-          <select
-            className="w-full mt-1 p-2 border border-gray-400 rounded-md outline-none"
-            value={selectedGrading}
-            onChange={(e) => setSelectedGrading(e.target.value)}
-          >
-            <option value="">Select grading</option>
-            {gradingOptions.map((grade) => (
-              <option key={grade} value={grade}>
-                {grade}
-              </option>
-            ))}
-          </select>
-        </div>
       )}
 
-      <div className="flex justify-center gap-4 mt-6">
-        <button
-          disabled={modalData.action === "APPROVED" && !selectedGrading}
-          onClick={async () => {
-            // Step 1: grading update first
-            if (modalData.action === "APPROVED") {
-              await updateNurseGrading(userId, selectedGrading);
-            }
-
-            // Step 2: then approve / reject
-            await verifyNurse(userId, modalData.action);
-
-            setModalData({ show: false, action: "" });
-            router.push(`/controlpanel/staffManagement?role=${role}`);
-          }}
-          className={`px-4 py-2 rounded-md cursor-pointer text-white
-            ${modalData.action === "APPROVED" && !selectedGrading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-[#3674B5]"}`
-          }
-        >
-          Yes, Confirm
-        </button>
-
-        <button
-          onClick={() => setModalData({ show: false, action: "" })}
-          className="px-4 py-2 bg-gray-300 rounded-md cursor-pointer"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-
       {/* Preview Modal */}
-      {/* {preview.show && (
-        <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
-          <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
-            <button
-              onClick={() =>
-                setPreview({ show: false, fileUrl: "", isImage: false })
-              }
-              className=" w-7  h-7 absolute top-0 -right-8 bg-[#ffff] rounded-full text-gray-500 hover:text-black text-xl font-semibold cursor-pointer"
-            >
-              ✕
-            </button>
-            {preview.isImage ? (
-              <img
-                src={preview.fileUrl}
-                alt="Preview"
-                className="max-w-full max-h-[80vh] mx-auto"
-              />
-            ) : (
-              <iframe src={preview.fileUrl} className="w-full h-[80vh]" />
-            )}
-          </div>
-        </div>
-      )} */}
+
       {preview.show && (
         <div className="fixed inset-0 bg-[#8b898976] z-50 flex items-center justify-center backdrop-blur-xs">
           <div className="bg-white rounded-xl p-4 max-w-3xl w-full shadow-lg relative">
@@ -583,9 +457,6 @@ const gradingOptions = [
                   width="100%"
                   height="100%"
                 />
-                {/* <p className="text-center mt-2">
-            If you cannot see the PDF, <a href={preview.fileUrl} target="_blank" rel="noopener noreferrer">download it here</a>.
-          </p> */}
               </div>
             )}
           </div>
@@ -602,14 +473,6 @@ const gradingOptions = [
         onCancel={() => setIsEditModalOpen(false)}
       />
 
-      {/* {editAvailabilityPopup && (
-        <EditNurseAvailability
-          availabilities={availabilities}
-          userId={userId}
-          onClose={() => setEditAvailabilityPopup(false)}
-        />
-      )} */}
-
       {isEditExperincePopUp && (
         <EditExperincePopup
           qualifications={qualifications}
@@ -617,6 +480,18 @@ const gradingOptions = [
           userId={userId}
           role={selectedNurse.role}
           onClose={() => setIsExperincePopUp(false)}
+        />
+      )}
+
+      {showPopup && (
+        <EditLanguagesPopup
+          selectedNurseLanguages={selectedNurseLanguages}
+          userId={userId}
+          onClose={() => setShowPopup(false)}
+          onSuccess={() => {
+            fetchNurseLanguagesById(userId);
+            setShowPopup(false);
+          }}
         />
       )}
     </div>
