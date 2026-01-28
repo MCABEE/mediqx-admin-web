@@ -1,11 +1,8 @@
-
-
 "use client";
 
 import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistrationStore";
 import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
 
 function Page() {
   const router = useRouter();
@@ -22,8 +19,8 @@ function Page() {
     error,
   } = useSupervisorRegistrationStore();
 
-  const [year, setYear] = useState("2025");
-  const [month, setMonth] = useState("December");
+  const [year, setYear] = useState("2026");
+  const [month, setMonth] = useState("January");
 
   useEffect(() => {
     if (supervisorId) {
@@ -39,7 +36,7 @@ function Page() {
 
   const handleRowClick = (serviceId) => {
     router.push(
-      `/controlpanel/staffManagement/supervisor/supervisor-service-details/${serviceId}`
+      `/controlpanel/staffManagement/supervisor/supervisor-service-details/${serviceId}`,
     );
   };
 
@@ -83,7 +80,7 @@ function Page() {
       </div>
 
       {/* Supervisor Name */}
-      <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-t-[15px] flex items-center">
+      <div className="w-full  h-[48px] flex justify-between items-center  bg-[#C0D8F6] mt-2 rounded-t-[15px]  ">
         <h1 className="text-[16px] px-[38px] font-semibold">
           {supervisorName || "-"}
         </h1>
@@ -108,17 +105,27 @@ function Page() {
             className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4"
           >
             {[
-              "January","February","March","April","May","June",
-              "July","August","September","October","November","December",
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December",
             ].map((m) => (
-              <option key={m} value={m}>{m}</option>
+              <option key={m} value={m}>
+                {m}
+              </option>
             ))}
           </select>
         </div>
 
-        <h1 className="text-[16px] font-semibold">
-          {totalServices} services
-        </h1>
+        <h1 className="text-[16px] font-semibold">{totalServices} services</h1>
       </div>
 
       {/* Table */}
@@ -129,7 +136,9 @@ function Page() {
             <th className="p-2 border-l-4 border-[#F0F4F9]">Patient Name</th>
             <th className="p-2 border-l-4 border-[#F0F4F9]">Service</th>
             <th className="p-2 border-l-4 border-[#F0F4F9]">Products</th>
-            <th className="p-2 border-l-4 border-[#F0F4F9] rounded-r-2xl">Billing</th>
+            <th className="p-2 border-l-4 border-[#F0F4F9] rounded-r-2xl">
+              Billing
+            </th>
           </tr>
         </thead>
 
@@ -140,9 +149,7 @@ function Page() {
               onClick={() => handleRowClick(item.serviceId)}
               className="bg-white cursor-pointer hover:bg-gray-100"
             >
-              <td className="p-2">
-                {(page - 1) * 10 + index + 1}
-              </td>
+              <td className="p-2">{(page - 1) * 10 + index + 1}</td>
               <td className="border-l-4 p-2 border-[#C0D8F6] hover:underline">
                 {item.patientName}
               </td>
