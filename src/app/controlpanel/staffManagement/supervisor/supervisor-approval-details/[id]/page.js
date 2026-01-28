@@ -8,6 +8,7 @@ import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistr
 import EditSupervisorBasicPopup from "@/components/supervisor/EditSupervisorBasicPopup";
 import EditSupervisorExperiencePopup from "@/components/supervisor/EditSupervisorExperiencePopup";
 import SupervisorFileSection from "@/components/supervisor/SupervisorFileSection";
+import RemoveSupervisorPopup from "@/components/supervisor/RemoveSupervisorPopup";
 /* 🔹 END ADD */
 
 export default function SupervisorApprovalDetailsPage() {
@@ -18,6 +19,7 @@ export default function SupervisorApprovalDetailsPage() {
     useSupervisorRegistrationStore();
 
   /* 🔹 ADDED STATE */
+  const [removeSupervisorPopup, setRemoveSupervisorPopup] = useState(false);
   const [editBasic, setEditBasic] = useState(false);
   const [editExperience, setEditExperience] = useState(false);
   const [preview, setPreview] = useState({
@@ -76,7 +78,7 @@ export default function SupervisorApprovalDetailsPage() {
           </tr>
         </tbody>
       </table>
- 
+
       {/* Profile Details */}
       <div className="bg-white border border-[#BBBBBB] rounded-[15px] mt-4 mb-6 pb-4">
         {/* Name Header */}
@@ -84,6 +86,12 @@ export default function SupervisorApprovalDetailsPage() {
           <span className="text-[20px] font-semibold text-[#333333]">
             {supervisor.fullName}
           </span>
+          <button
+            className=" text-white font-semibold text-[16px] w-[162px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer"
+            onClick={() => setRemoveSupervisorPopup(true)}
+          >
+            Remove Employee
+          </button>
         </div>
 
         {/* BASIC DETAILS */}
@@ -192,9 +200,7 @@ export default function SupervisorApprovalDetailsPage() {
 
           <div className="flex flex-col gap-[10px]">
             {supervisor.skills?.length > 0
-              ? supervisor.skills.map((s) => (
-                  <span key={s.id}>{s.skill}</span>
-                ))
+              ? supervisor.skills.map((s) => <span key={s.id}>{s.skill}</span>)
               : "No skills"}
           </div>
         </div>
@@ -208,19 +214,19 @@ export default function SupervisorApprovalDetailsPage() {
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Languages</span>
             <span>
-              {supervisor.languages?.map((l) => l.language).join(", ") || "None"}
+              {supervisor.languages?.map((l) => l.language).join(", ") ||
+                "None"}
             </span>
           </div>
         </div>
 
         {/* 🔹 FILE SECTION ADDED (NO UI CHANGE) */}
         <SupervisorFileSection
-  files={supervisor.files}
-  qualifications={supervisor.qualifications}
-  url={"https://dev-nurse-docs.s3.ap-south-1.amazonaws.com/"}
-  setPreview={setPreview}
-/>
-
+          files={supervisor.files}
+          qualifications={supervisor.qualifications}
+          url={"https://dev-nurse-docs.s3.ap-south-1.amazonaws.com/"}
+          setPreview={setPreview}
+        />
       </div>
 
       {/* 🔹 FILE PREVIEW MODAL */}
@@ -262,6 +268,14 @@ export default function SupervisorApprovalDetailsPage() {
         onClose={() => setEditExperience(false)}
         supervisor={supervisor}
       />
+
+      {removeSupervisorPopup && (
+        <RemoveSupervisorPopup
+          staffName={supervisor.fullName}
+          staffId={supervisor.userId}
+          onClose={() => setRemoveSupervisorPopup(false)}
+        />
+      )}
     </div>
   );
 }

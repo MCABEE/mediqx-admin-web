@@ -271,3 +271,17 @@ export const updateNurseGrading = async (nurseId, grading) => {
     throw new Error(message);
   }
 };
+
+
+
+export const deleteStaffAPI = async (id, reason) => {
+  try {
+    const res = await api.delete(`/admin/users/${id}`, {
+      data: { reason },
+    });
+
+    return res.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
