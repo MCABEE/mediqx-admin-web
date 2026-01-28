@@ -14,6 +14,7 @@ import {
   getNurseQualificationById,
   getNurseLanguagesById,
   updateNurseGrading,
+  deleteStaffAPI,
 } from "@/api/nurseApi";
 
 const useNurseStore = create(
@@ -57,7 +58,7 @@ const useNurseStore = create(
         limit = get().limit,
         status = "ALL",
         role = "REGISTERED_NURSE",
-        filters
+        filters,
       ) => {
         set({ isLoading: true, error: null });
 
@@ -74,7 +75,7 @@ const useNurseStore = create(
             limit,
             status,
             role,
-            currentFilters
+            currentFilters,
           );
           const nurseData = response?.data?.data?.users || [];
           set({
@@ -159,7 +160,7 @@ const useNurseStore = create(
         try {
           const result = await updateNurseAvailability(
             userId,
-            payload.availabilities
+            payload.availabilities,
           ); // pass only the array
           console.log("✅ Availability updated:", result);
           await get().fetchNurseById(userId);
@@ -287,6 +288,18 @@ const useNurseStore = create(
         }
       },
 
+      deleteStaff: async (id, reason) => {
+        set({ loading: true });
+        try {
+          const res = await deleteStaffAPI(id, reason);
+          set({ loading: false });
+          return { success: true, data: res };
+        } catch (error) {
+          set({ loading: false });
+          return { success: false, error };
+        }
+      },
+
       setPage: (newPage) => set({ page: newPage }),
       setLimit: (newLimit) => set({ limit: newLimit }),
     }),
@@ -300,8 +313,8 @@ const useNurseStore = create(
         totalUsers: state.totalUsers,
         selectedNurse: state.selectedNurse,
       }),
-    }
-  )
+    },
+  ),
 );
 
 export default useNurseStore;

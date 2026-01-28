@@ -10,6 +10,7 @@ import EditNurseAvailability from "@/components/staffManagement/NurseEdit/EditNu
 import EditExperincePopup from "@/components/staffManagement/NurseEdit/EditExperincePopup";
 import NurseFileSection from "@/components/staffManagement/NurseFileSection";
 import EditLanguagesPopup from "@/components/staffManagement/NurseEdit/EditLanguagesPopup";
+import RemoveStaffPopup from "@/components/staffManagement/RemoveStaffPopup";
 
 function StaffDetailPage() {
   const router = useRouter();
@@ -55,6 +56,7 @@ function StaffDetailPage() {
   const [editAvailabilityPopup, setEditAvailabilityPopup] = useState(false);
   const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [removeStaffPopup,setRemoveStaffPopup]= useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -121,6 +123,9 @@ function StaffDetailPage() {
           <span className="text-[20px] font-semibold text-[#333333]">
             {selectedNurse.fullName}
           </span>
+          <button
+          className=" text-white font-semibold text-[16px] w-[162px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer"
+          onClick={()=>setRemoveStaffPopup(true)}>Remove Employee</button>
         </div>
         <div className="flex justify-between px-[39px]">
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
@@ -424,6 +429,17 @@ function StaffDetailPage() {
           }}
         />
       )}
+
+
+      {
+        removeStaffPopup && (
+          <RemoveStaffPopup
+          staffName={selectedNurse.fullName}
+          staffId={userId}
+          onClose={()=>setRemoveStaffPopup(false)}
+          />
+        )
+      }
     </div>
   );
 }
