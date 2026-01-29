@@ -38,8 +38,8 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
 
   useEffect(() => {
     if (normalizedCategory) {
-      fetchItems("qualifications", 1, 50, normalizedCategory);
-      fetchItems("specializations", 1, 50, normalizedCategory);
+      fetchItems("qualifications", 1, 100, normalizedCategory);
+      fetchItems("specializations", 1, 100, normalizedCategory);
     }
   }, [normalizedCategory, fetchItems]);
 

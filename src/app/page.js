@@ -1,9 +1,161 @@
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import { useAuthStore } from "./lib/store/authStore";
+// import { login } from "@/api/auth";
+
+// export default function Home() {
+//   const router = useRouter();
+//   const { login: loginToStore, loadToken, accessToken } = useAuthStore();
+
+//   const [loginType, setLoginType] = useState("PHONE"); // PHONE | EMAIL
+//   const [identifier, setIdentifier] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [errorMessage, setErrorMessage] = useState("");
+//   const [loading, setLoading] = useState(false);
+
+//   useEffect(() => {
+//     loadToken();
+//   }, [loadToken]);
+
+//   useEffect(() => {
+//     if (accessToken) {
+//       router.replace("/controlpanel/dashboard");
+//     }
+//   }, [accessToken, router]);
+
+//   /* ===================== LOGIN ===================== */
+//   const handleLogin = async (e) => {
+//     e.preventDefault();
+//     setErrorMessage("");
+//     setLoading(true);
+
+//     try {
+//       // ✅ only send identifier + password
+//       const data = await login(identifier, password);
+
+//       const { accessToken, userId, permissions,username,isMainAdmin } = data.data;
+
+//       if (!accessToken || !userId) {
+//         throw new Error("Invalid login response");
+//       }
+
+//       loginToStore(accessToken, userId, permissions,username,isMainAdmin );
+//       router.push("/controlpanel/dashboard");
+//     } catch (err) {
+//       setErrorMessage(err.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="flex flex-col min-h-screen bg-slate-100">
+//       <main className="flex-grow px-5 md:px-20 md:py-20 flex justify-center">
+//         <section className="flex flex-col md:flex-row md:gap-10 px-5 md:px-16 py-12 bg-white rounded-[30px] min-w-full">
+//            <div className="flex-1 flex justify-center mb-4 md:mb-0">
+//              <img
+//               loading="lazy"
+//               src={"/logo.svg"}
+//               alt="Master Control Panel Logo"
+//               className="w-[300px]"
+//             />
+//           </div>
+
+//           <div className="w-full h-full flex-1 flex justify-center md:justify-start items-center">
+//             <form
+//               onSubmit={handleLogin}
+//               className="flex flex-col w-md "
+//             >
+//               <h2 className="text-3xl font-semibold mb-6">
+//                 Master <br />Control Panel
+//               </h2>
+
+//               {/* 🔁 LOGIN TYPE TOGGLE */}
+//               <div className="flex mb-4 bg-gray-100 rounded-full p-1">
+//                 {["PHONE", "EMAIL"].map((type) => (
+//                   <button
+//                     type="button"
+//                     key={type}
+//                     onClick={() => {
+//                       setLoginType(type);
+//                       setIdentifier("");
+//                     }}
+//                     className={`flex-1 py-2 text-sm rounded-full transition ${
+//                       loginType === type
+//                         ? "bg-[#3674B5] text-white"
+//                         : "text-gray-600"
+//                     }`}
+//                   >
+//                     {type === "PHONE" ? "Phone" : "Email"}
+//                   </button>
+//                 ))}
+//               </div>
+
+//               {/* IDENTIFIER INPUT */}
+//               <input
+//                 type="text"
+//                 placeholder={
+//                   loginType === "PHONE"
+//                     ? "Mobile Number"
+//                     : "Email Address"
+//                 }
+//                 value={identifier}
+//                 onChange={(e) => setIdentifier(e.target.value)}
+//                 className="px-4 py-3 mb-4 border rounded-xl"
+//                 required
+//               />
+
+//               <input
+//                 type="password"
+//                 placeholder="Password"
+//                 value={password}
+//                 onChange={(e) => setPassword(e.target.value)}
+//                 className="px-4 py-3 border rounded-xl"
+//                 required
+//               />
+
+//               {errorMessage && (
+//                 <p className="text-red-500 text-sm mt-2">
+//                   {errorMessage}
+//                 </p>
+//               )}
+
+//               <div className="flex justify-end mt-6">
+//                 <button
+//                   type="submit"
+//                   disabled={loading}
+//                   className={`w-[120px] py-2 rounded-3xl text-white ${
+//                     loading ? "bg-blue-400" : "bg-[#3674B5]"
+//                   }`}
+//                 >
+//                   {loading ? "Logging in..." : "Login"}
+//                 </button>
+//               </div>
+//             </form>
+//           </div>
+//         </section>
+//       </main>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "./lib/store/authStore";
 import { login } from "@/api/auth";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Home() {
   const router = useRouter();
@@ -12,6 +164,7 @@ export default function Home() {
   const [loginType, setLoginType] = useState("PHONE"); // PHONE | EMAIL
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -32,16 +185,22 @@ export default function Home() {
     setLoading(true);
 
     try {
-      // ✅ only send identifier + password
       const data = await login(identifier, password);
-
-      const { accessToken, userId, permissions,username,isMainAdmin } = data.data;
+      const { accessToken, userId, permissions, username, isMainAdmin } =
+        data.data;
 
       if (!accessToken || !userId) {
         throw new Error("Invalid login response");
       }
 
-      loginToStore(accessToken, userId, permissions,username,isMainAdmin );
+      loginToStore(
+        accessToken,
+        userId,
+        permissions,
+        username,
+        isMainAdmin
+      );
+
       router.push("/controlpanel/dashboard");
     } catch (err) {
       setErrorMessage(err.message);
@@ -54,8 +213,10 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-slate-100">
       <main className="flex-grow px-5 md:px-20 md:py-20 flex justify-center">
         <section className="flex flex-col md:flex-row md:gap-10 px-5 md:px-16 py-12 bg-white rounded-[30px] min-w-full">
-           <div className="flex-1 flex justify-center mb-4 md:mb-0">
-             <img
+          
+          {/* Logo */}
+          <div className="flex-1 flex justify-center mb-4 md:mb-0">
+            <img
               loading="lazy"
               src={"/logo.svg"}
               alt="Master Control Panel Logo"
@@ -63,13 +224,12 @@ export default function Home() {
             />
           </div>
 
+          {/* Login Form */}
           <div className="w-full h-full flex-1 flex justify-center md:justify-start items-center">
-            <form
-              onSubmit={handleLogin}
-              className="flex flex-col w-md "
-            >
+            <form onSubmit={handleLogin} className="flex flex-col w-md">
               <h2 className="text-3xl font-semibold mb-6">
-                Master <br />Control Panel
+                Master <br />
+                Control Panel
               </h2>
 
               {/* 🔁 LOGIN TYPE TOGGLE */}
@@ -95,7 +255,7 @@ export default function Home() {
 
               {/* IDENTIFIER INPUT */}
               <input
-                type="text"
+                type={loginType === "PHONE" ? "number" : "email"}
                 placeholder={
                   loginType === "PHONE"
                     ? "Mobile Number"
@@ -103,18 +263,28 @@ export default function Home() {
                 }
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                className="px-4 py-3 mb-4 border rounded-xl"
+                className="px-4 py-3 mb-4 border rounded-xl outline-blue-900"
                 required
               />
 
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="px-4 py-3 border rounded-xl"
-                required
-              />
+              {/* PASSWORD INPUT WITH TOGGLE */}
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="px-4 py-3 border rounded-xl w-full pr-12 outline-blue-900"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
 
               {errorMessage && (
                 <p className="text-red-500 text-sm mt-2">

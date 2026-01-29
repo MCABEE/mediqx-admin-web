@@ -6,7 +6,9 @@ import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsS
 import { AiOutlineClose } from "react-icons/ai";
 import LocationPickerPopup from "../addNewStaff/LocationPickerPopup";
 
-const EditContactModal = ({ show, userId, onCancel, role }) => {
+const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
+  console.log(grading);
+  
   const { updateNurseDetails, fetchNurseProfileById, selectedNurseProfile } =
     useNurseStore();
   const { fetchItems, listedItems } = useManageProfessionalsStore();
@@ -15,6 +17,16 @@ const EditContactModal = ({ show, userId, onCancel, role }) => {
   const [specializations, setSpecializations] = useState([]);
   const [showLocationPopup, setShowLocationPopup] = useState(false);
   const [formData, setFormData] = useState({});
+
+  const gradingOptions = [
+  "GRADE_01",
+  "GRADE_02",
+  "GRADE_03",
+  "GRADE_04",
+  "GRADE_05",
+  "GRADE_06",
+  "GRADE_07",
+];
 
   // Fetch nurse profile
   useEffect(() => {
@@ -39,6 +51,15 @@ const EditContactModal = ({ show, userId, onCancel, role }) => {
         specializations: selectedNurseProfile.specializations || [],
 
         workSchedule: selectedNurseProfile.workSchedule || "",
+           // ONLY SET IF PROP EXISTS
+            ...(grading
+        ? {
+            grading:
+              selectedNurseProfile.grading || grading || "",
+          }
+        : {}),
+
+
       });
     }
   }, [selectedNurseProfile]);
@@ -112,6 +133,7 @@ const EditContactModal = ({ show, userId, onCancel, role }) => {
       educationQualifications: formData.educationQualifications,
       specializations: formData.specializations,
       workSchedule: formData.workSchedule,
+      ...(formData.grading ? { grading: formData.grading } : {}),
 
       // Only send if address has been updated
       latitude: formData.address?.latitude,
@@ -276,6 +298,19 @@ const EditContactModal = ({ show, userId, onCancel, role }) => {
                 {formData.address?.fullAddress || "Pick location on map"}
               </button>
             </div>
+
+
+            {grading && (
+  <SelectField
+    label="Grading"
+    value={formData.grading || ""}
+    onChange={(e) => handleChange("grading", e.target.value)}
+    options={[
+      { label: "Select grading", value: "" },
+      ...gradingOptions.map((g) => ({ label: g, value: g })),
+    ]}
+  />
+)}
           </div>
 
           <div className="flex justify-end gap-3 mt-8">

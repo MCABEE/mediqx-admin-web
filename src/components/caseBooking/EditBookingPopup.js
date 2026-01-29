@@ -150,9 +150,9 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
     setForm((prev) => ({ ...prev, endTime: formattedEnd }));
   }, [form.startTime, form.scheduleType]);
   useEffect(() => {
-    fetchServices(1, 50); // load services
-    fetchHealthStatus(1, 50); // load health statuses
-    fetchDiagnosesList(1, 50); // load diagnoses
+    fetchServices(1, 100); // load services
+    fetchHealthStatus(1, 100); // load health statuses
+    fetchDiagnosesList(1, 100); // load diagnoses
   }, [fetchServices, fetchHealthStatus, fetchDiagnosesList]);
 
   console.log(listedServices);
