@@ -13,18 +13,19 @@ const AssignStaffTable = ({
   onApplyRadius,
 }) => {
   const router = useRouter();
+
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showWarningPopup, setShowWarningPopup] = useState(false); // ✅ added
   const [selectedNurse, setSelectedNurse] = useState(null);
 
   const nursesPerPage = 50;
 
   // ✅ Remove duplicates by userId (keeps first occurrence)
   const uniqueNurses = Array.from(
-    new Map(nurses.map(n => [n.userId, n])).values()
+    new Map(nurses.map((n) => [n.userId, n])).values(),
   );
 
   const totalPages = Math.ceil(uniqueNurses.length / nursesPerPage);
-
   const indexOfLastNurse = currentPage * nursesPerPage;
   const indexOfFirstNurse = indexOfLastNurse - nursesPerPage;
   const currentNurses = uniqueNurses.slice(indexOfFirstNurse, indexOfLastNurse);
@@ -33,9 +34,15 @@ const AssignStaffTable = ({
     router.push(`/controlpanel/staffManagement/allStaffDetails/${userId}`);
   };
 
+  // ✅ ONLY LOGIC CHANGE
   const handleAssignClick = (nurse) => {
     setSelectedNurse(nurse);
-    setShowConfirm(true);
+
+    if (nurse.onDuty === true) {
+      setShowWarningPopup(true);
+    } else {
+      setShowConfirm(true);
+    }
   };
 
   const handleConfirm = async () => {
@@ -43,18 +50,19 @@ const AssignStaffTable = ({
       await onSelectNurse?.(selectedNurse.userId);
     }
     setShowConfirm(false);
+    setShowWarningPopup(false);
   };
 
   if (isLoading) return <p>Loading...</p>;
 
   return (
     <>
-      {/* Confirm Popup */}
+      {/* ================= CONFIRM POPUP (UNCHANGED) ================= */}
       {showConfirm && (
         <div className="fixed inset-0 z-50 bg-[#1a191959] backdrop-blur-xs flex items-center justify-center">
           <div className="bg-white w-[500px] h-[200px] p-8 rounded-xl shadow-md text-center flex justify-center items-center flex-col">
             <p className="font-thin text-black">
-              Are you sure you want to assign  <br />
+              Are you sure you want to assign <br />
               <span className="font-semibold text-black">
                 "{selectedNurse?.fullName}"
               </span>
@@ -78,7 +86,59 @@ const AssignStaffTable = ({
         </div>
       )}
 
-      {/* Header with Radius */}
+      {/* ================= ON DUTY WARNING POPUP (NEW, STYLE UNCHANGED) ================= */}
+      {showWarningPopup && (
+        <div className="fixed inset-0 bg-[#03030347] backdrop-blur-xs flex items-center justify-center z-50">
+          <div
+            className={`rounded-[15px] w-[762px] h-[456px] shadow-xl bg-white`}
+          >
+            <div className="rounded-t-[15px] h-[100px] bg-red-500 relative">
+              <div
+                onClick={() => setShowWarningPopup(false)}
+                className="bg-white hover:bg-[#e2e0e0] size-[24px] flex justify-center items-center absolute rounded right-6 top-6 cursor-pointer"
+              >
+                <h1 className={`rotate-45 text-2xl `}>+</h1>
+              </div>
+              <h1 className="text-white text-[20px] text-center pt-14">
+                Warning
+              </h1>
+            </div>
+
+            <div className="flex flex-col items-center mt-[24px] border-b border-[#BBBBBB] pb-[26px]">
+              <p className="text-[16px] text-black">
+                This{" "}
+                <span className="font-semibold">{selectedNurse?.fullName}</span>{" "}
+                is currently <span className="font-semibold">'On Duty'</span>,
+              </p>
+              <p className="text-[16px] text-black">
+                Do you want to assign a new duty forcefully?
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center mt-[24px] border-b border-[#BBBBBB] pb-[46px]">
+              <p className="text-[16px] text-black font-semibold">
+                Duty Schedule &nbsp;{selectedNurse?.dutyScheduleType}
+              </p>
+              <p className="text-[16px] text-black">
+                Start Time &nbsp;{selectedNurse?.dutyStartTime}
+              </p>
+              <p className="text-[16px] text-black">
+                End Time &nbsp;{selectedNurse?.dutyEndTime}
+              </p>
+            </div>
+
+            <div className="flex justify-center items-center">
+              <button
+                onClick={handleConfirm}
+                className="mt-[41px] text-white font-semibold text-[16px] w-[192px] h-[40px] bg-[#3674B5] rounded-[15px]"
+              >
+                Confirm Assign
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] my-4 py-2 px-6 text-[#3674B5] font-semibold text-[24px] flex justify-between items-center">
         <p>{uniqueNurses.length} Results found</p>
 
@@ -133,7 +193,7 @@ const AssignStaffTable = ({
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto mb-4">
         <table className="w-full border-spacing-y-2 border-separate text-black">
           <thead className="bg-[#C0D8F6]">
             <tr className="p-2 bg-[#C0D8F6]">
@@ -142,6 +202,9 @@ const AssignStaffTable = ({
               </th>
               <th className="text-base border-l-4 border-[#F0F4F9] p-2">
                 Name
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+                Duty Status
               </th>
               <th className="text-base border-l-4 border-[#F0F4F9] p-2">
                 Location
@@ -157,37 +220,6 @@ const AssignStaffTable = ({
               </th>
             </tr>
           </thead>
-          {/* <tbody>
-            {currentNurses.map((nurse, index) => (
-              <tr
-                key={`${nurse.userId || "no-id"}-${indexOfFirstNurse + index}`} // ✅ Unique key
-                className="bg-white"
-              >
-                <td className="p-2">{indexOfFirstNurse + index + 1}</td>
-                <td
-                  className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer hover:underline"
-                  onClick={() => handleNameClick(nurse.userId)}
-                >
-                  {nurse.fullName}
-                </td>
-                <td className="border-l-4 border-[#C0D8F6] p-2">
-                  {nurse.location}
-                </td>
-                <td className="border-l-4 border-[#C0D8F6] p-2">
-                  {nurse.gender}
-                </td>
-                <td className="border-l-4 border-[#C0D8F6] p-2">
-                  {nurse.educationQualifications}
-                </td>
-                <td
-                  className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer text-blue-600 hover:underline"
-                  onClick={() => handleAssignClick(nurse)}
-                >
-                  Assign
-                </td>
-              </tr>
-            ))}
-          </tbody> */}
 
           <tbody>
             {currentNurses.length > 0 ? (
@@ -204,6 +236,9 @@ const AssignStaffTable = ({
                     onClick={() => handleNameClick(nurse.userId)}
                   >
                     {nurse.fullName}
+                  </td>
+                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                    {nurse.onDuty === true ? "On Duty" : "Available"}
                   </td>
                   <td className="border-l-4 border-[#C0D8F6] p-2">
                     {nurse.location}

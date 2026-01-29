@@ -43,6 +43,7 @@ function StaffDetailPage() {
     educationQualifications: "",
     specializations: [], // array, assuming one or more values
     workSchedule: "", // "FULLTIME" or "PARTTIME"
+    grading: "",
     address: {
       state: "",
       district: "",
@@ -77,6 +78,7 @@ function StaffDetailPage() {
         educationQualifications: nurseData.educationQualifications[0] || "",
         specializations: nurseData.specializations || [],
         workSchedule: nurseData.workSchedule || "",
+          grading: nurseData.grading || "",
         address: {
           addressId: selectedNurse.address?.id || "",
           state: selectedNurse.address?.state || "",
@@ -181,6 +183,10 @@ function StaffDetailPage() {
           <div className="flex gap-[18px]">
             <span className="w-[280px]">Fulltime / Part time</span>
             <span>{nurseData.workSchedule}</span>
+          </div>
+           <div className="flex gap-[18px]">
+            <span className="w-[280px]">Grading</span>
+            <span>{editedContact.grading}</span>
           </div>
 
           {/* <div className="flex gap-[18px]"><span className="w-[280px]">Address</span><span>{address.lineFirst}, {address.lineSecond}</span></div> */}
@@ -393,6 +399,7 @@ function StaffDetailPage() {
       <EditContactModal
         show={isEditModalOpen}
         contact={editedContact}
+         grading={editedContact.grading} 
         userId={userId}
         role={selectedNurse.role}
         onChange={setEditedContact}
