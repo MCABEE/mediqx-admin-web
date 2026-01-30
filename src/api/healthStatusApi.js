@@ -19,18 +19,23 @@ export const createManyHealthStatuses = async (patientHealthStatuses) => {
 };
 
 // Fetch health statuses list with pagination
-export const fetchHealthStatuses = async (page = 1, limit = 10) => {
+export const fetchHealthStatuses = async (
+  page = 1,
+  limit = 10,
+  search = ""
+) => {
   try {
     const response = await api.get(
-      `/admin/patient-health-status?page=${page}&limit=${limit}`,
+      `/admin/patient-health-status?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`
     );
     return response.data;
   } catch (error) {
-    const message =
-      error.response?.data?.message || "Failed to fetch health statuses.";
-    throw new Error(message);
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch health statuses."
+    );
   }
 };
+
 
 // Update a health status by ID
 export const updateHealthStatus = async (id, status) => {

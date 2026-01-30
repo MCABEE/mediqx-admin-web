@@ -89,6 +89,7 @@ const handlePopupClose = () => {
             : "-",
           scheduleType: booking.scheduleType || "-",
           durationType: booking.durationType || "-",
+          durationValue:booking.durationValue|| "-",
           serviceType: booking.serviceType || "-",
           weekdays: Array.isArray(booking.weekdays)
             ? booking.weekdays.join(", ")

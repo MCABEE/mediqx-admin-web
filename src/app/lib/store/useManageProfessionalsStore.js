@@ -41,49 +41,97 @@ const useManageProfessionalsStore = create(
       error: null,
       success: false,
 
-      fetchItems: async (
-        category,
-        page = 1,
-        limit = 10,
-        professionalCategory
-      ) => {
-        if (!CATEGORIES.includes(category)) {
-          set({ error: `Unknown category: ${category}` });
-          return;
-        }
-        set({ isLoading: true, error: null, success: false });
-        try {
-          // Pass professionalCategory as query param in API call
-          const response = await fetchList(
-            category,
-            page,
-            limit,
-            professionalCategory
-          );
-          const data = response.data;
-          const key = STORE_TO_API_MAP[category];
-          set((state) => ({
-            listedItems: {
-              ...state.listedItems,
-              [category]: data?.[key] || [],
-            },
-            pagination: {
-              ...state.pagination,
-              [category]: {
-                page: data.page || page,
-                limit: data.limit || limit,
-                totalPages: data.totalPages || 0,
-                totalItems: data.total || 0,
-              },
-            },
-            error: null,
-          }));
-        } catch (error) {
-          set({ error: error.message || "Failed to fetch data." });
-        } finally {
-          set({ isLoading: false });
-        }
+      // fetchItems: async (
+      //   category,
+      //   page = 1,
+      //   limit = 10,
+      //   professionalCategory
+      // ) => {
+      //   if (!CATEGORIES.includes(category)) {
+      //     set({ error: `Unknown category: ${category}` });
+      //     return;
+      //   }
+      //   set({ isLoading: true, error: null, success: false });
+      //   try {
+      //     // Pass professionalCategory as query param in API call
+      //     const response = await fetchList(
+      //       category,
+      //       page,
+      //       limit,
+      //       professionalCategory
+      //     );
+      //     const data = response.data;
+      //     const key = STORE_TO_API_MAP[category];
+      //     set((state) => ({
+      //       listedItems: {
+      //         ...state.listedItems,
+      //         [category]: data?.[key] || [],
+      //       },
+      //       pagination: {
+      //         ...state.pagination,
+      //         [category]: {
+      //           page: data.page || page,
+      //           limit: data.limit || limit,
+      //           totalPages: data.totalPages || 0,
+      //           totalItems: data.total || 0,
+      //         },
+      //       },
+      //       error: null,
+      //     }));
+      //   } catch (error) {
+      //     set({ error: error.message || "Failed to fetch data." });
+      //   } finally {
+      //     set({ isLoading: false });
+      //   }
+      // },
+fetchItems: async (
+  category,
+  page = 1,
+  limit = 10,
+  professionalCategory,
+  search = ""
+) => {
+  if (!CATEGORIES.includes(category)) {
+    set({ error: `Unknown category: ${category}` });
+    return;
+  }
+
+  set({ isLoading: true, error: null, success: false });
+
+  try {
+    const response = await fetchList(
+      category,
+      page,
+      limit,
+      professionalCategory,
+      search
+    );
+
+    const data = response.data;
+    const key = STORE_TO_API_MAP[category];
+
+    set((state) => ({
+      listedItems: {
+        ...state.listedItems,
+        [category]: data?.[key] || [],
       },
+      pagination: {
+        ...state.pagination,
+        [category]: {
+          page: data.page || page,
+          limit: data.limit || limit,
+          totalPages: data.totalPages || 0,
+          totalItems: data.total || 0,
+        },
+      },
+      error: null,
+    }));
+  } catch (error) {
+    set({ error: error.message || "Failed to fetch data." });
+  } finally {
+    set({ isLoading: false });
+  }
+},
 
       setPage: (category, page) =>
         set((state) => ({
