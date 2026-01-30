@@ -19,6 +19,14 @@ const AssignStaffTable = ({
   const [selectedNurse, setSelectedNurse] = useState(null);
 
   const nursesPerPage = 50;
+  const formatTime = (time) => {
+    if (!time) return "-";
+    const [h, m] = time.split(":");
+    const hour = Number(h);
+    const suffix = hour >= 12 ? "PM" : "AM";
+    const formattedHour = hour % 12 || 12;
+    return `${formattedHour}:${m} ${suffix}`;
+  };
 
   // ✅ Remove duplicates by userId (keeps first occurrence)
   const uniqueNurses = Array.from(
@@ -120,10 +128,11 @@ const AssignStaffTable = ({
                 Duty Schedule &nbsp;{selectedNurse?.dutyScheduleType}
               </p>
               <p className="text-[16px] text-black">
-                Start Time &nbsp;{selectedNurse?.dutyStartTime}
+                Start Time &nbsp;{formatTime(selectedNurse?.dutyStartTime)}
               </p>
+
               <p className="text-[16px] text-black">
-                End Time &nbsp;{selectedNurse?.dutyEndTime}
+                End Time &nbsp;{formatTime(selectedNurse?.dutyEndTime)}
               </p>
             </div>
 
