@@ -19,16 +19,20 @@ export const createManyPatientServices = async (patientServices) => {
 
 
 // Fetch patient services list with pagination
-export const fetchPatientServices = async (page = 1, limit = 10) => {
+export const fetchPatientServices = async (
+  page = 1,
+  limit = 10,
+  search = ""
+) => {
   try {
     const response = await api.get(
-      `/admin/patient-service?page=${page}&limit=${limit}`
+      `/admin/patient-service?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`
     );
-    return response.data; // Adjust as needed
+    return response.data;
   } catch (error) {
-    const message =
-      error.response?.data?.message || "Failed to fetch services.";
-    throw new Error(message);
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch services."
+    );
   }
 };
 

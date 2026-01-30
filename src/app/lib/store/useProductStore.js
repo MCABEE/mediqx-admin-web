@@ -10,6 +10,7 @@ import {
   fetchProductBookingDetails,
   updateProductSalesStatus,
   updateProduct,
+  updateBillingInfo,
 } from "@/api/product";
 import { create } from "zustand";
 
@@ -23,6 +24,7 @@ const useProductStore = create((set, get) => ({
   limit: 10,
   total: 0,
   totalPages: 1,
+  billingLoading: false,
 
   uploadedFiles: {
     PRODUCT_IMAGE: null,
@@ -314,6 +316,24 @@ console.log(res);
       set({ editingId: null });
     }
   },
+
+
+
+  /* ---------------- BILLING INFO ---------------- */
+submitBillingInfo: async (productCartId, payload) => {
+  set({ billingLoading: true, error: null });
+
+  try {
+    await updateBillingInfo(productCartId, payload);
+    return true; // ✅ important success flag
+  } catch (err) {
+    set({ error: err.message });
+    throw err;
+  } finally {
+    set({ billingLoading: false });
+  }
+},
+
 }));
 
 export default useProductStore;

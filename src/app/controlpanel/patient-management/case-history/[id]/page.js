@@ -13,6 +13,8 @@ export default function Page() {
     startDate: searchParams.get("startDate"),
     scheduleType: searchParams.get("scheduleType"),
     durationType: searchParams.get("durationType"),
+    durationValue: searchParams.get("durationValue"),
+
     serviceType: searchParams.get("serviceType"),
     weekdays: searchParams.get("weekdays")
       ? searchParams.get("weekdays").split(", ")
@@ -124,7 +126,7 @@ export default function Page() {
 
               <div className="flex">
                 <span className="w-[250px] font-medium">Duration</span>
-                <span>{booking.durationType || "-"}</span>
+                <span>{booking.durationType || "-"} ({booking.durationValue})</span>
               </div>
 
               <div className="flex">
@@ -169,10 +171,10 @@ export default function Page() {
                 <span className="w-[250px] font-medium">Staff Name</span>
                 <span>{staff?.nurseFullName || "-"}</span>
               </div>
-              <div className="flex">
+              {/* <div className="flex">
                 <span className="w-[250px] font-medium">Staff ID</span>
                 <span>{staff?.staffId || "-"}</span>
-              </div>
+              </div> */}
               <div className="flex">
                 <span className="w-[250px] font-medium">Contact</span>
                 <span>{staff?.NurseMobileNumber || "-"}</span>

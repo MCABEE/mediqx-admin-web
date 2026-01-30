@@ -237,9 +237,14 @@ const AssignStaffTable = ({
                   >
                     {nurse.fullName}
                   </td>
-                  <td className="border-l-4 border-[#C0D8F6] p-2">
+                  <td
+                    className={`border-l-4 border-[#C0D8F6] p-2 ${
+                      nurse.onDuty === true ? "text-black" : "text-green-600"
+                    }`}
+                  >
                     {nurse.onDuty === true ? "On Duty" : "Available"}
                   </td>
+
                   <td className="border-l-4 border-[#C0D8F6] p-2">
                     {nurse.location}
                   </td>

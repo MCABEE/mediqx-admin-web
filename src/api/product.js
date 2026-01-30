@@ -186,3 +186,22 @@ export const updateProduct = async (productId, payload) => {
 
 
 
+export const updateBillingInfo = async (productCartId, payload) => {
+  try {
+    const res = await api.put(
+      `/admin/products/bookings/${productCartId}/billing-info`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Failed to update billing info"
+    );
+  }
+};

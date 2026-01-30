@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Navlink from "@/components/dataManager/generalData/Navlink";
 import Link from "next/link";
 import useLocationStore from "@/app/lib/store/locationStore";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
 function ConfirmDeletePopup({ location, onConfirm, onCancel }) {
   if (!location) return null;
@@ -63,10 +64,11 @@ function ManageLocations() {
   const [confirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [duplicateError, setDuplicateError] = useState(false); // highlight fields
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetchLocations(page, 10);
-  }, [page, fetchLocations]);
+    fetchLocations(page, 10, search);
+  }, [page, search, fetchLocations]);
 
   useEffect(() => {
     if (checkedIds.length === 1) {
@@ -77,9 +79,6 @@ function ManageLocations() {
     }
   }, [checkedIds, listedLocations]);
 
-  const handleCheckbox = (id) => {
-    setCheckedIds(checkedIds.includes(id) ? [] : [id]);
-  };
 
   const handleUpdate = async () => {
     setMessage("");
@@ -138,8 +137,18 @@ function ManageLocations() {
         </div>
       </div>
 
-      <div className="w-full bg-[#C0D8F6] mt-2 rounded-t-[15px] px-6">
-        <h1 className="text-black font-semibold py-[16px]">Manage Locations</h1>
+      <div className="w-full flex items-center gap-4 justify-between bg-[#C0D8F6] mt-2 rounded-t-[15px]  py-[16px] px-6">
+        <h1 className="text-black font-semibold">Manage Locations</h1>
+        <input
+          type="search"
+          placeholder="Search by state, district, city & pincode"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+          className="w-[350px] px-4 py-2  border bg-white border-[#BBBBBB] rounded-[15px] outline-none"
+        />
       </div>
 
       {isLoading ? (
@@ -184,12 +193,29 @@ function ManageLocations() {
                 />
               </div>
 
-              <input
-                type="checkbox"
-                className="size-6 rounded-[15px]"
-                checked={checkedIds.includes(loc.id)}
-                onChange={() => handleCheckbox(loc.id)}
-              />
+              {/* ACTION ICONS */}
+              <div className="flex items-center gap-3 ms-2">
+                <button
+                  onClick={() => {
+                    setCheckedIds([loc.id]);
+                    setEditData(loc);
+                    setEditPopupOpen(true);
+                  }}
+                  className="text-[#196BA5] hover:scale-110 transition"
+                >
+                  <FiEdit2 size={18} />
+                </button>
+
+                <button
+                  onClick={() => {
+                    setCheckedIds([loc.id]);
+                    setConfirmPopupOpen(true);
+                  }}
+                  className="text-red-600 hover:scale-110 transition"
+                >
+                  <FiTrash2 size={18} />
+                </button>
+              </div>
             </div>
           ))}
 
@@ -213,22 +239,7 @@ function ManageLocations() {
             </button>
           </div>
 
-          <div className="flex gap-3 my-6 px-6">
-            <button
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-              disabled={checkedIds.length !== 1}
-              onClick={() => setEditPopupOpen(true)}
-            >
-              Edit
-            </button>
-            <button
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-              disabled={checkedIds.length !== 1}
-              onClick={() => setConfirmPopupOpen(true)}
-            >
-              Remove
-            </button>
-          </div>
+    
 
           {/* {message && <div className="text-blue-600 mt-2 px-6">{message}</div>} */}
 

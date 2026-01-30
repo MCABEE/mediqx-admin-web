@@ -18,18 +18,23 @@ export const createManyDiagnoses = async (patientDiagnoses) => {
 };
 
 // Fetch diagnoses list with pagination
-export const fetchDiagnoses = async (page = 1, limit = 10) => {
+export const fetchDiagnoses = async (
+  page = 1,
+  limit = 10,
+  search = ""
+) => {
   try {
     const response = await api.get(
-      `/admin/patient-diagnosis?page=${page}&limit=${limit}`,
+      `/admin/patient-diagnosis?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`
     );
     return response.data;
   } catch (error) {
-    const message =
-      error.response?.data?.message || "Failed to fetch diagnoses.";
-    throw new Error(message);
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch diagnoses."
+    );
   }
 };
+
 
 // Update a diagnosis by ID
 export const updateDiagnosis = async (id, diagnosis) => {

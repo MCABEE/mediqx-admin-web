@@ -1019,7 +1019,7 @@ export default function Page() {
         purchaseRate: Number(form.purchaseRate),
         quantity: Number(form.quantity),
         mrpPrice: Number(form.mrpPrice),
-        gstTax: Number(form.gstTax),
+        gstTaxPercent: Number(form.gstTax),
         discountPercent: Number(form.discountPercent),
         discountedPrice: Number(form.discountedPrice),
         hsnCode: form.hsnCode.trim(),

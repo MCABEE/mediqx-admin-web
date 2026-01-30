@@ -23,46 +23,7 @@ const useDiagnosisStore = create((set, get) => ({
       return { diagnosisInputs: arr };
     }),
 
-  // 🧩 Add multiple diagnoses
-//   addDiagnoses: async () => {
-//     set({ isLoading: true, error: null, success: false });
-//     try {
-//       const filtered = get()
-//         .diagnosisInputs
-//         .filter((d) => d.trim() !== "")
-//         .map((d) => ({ diagnosis: d.trim() }));
-
-//       if (filtered.length === 0) {
-//         set({
-//           error: { message: "Please enter at least one diagnosis." },
-//           isLoading: false,
-//         });
-//         return;
-//       }
-
-//       await createManyDiagnoses(filtered);
-//       set({ success: true, diagnosisInputs: [""], error: null });
-//     } catch (err) {
-//   console.error("Store caught error:", err);
-
-//   const normalizedError = {
-//     message:
-//       typeof err === "string"
-//         ? err
-//         : typeof err?.message === "object"
-//         ? err.message?.message || "An unknown error occurred."
-//         : err?.message || "Failed to add data.",
-//     details:
-//       err?.error?.details || err?.response?.data?.details || null,
-//   };
-
-//   set({
-//     error: normalizedError,
-//     success: false,
-//   });
-// }
-
-//   },
+  
 addDiagnoses: async () => {
   set({ isLoading: true, error: null, success: false });
 
@@ -133,24 +94,24 @@ addDiagnoses: async () => {
   },
   resetChecked: () => set({ checkedIds: [] }),
 
-  // 🧩 Fetch and manage existing diagnoses
-  fetchDiagnosesList: async (page = 1, limit = 10) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await fetchDiagnoses(page, limit);
-      set({
-        listedDiagnoses: response.data.patientDiagnoses || [],
-        page: response.data.page || page,
-        limit: response.data.limit || limit,
-        totalPages: response.data.totalPages || 0,
-        totalDiagnoses: response.data.total || 0,
-      });
-    } catch (error) {
-      set({ error: error.message });
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+  // Fetch and manage existing diagnoses
+ fetchDiagnosesList: async (page = 1, limit = 10, search = "") => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await fetchDiagnoses(page, limit, search);
+    set({
+      listedDiagnoses: response.data.patientDiagnoses || [],
+      page: response.data.page || page,
+      limit: response.data.limit || limit,
+      totalPages: response.data.totalPages || 0,
+      totalDiagnoses: response.data.total || 0,
+    });
+  } catch (error) {
+    set({ error: error.message });
+  } finally {
+    set({ isLoading: false });
+  }
+},
   setPage: (page) => set({ page }),
   setLimit: (limit) => set({ limit }),
 

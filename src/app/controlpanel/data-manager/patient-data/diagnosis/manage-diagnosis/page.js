@@ -4,6 +4,8 @@ import Navlink from "@/components/dataManager/patientData/Navlink";
 import Link from "next/link";
 import EditPopup from "@/components/dataManager/generalData/EditPopup";
 import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
+import { FiEdit2 } from "react-icons/fi";
+import { MdDeleteOutline } from "react-icons/md";
 
 function ConfirmDeletePopup({ diagnosisName, onConfirm, onCancel }) {
   return (
@@ -54,15 +56,13 @@ function ManageDiagnosisPage() {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [editDiagnosisName, setEditDiagnosisName] = useState("");
+  const [search, setSearch] = useState("");
+
   const [apiError, setApiError] = useState("");
 
   useEffect(() => {
-    fetchServices(page, 10);
-  }, [page, fetchServices]);
-
-  const handleCheckbox = (id) => {
-    setCheckedItems((prev) => (prev.includes(id) ? [] : [id]));
-  };
+    fetchServices(page, 10, search);
+  }, [page, search, fetchServices]);
 
   useEffect(() => {
     if (checkedItems.length === 1) {
@@ -115,8 +115,18 @@ function ManageDiagnosisPage() {
         </div>
       </div>
 
-      <div className="w-full bg-[#C0D8F6] mt-2 rounded-t-[15px] px-6">
+      <div className="w-full flex justify-between items-center bg-[#C0D8F6] mt-2 rounded-t-[15px] px-6">
         <h1 className="text-black font-semibold py-[16px]">Manage Diagnosis</h1>
+        <input
+          type="search"
+          placeholder="Search diagnosis"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1); // reset pagination on search
+          }}
+          className="w-[300px] px-4 py-2 border bg-white border-[#BBBBBB] rounded-[15px] outline-none"
+        />
       </div>
 
       {isLoading ? (
@@ -139,12 +149,32 @@ function ManageDiagnosisPage() {
                 value={diagnosis.diagnosis}
                 readOnly
               />
-              <input
-                type="checkbox"
-                className="size-6 rounded-[15px]"
-                checked={checkedItems.includes(diagnosis.id)}
-                onChange={() => handleCheckbox(diagnosis.id)}
-              />
+              <div className="flex items-center gap-3 ms-2">
+                {/* Edit */}
+                <button
+                  onClick={() => {
+                    setCheckedItems([diagnosis.id]);
+                    setEditDiagnosisName(diagnosis.diagnosis);
+                    setIsEditPopupOpen(true);
+                  }}
+                  className="text-[#196BA5] hover:text-[#124d78]"
+                  title="Edit"
+                >
+                  <FiEdit2 size={20} />
+                </button>
+
+                {/* Delete */}
+                <button
+                  onClick={() => {
+                    setCheckedItems([diagnosis.id]);
+                    setIsConfirmOpen(true);
+                  }}
+                  className="text-red-600 hover:text-red-800"
+                  title="Delete"
+                >
+                  <MdDeleteOutline size={22} />
+                </button>
+              </div>
             </div>
           ))}
 
@@ -165,23 +195,6 @@ function ManageDiagnosisPage() {
               className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
             >
               Next
-            </button>
-          </div>
-
-          <div className="flex gap-3 mt-4 px-6">
-            <button
-              disabled={checkedItems.length !== 1}
-              onClick={() => setIsEditPopupOpen(true)}
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-            >
-              Edit
-            </button>
-            <button
-              disabled={checkedItems.length === 0}
-              onClick={() => setIsConfirmOpen(true)}
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-            >
-              Remove
             </button>
           </div>
 

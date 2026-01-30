@@ -5,6 +5,8 @@ import Navlink from "@/components/dataManager/patientData/Navlink";
 import Link from "next/link";
 import EditPopup from "@/components/dataManager/generalData/EditPopup";
 import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
+
 
 function ConfirmDeletePopup({ serviceName, onConfirm, onCancel }) {
   return (
@@ -49,19 +51,18 @@ function ManageServicesPage() {
 
   const [checkedItems, setCheckedItems] = useState([]);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [editServiceName, setEditServiceName] = useState("");
   const [apiError, setApiError] = useState("");
   const [page, setPage] = useState(1);
   const limit = 10;
   useEffect(() => {
-    fetchServices(page, limit);
-  }, [page, fetchServices]);
+    fetchServices(page, limit, search);
+  }, [page, search, fetchServices]);
 
-  // Toggle single checkbox selection
-  const handleCheckbox = (id) => {
-    setCheckedItems((prev) => (prev.includes(id) ? [] : [id]));
-  };
+
 
   // Sync edit input with selected service
   useEffect(() => {
@@ -141,8 +142,18 @@ function ManageServicesPage() {
         </div>
       </div>
 
-      <div className="w-full bg-[#C0D8F6] mt-2 rounded-t-[15px] px-6">
+      <div className="w-full flex justify-between items-center bg-[#C0D8F6] mt-2 rounded-t-[15px] px-6">
         <h1 className="text-black font-semibold py-[16px]">Manage Services</h1>
+        <input
+          type="search"
+          placeholder="Search service"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1); // reset pagination
+          }}
+          className="w-[300px] px-4 py-2 border bg-white border-[#BBBBBB] rounded-[15px] outline-none"
+        />
       </div>
 
       {isLoading ? (
@@ -165,53 +176,59 @@ function ManageServicesPage() {
                 value={service.service}
                 readOnly
               />
-              <input
-                type="checkbox"
-                className="size-6 rounded-[15px]"
-                checked={checkedItems.includes(service.id)}
-                onChange={() => handleCheckbox(service.id)}
-              />
+             {/* ACTION ICONS */}
+    <div className="flex items-center gap-4 ms-2">
+      {/* Edit */}
+      <button
+        onClick={() => {
+          setCheckedItems([service.id]);
+          setEditServiceName(service.service);
+          setIsEditPopupOpen(true);
+        }}
+        className="text-[#196BA5] hover:scale-110 transition cursor-pointer"
+        title="Edit"
+      >
+        <FiEdit2 size={18} />
+      </button>
+
+      {/* Delete */}
+      <button
+        onClick={() => {
+          setCheckedItems([service.id]);
+          setIsConfirmOpen(true);
+        }}
+        className="text-red-600 hover:scale-110 transition cursor-pointer"
+        title="Delete"
+      >
+        <FiTrash2 size={18} />
+      </button>
+    </div>
             </div>
           ))}
 
-        <div className="flex justify-center gap-4 items-center mt-2">
+          <div className="flex justify-center gap-4 items-center mt-2">
             <button
-            disabled={page <= 1}
-            onClick={() => setPage((p) => p - 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            Previous
-          </button>
-
-          <span>
-            Page {page} of {totalPages}
-          </span>
-
-          <button
-            disabled={page >= totalPages}
-            onClick={() => setPage((p) => p + 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
-
-          <div className="flex gap-3 my-4 px-6">
-            <button
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-              disabled={checkedItems.length !== 1}
-              onClick={() => setIsEditPopupOpen(true)}
+              disabled={page <= 1}
+              onClick={() => setPage((p) => p - 1)}
+              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
             >
-              Edit
+              Previous
             </button>
+
+            <span>
+              Page {page} of {totalPages}
+            </span>
+
             <button
-              className="bg-[#d9534f] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-              disabled={checkedItems.length === 0}
-              onClick={() => setIsConfirmOpen(true)}
+              disabled={page >= totalPages}
+              onClick={() => setPage((p) => p + 1)}
+              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
             >
-              Remove
+              Next
             </button>
           </div>
+
+      
 
           {isEditPopupOpen && (
             <EditPopup
