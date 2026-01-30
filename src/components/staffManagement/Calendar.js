@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import useNurseStore from "@/app/lib/store/nurseStore";
 import { CiSearch } from "react-icons/ci";
+import DutyDetailsPopup from "./DutyDetailsPopup";
 
 const Calendar = () => {
   const today = new Date();
@@ -283,7 +284,7 @@ data: statusByDate[day] || null,
         </div>
       </div>
       {showDutyPopup && selectedDuty && (
-  <DutyPopup
+  <DutyDetailsPopup
     duty={selectedDuty}
     onClose={() => setShowDutyPopup(false)}
   />
@@ -298,49 +299,3 @@ data: statusByDate[day] || null,
 
 export default Calendar;
 
-function DutyPopup({ duty, onClose }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-xl w-[400px] p-6 text-black">
-        <h2 className="text-lg font-semibold mb-4">Duty Details</h2>
-
-        <div className="space-y-2 text-sm">
-          <p>
-            <strong>Date:</strong>{" "}
-            {new Date(duty.date).toLocaleDateString()}
-          </p>
-
-          <p>
-            <strong>Status:</strong> {duty.status}
-          </p>
-
-          {duty.fixedSlots && (
-            <p>
-              <strong>Schedule:</strong> {duty.fixedSlots}
-            </p>
-          )}
-
-          {duty.slotOneStart && duty.slotOneEnd && (
-            <p>
-              <strong>Time:</strong> {duty.slotOneStart} – {duty.slotOneEnd}
-            </p>
-          )}
-
-          {duty.slotTwoStart && duty.slotTwoEnd && (
-            <p>
-              <strong>Second Slot:</strong> {duty.slotTwoStart} –{" "}
-              {duty.slotTwoEnd}
-            </p>
-          )}
-        </div>
-
-        <button
-          onClick={onClose}
-          className="mt-6 w-full rounded-lg bg-[#3674B5] text-white py-2"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  );
-}
