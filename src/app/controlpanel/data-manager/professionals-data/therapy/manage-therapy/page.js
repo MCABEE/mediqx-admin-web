@@ -5,6 +5,8 @@ import Navlink from "@/components/dataManager/professionalsData.js/Navlink";
 import Link from "next/link";
 import EditPopup from "@/components/dataManager/generalData/EditPopup";
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
+import { FiEdit2 } from "react-icons/fi";
+import { MdDeleteOutline } from "react-icons/md";
 
 function ManageProfessionalsPage() {
   const professionalCategory = "THERAPY";
@@ -17,6 +19,7 @@ function ManageProfessionalsPage() {
   ];
 
   const [selectedCategory, setSelectedCategory] = useState(categories[0].key);
+  const [search, setSearch] = useState("");
 
   const {
     listedItems,
@@ -43,22 +46,25 @@ function ManageProfessionalsPage() {
       selectedCategory,
       pagination[selectedCategory].page,
       pagination[selectedCategory].limit,
-      professionalCategory
+      professionalCategory,
+      search,
     );
+
     setCheckedId(null);
     setCheckedName("");
   }, [
     selectedCategory,
     pagination[selectedCategory].page,
     pagination[selectedCategory].limit,
-    fetchItems,
     professionalCategory,
+    search,
+    fetchItems,
   ]);
 
   useEffect(() => {
     if (checkedId) {
       const selected = listedItems[selectedCategory]?.find(
-        (i) => i.id === checkedId
+        (i) => i.id === checkedId,
       );
       if (!selected) return;
       const keyMap = {
@@ -75,11 +81,6 @@ function ManageProfessionalsPage() {
     }
   }, [checkedId, listedItems, selectedCategory]);
 
-  const handleCheckboxChange = (id) => {
-    setCheckedId(id === checkedId ? null : id);
-    setApiError("");
-  };
-
   const handleUpdate = async () => {
     if (!checkedId) return;
     setApiError("");
@@ -93,8 +94,11 @@ function ManageProfessionalsPage() {
       await updateItemId(
         selectedCategory,
         checkedId,
-        { [keyMap[selectedCategory]]: editValue, category: professionalCategory, },
-        professionalCategory
+        {
+          [keyMap[selectedCategory]]: editValue,
+          category: professionalCategory,
+        },
+        professionalCategory,
       );
       setIsEditPopupOpen(false);
       setCheckedId(null);
@@ -127,15 +131,19 @@ function ManageProfessionalsPage() {
             className={`cursor-pointer font-semibold ${
               selectedCategory === key ? "text-[#196BA5]" : "text-black"
             }`}
-            onClick={() => setSelectedCategory(key)}
+            onClick={() => {
+              setSelectedCategory(key);
+              setSearch(""); //  clear search
+              setPage(key, 1); //  reset pagination for new category
+            }}
           >
             {label}
           </h1>
         ))}
       </div>
 
-      <div className="w-full bg-white border border-gray-300 text-base font-semibold flex justify-between px-6 rounded-lg mt-2">
-        <div className="flex gap-8 items-center py-5">
+      <div className="w-full bg-white border border-gray-300 text-base font-semibold flex justify-between px-6 rounded-lg mt-2 py-5">
+        <div className="flex gap-8 items-center">
           <Link
             href={
               " /controlpanel/data-manager/professionals-data/therapy/add-therapy"
@@ -146,6 +154,16 @@ function ManageProfessionalsPage() {
           </Link>
           <h1 className="text-[#196BA5] font-semibold">Manage</h1>
         </div>
+        <input
+          type="search"
+          placeholder="Search"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(selectedCategory, 1);
+          }}
+          className="w-[300px] px-4 py-2 border border-gray-300 rounded-[15px] outline-none"
+        />
       </div>
 
       {isLoading && <p className="px-6 py-4">Loading...</p>}
@@ -182,12 +200,34 @@ function ManageProfessionalsPage() {
                   value={value}
                   readOnly
                 />
-                <input
-                  type="checkbox"
-                  className="w-6 h-6 rounded"
-                  checked={checkedId === item.id}
-                  onChange={() => handleCheckboxChange(item.id)}
-                />
+                <div className="flex items-center gap-3 ms-2">
+                  {/* Edit */}
+                  <button
+                    onClick={() => {
+                      setCheckedId(item.id);
+                      setEditValue(value);
+                      setCheckedName(value);
+                      setIsEditPopupOpen(true);
+                    }}
+                    className="text-[#196BA5] hover:text-[#124d78]"
+                    title="Edit"
+                  >
+                    <FiEdit2 size={20} />
+                  </button>
+
+                  {/* Delete */}
+                  <button
+                    onClick={() => {
+                      setCheckedId(item.id);
+                      setCheckedName(value);
+                      setIsDeleteConfirmOpen(true);
+                    }}
+                    className="text-red-600 hover:text-red-800"
+                    title="Delete"
+                  >
+                    <MdDeleteOutline size={22} />
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -217,23 +257,6 @@ function ManageProfessionalsPage() {
               className="bg-gray-200 px-3 py-1 rounded disabled:opacity-50"
             >
               Next
-            </button>
-          </div>
-
-          <div className="flex gap-3 mt-4 px-6 mb-4">
-            <button
-              disabled={!checkedId}
-              onClick={() => setIsEditPopupOpen(true)}
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-            >
-              Edit
-            </button>
-            <button
-              disabled={!checkedId}
-              onClick={() => setIsDeleteConfirmOpen(true)}
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-            >
-              Remove
             </button>
           </div>
         </>

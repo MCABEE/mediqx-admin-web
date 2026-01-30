@@ -102,23 +102,23 @@ const useHealthStatusStore = create((set, get) => ({
     }
   },
 
-  fetchServices: async (page = 1, limit = 10) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await fetchHealthStatuses(page, limit);
-      set({
-        listedServices: response.data.patientHealthStatuses || [],
-        page: response.data.page || page,
-        limit: response.data.limit || limit,
-        totalPages: response.data.totalPages || 0,
-        totalServices: response.data.total || 0,
-      });
-    } catch (error) {
-      set({ error: error.message });
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+  fetchServices: async (page = 1, limit = 10, search = "") => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await fetchHealthStatuses(page, limit, search);
+    set({
+      listedServices: response.data.patientHealthStatuses || [],
+      page: response.data.page || page,
+      limit: response.data.limit || limit,
+      totalPages: response.data.totalPages || 0,
+      totalServices: response.data.total || 0,
+    });
+  } catch (error) {
+    set({ error: error.message });
+  } finally {
+    set({ isLoading: false });
+  }
+},
 
   setPage: (page) => set({ page }),
   setLimit: (limit) => set({ limit }),

@@ -14,15 +14,10 @@ export default function EditProductPopup({
   loading,
 }) {
   /* ---------------- STORES ---------------- */
-  const {
-    listedServices: healthStatuses,
-    fetchServices,
-  } = useHealthStatusStore();
+  const { listedServices: healthStatuses, fetchServices } =
+    useHealthStatusStore();
 
-  const {
-    listedDiagnoses,
-    fetchDiagnosesList,
-  } = useDiagnosisStore();
+  const { listedDiagnoses, fetchDiagnosesList } = useDiagnosisStore();
 
   /* ---------------- FORM STATE ---------------- */
   const [form, setForm] = useState({
@@ -30,6 +25,11 @@ export default function EditProductPopup({
     description: "",
     quantity: "",
     mrpPrice: "",
+    purchaseRate: "",
+    gstTaxPercent: "",
+    discountPercent: "",
+    hsnCode: "",
+
     discountedPrice: "",
     referralCommissionAmount: "",
   });
@@ -53,8 +53,14 @@ export default function EditProductPopup({
       description: product.description ?? "",
       quantity: product.quantity ?? "",
       mrpPrice: product.mrpPrice ?? "",
+      purchaseRate: product.purchaseRate ?? "",
+      gstTaxPercent: product.gstTaxPercent ?? "",
+
+      discountPercent: product.discountPercent ?? "",
+
       discountedPrice: product.discountedPrice ?? "",
       referralCommissionAmount: product.referralCommissionAmount ?? "",
+      hsnCode: product.hsnCode ?? "",
     });
 
     // ✅ USE SELECTED IDS FROM PROPS
@@ -64,16 +70,30 @@ export default function EditProductPopup({
 
   /* ---------------- HELPERS ---------------- */
   const toggleArray = (id, array, setter) => {
-    setter(
-      array.includes(id)
-        ? array.filter((x) => x !== id)
-        : [...array, id]
-    );
+    setter(array.includes(id) ? array.filter((x) => x !== id) : [...array, id]);
   };
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setForm((prev) => ({ ...prev, [name]: value }));
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+
+    setForm((prev) => {
+      let updated = { ...prev, [name]: value };
+
+      if (name === "discountPercent" || name === "mrpPrice") {
+        const mrp = parseFloat(updated.mrpPrice) || 0;
+        const discount = parseFloat(updated.discountPercent) || 0;
+
+        const discountedPrice = mrp - (mrp * discount) / 100;
+        updated.discountedPrice = discountedPrice.toFixed(2);
+      }
+
+      return updated;
+    });
   };
 
   const handleSave = async () => {
@@ -93,7 +113,6 @@ export default function EditProductPopup({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
       <div className="relative bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6">
-
         {/* CLOSE */}
         <button
           onClick={onCancel}
@@ -114,12 +133,86 @@ export default function EditProductPopup({
 
         {/* FORM */}
         <div className="space-y-4">
-          <Input label="Product Name" name="productName" value={form.productName} onChange={handleChange} />
-          <Input label="Description" name="description" value={form.description} onChange={handleChange} />
-          <Input label="Quantity" name="quantity" type="number" value={form.quantity} onChange={handleChange} />
-          <Input label="MRP Price" name="mrpPrice" type="number" value={form.mrpPrice} onChange={handleChange} />
-          <Input label="Discounted Price" name="discountedPrice" type="number" value={form.discountedPrice} onChange={handleChange} />
-          <Input label="Referral Commission" name="referralCommissionAmount" type="number" value={form.referralCommissionAmount} onChange={handleChange} />
+          <Input
+            label="Product Name"
+            name="productName"
+            value={form.productName}
+            onChange={handleChange}
+          />
+          <Input
+            label="Description"
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+          />
+          <Input
+            label="Quantity"
+            name="quantity"
+            type="number"
+            value={form.quantity}
+            onChange={handleChange}
+          />
+          <Input
+            label="MRP Price"
+            name="mrpPrice"
+            type="number"
+            value={form.mrpPrice}
+            onChange={handleChange}
+          />
+          <Input
+            label="Purchase Rate"
+            name="purchaseRate"
+            type="number"
+            value={form.purchaseRate}
+            onChange={handleChange}
+          />
+          <div className="flex flex-col">
+            <label className="text-sm font-medium mb-1">GST Tax %</label>
+            <select
+              name="gstTaxPercent"
+              value={form.gstTaxPercent}
+              onChange={handleChange}
+              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">GST Tax %</option>
+              {[5, 12, 18].map((v) => (
+                <option key={v} value={v}>
+                  {v}%
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <Input
+            label="Discounted %"
+            name="discountPercent"
+            type="number"
+            value={form.discountPercent}
+            onChange={handleChange}
+          />
+
+          <Input
+            label="Discounted Price"
+            name="discountedPrice"
+            type="number"
+            value={form.discountedPrice}
+            onChange={handleChange}
+            disabled
+          />
+          <Input
+            label="Referral Commission"
+            name="referralCommissionAmount"
+            type="number"
+            value={form.referralCommissionAmount}
+            onChange={handleChange}
+          />
+          <Input
+            label="HSN Code"
+            name="hsnCode"
+            type="text"
+            value={form.hsnCode}
+            onChange={handleChange}
+          />
         </div>
 
         {/* HEALTH STATUS */}
@@ -183,7 +276,14 @@ export default function EditProductPopup({
 }
 
 /* ---------- REUSABLE INPUT ---------- */
-function Input({ label, name, value, onChange, type = "text" }) {
+function Input({
+  label,
+  name,
+  value,
+  onChange,
+  type = "text",
+  disabled = false,
+}) {
   return (
     <div className="flex flex-col">
       <label className="text-sm font-medium mb-1">{label}</label>
@@ -192,6 +292,7 @@ function Input({ label, name, value, onChange, type = "text" }) {
         type={type}
         value={value}
         onChange={onChange}
+        disabled={disabled}
         className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
       />
     </div>

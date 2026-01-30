@@ -4,6 +4,7 @@ import useLanguageStore from "@/app/lib/store/languageStore";
 import Navlink from "@/components/dataManager/generalData/Navlink";
 import Link from "next/link";
 import EditPopup from "@/components/dataManager/generalData/EditPopup";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
 function ConfirmDeletePopup({ id, languageName, onConfirm, onCancel }) {
   return (
@@ -55,11 +56,6 @@ function ManageLanguagesPage() {
   useEffect(() => {
     fetchLanguages(page, 10);
   }, [page, fetchLanguages]);
-
-  // Allow only one checkbox selected at a time
-  const handleCheckbox = (id) => {
-    setCheckedItems((prev) => (prev.includes(id) ? [] : [id]));
-  };
 
   // Synchronize edit input when selection changes
   useEffect(() => {
@@ -151,12 +147,32 @@ function ManageLanguagesPage() {
                 value={lang.language}
                 readOnly
               />
-              <input
-                type="checkbox"
-                className="size-6 rounded-[15px]"
-                checked={checkedItems.includes(lang.id)}
-                onChange={() => handleCheckbox(lang.id)}
-              />
+              <div className="flex items-center gap-4 ms-2">
+                {/* Edit */}
+                <button
+                  onClick={() => {
+                    setCheckedItems([lang.id]);
+                    setEditLanguage(lang.language);
+                    setIsPopupOpen(true);
+                  }}
+                  className="text-[#196BA5] hover:scale-110 transition cursor-pointer"
+                  title="Edit"
+                >
+                  <FiEdit2 size={18} />
+                </button>
+
+                {/* Delete */}
+                <button
+                  onClick={() => {
+                    setCheckedItems([lang.id]);
+                    setIsConfirmOpen(true);
+                  }}
+                  className="text-red-600 hover:scale-110 transition cursor-pointer"
+                  title="Delete"
+                >
+                  <FiTrash2 size={18} />
+                </button>
+              </div>
             </div>
           ))}
 
@@ -181,26 +197,7 @@ function ManageLanguagesPage() {
             </button>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 my-6 px-6">
-            <button
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-              onClick={() => setIsPopupOpen(true)}
-              disabled={checkedItems.length !== 1}
-            >
-              Edit
-            </button>
-            <button
-              className="bg-[#196BA5] text-white rounded-[15px] py-2 px-10 cursor-pointer"
-              onClick={() => setIsConfirmOpen(true)}
-              disabled={checkedItems.length === 0}
-            >
-              Remove
-            </button>
-          </div>
-
           {/* Edit Popup */}
-      
 
           {isPopupOpen && (
             <EditPopup

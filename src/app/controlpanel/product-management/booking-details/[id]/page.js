@@ -1,6 +1,7 @@
 "use client";
 
 import useProductStore from "@/app/lib/store/useProductStore";
+import BillingConfirmationModal from "@/components/productManagement/BillingConfirmationModel";
 import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -8,8 +9,19 @@ function Page() {
   const router = useRouter();
   const { id: patientId } = useParams();
 
-  const { details, fetchDetails, updateSalesStatus, loading, updatingId } =
-    useProductStore();
+  const {
+    details,
+    fetchDetails,
+    updateSalesStatus,
+    billingLoading,
+    submitBillingInfo,
+    loading,
+    updatingId,
+  } = useProductStore();
+
+  const [showBilling, setShowBilling] = useState(false);
+  const [activeCartId, setActiveCartId] = useState(null);
+  const [activeCustomerName, setActiveCustomerName] = useState("");
 
   const [localStatus, setLocalStatus] = useState({});
 
@@ -97,13 +109,9 @@ function Page() {
             <Row label="Final Price" value={`₹${item.finalPrice}`} />
             <Row label="Source Type" value={item.sourceType} />
 
-            {item.referralPayment &&
-              item.referralPayment !== "NA" && (
-                <Row
-                  label="Referral Payment"
-                  value={item.referralPayment}
-                />
-              )}
+            {item.referralPayment && item.referralPayment !== "NA" && (
+              <Row label="Referral Payment" value={item.referralPayment} />
+            )}
 
             {item.customerName && (
               <Row label="Customer Name" value={item.customerName} />
@@ -143,7 +151,7 @@ function Page() {
               ))}
             </div>
 
-            <button
+            {/* <button
               disabled={
                 updatingId === item.productCartId ||
                 localStatus[item.productCartId] === item.salesStatus
@@ -157,10 +165,48 @@ function Page() {
               className="mt-4 w-[200px] h-[40px] bg-[#3674B5] text-white rounded disabled:opacity-50"
             >
               {updatingId === item.productCartId ? "Saving..." : "Save"}
+            </button> */}
+
+            <button
+             disabled={
+    updatingId === item.productCartId ||
+    localStatus[item.productCartId] === item.salesStatus
+  }
+              onClick={() => {
+                if (localStatus[item.productCartId] === "SOLD") {
+                  setActiveCartId(item.productCartId);
+                  setActiveCustomerName(item.customerName); 
+                  setShowBilling(true);
+                } else {
+                  updateSalesStatus(
+                    item.productCartId,
+                    localStatus[item.productCartId],
+                  );
+                }
+              }}
+              className="mt-4 w-[200px] h-[40px] bg-[#3674B5] text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Save
             </button>
           </div>
         </div>
       ))}
+
+      <BillingConfirmationModal
+        isOpen={showBilling}
+        onClose={() => setShowBilling(false)}
+        customerName={activeCustomerName}
+        loading={billingLoading}
+        onSubmit={async (payload) => {
+          try {
+            await submitBillingInfo(activeCartId, payload); // STEP 1
+            await updateSalesStatus(activeCartId, "SOLD"); // STEP 2
+            setShowBilling(false);
+          } catch (err) {
+            alert(err.message);
+          }
+        }}
+      />
     </div>
   );
 }

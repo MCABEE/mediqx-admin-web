@@ -22,10 +22,13 @@ export const addLocations = async (locations) => {
   }
 };
 // Get locations with pagination
-export const getLocations = async (page = 1, limit = 10) => {
+
+export const getLocations = async (page = 1, limit = 10, search = "") => {
   try {
     const response = await api.get(
-      `/admin/locations?page=${page}&limit=${limit}`,
+      `/admin/locations?page=${page}&limit=${limit}${
+        search ? `&search=${encodeURIComponent(search)}` : ""
+      }`,
       {
         headers: { accept: "application/json" },
       },
@@ -37,7 +40,6 @@ export const getLocations = async (page = 1, limit = 10) => {
     );
   }
 };
-
 // Update a location by ID
 export const updateLocation = async (id, data) => {
   try {

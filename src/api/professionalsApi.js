@@ -50,17 +50,33 @@ export const createManySkills = async (skills) => {
 };
 
 // Fetch list
+// export const fetchList = async (
+//   category,
+//   page,
+//   limit,
+//   professionalCategory,
+// ) => {
+//   const response = await api.get(
+//     `/admin/${category}?page=${page}&limit=${limit}&category=${professionalCategory}`,
+//   );
+//   return response.data;
+// };
+
 export const fetchList = async (
   category,
   page,
   limit,
   professionalCategory,
+  search = ""
 ) => {
   const response = await api.get(
-    `/admin/${category}?page=${page}&limit=${limit}&category=${professionalCategory}`,
+    `/admin/${category}?page=${page}&limit=${limit}&category=${professionalCategory}&search=${encodeURIComponent(
+      search
+    )}`,
   );
   return response.data;
 };
+
 
 // Update item by ID
 export const updateItem = async (category, id, data) => {

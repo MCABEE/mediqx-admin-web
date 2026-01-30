@@ -108,24 +108,24 @@ const useLocationStore = create((set, get) => ({
       set({ isLoading: false });
     }
   },
-  fetchLocations: async (page = 1, limit = 10) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await getLocations(page, limit);
-      set({
-        listedLocations: response.data.locations || [],
-        page: response.data.page || page,
-        limit: response.data.limit || limit,
-        totalPages: response.data.totalPages || 0,
-        totalLocations: response.data.total || 0,
-      });
-    } catch (err) {
-      set({ error: err.message });
-    } finally {
-      set({ isLoading: false });
-    }
-  },
-
+ 
+  fetchLocations: async (page = 1, limit = 10, search = "") => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await getLocations(page, limit, search);
+    set({
+      listedLocations: response.data.locations || [],
+      page: response.data.page || page,
+      limit: response.data.limit || limit,
+      totalPages: response.data.totalPages || 0,
+      totalLocations: response.data.total || 0,
+    });
+  } catch (err) {
+    set({ error: err.message });
+  } finally {
+    set({ isLoading: false });
+  }
+},
   setPage: (page) => set({ page }),
   setLimit: (limit) => set({ limit }),
 
