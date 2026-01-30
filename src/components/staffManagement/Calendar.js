@@ -12,6 +12,9 @@ const Calendar = () => {
   const [selectedNurse, setSelectedNurse] = useState(null); // Selected nurse info
   const [nurseId, setNurseId] = useState(null); // Nurse ID for calendar
   const [debounceTimeout, setDebounceTimeout] = useState(null);
+  const [showDutyPopup, setShowDutyPopup] = useState(false);
+const [selectedDuty, setSelectedDuty] = useState(null);
+
 
   const { fetchNurseCalendar, calendarData, isLoading, searchNurses, users } = useNurseStore();
 
@@ -41,18 +44,21 @@ const Calendar = () => {
     (_, i) => today.getFullYear() + i
   );
 
+
   const getMonthDates = (month, year) => {
-    const firstDay = new Date(year, month - 1, 1);
-    const lastDay = new Date(year, month, 0);
-    const startDate =
-      year === today.getFullYear() && month === today.getMonth() + 1
-        ? today
-        : firstDay;
-    return {
-      monthStart: startDate.toISOString(),
-      monthEnd: lastDay.toISOString(),
-    };
+  // month is 1-based (1 = Jan)
+  const monthStart = new Date(Date.UTC(year, month - 1, 1));
+  const monthEnd = new Date(Date.UTC(year, month, 0));
+
+  return {
+    monthStart: monthStart.toISOString(), // YYYY-MM-01T00:00:00.000Z
+    monthEnd: monthEnd.toISOString(),     // correct last day
   };
+};
+
+
+
+
 
   // Fetch calendar whenever nurseId, month, or year changes
   useEffect(() => {
@@ -101,7 +107,9 @@ const Calendar = () => {
       const d = new Date(day.date);
       // Only include days that fall in the selected month and year
       if (d.getFullYear() === year && d.getMonth() + 1 === selectedMonth) {
-        statusByDate[d.getDate()] = day.status;
+        // statusByDate[d.getDate()] = day.status;
+        statusByDate[d.getDate()] = day; // store full object
+
       }
     });
 
@@ -116,7 +124,10 @@ const Calendar = () => {
     for (let day = 1; day <= daysInMonth; day++) {
       calendarDays.push({
         date: day,
-        status: statusByDate[day] || "empty", // default empty if no status
+        // status: statusByDate[day] || "empty", 
+        status: statusByDate[day]?.status || "empty",
+data: statusByDate[day] || null,
+
         isCurrentMonth: true,
       });
     }
@@ -239,22 +250,97 @@ const Calendar = () => {
             <p className="col-span-7 text-center">Select a nurse to view calendar</p>
           ) : calendarDays.length > 0 ? (
             calendarDays.map((day, idx) => (
+              // <div
+              //   key={idx}
+              //   className={`p-4 text-center rounded ${
+              //     day.isCurrentMonth ? getColor(day.status) : "bg-gray-100"
+              //   }`}
+              // >
+              //   {day.date || ""}
+              // </div>
+
               <div
-                key={idx}
-                className={`p-4 text-center rounded ${
-                  day.isCurrentMonth ? getColor(day.status) : "bg-gray-100"
-                }`}
-              >
-                {day.date || ""}
-              </div>
+  key={idx}
+  onClick={() => {
+    if (day.status === "duty") {
+      setSelectedDuty(day.data);
+      setShowDutyPopup(true);
+    }
+  }}
+  className={`p-4 text-center rounded ${
+    day.isCurrentMonth ? getColor(day.status) : "bg-gray-100"
+  } ${
+    day.status === "duty" ? "cursor-pointer hover:ring-2 hover:ring-gray-500" : ""
+  }`}
+>
+  {day.date || ""}
+</div>
+
             ))
           ) : (
             <p className="col-span-7 text-center">No data available</p>
           )}
         </div>
       </div>
+      {showDutyPopup && selectedDuty && (
+  <DutyPopup
+    duty={selectedDuty}
+    onClose={() => setShowDutyPopup(false)}
+  />
+)}
+
     </>
+
+
+    
   );
 };
 
 export default Calendar;
+
+function DutyPopup({ duty, onClose }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-xl w-[400px] p-6 text-black">
+        <h2 className="text-lg font-semibold mb-4">Duty Details</h2>
+
+        <div className="space-y-2 text-sm">
+          <p>
+            <strong>Date:</strong>{" "}
+            {new Date(duty.date).toLocaleDateString()}
+          </p>
+
+          <p>
+            <strong>Status:</strong> {duty.status}
+          </p>
+
+          {duty.fixedSlots && (
+            <p>
+              <strong>Schedule:</strong> {duty.fixedSlots}
+            </p>
+          )}
+
+          {duty.slotOneStart && duty.slotOneEnd && (
+            <p>
+              <strong>Time:</strong> {duty.slotOneStart} – {duty.slotOneEnd}
+            </p>
+          )}
+
+          {duty.slotTwoStart && duty.slotTwoEnd && (
+            <p>
+              <strong>Second Slot:</strong> {duty.slotTwoStart} –{" "}
+              {duty.slotTwoEnd}
+            </p>
+          )}
+        </div>
+
+        <button
+          onClick={onClose}
+          className="mt-6 w-full rounded-lg bg-[#3674B5] text-white py-2"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}

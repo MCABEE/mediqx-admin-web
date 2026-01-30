@@ -25,8 +25,8 @@ function NurseExperienceDetails({ categoryByProfession, onComplete }) {
 
   useEffect(() => {
     if (normalizedCategory) {
-      fetchItems("skills", 1, 50, normalizedCategory);
-      fetchItems("working-departments", 1, 50, normalizedCategory);
+      fetchItems("skills", 1, 100, normalizedCategory);
+      fetchItems("working-departments", 1, 100, normalizedCategory);
     }
   }, [normalizedCategory, fetchItems]);
 

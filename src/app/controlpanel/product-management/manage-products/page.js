@@ -59,9 +59,7 @@ export default function Page() {
       </div>
 
       {loading && (
-        <p className="text-center text-gray-500 mt-4">
-          Loading products...
-        </p>
+        <p className="text-center text-gray-500 mt-4">Loading products...</p>
       )}
 
       {!loading &&
@@ -69,14 +67,13 @@ export default function Page() {
           const product = item.product;
 
           const image =
-            item.productImages?.find(
-              (img) => img.status === "COMPLETE"
-            )?.fileUrl || "/glucometer.svg";
+            item.productImages?.find((img) => img.status === "COMPLETE")
+              ?.fileUrl || "/glucometer.svg";
 
           return (
             <div
               key={product.id}
-              className="w-full py-4 bg-white mt-4 border border-[#f4eded] rounded-[15px]"
+              className="w-full py-4 text-black bg-white mt-4 border border-[#f4eded] rounded-[15px]"
             >
               <div className="flex justify-between items-center">
                 <p className="text-[20px] font-semibold px-[24px] pt-[19px]">
@@ -85,22 +82,18 @@ export default function Page() {
 
                 {/* ACTIONS */}
                 <div className="flex justify-end gap-2 pe-4">
-
-                     <button
-                  onClick={() => setEditItem(item)}
-                  className="text-xl text-[#3674B5] rounded-[15px]  hover:scale-110 cursor-pointer"
-                >
-                  <MdModeEditOutline/>
-                </button>
+                  <button
+                    onClick={() => setEditItem(item)}
+                    className="text-xl text-[#3674B5] rounded-[15px]  hover:scale-110 cursor-pointer"
+                  >
+                    <MdModeEditOutline />
+                  </button>
                   <button
                     onClick={() => setDeleteId(product.id)}
                     className="text-xl text-[#ff0000a9] rounded-[15px] hover:scale-110 cursor-pointer"
                   >
                     <MdDelete />
                   </button>
-
-                  
-               
                 </div>
               </div>
 
@@ -116,15 +109,31 @@ export default function Page() {
                     {product.description}
                   </p>
 
-                  <p className="text-[14px] pt-[14px]">
-                    Quantity/Unit: {product.quantity}
-                  </p>
+                  <div className="flex gap-[40px] pt-[14px] text-[14px]">
+                    <span className="">Quantity/Unit: {product.quantity}</span>
+                    <span className="">
+                      Purchase Rate: {product.purchaseRate}
+                    </span>
+                    <span>MRP Price: {product.mrpPrice}</span>
+                  </div>
 
                   <div className="flex gap-[40px] pt-[14px] text-[14px]">
-                    <p>Price: {product.mrpPrice}</p>
-                    <p className="text-[#008F27]">
+                    <span>GST Tax %: {product.gstTaxPercent}%</span>
+                    <span className="text-[#008F27]">
+                      Discounted %: {product.discountPercent}%
+                    </span>
+                    <span className="text-[#008F27]">
                       Discounted Price: {product.discountedPrice}
-                    </p>
+                    </span>
+                  </div>
+
+                  <div className="flex gap-[40px] pt-[14px] text-[14px]">
+                    <span className="">Net: {product.netAmount}</span>
+                    <span className="">HSN Code : {product.hsnCode}</span>
+                    <span>
+                      Referral Commission Amount :{" "}
+                      {product.referralCommissionAmount}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -136,24 +145,16 @@ export default function Page() {
                 </p>
                 <div className="flex gap-3 flex-wrap">
                   {item.healthStatuses.map((h) => (
-                    <span
-                      key={h.id}
-                      className="px-2 py-1 bg-[#F0F4F9] rounded"
-                    >
+                    <span key={h.id} className="px-2 py-1 bg-[#F0F4F9] rounded">
                       {h.status}
                     </span>
                   ))}
                 </div>
 
-                <p className="font-semibold text-[14px] pt-3">
-                  Diagnosis
-                </p>
+                <p className="font-semibold text-[14px] pt-3">Diagnosis</p>
                 <div className="flex gap-3 flex-wrap">
                   {item.diagnoses.map((d) => (
-                    <span
-                      key={d.id}
-                      className="px-2 py-1 bg-[#F0F4F9] rounded"
-                    >
+                    <span key={d.id} className="px-2 py-1 bg-[#F0F4F9] rounded">
                       {d.diagnosis}
                     </span>
                   ))}
@@ -196,62 +197,26 @@ export default function Page() {
 
       {/* EDIT POPUP */}
       {editItem && (
-        // <EditProductPopup
-        //   product={editItem.product}
-        //   loading={editingId === editItem.product.id}
-        //   onCancel={() => setEditItem(null)}
-        //   onSave={async (payload) => {
-        //     await updateProduct(editItem.product.id, {
-        //       ...payload,
-        //       healthStatusIds: editItem.healthStatuses.map((h) => h.id),
-        //       diagnosisIds: editItem.diagnoses.map((d) => d.id),
-        //     });
-        //     setEditItem(null);
-        //   }}
-        // />
+        <EditProductPopup
+          product={editItem.product}
+          loading={editingId === editItem.product.id}
+          selectedHealthStatusIds={editItem.healthStatuses.map((h) => h.id)}
+          selectedDiagnosisIds={editItem.diagnoses.map((d) => d.id)}
+          onCancel={() => setEditItem(null)}
+          onSave={async (payload) => {
+            await updateProduct(editItem.product.id, {
+              ...payload,
+              healthStatusIds: payload.healthStatusIds,
+              diagnosisIds: payload.diagnosisIds,
+            });
 
-//         <EditProductPopup
-//   product={editItem.product}
-//   loading={editingId === editItem.product.id}
+            // ✅ REFRESH LIST WITH CURRENT PAGE
+            await fetchProducts(page, search);
 
-//   selectedHealthStatusIds={editItem.healthStatuses.map(h => h.id)}
-//   selectedDiagnosisIds={editItem.diagnoses.map(d => d.id)}
-
-//   onCancel={() => setEditItem(null)}
-//   onSave={async (payload) => {
-//     await updateProduct(editItem.product.id, {
-//       ...payload,
-//       healthStatusIds: payload.healthStatusIds,
-//       diagnosisIds: payload.diagnosisIds,
-//     });
-//     setEditItem(null);
-//   }}
-// />
-
-<EditProductPopup
-  product={editItem.product}
-  loading={editingId === editItem.product.id}
-
-  selectedHealthStatusIds={editItem.healthStatuses.map(h => h.id)}
-  selectedDiagnosisIds={editItem.diagnoses.map(d => d.id)}
-
-  onCancel={() => setEditItem(null)}
-  onSave={async (payload) => {
-    await updateProduct(editItem.product.id, {
-      ...payload,
-      healthStatusIds: payload.healthStatusIds,
-      diagnosisIds: payload.diagnosisIds,
-    });
-
-    // ✅ REFRESH LIST WITH CURRENT PAGE
-    await fetchProducts(page, search);
-
-    // ✅ CLOSE POPUP
-    setEditItem(null);
-  }}
-/>
-
-
+            // ✅ CLOSE POPUP
+            setEditItem(null);
+          }}
+        />
       )}
     </div>
   );

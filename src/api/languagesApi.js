@@ -69,27 +69,17 @@ export const updateLanguage = async (id, data) => {
   }
 };
 
-
-
-
-//update langguage for nurses
+//update language for nurses
 
 export const updateNurseLanguages = async (userId, languageIds) => {
   const payload = {
-    languages: languageIds.map((id) => ({
-      languageId: id,
-    })),
+    languageId: languageIds,
   };
-
-  const res = await api.put(
-    `/admin/nurses/language/${userId}`,
-    payload,
-    {
-      headers: {
-        accept: "application/json",
-      },
-    }
-  );
+  const res = await api.put(`/admin/nurses/language/${userId}`, payload, {
+    headers: {
+      accept: "application/json",
+    },
+  });
 
   return res.data;
 };

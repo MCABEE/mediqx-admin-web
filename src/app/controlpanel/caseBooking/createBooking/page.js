@@ -84,7 +84,7 @@ const CaseBookingPage = () => {
     useDiagnosisStore();
 
   useEffect(() => {
-    fetchDiagnosesList(1, 50);
+    fetchDiagnosesList(1, 100);
   }, [fetchDiagnosesList]);
 
   // const handleChange = (e) => {
