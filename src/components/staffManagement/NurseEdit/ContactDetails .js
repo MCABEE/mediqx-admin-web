@@ -6,9 +6,9 @@ import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsS
 import { AiOutlineClose } from "react-icons/ai";
 import LocationPickerPopup from "../addNewStaff/LocationPickerPopup";
 
-const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
+const EditContactModal = ({ show, userId, onCancel, role, grading }) => {
   console.log(grading);
-  
+
   const { updateNurseDetails, fetchNurseProfileById, selectedNurseProfile } =
     useNurseStore();
   const { fetchItems, listedItems } = useManageProfessionalsStore();
@@ -19,14 +19,14 @@ const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
   const [formData, setFormData] = useState({});
 
   const gradingOptions = [
-  "GRADE_01",
-  "GRADE_02",
-  "GRADE_03",
-  "GRADE_04",
-  "GRADE_05",
-  "GRADE_06",
-  "GRADE_07",
-];
+    "GRADE_01",
+    "GRADE_02",
+    "GRADE_03",
+    "GRADE_04",
+    "GRADE_05",
+    "GRADE_06",
+    "GRADE_07",
+  ];
 
   // Fetch nurse profile
   useEffect(() => {
@@ -51,15 +51,12 @@ const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
         specializations: selectedNurseProfile.specializations || [],
 
         workSchedule: selectedNurseProfile.workSchedule || "",
-           // ONLY SET IF PROP EXISTS
-            ...(grading
-        ? {
-            grading:
-              selectedNurseProfile.grading || grading || "",
-          }
-        : {}),
-
-
+        // ONLY SET IF PROP EXISTS
+        ...(grading
+          ? {
+              grading: selectedNurseProfile.grading || grading || "",
+            }
+          : {}),
       });
     }
   }, [selectedNurseProfile]);
@@ -82,7 +79,7 @@ const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
         listedItems.qualifications.map((q) => ({
           label: q.qualification,
           value: q.id,
-        }))
+        })),
       );
     }
     if (listedItems.specializations) {
@@ -90,7 +87,7 @@ const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
         listedItems.specializations.map((s) => ({
           label: s.specialization,
           value: s.id,
-        }))
+        })),
       );
     }
   }, [listedItems]);
@@ -212,7 +209,7 @@ const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
               }
               onChange={(e) => {
                 const selectedOption = qualifications.find(
-                  (q) => q.value === e.target.value
+                  (q) => q.value === e.target.value,
                 );
 
                 if (selectedOption) {
@@ -246,7 +243,7 @@ const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
               value={formData.specializations?.[0]?.specializationId || ""}
               onChange={(e) => {
                 const selectedOption = specializations.find(
-                  (s) => s.value === e.target.value
+                  (s) => s.value === e.target.value,
                 );
 
                 if (selectedOption) {
@@ -299,18 +296,15 @@ const EditContactModal = ({ show, userId, onCancel, role,grading }) => {
               </button>
             </div>
 
-
-            {grading && (
-  <SelectField
-    label="Grading"
-    value={formData.grading || ""}
-    onChange={(e) => handleChange("grading", e.target.value)}
-    options={[
-      { label: "Select grading", value: "" },
-      ...gradingOptions.map((g) => ({ label: g, value: g })),
-    ]}
-  />
-)}
+            <SelectField
+              label="Grading"
+              value={formData.grading || ""}
+              onChange={(e) => handleChange("grading", e.target.value)}
+              options={[
+                { label: "Select grading", value: "" },
+                ...gradingOptions.map((g) => ({ label: g, value: g })),
+              ]}
+            />
           </div>
 
           <div className="flex justify-end gap-3 mt-8">
