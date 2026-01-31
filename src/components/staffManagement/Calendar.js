@@ -89,7 +89,7 @@ const [selectedDuty, setSelectedDuty] = useState(null);
       case "duty":
         return "bg-gray-300";
       default:
-        return "bg-gray-100";
+        return "bg-red-300";
     }
   };
 
