@@ -175,6 +175,7 @@ const EditContactModal = ({ show, userId, onCancel, role, grading }) => {
   if (formData.address?.id) {
     payload.addressId = formData.address.id;
   }
+if (formData.grading) payload.grading = formData.grading;
 
   if (
     formData.address?.latitude &&
@@ -185,6 +186,7 @@ const EditContactModal = ({ show, userId, onCancel, role, grading }) => {
     payload.longitude = formData.address.longitude;
     payload.mapLocation = formData.address.fullAddress;
   }
+
 
   try {
     await updateNurseDetails(userId, payload);
