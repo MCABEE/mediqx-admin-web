@@ -114,37 +114,87 @@ const EditContactModal = ({ show, userId, onCancel, role, grading }) => {
     }));
   };
 
+  // const handleSave = async () => {
+  //   if (!formData.fullName || !formData.email || !formData.mobileNumber) {
+  //     alert("Full Name, Email and Mobile Number are required");
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     addressId: formData.address?.id || null,
+  //     fullName: formData.fullName,
+  //     gender: formData.gender,
+  //     dob: formData.dob || null,
+  //     email: formData.email,
+  //     mobileNumber: formData.mobileNumber,
+  //     educationQualifications: formData.educationQualifications,
+  //     specializations: formData.specializations,
+  //     workSchedule: formData.workSchedule,
+  //     ...(formData.grading ? { grading: formData.grading } : {}),
+
+  //     // Only send if address has been updated
+  //     latitude: formData.address?.latitude,
+  //     longitude: formData.address?.longitude,
+  //     mapLocation: formData.address?.fullAddress,
+  //   };
+
+  //   try {
+  //     await updateNurseDetails(userId, payload);
+  //     onCancel();
+  //   } catch (err) {
+  //     console.error(err.message || "Failed to update nurse");
+  //   }
+  // };
   const handleSave = async () => {
-    if (!formData.fullName || !formData.email || !formData.mobileNumber) {
-      alert("Full Name, Email and Mobile Number are required");
-      return;
-    }
+  if (!formData.fullName || !formData.email || !formData.mobileNumber) {
+    alert("Full Name, Email and Mobile Number are required");
+    return;
+  }
 
-    const payload = {
-      addressId: formData.address?.id || null,
-      fullName: formData.fullName,
-      gender: formData.gender,
-      dob: formData.dob || null,
-      email: formData.email,
-      mobileNumber: formData.mobileNumber,
-      educationQualifications: formData.educationQualifications,
-      specializations: formData.specializations,
-      workSchedule: formData.workSchedule,
-      ...(formData.grading ? { grading: formData.grading } : {}),
+  const payload = {};
 
-      // Only send if address has been updated
-      latitude: formData.address?.latitude,
-      longitude: formData.address?.longitude,
-      mapLocation: formData.address?.fullAddress,
-    };
+  // Required / core fields
+  if (formData.fullName) payload.fullName = formData.fullName;
+  if (formData.email) payload.email = formData.email;
+  if (formData.mobileNumber) payload.mobileNumber = formData.mobileNumber;
 
-    try {
-      await updateNurseDetails(userId, payload);
-      onCancel();
-    } catch (err) {
-      console.error(err.message || "Failed to update nurse");
-    }
-  };
+  // Optional fields – only include if present
+  if (formData.gender) payload.gender = formData.gender;
+  if (formData.dob) payload.dob = formData.dob;
+
+  if (formData.workSchedule)
+    payload.workSchedule = formData.workSchedule;
+
+  if (formData.educationQualifications?.length > 0)
+    payload.educationQualifications = formData.educationQualifications;
+
+  if (formData.specializations?.length > 0)
+    payload.specializations = formData.specializations;
+
+  // Address handling
+  if (formData.address?.id) {
+    payload.addressId = formData.address.id;
+  }
+if (formData.grading) payload.grading = formData.grading;
+
+  if (
+    formData.address?.latitude &&
+    formData.address?.longitude &&
+    formData.address?.fullAddress
+  ) {
+    payload.latitude = formData.address.latitude;
+    payload.longitude = formData.address.longitude;
+    payload.mapLocation = formData.address.fullAddress;
+  }
+
+
+  try {
+    await updateNurseDetails(userId, payload);
+    onCancel();
+  } catch (err) {
+    console.error(err.message || "Failed to update nurse");
+  }
+};
 
   return (
     <>
