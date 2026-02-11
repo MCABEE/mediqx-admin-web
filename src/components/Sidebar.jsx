@@ -216,12 +216,20 @@ function Sidebar() {
 
   /* ===================== ACTIVE PATH LOGIC ===================== */
   useEffect(() => {
-    if (pathname.includes ("/controlpanel/staffManagement")) {
-      setActive("Healthcare Staff");
-      setOpenSubmenu("Staff Manager");
-    } else if (pathname.includes("/controlpanel/staffManagement/supervisor")) {
-      setActive("Supervisors");
-      setOpenSubmenu("Staff Manager");
+    // if (pathname.includes ("/controlpanel/staffManagement")) {
+    //   setActive("Healthcare Staff");
+    //   setOpenSubmenu("Staff Manager");
+    // } else if (pathname.includes("/controlpanel/staffManagement/supervisor")) {
+    //   setActive("Supervisors");
+    //   setOpenSubmenu("Staff Manager");
+    if (pathname.includes("/controlpanel/staffManagement/supervisor")) {
+  setActive("Supervisors");
+  setOpenSubmenu("Staff Manager");
+} 
+else if (pathname.includes("/controlpanel/staffManagement")) {
+  setActive("Healthcare Staff");
+  setOpenSubmenu("Staff Manager");
+
     } else if (pathname.includes("/controlpanel/agentManagement")) {
       setActive("Agent Manager");
       setOpenSubmenu(null);
