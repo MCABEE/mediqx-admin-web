@@ -3,6 +3,7 @@
 import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistrationStore";
 import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { FaSortDown } from "react-icons/fa";
 
 function Page() {
   const router = useRouter();
@@ -89,40 +90,52 @@ function Page() {
       {/* Filters */}
       <div className="w-full bg-white border border-[#8888888c] flex justify-between items-center px-6 py-4 mt-2 rounded-[15px]">
         <div className="flex gap-[10px]">
-          <select
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4"
-          >
-            <option value="2024">2026</option>
+          <div className="relative w-[192px]">
+            <select
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              className="w-full h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4 appearance-none"
+            >
+              <option value="2026 ">2026</option>
 
-            <option value="2025">2025</option>
-          </select>
+              <option value="2025">2025</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
 
-          <select
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4"
-          >
-            {[
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December",
-            ].map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-[192px]">
+            <select
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4 appearance-none"
+            >
+              {[
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ].map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
         </div>
 
         <h1 className="text-[16px] font-semibold">{totalServices} services</h1>

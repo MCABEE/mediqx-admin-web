@@ -5,6 +5,7 @@ import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
 import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
 import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
 import useLanguageStore from "@/app/lib/store/languageStore";
+import { FaSortDown } from "react-icons/fa";
 
 // Input Group Component
 const InputGroup = ({ label, type = "text", name, value, onChange }) => (
@@ -310,17 +311,23 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
           />
           <div className="flex flex-col gap-[6px]">
             <label className="text-sm font-medium text-[#1F2937]">Gender</label>
-            <select
-              name="gender"
-              value={form.gender}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
-            >
-              <option value="">Select Gender</option>
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-              <option value="OTHERS">Others</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="gender"
+                value={form.gender}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              >
+                <option value="">Select Gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHERS">Others</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
           <InputGroup
             label="Age"
@@ -344,42 +351,54 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
             <label className="text-sm font-medium text-[#1F2937]">
               Health Status
             </label>
-            <select
-              name="healthStatusId"
-              value={form.healthStatusId}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
-            >
-              <option value="" disabled>
-                Select Health Status
-              </option>
-              {listedHealthStatus?.map((status) => (
-                <option key={status.id} value={status.id}>
-                  {status.status}
+            <div className="relative w-full">
+              <select
+                name="healthStatusId"
+                value={form.healthStatusId}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-[#D1D5DB] appearance-none rounded-md"
+              >
+                <option value="" disabled>
+                  Select Health Status
                 </option>
-              ))}
-            </select>
+                {listedHealthStatus?.map((status) => (
+                  <option key={status.id} value={status.id}>
+                    {status.status}
+                  </option>
+                ))}
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-[6px]">
             <label className="text-sm font-medium text-[#1F2937]">
               Stay At
             </label>
-            <select
-              name="stayAt"
-              value={form.stayAt}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
-            >
-              <option value="" disabled>
-                Now Patient stayed at
-              </option>
-              <option value="HOSPITAL">Hospital</option>
-              <option value="RESIDENCE">Residence</option>
-              <option value="CARE_HOME">Care Home</option>
-              <option value="PSYCHIATRIC_HOME">Psychiatric Homes</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="stayAt"
+                value={form.stayAt}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-[#D1D5DB] appearance-none rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              >
+                <option value="" disabled>
+                  Now Patient stayed at
+                </option>
+                <option value="HOSPITAL">Hospital</option>
+                <option value="RESIDENCE">Residence</option>
+                <option value="CARE_HOME">Care Home</option>
+                <option value="PSYCHIATRIC_HOME">Psychiatric Homes</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <InputGroup
@@ -399,43 +418,49 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
             <label className="text-sm font-medium text-[#1F2937]">
               Relation to Patient
             </label>
-            <select
-              name="contactPersonRelation"
-              value={form.contactPersonRelation}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
-            >
-              <option value="">Relationship with patient</option>
-              <option value="SELF">Self</option>
-              <option value="Wife">Wife</option>
-              <option value="Husband">Husband</option>
-              <option value="Father">Father</option>
-              <option value="Mother">Mother</option>
-              <option value="Son">Son</option>
-              <option value="Daughter">Daughter</option>
-              <option value="Brother">Brother</option>
-              <option value="Sister">Sister</option>
-              <option value="Son-in-law">Son-in-law</option>
-              <option value="Daughter-in-law">Daughter-in-law</option>
-              <option value="Father-in-law">Father-in-law</option>
-              <option value="Mother-in-law">Mother-in-law</option>
-              <option value="Grandfather">Grandfather</option>
-              <option value="Grandmother">Grandmother</option>
-              <option value="Grandson">Grandson</option>
-              <option value="Granddaughter">Granddaughter</option>
-              <option value="Uncle">Uncle</option>
-              <option value="Aunt">Aunt</option>
-              <option value="Nephew">Nephew</option>
-              <option value="Niece">Niece</option>
-              <option value="Cousin">Cousin</option>
-              <option value="Relative (Other)">Relative (Other)</option>
-              <option value="Caretaker / Attendant">
-                Caretaker / Attendant
-              </option>
-              <option value="Legal Guardian">Legal Guardian</option>
-              <option value="Friend">Friend</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="contactPersonRelation"
+                value={form.contactPersonRelation}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-[#D1D5DB] appearance-none rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              >
+                <option value="">Relationship with patient</option>
+                <option value="SELF">Self</option>
+                <option value="Wife">Wife</option>
+                <option value="Husband">Husband</option>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Son">Son</option>
+                <option value="Daughter">Daughter</option>
+                <option value="Brother">Brother</option>
+                <option value="Sister">Sister</option>
+                <option value="Son-in-law">Son-in-law</option>
+                <option value="Daughter-in-law">Daughter-in-law</option>
+                <option value="Father-in-law">Father-in-law</option>
+                <option value="Mother-in-law">Mother-in-law</option>
+                <option value="Grandfather">Grandfather</option>
+                <option value="Grandmother">Grandmother</option>
+                <option value="Grandson">Grandson</option>
+                <option value="Granddaughter">Granddaughter</option>
+                <option value="Uncle">Uncle</option>
+                <option value="Aunt">Aunt</option>
+                <option value="Nephew">Nephew</option>
+                <option value="Niece">Niece</option>
+                <option value="Cousin">Cousin</option>
+                <option value="Relative (Other)">Relative (Other)</option>
+                <option value="Caretaker / Attendant">
+                  Caretaker / Attendant
+                </option>
+                <option value="Legal Guardian">Legal Guardian</option>
+                <option value="Friend">Friend</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <InputGroup
@@ -460,21 +485,27 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
             <label className="text-sm font-medium text-[#1F2937]">
               Diagnosis
             </label>
-            <select
-              name="diagnosisId"
-              value={form.diagnosisId}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
-            >
-              <option value="" disabled>
-                Select Diagnosis
-              </option>
-              {listedDiagnoses?.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.diagnosis}
+            <div className="relative w-full">
+              <select
+                name="diagnosisId"
+                value={form.diagnosisId}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-[#D1D5DB] appearance-none rounded-md"
+              >
+                <option value="" disabled>
+                  Select Diagnosis
                 </option>
-              ))}
-            </select>
+                {listedDiagnoses?.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.diagnosis}
+                  </option>
+                ))}
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <InputGroup
@@ -488,43 +519,55 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
             <label className="text-sm font-medium text-[#1F2937]">
               Service Type
             </label>
-            <select
-              name="serviceTypeId"
-              value={form.serviceTypeId}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md"
-            >
-              <option value="" disabled>
-                Service Required
-              </option>
-              {listedServices?.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.service}
+            <div className="relative w-full">
+              <select
+                name="serviceTypeId"
+                value={form.serviceTypeId}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-[#D1D5DB] appearance-none rounded-md"
+              >
+                <option value="" disabled>
+                  Service Required
                 </option>
-              ))}
-            </select>
+                {listedServices?.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.service}
+                  </option>
+                ))}
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-[6px]">
             <label className="text-sm font-medium text-[#1F2937]">
               Duration Type
             </label>
-            <select
-              name="durationType"
-              value={form.durationType}
-              onChange={handleChange}
-              required
-              className="w-[328px] py-2 rounded-md text-sm px-4 border border-gray-300 placeholder:text-black outline-none"
-            >
-              <option value="" disabled>
-                Single Visit / Periodically
-              </option>
-              <option value="ONE_TIME_VISIT">One-time visit</option>
-              <option value="FEW_DAYS">Few Days</option>
-              <option value="FEW_WEEKS">Few Weeks</option>
-              <option value="LONG_TERM">Long-term(Month)</option>
-              <option value="OTHER">Other</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="durationType"
+                value={form.durationType}
+                onChange={handleChange}
+                required
+                className="w-[328px] py-2 rounded-md text-sm px-4 border appearance-none border-gray-300 placeholder:text-black outline-none"
+              >
+                <option value="" disabled>
+                  Single Visit / Periodically
+                </option>
+                <option value="ONE_TIME_VISIT">One-time visit</option>
+                <option value="FEW_DAYS">Few Days</option>
+                <option value="FEW_WEEKS">Few Weeks</option>
+                <option value="LONG_TERM">Long-term(Month)</option>
+                <option value="OTHER">Other</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <InputGroup
@@ -581,41 +624,53 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
             <label className="text-sm font-medium text-[#1F2937]">
               Flexibility
             </label>
-            <select
-              name="flexibility"
-              value={form.flexibility}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
-            >
-              <option value="" disabled>
-                Select flexibility
-              </option>
-              <option value="FIXED">Fixed</option>
-              <option value="FLEXIBLE">Flexible</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="flexibility"
+                value={form.flexibility}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              >
+                <option value="" disabled>
+                  Select flexibility
+                </option>
+                <option value="FIXED">Fixed</option>
+                <option value="FLEXIBLE">Flexible</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-[6px]">
             <label className="text-sm font-medium text-[#1F2937]">
               Schedule Type
             </label>
-            <select
-              name="scheduleType"
-              value={form.scheduleType}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
-            >
-              <option value="" disabled>
-                Daily Schedule Type
-              </option>
-              <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
-              <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
-              {/* <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option> */}
-              <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
-              <option value="CUSTOM_HOURS">Custom Hours</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="scheduleType"
+                value={form.scheduleType}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              >
+                <option value="" disabled>
+                  Daily Schedule Type
+                </option>
+                <option value="FULL_TIME_24_HOURS">Full Time(24Hrs)</option>
+                <option value="DAY_SHIFT_12_HOURS">Day Shift(12Hrs)</option>
+                {/* <option value="DAY_SHIFT_8_HOURS">Day Shift(8Hrs)</option> */}
+                <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
+                <option value="CUSTOM_HOURS">Custom Hours</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           {/* Shows comma-separated selected weekdays */}
@@ -664,22 +719,28 @@ const EditBookingPopup = ({ initialData, onClose, onSave }) => {
             <label className="text-sm font-medium text-[#1F2937] mb-1 block">
               Preferred Gender
             </label>
-            <select
-              name="preferredGender"
-              value={form.preferredGender}
-              onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  preferredGender: e.target.value,
-                }))
-              }
-              required
-              className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
-            >
-              <option value="">Select Gender</option>
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="preferredGender"
+                value={form.preferredGender}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    preferredGender: e.target.value,
+                  }))
+                }
+                required
+                className="w-full px-3 py-2 border border-[#D1D5DB] rounded-md focus:outline-none appearance-none  focus:ring-2 focus:ring-[#2563EB] focus:border-transparent text-sm"
+              >
+                <option value="">Select Gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           {/* Preferred Languages */}
