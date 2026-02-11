@@ -5,6 +5,7 @@ import useNurseStore from "@/app/lib/store/nurseStore";
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 import { AiOutlineClose } from "react-icons/ai";
 import LocationPickerPopup from "../addNewStaff/LocationPickerPopup";
+import { FaSortDown } from "react-icons/fa";
 
 const InputField = ({ label, value, onChange, placeholder, error }) => (
   <div className="flex flex-col w-full">
@@ -35,8 +36,8 @@ const EditExperiencePopup = ({ onClose, userId, role }) => {
     role === "REGISTERED_NURSE"
       ? "REG_NURSES"
       : role === "ANCILLARY_PERSONAL"
-      ? "ANCILLARY"
-      : role;
+        ? "ANCILLARY"
+        : role;
 
   const [form, setForm] = useState({
     qualificationId: "",
@@ -73,7 +74,7 @@ const EditExperiencePopup = ({ onClose, userId, role }) => {
         listedItems["working-departments"].map((d) => ({
           label: d.workingDepartment,
           value: d.id,
-        }))
+        })),
       );
     }
   }, [listedItems["working-departments"]]);
@@ -84,7 +85,7 @@ const EditExperiencePopup = ({ onClose, userId, role }) => {
         listedItems.skills.map((s) => ({
           label: s.skill,
           value: s.id,
-        }))
+        })),
       );
     }
   }, [listedItems.skills]);
@@ -207,19 +208,25 @@ const EditExperiencePopup = ({ onClose, userId, role }) => {
           <label className="text-sm font-medium text-gray-700 mb-1">
             Experience Level
           </label>
-          <select
-            value={form.experienceLevel}
-            onChange={(e) => handleChange("experienceLevel", e.target.value)}
-            className={`border rounded-lg p-2 text-sm focus:outline-none focus:ring-2 ${
-              errors.experienceLevel
-                ? "border-red-500 focus:ring-red-400"
-                : "border-gray-300 focus:ring-blue-500"
-            }`}
-          >
-            <option value="">Select Experience Level</option>
-            <option value="FRESHER">Fresher</option>
-            <option value="EXPERIENCED">Experienced</option>
-          </select>
+          <div className="relative w-full">
+            <select
+              value={form.experienceLevel}
+              onChange={(e) => handleChange("experienceLevel", e.target.value)}
+              className={`w-full border rounded-lg p-2 appearance-none text-sm focus:outline-none focus:ring-2 ${
+                errors.experienceLevel
+                  ? "border-red-500 focus:ring-red-400"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
+            >
+              <option value="">Select Experience Level</option>
+              <option value="FRESHER">Fresher</option>
+              <option value="EXPERIENCED">Experienced</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
           {errors.experienceLevel && (
             <p className="text-xs text-red-500 mt-1">
               {errors.experienceLevel}
@@ -253,22 +260,28 @@ const EditExperiencePopup = ({ onClose, userId, role }) => {
           <label className="text-sm font-medium text-gray-700 mb-1">
             Department
           </label>
-          <select
-            value={form.departmentId}
-            onChange={(e) => handleChange("departmentId", e.target.value)}
-            className={`border rounded-lg p-2 text-sm focus:outline-none focus:ring-2 ${
-              errors.departmentId
-                ? "border-red-500 focus:ring-red-400"
-                : "border-gray-300 focus:ring-blue-500"
-            }`}
-          >
-            <option value="">Select Department</option>
-            {departments.map((d) => (
-              <option key={d.value} value={d.value}>
-                {d.label}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-full">
+            <select
+              value={form.departmentId}
+              onChange={(e) => handleChange("departmentId", e.target.value)}
+              className={`w-full border appearance-none rounded-lg p-2 text-sm focus:outline-none focus:ring-2 ${
+                errors.departmentId
+                  ? "border-red-500 focus:ring-red-400"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
+            >
+              <option value="">Select Department</option>
+              {departments.map((d) => (
+                <option key={d.value} value={d.value}>
+                  {d.label}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
           {errors.departmentId && (
             <p className="text-xs text-red-500 mt-1">{errors.departmentId}</p>
           )}
@@ -326,8 +339,8 @@ const EditExperiencePopup = ({ onClose, userId, role }) => {
               form.onGoing
                 ? "bg-gray-100 text-gray-500 cursor-not-allowed"
                 : errors.endDate
-                ? "border-red-500 focus:ring-red-400"
-                : "border-gray-300 focus:ring-blue-500"
+                  ? "border-red-500 focus:ring-red-400"
+                  : "border-gray-300 focus:ring-blue-500"
             }`}
           />
           {errors.endDate && (

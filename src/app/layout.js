@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased px-[20px] xl:px-[80px] 2xl:px-[196px] `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased px-[20px] xl:px-[80px] 2xl:px-[156px] `}
       >
         <RouteProtector>
         {children}

@@ -3,8 +3,9 @@ import React, { useState, useMemo, useEffect } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 import { submitNursePageThree } from "@/api/addStaffNurseApi";
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
+import { FaSortDown } from "react-icons/fa";
 
-function AddNurseAvailability({ categoryByProfession,onComplete  }) {
+function AddNurseAvailability({ categoryByProfession, onComplete }) {
   const today = new Date().toISOString().split("T")[0];
   const { userId } = useNurseRegistrationStore();
 
@@ -176,38 +177,6 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
     });
   };
 
-  // Prepare payload according to backend API
-  // const generateAvailabilities = () => {
-  //   const availabilities = [];
-  //   for (const [date, info] of Object.entries(selectedDates)) {
-  //     if (info.fulltime) {
-  //       availabilities.push({
-  //         date,
-  //         isAvailable: true,
-  //         fixedSlots: info.fixedSlot,
-  //         slotOneStart: null,
-  //         slotOneEnd: null,
-  //         slotTwoStart: null,
-  //         slotTwoEnd: null,
-  //       });
-  //     } else {
-  //       // For parttime, actual shifts
-  //       const s1 = info.slots.forenoon || null;
-  //       const s2 = info.slots.afternoon || null;
-  //       availabilities.push({
-  //         date,
-  //         isAvailable: true,
-  //         fixedSlots: null,
-  //         slotOneStart: s1 ? s1.from : null,
-  //         slotOneEnd: s1 ? s1.to : null,
-  //         slotTwoStart: s2 ? s2.from : null,
-  //         slotTwoEnd: s2 ? s2.to : null,
-  //       });
-  //     }
-  //   }
-  //   return availabilities;
-  // };
-
   const generateAvailabilities = () => {
     const availabilities = [];
     // Add available dates in your current logic
@@ -322,50 +291,27 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
 
         <div className="mt-6">
           {/* Qualification */}
-          {/* <select
-            value={qualification}
-            onChange={(e) => setQualification(e.target.value)}
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
-            required
-          >
-        
-            <option disabled value="">
-              Qualification
-            </option>
-            <option value="ANM (Auxiliary Nurse Midwife)">ANM (Auxiliary Nurse Midwife)</option>
-            <option value="GNM (General Nursing and Midwifery)">GNM (General Nursing and Midwifery)</option>
-            <option value="GDA (General Duty Assistant)">GDA (General Duty Assistant)</option>
-            <option value="B.Sc. Nursing">B.Sc. Nursing</option>
-            <option value="Post Basic B.Sc. Nursing">Post Basic B.Sc. Nursing</option>
-            <option value="M.Sc. Nursing">M.Sc. Nursing</option>
-            <option value="Nurse Practitioner (NP)">Nurse Practitioner (NP)</option>
-            
-          </select> */}
-
-          <select
-            value={qualification}
-            onChange={(e) => setQualification(e.target.value)}
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none placeholder:text-black"
-            required
-          >
-            {/* <option disabled value="">
-              Qualification
-            </option>
-            {qualifications.map((q) => (
-              <option key={q.id} value={q.qualification || q}>
-                {q.qualification || q}
+          <div className="relative w-[328px]">
+            <select
+              value={qualification}
+              onChange={(e) => setQualification(e.target.value)}
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none appearance-none placeholder:text-black"
+              required
+            >
+              <option disabled value="">
+                Qualification
               </option>
-            ))} */}
-            <option disabled value="">
-              Qualification
-            </option>
-            {qualifications.map((q) => (
-              <option key={q.id} value={q.id}>
-                {q.qualification || q}
-              </option>
-            ))}
-          </select>
-
+              {qualifications.map((q) => (
+                <option key={q.id} value={q.id}>
+                  {q.qualification || q}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
           {/* Registered Nurse Checkbox */}
           <div className="flex items-center gap-2 ps-2 mt-3">
             <input
@@ -381,30 +327,15 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
           </div>
 
           {/* Specialization */}
-          {/* <div className="pb-3">
-            <select
-            value={specialization}
-            onChange={(e) => setSpecialization(e.target.value)}
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black mt-3"
-          >
-            <option disabled value="">
-              Specialization
-            </option>
-            <option value="Staff Nurse / Ward Nurse">
-              Staff Nurse / Ward Nurse
-            </option>
-            <option value="ICU Nurse / Critical Care Nurse">ICU Nurse</option>
-            <option value="ER Nurse / Trauma Nurse">ER Nurse</option>
-            <option value="Pediatric Nurse">Pediatric Nurse</option>
-          </select>
-          </div> */}
+
           <div className="pb-3">
-            <select
-              value={specialization}
-              onChange={(e) => setSpecialization(e.target.value)}
-              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none mt-3"
-            >
-              {/* <option disabled value="">
+            <div className="relative w-[328px]">
+              <select
+                value={specialization}
+                onChange={(e) => setSpecialization(e.target.value)}
+                className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black outline-none appearance-none mt-3"
+              >
+                {/* <option disabled value="">
                 Specialization
               </option>
               {specializations.map((s) => (
@@ -412,36 +343,47 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
                   {s.specialization || s}
                 </option>
               ))} */}
-              <option disabled value="">
-                Specialization
-              </option>
-              {specializations.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.specialization || s}
+                <option disabled value="">
+                  Specialization
                 </option>
-              ))}
-            </select>
+                {specializations.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.specialization || s}
+                  </option>
+                ))}
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           {/* Single select for schedule + mode */}
-          <select
-            value={workSchedule}
-            onChange={(e) => {
-              const val = e.target.value;
-              setWorkSchedule(val);
-              setMode(val === "FULL_TIME" ? "fulltime" : "parttime");
-              setSelectedDates({});
-              setSelectedFullTimeSlot("");
-              setPopupDate(null);
-              setErrorMsg("");
-            }}
-            required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black  outline-none placeholder:text-black mt-3"
-          >
-            <option value="">Select Work Schedule</option>
-            <option value="FULL_TIME">Full Time</option>
-            <option value="PART_TIME">Part Time</option>
-          </select>
+          <div className="relative w-[328px]">
+            <select
+              value={workSchedule}
+              onChange={(e) => {
+                const val = e.target.value;
+                setWorkSchedule(val);
+                setMode(val === "FULL_TIME" ? "fulltime" : "parttime");
+                setSelectedDates({});
+                setSelectedFullTimeSlot("");
+                setPopupDate(null);
+                setErrorMsg("");
+              }}
+              required
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-[14px] text-black appearance-none  outline-none placeholder:text-black mt-3"
+            >
+              <option value="">Select Work Schedule</option>
+              <option value="FULL_TIME">Full Time</option>
+              <option value="PART_TIME">Part Time</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
         </div>
 
         {/* Fulltime Slot Selection */}
@@ -481,7 +423,7 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
         )}
 
         {/* Date range selection */}
-        {/* <div className="mt-6">
+        <div className="mt-6">
           <p className="mt-6 text-[14px] text-black ">
             Set your available days
           </p>
@@ -493,6 +435,13 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
                 min={today}
                 value={fromDate}
                 onChange={(e) => {
+                  if (!workSchedule) {
+                    setFormError(
+                      "Please select your work schedule before choosing dates.",
+                    );
+                    return;
+                  }
+                  setFormError(""); // clear error if valid
                   setFromDate(e.target.value);
                   setToDate("");
                   setSelectedDates({});
@@ -509,6 +458,13 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
                 min={fromDate || today}
                 value={toDate}
                 onChange={(e) => {
+                  if (!workSchedule) {
+                    setFormError(
+                      "Please select your work schedule before choosing dates.",
+                    );
+                    return;
+                  }
+                  setFormError("");
                   setToDate(e.target.value);
                   setSelectedDates({});
                   setCurrentMonthIndex(0);
@@ -519,59 +475,7 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
               />
             </div>
           </div>
-        </div> */}
-
-        {/* Date range selection */}
-<div className="mt-6">
-  <p className="mt-6 text-[14px] text-black ">
-    Set your available days
-  </p>
-  <div className="flex gap-4 mt-2">
-    <div>
-      <p className="text-[14px] text-gray-600">Choose from Date</p>
-      <input
-        type="date"
-        min={today}
-        value={fromDate}
-        onChange={(e) => {
-          if (!workSchedule) {
-            setFormError("Please select your work schedule before choosing dates.");
-            return;
-          }
-          setFormError(""); // clear error if valid
-          setFromDate(e.target.value);
-          setToDate("");
-          setSelectedDates({});
-          setCurrentMonthIndex(0);
-        }}
-        className="w-[240px] h-[40px] px-2 mt-2 border-1 rounded-[15px] border-[#bbbbbb] outline-none"
-        required
-      />
-    </div>
-    <div>
-      <p className="text-[14px] text-gray-600">Choose To Date</p>
-      <input
-        type="date"
-        min={fromDate || today}
-        value={toDate}
-        onChange={(e) => {
-          if (!workSchedule) {
-            setFormError("Please select your work schedule before choosing dates.");
-            return;
-          }
-          setFormError("");
-          setToDate(e.target.value);
-          setSelectedDates({});
-          setCurrentMonthIndex(0);
-        }}
-        className="w-[240px] h-[40px] px-2 mt-2 border-1 rounded-[15px] border-[#bbbbbb] outline-none"
-        required
-        disabled={!fromDate}
-      />
-    </div>
-  </div>
-</div>
-
+        </div>
 
         {/* Selected Dates display */}
         {selectedDateList.length > 0 && (
@@ -662,8 +566,8 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
                       isPast
                         ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                         : isSelected
-                        ? "bg-blue-500 text-white"
-                        : "bg-white border-gray-400"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white border-gray-400"
                     }`}
                   >
                     {date.getDate()}
@@ -687,7 +591,7 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
                   type="button"
                   onClick={() =>
                     setCurrentMonthIndex((prev) =>
-                      Math.min(prev + 1, groupedByMonth.length - 1)
+                      Math.min(prev + 1, groupedByMonth.length - 1),
                     )
                   }
                   disabled={currentMonthIndex === groupedByMonth.length - 1}
@@ -840,4 +744,3 @@ function AddNurseAvailability({ categoryByProfession,onComplete  }) {
 }
 
 export default AddNurseAvailability;
-
