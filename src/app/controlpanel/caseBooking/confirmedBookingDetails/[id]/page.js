@@ -7,6 +7,7 @@ import Link from "next/link";
 import EditBookingPopup from "@/components/caseBooking/EditBookingPopup";
 import CancelPopup from "@/components/caseBooking/CancelPopup";
 import UpdateLocationPopup from "@/components/caseBooking/UpdateLocationPopup";
+import { FaSortDown } from "react-icons/fa";
 
 const formatDate = (isoString) => {
   if (!isoString) return "-";
@@ -238,7 +239,9 @@ const BookingDetailsPage = () => {
           </div>
           <div className="flex">
             <span className="w-[200px] font-medium">Duration</span>
-            <span>{booking.durationType} ({booking.durationValue})</span>
+            <span>
+              {booking.durationType} ({booking.durationValue})
+            </span>
           </div>
 
           <div className="flex">
@@ -315,41 +318,52 @@ const BookingDetailsPage = () => {
           </h1>
         </div>
         <div className="flex gap-10 p-8">
-          <select
-            name="categoryByProfession"
-            required
-            value={selectedRole}
-            onChange={handleRoleChange}
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
-          >
-            <option value="" disabled>
-              Category by profession
-            </option>
-            <option value="REGISTERED_NURSE">Registered Nurse</option>
-            <option value="NURSING_ASSISTANTS">Nursing Assistants</option>
-            <option value="TECHNICIANS">Technicians</option>
-            <option value="THERAPY">Therapy</option>
-            <option value="ANCILLARY_PERSONAL">Ancillary Personal</option>
-          </select>
-
-          <select
-            name="grade"
-            required
-            value={selectedGrade}
-            onChange={handleGradeChange}
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
-          >
-            <option value="" disabled>
-              Select Grade
-            </option>
-            <option value="GRADE_01">Grade 1</option>
-            <option value="GRADE_02">Grade 2</option>
-            <option value="GRADE_03">Grade 3</option>
-            <option value="GRADE_04">Grade 4</option>
-            <option value="GRADE_05">Grade 5</option>
-            <option value="GRADE_06">Grade 6</option>
-            <option value="GRADE_07">Grade 7</option>
-          </select>
+          <div className="relative w-[328px]">
+            <select
+              name="categoryByProfession"
+              required
+              value={selectedRole}
+              onChange={handleRoleChange}
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none appearance-none"
+            >
+              <option value="" disabled>
+                Category by profession
+              </option>
+              <option value="REGISTERED_NURSE">Registered Nurse</option>
+              <option value="NURSING_ASSISTANTS">Nursing Assistants</option>
+              <option value="TECHNICIANS">Technicians</option>
+              <option value="THERAPY">Therapy</option>
+              <option value="ANCILLARY_PERSONAL">Ancillary Personal</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
+          <div className="relative w-[328px]">
+            <select
+              name="grade"
+              required
+              value={selectedGrade}
+              onChange={handleGradeChange}
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none appearance-none"
+            >
+              <option value="" disabled>
+                Select Grade
+              </option>
+              <option value="GRADE_01">Grade 1</option>
+              <option value="GRADE_02">Grade 2</option>
+              <option value="GRADE_03">Grade 3</option>
+              <option value="GRADE_04">Grade 4</option>
+              <option value="GRADE_05">Grade 5</option>
+              <option value="GRADE_06">Grade 6</option>
+              <option value="GRADE_07">Grade 7</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
         </div>
       </div>
 

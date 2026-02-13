@@ -2,8 +2,12 @@
 import React, { useState } from "react";
 import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistrationStore";
 import LocationPickerPopup from "@/components/staffManagement/addNewStaff/LocationPickerPopup"; // adjust path
+import { FaSortDown } from "react-icons/fa";
 
-const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => {
+const SupervisorBasicInformation = ({
+  onComplete,
+  setCategoryByProfession,
+}) => {
   const [formData, setFormData] = useState({
     categoryByProfession: "",
     fullName: "",
@@ -14,12 +18,17 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
     dob: "",
   });
 
-  const [location, setLocation] = useState({ latitude: "", longitude: "", mapLocation: "" });
+  const [location, setLocation] = useState({
+    latitude: "",
+    longitude: "",
+    mapLocation: "",
+  });
   const [showLocationPopup, setShowLocationPopup] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [isFocused, setIsFocused] = useState(false);
 
-  const { registerSupervisor, isLoading, successData, error } = useSupervisorRegistrationStore();
+  const { registerSupervisor, isLoading, successData, error } =
+    useSupervisorRegistrationStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,15 +49,18 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
 
   const validate = () => {
     const errs = {};
-    if (!formData.categoryByProfession) errs.categoryByProfession = "Category is required.";
+    if (!formData.categoryByProfession)
+      errs.categoryByProfession = "Category is required.";
     if (!formData.fullName) errs.fullName = "Full name is required.";
     if (!formData.gender) errs.gender = "Gender is required.";
     if (!formData.email) errs.email = "Email is required.";
-    else if (!validateEmail(formData.email)) errs.email = "Enter a valid email.";
+    else if (!validateEmail(formData.email))
+      errs.email = "Enter a valid email.";
     if (!formData.mobileNumber || formData.mobileNumber.length !== 10)
       errs.mobileNumber = "Phone must be exactly 10 digits.";
     if (!formData.dob) errs.dob = "Date of birth is required.";
-    if (!location.latitude || !location.longitude) errs.location = "Please select a location.";
+    if (!location.latitude || !location.longitude)
+      errs.location = "Please select a location.";
     return errs;
   };
 
@@ -86,40 +98,65 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">Basic Information</h1>
+        <h1 className="text-[16px] font-semibold text-black px-[39px] py-[18px]">
+          Basic Information
+        </h1>
         <div className="flex flex-col gap-5 px-[39px] mb-12">
           {/* Gender */}
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
-          >
-            <option value="" disabled>Gender</option>
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-            <option value="OTHER">Other</option>
-          </select>
-          {validationErrors.gender && <span className="text-[13px] text-red-500 ps-2">{validationErrors.gender}</span>}
+          <div className="relative w-[328px]">
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none appearance-none"
+            >
+              <option value="" disabled>
+                Gender
+              </option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="OTHER">Other</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
+          {validationErrors.gender && (
+            <span className="text-[13px] text-red-500 ps-2">
+              {validationErrors.gender}
+            </span>
+          )}
 
           {/* Profession category */}
-          <select
-            name="categoryByProfession"
-            value={formData.categoryByProfession}
-            onChange={handleChange}
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
-          >
-            <option value="" disabled>Category by profession</option>
-           
-            <option value="REGISTERED_NURSE">Registered Nurse</option>
-            <option value="NURSING_ASSISTANTS">Nursing Assistants</option>
-            <option value="TECHNICIANS">Technicians</option>
-            <option value="THERAPY">Therapy</option>
-            <option value="ANCILLARY_PERSONAL">Ancillary Personal</option>
-            <option value="OTHER">Other</option>
-          
-          </select>
-          {validationErrors.categoryByProfession && <span className="text-[13px] text-red-500 ps-2">{validationErrors.categoryByProfession}</span>}
+          <div className="relative w-[328px]">
+            <select
+              name="categoryByProfession"
+              value={formData.categoryByProfession}
+              onChange={handleChange}
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none appearance-none"
+            >
+              <option value="" disabled>
+                Category by profession
+              </option>
+
+              <option value="REGISTERED_NURSE">Registered Nurse</option>
+              <option value="NURSING_ASSISTANTS">Nursing Assistants</option>
+              <option value="TECHNICIANS">Technicians</option>
+              <option value="THERAPY">Therapy</option>
+              <option value="ANCILLARY_PERSONAL">Ancillary Personal</option>
+              <option value="OTHER">Other</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
+          {validationErrors.categoryByProfession && (
+            <span className="text-[13px] text-red-500 ps-2">
+              {validationErrors.categoryByProfession}
+            </span>
+          )}
 
           <input
             type="text"
@@ -129,7 +166,11 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
             placeholder="Full Name"
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none placeholder:text-black"
           />
-          {validationErrors.fullName && <span className="text-[13px] text-red-500 ps-2">{validationErrors.fullName}</span>}
+          {validationErrors.fullName && (
+            <span className="text-[13px] text-red-500 ps-2">
+              {validationErrors.fullName}
+            </span>
+          )}
 
           <input
             type="email"
@@ -139,7 +180,11 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
             placeholder="Email ID"
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none placeholder:text-black"
           />
-          {validationErrors.email && <span className="text-[13px] text-red-500 ps-2">{validationErrors.email}</span>}
+          {validationErrors.email && (
+            <span className="text-[13px] text-red-500 ps-2">
+              {validationErrors.email}
+            </span>
+          )}
 
           <input
             type="text"
@@ -150,7 +195,11 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
             maxLength={10}
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none placeholder:text-black"
           />
-          {validationErrors.mobileNumber && <span className="text-[13px] text-red-500 ps-2">{validationErrors.mobileNumber}</span>}
+          {validationErrors.mobileNumber && (
+            <span className="text-[13px] text-red-500 ps-2">
+              {validationErrors.mobileNumber}
+            </span>
+          )}
 
           <input
             type={isFocused ? "date" : "text"}
@@ -162,7 +211,11 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
             onBlur={() => setIsFocused(false)}
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none placeholder:text-black"
           />
-          {validationErrors.dob && <span className="text-[13px] text-red-500 ps-2">{validationErrors.dob}</span>}
+          {validationErrors.dob && (
+            <span className="text-[13px] text-red-500 ps-2">
+              {validationErrors.dob}
+            </span>
+          )}
 
           {/* Location input (clickable, opens popup) */}
           <input
@@ -173,7 +226,11 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
             readOnly
             className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none placeholder:text-black cursor-pointer bg-white"
           />
-          {validationErrors.location && <span className="text-[13px] text-red-500 ps-2">{validationErrors.location}</span>}
+          {validationErrors.location && (
+            <span className="text-[13px] text-red-500 ps-2">
+              {validationErrors.location}
+            </span>
+          )}
 
           <input
             type="text"
@@ -193,8 +250,16 @@ const SupervisorBasicInformation = ({ onComplete, setCategoryByProfession }) => 
             {isLoading ? "Submitting..." : "Next"}
           </button>
 
-          {successData && <span className="text-[14px] text-[#3674B5] font-semibold ps-4">The entry has been successfully submitted!</span>}
-          {error && <span className="text-[14px] text-red-500 font-semibold ps-4">{error}</span>}
+          {successData && (
+            <span className="text-[14px] text-[#3674B5] font-semibold ps-4">
+              The entry has been successfully submitted!
+            </span>
+          )}
+          {error && (
+            <span className="text-[14px] text-red-500 font-semibold ps-4">
+              {error}
+            </span>
+          )}
         </div>
       </div>
 

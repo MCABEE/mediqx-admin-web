@@ -5,11 +5,7 @@ import { GoArrowUp, GoArrowDown } from "react-icons/go";
 const Payments = ({ data }) => {
   if (!data) return null;
 
-  const {
-    total = 0,
-    referralPayments = 0,
-    percentageChange = 0,
-  } = data;
+  const { total = 0, referralPayments = 0, percentageChange = 0 } = data;
 
   const isPositive = percentageChange >= 0;
 
@@ -35,9 +31,10 @@ const Payments = ({ data }) => {
             )}
             <p className="text-2xl pt-2">{Math.abs(percentageChange)}%</p>
           </div>
-
           <div className="text-[#333333] text-center text-[14px] font-semibold">
-            <p>Compared <br/> to last period</p>
+            <p>
+              Compared <br /> to last period
+            </p>
           </div>
         </div>
       </div>
