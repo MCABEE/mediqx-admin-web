@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import useAgentStore from "@/app/lib/store/agentManagementStore";
+import { FaSortDown } from "react-icons/fa";
 
 function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
   const {
@@ -83,7 +84,11 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
     if (isSubmitDisabled) return;
     setSubmitLoading(true);
     try {
-      await updateAgentReferralStatus(referral.id, referralStatus, referralSignupStaffId);
+      await updateAgentReferralStatus(
+        referral.id,
+        referralStatus,
+        referralSignupStaffId,
+      );
       if (onSubmitSuccess)
         onSubmitSuccess({
           ...referral,
@@ -100,7 +105,10 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
 
   return (
     <div className="fixed inset-0 w-screen h-screen flex justify-center items-center bg-[#1a1a1a50] backdrop-blur-xs">
-      <div ref={containerRef} className="w-[640px] bg-white rounded-[15px] py-10 relative">
+      <div
+        ref={containerRef}
+        className="w-[640px] bg-white rounded-[15px] py-10 relative"
+      >
         <div
           className="bg-black text-white size-6 flex justify-center items-center rounded absolute right-4 top-4 cursor-pointer"
           onClick={onClose}
@@ -109,7 +117,9 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
         </div>
 
         <div className="px-[155px] flex flex-col gap-4">
-          <h1 className="text-black font-semibold">Manage Referral Information</h1>
+          <h1 className="text-black font-semibold">
+            Manage Referral Information
+          </h1>
 
           {/* Readonly fields */}
           {/* <select
@@ -133,7 +143,6 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
             className="w-full h-[40px] border-1 border-[#BBBBBB] rounded-[15px] px-4 bg-gray-100 cursor-not-allowed"
             value={referral?.qualifications?.[0]?.qualification || ""}
           />
-           
 
           <input
             type="tel"
@@ -146,23 +155,28 @@ function ManageReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
 
         <div className="px-[155px] flex flex-col gap-4 mt-4 relative">
           <h1 className="text-black font-semibold">Referral Status</h1>
-
-          <select
-            name="referralStatus"
-            className="w-full h-[40px] border-1 border-[#BBBBBB] rounded-[15px] px-4 outline-none"
-            value={referralStatus}
-            onChange={(e) => setReferralStatus(e.target.value)}
-          >
-            <option value="">Select Status</option>
-            <option value="PENDING">Pending</option>
-            <option value="CONFIRMED">Confirmed</option>
-            <option value="CANCELLED">Rejected</option>
-          </select>
+          <div className="relative w-full">
+            <select
+              name="referralStatus"
+              className="w-full h-[40px] border-1 border-[#BBBBBB] rounded-[15px] px-4 outline-none appearance-none"
+              value={referralStatus}
+              onChange={(e) => setReferralStatus(e.target.value)}
+            >
+              <option value="">Select Status</option>
+              <option value="PENDING">Pending</option>
+              <option value="CONFIRMED">Confirmed</option>
+              <option value="CANCELLED">Rejected</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
 
           <h1 className="text-black font-semibold mt-4">
             {referral?.referralType === "STAFF"
-                      ? "Choose Staff Name (Confirmed)" 
-                      : "Choose Patient Name (Confirmed)"}
+              ? "Choose Staff Name (Confirmed)"
+              : "Choose Patient Name (Confirmed)"}
           </h1>
 
           <div className="relative w-full">

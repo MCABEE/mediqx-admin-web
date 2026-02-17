@@ -7,6 +7,7 @@ import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
 import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
 import useLanguageStore from "@/app/lib/store/languageStore";
 import LocationPickerPopup from "../staffManagement/addNewStaff/LocationPickerPopup";
+import { FaSortDown } from "react-icons/fa";
 const WEEK_DAYS = [
   "MONDAY",
   "TUESDAY",
@@ -153,11 +154,11 @@ export default function CreateServiceBookingPopup({ open, onClose }) {
     // }
 
     if (form.durationType === "ONE_TIME_VISIT") {
-  payload.durationValue = 1;
-} else {
-  payload.durationValue = Number(form.durationValue);
-  payload.weekdays = weekdays;
-}
+      payload.durationValue = 1;
+    } else {
+      payload.durationValue = Number(form.durationValue);
+      payload.weekdays = weekdays;
+    }
     console.log("FINAL PAYLOAD :point_right:", payload);
     const res = await createBooking({
       userId: patientId, // sent as query param
@@ -236,7 +237,6 @@ export default function CreateServiceBookingPopup({ open, onClose }) {
             label="Schedule Type"
             name="scheduleType"
             options={[
-              { value: "FULL_TIME_24_HOURS", label: "24 Hours" },
               { value: "DAY_SHIFT_12_HOURS", label: "Day Shift 12 Hours" },
               { value: "NIGHT_SHIFT_12_HOURS", label: "Night Shift 12 Hours" },
               { value: "FULL_TIME_24_HOURS", label: "Full Time 24 Hours" },
@@ -254,13 +254,13 @@ export default function CreateServiceBookingPopup({ open, onClose }) {
           /> */}
 
           <Input
-  label="Start Date"
-  type="date"
-  name="startDate"
-  value={form.startDate}
-  onChange={handleChange}
-  error={errors.startDate}
-/>
+            label="Start Date"
+            type="date"
+            name="startDate"
+            value={form.startDate}
+            onChange={handleChange}
+            error={errors.startDate}
+          />
 
           <Select
             label="Duration Type"
@@ -420,14 +420,23 @@ const Input = ({ label, error, ...props }) => (
 const Select = ({ label, options, error, ...props }) => (
   <div>
     <label className="font-medium">{label}</label>
-    <select {...props} className="w-full h-[40px] border rounded px-3">
-      <option value="">Select</option>
-      {options.map((o) => (
-        <option key={o.value} value={o.value}>
-          {o.label}
-        </option>
-      ))}
-    </select>
+    <div className="relative w-full">
+      <select
+        {...props}
+        className="w-full h-[40px] border rounded px-3 appearance-none outline-none"
+      >
+        <option value="">Select</option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+      <FaSortDown
+        size={18}
+        className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+      />
+    </div>
     {error && <p className="text-red-500 text-xs">{error}</p>}
   </div>
 );

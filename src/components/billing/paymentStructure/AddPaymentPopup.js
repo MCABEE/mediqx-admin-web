@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
 import usePaymentStructureStore from "@/app/lib/store/usePaymentStructureStore";
+import { FaSortDown } from "react-icons/fa";
 
 /**
  * AddPaymentPopup
@@ -100,19 +101,19 @@ export default function AddPaymentPopup({ onClose }) {
       setLocalError("Please enter the discount amount.");
       return false;
     }
-      if (!form.staffPayValue) {
+    if (!form.staffPayValue) {
       setLocalError("Please enter the staff payment amount.");
       return false;
     }
-     if (!form.patientReferralValue) {
+    if (!form.patientReferralValue) {
       setLocalError("Please enter the patient payment amount.");
       return false;
     }
-     if (!form.patientReferralValue) {
+    if (!form.patientReferralValue) {
       setLocalError("Please enter the patient referral value.");
       return false;
     }
-     if (!form.patientReferralValue) {
+    if (!form.patientReferralValue) {
       setLocalError("Please enter the staff payment amount.");
       return false;
     }
@@ -136,10 +137,12 @@ export default function AddPaymentPopup({ onClose }) {
       staffPayAmount:
         form.staffPayValue === "" ? null : Number(form.staffPayValue),
       patientReferralDiscountType: mapDiscountTypeToApi(
-        form.patientReferralType
+        form.patientReferralType,
       ),
       patientReferralValue:
-        form.patientReferralValue === "" ? null : Number(form.patientReferralValue),
+        form.patientReferralValue === ""
+          ? null
+          : Number(form.patientReferralValue),
       staffReferralDiscountType: mapDiscountTypeToApi(form.staffReferralType),
       staffReferralValue:
         form.staffReferralValue === "" ? null : Number(form.staffReferralValue),
@@ -169,82 +172,116 @@ export default function AddPaymentPopup({ onClose }) {
     <div className="fixed inset-0 flex justify-center items-center bg-black/40 z-50">
       <div className="bg-white w-[720px] max-h-[92vh] overflow-y-auto rounded-[12px] p-6 shadow-lg">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-[#3674B5]">Add Payment Structure</h2>
-          <button onClick={onClose} className="text-gray-600 text-xl">✖</button>
+          <h2 className="text-lg font-semibold text-[#3674B5]">
+            Add Payment Structure
+          </h2>
+          <button onClick={onClose} className="text-gray-600 text-xl">
+            ✖
+          </button>
         </div>
 
         {/* Payment Details */}
-        <h3 className="text-[#3674B5] font-semibold text-base mb-2">Payment Details</h3>
+        <h3 className="text-[#3674B5] font-semibold text-base mb-2">
+          Payment Details
+        </h3>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
             <label className="block text-sm mb-1">Role</label>
-            <select
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2 text-sm"
-            >
-              <option value="REG_NURSES">REG NURSES</option>
-              <option value="NURSING_ASSISTANTS">NURSING ASSISTANTS</option>
-              <option value="TECHNICIANS">TECHNICIANS</option>
-              <option value="THERAPY">THERAPY</option>
-              <option value="ANCILLARY">ANCILLARY</option>
-              <option value="DOCTORS">DOCTORS</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 text-sm outline-none appearance-none"
+              >
+                <option value="REG_NURSES">REG NURSES</option>
+                <option value="NURSING_ASSISTANTS">NURSING ASSISTANTS</option>
+                <option value="TECHNICIANS">TECHNICIANS</option>
+                <option value="THERAPY">THERAPY</option>
+                <option value="ANCILLARY">ANCILLARY</option>
+                <option value="DOCTORS">DOCTORS</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm mb-1">Category</label>
-            <select
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2 text-sm"
-            >
-              <option value="GRADE_01">Grade 01</option>
-              <option value="GRADE_02">Grade 02</option>
-              <option value="GRADE_03">Grade 03</option>
-              <option value="GRADE_04">Grade 04</option>
-              <option value="GRADE_05">Grade 05</option>
-              <option value="GRADE_06">Grade 06</option>
-              <option value="GRADE_07">Grade 07</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 text-sm outline-none appearance-none"
+              >
+                <option value="GRADE_01">Grade 01</option>
+                <option value="GRADE_02">Grade 02</option>
+                <option value="GRADE_03">Grade 03</option>
+                <option value="GRADE_04">Grade 04</option>
+                <option value="GRADE_05">Grade 05</option>
+                <option value="GRADE_06">Grade 06</option>
+                <option value="GRADE_07">Grade 07</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm mb-1">Duty Schedule</label>
-            <select
-              name="dutySchedule"
-              value={form.dutySchedule}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2 text-sm"
-            >
-              <option value="SHIFT_24_HOURS">SHIFT 24 HOURS</option>
-              <option value="DAY_SHIFT_12_HOURS">DAY SHIFT 12 HOURS</option>
-              <option value="NIGHT_SHIFT_12_HOURS">NIGHT SHIFT 12 HOURS</option>
-              <option value="SHIFT_FLEXIBLE_HOURS">SHIFT FLEXIBLE HOURS</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="dutySchedule"
+                value={form.dutySchedule}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 text-sm outline-none appearance-none"
+              >
+                <option value="SHIFT_24_HOURS">SHIFT 24 HOURS</option>
+                <option value="DAY_SHIFT_12_HOURS">DAY SHIFT 12 HOURS</option>
+                <option value="NIGHT_SHIFT_12_HOURS">
+                  NIGHT SHIFT 12 HOURS
+                </option>
+                <option value="SHIFT_FLEXIBLE_HOURS">
+                  SHIFT FLEXIBLE HOURS
+                </option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm mb-1">Select Service</label>
-            <select
-              name="service"
-              value={form.service}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2 text-sm"
-            >
-              <option value="">
-                {isServicesLoading ? "Loading services..." : "Select Service"}
-              </option>
-              {services &&
-                services.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.service ?? s.name ?? `Service ${s.id}`}
-                  </option>
-                ))}
-            </select>
+            <div className="relative w-full">
+              <select
+                name="service"
+                value={form.service}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 text-sm outline-none appearance-none"
+              >
+                <option value="">
+                  {isServicesLoading ? "Loading services..." : "Select Service"}
+                </option>
+                {services &&
+                  services.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.service ?? s.name ?? `Service ${s.id}`}
+                    </option>
+                  ))}
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div>
@@ -261,15 +298,21 @@ export default function AddPaymentPopup({ onClose }) {
 
           <div>
             <label className="block text-sm mb-1">Discount Type</label>
-            <select
-              name="discountType"
-              value={form.discountType}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2 text-sm"
-            >
-              <option>Amount</option>
-              <option>Percentage</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="discountType"
+                value={form.discountType}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 text-sm outline-none appearance-none"
+              >
+                <option>Amount</option>
+                <option>Percentage</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div>
@@ -295,7 +338,9 @@ export default function AddPaymentPopup({ onClose }) {
         </div>
 
         {/* Staff Pay */}
-        <h3 className="text-[#3674B5] font-semibold text-base mb-2">Staff Pay</h3>
+        <h3 className="text-[#3674B5] font-semibold text-base mb-2">
+          Staff Pay
+        </h3>
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
             <label className="block text-sm mb-1">Staff Pay Amount</label>
@@ -319,19 +364,27 @@ export default function AddPaymentPopup({ onClose }) {
         </div>
 
         {/* Patient Referral */}
-        <h3 className="text-[#3674B5] font-semibold text-base mb-2">Patient Referral</h3>
+        <h3 className="text-[#3674B5] font-semibold text-base mb-2">
+          Patient Referral
+        </h3>
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div>
             <label className="block text-sm mb-1">Type</label>
-            <select
-              name="patientReferralType"
-              value={form.patientReferralType}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2 text-sm"
-            >
-              <option>Amount</option>
-              <option>Percentage</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="patientReferralType"
+                value={form.patientReferralType}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 text-sm outline-none appearance-none"
+              >
+                <option>Amount</option>
+                <option>Percentage</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm mb-1">Value</label>
@@ -355,19 +408,27 @@ export default function AddPaymentPopup({ onClose }) {
         </div>
 
         {/* Staff Referral */}
-        <h3 className="text-[#3674B5] font-semibold text-base mb-2">Staff Referral</h3>
+        <h3 className="text-[#3674B5] font-semibold text-base mb-2">
+          Staff Referral
+        </h3>
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div>
             <label className="block text-sm mb-1">Type</label>
-            <select
-              name="staffReferralType"
-              value={form.staffReferralType}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2 text-sm"
-            >
-              <option>Amount</option>
-              <option>Percentage</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                name="staffReferralType"
+                value={form.staffReferralType}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 text-sm outline-none appearance-auto"
+              >
+                <option>Amount</option>
+                <option>Percentage</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm mb-1">Value</label>

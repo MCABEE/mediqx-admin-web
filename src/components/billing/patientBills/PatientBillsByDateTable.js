@@ -1,10 +1,10 @@
-
 "use client";
 
 import Link from "next/link";
 import { useEffect } from "react";
 import usePatientBillsStore from "@/app/lib/store/patientBillingStore";
 import { useRouter } from "next/navigation";
+import { FaSortDown } from "react-icons/fa";
 
 export default function PatientBillsByDateTable() {
   const {
@@ -20,8 +20,11 @@ export default function PatientBillsByDateTable() {
     summary,
   } = usePatientBillsStore();
   console.log(summary);
-const router = useRouter();
-  const years = [2023, 2024, 2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035];
+  const router = useRouter();
+  const years = [
+    2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034,
+    2035,
+  ];
   const months = [
     "January",
     "February",
@@ -47,29 +50,40 @@ const router = useRouter();
       {/* FILTER SECTION */}
       <div className="w-full bg-white border border-[#8888888c] text-base text-black flex justify-between items-center px-6 py-4 mt-2 rounded-[15px]">
         <div className="flex gap-[10px]">
-          <select
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
-            className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4"
-          >
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4"
-          >
-            {months.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-[192px]">
+            <select
+              value={year}
+              onChange={(e) => setYear(Number(e.target.value))}
+              className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4 appearance-none"
+            >
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
+          <div className="relative w-[192px]">
+            <select
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4 appearance-none"
+            >
+              {months.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
         </div>
 
         <h1 className="text-black text-[16px] font-semibold">
@@ -143,53 +157,53 @@ const router = useRouter();
               </tr>
             ))}
         </tbody> */}
-        
-<tbody>
-  {loading && (
-    <tr>
-      <td colSpan={5} className="text-center p-4">
-        Loading...
-      </td>
-    </tr>
-  )}
 
-  {!loading && bills.length === 0 && (
-    <tr>
-      <td colSpan={5} className="text-center p-4">
-        No records found
-      </td>
-    </tr>
-  )}
+        <tbody>
+          {loading && (
+            <tr>
+              <td colSpan={5} className="text-center p-4">
+                Loading...
+              </td>
+            </tr>
+          )}
 
-  {!loading &&
-    bills.map((item) => (
-      <tr
-        key={item.serviceId}
-        onClick={() =>
-          router.push(
-            `/controlpanel/billing/patient-bills/patient-bill-detailView/${item.serviceId}`
-          )
-        }
-        className="bg-white cursor-pointer hover:bg-[#E8F1FD] transition"
-      >
-        <td className="p-2 text-center  font-medium">
-          {item.patientName}
-        </td>
-        <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-          {item.serviceTypeName}
-        </td>
-        <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-          {item.payment}
-        </td>
-        <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-          {item.discount}
-        </td>
-        <td className="border-l-4 text-center border-[#C0D8F6] p-2">
-          {item.netPay}
-        </td>
-      </tr>
-    ))}
-</tbody>
+          {!loading && bills.length === 0 && (
+            <tr>
+              <td colSpan={5} className="text-center p-4">
+                No records found
+              </td>
+            </tr>
+          )}
+
+          {!loading &&
+            bills.map((item) => (
+              <tr
+                key={item.serviceId}
+                onClick={() =>
+                  router.push(
+                    `/controlpanel/billing/patient-bills/patient-bill-detailView/${item.serviceId}`,
+                  )
+                }
+                className="bg-white cursor-pointer hover:bg-[#E8F1FD] transition"
+              >
+                <td className="p-2 text-center  font-medium">
+                  {item.patientName}
+                </td>
+                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+                  {item.serviceTypeName}
+                </td>
+                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+                  {item.payment}
+                </td>
+                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+                  {item.discount}
+                </td>
+                <td className="border-l-4 text-center border-[#C0D8F6] p-2">
+                  {item.netPay}
+                </td>
+              </tr>
+            ))}
+        </tbody>
       </table>
 
       {/* PAGINATION */}
