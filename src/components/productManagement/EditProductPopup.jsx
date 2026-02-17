@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
 import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
+import { FaSortDown } from "react-icons/fa";
 
 export default function EditProductPopup({
   product,
@@ -168,19 +169,25 @@ export default function EditProductPopup({
           />
           <div className="flex flex-col">
             <label className="text-sm font-medium mb-1">GST Tax %</label>
-            <select
-              name="gstTaxPercent"
-              value={form.gstTaxPercent}
-              onChange={handleChange}
-              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">GST Tax %</option>
-              {[5, 12, 18].map((v) => (
-                <option key={v} value={v}>
-                  {v}%
-                </option>
-              ))}
-            </select>
+            <div className="relative w-full">
+              <select
+                name="gstTaxPercent"
+                value={form.gstTaxPercent}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 appearance-none"
+              >
+                <option value="">GST Tax %</option>
+                {[5, 12, 18].map((v) => (
+                  <option key={v} value={v}>
+                    {v}%
+                  </option>
+                ))}
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <Input

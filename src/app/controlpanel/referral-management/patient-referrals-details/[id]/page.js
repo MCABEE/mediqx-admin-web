@@ -44,7 +44,7 @@ function Page() {
   return (
     <div>
       {/* Header */}
-      <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex">
+      <div className="w-full h-[48px] bg-[#C0D8F6] mb-2 rounded-[15px] flex">
         <div
           onClick={() => router.back()}
           className="text-[16px] text-black border-r-2 border-[#F0F4F9] flex justify-center items-center px-[38px] cursor-pointer"
@@ -57,7 +57,7 @@ function Page() {
       </div>
 
       {/* Details */}
-      <div className="rounded-[15px] border border-[#BBBBBB] mt-2 text-black bg-white">
+      <div className="rounded-[15px] border border-[#BBBBBB] my-2 text-black bg-white">
         {/* Created At */}
         <div className="text-gray-500 bg-white p-3 ps-80 border-b border-[#BBBBBB] rounded-t-[15px]">
           {referral?.createdAt

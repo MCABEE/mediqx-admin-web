@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import usePaymentStructureStore from "@/app/lib/store/usePaymentStructureStore";
 import AddPaymentPopup from "./AddPaymentPopup";
 import ViewPaymentPopup from "./ViewPaymentPopup";
+import { FaSortDown } from "react-icons/fa";
 
 // enums (keep in sync with API frontend values)
 const CATEGORY_OPTIONS = [
@@ -66,7 +67,7 @@ export default function PaymentStructureTable() {
       await removeStructure(id);
       // store will re-fetch after deletion
     } catch (err) {
-      alert("Delete failed: " + (err?.message || err));
+      console.log("Delete failed: " + (err?.message || err));
     }
   };
 
@@ -99,32 +100,42 @@ export default function PaymentStructureTable() {
       {/* Filters + Add */}
       <div className="w-full bg-white border border-[#8888888c] text-base text-black flex justify-between items-center px-6 py-4 mt-3 rounded-[15px]">
         <div className="flex gap-[10px] items-center">
-          <select
-            value={category || ""}
-            onChange={(e) => setCategory(e.target.value || "")}
-            className="w-[192px] h-[40px] rounded-[10px] text-[14px] border border-[#bbbbbb] outline-none px-4"
-          >
-            <option value="">Select Category</option>
-            {CATEGORY_OPTIONS.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={dutySchedule || ""}
-            onChange={(e) => setDutySchedule(e.target.value || "")}
-            className="w-[192px] h-[40px] rounded-[10px] text-[14px] border border-[#bbbbbb] outline-none px-4"
-          >
-            <option value="">Select Duty</option>
-            {DUTY_OPTIONS.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-
+          <div className="relative w-[192px]">
+            <select
+              value={category || ""}
+              onChange={(e) => setCategory(e.target.value || "")}
+              className="w-[192px] h-[40px] rounded-[10px] text-[14px] border border-[#bbbbbb] outline-none px-4 appearance-none"
+            >
+              <option value="">Select Category</option>
+              {CATEGORY_OPTIONS.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
+          <div className="relative w-[192px]">
+            <select
+              value={dutySchedule || ""}
+              onChange={(e) => setDutySchedule(e.target.value || "")}
+              className="w-[192px] h-[40px] rounded-[10px] text-[14px] border border-[#bbbbbb] outline-none px-4 appearance-none"
+            >
+              <option value="">Select Duty</option>
+              {DUTY_OPTIONS.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
           <button
             onClick={() => {
               setCategory("");
@@ -154,11 +165,21 @@ export default function PaymentStructureTable() {
           <thead className="bg-[#C0D8F6]">
             <tr>
               <th className="text-base rounded-l-2xl p-2">Services</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] p-2">Charge</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] p-2">Final Bill</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] p-2">Staff Pay</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] p-2">S. Referral</th>
-              <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">P. Referral</th>
+              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+                Charge
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+                Final Bill
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+                Staff Pay
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+                S. Referral
+              </th>
+              <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
+                P. Referral
+              </th>
             </tr>
           </thead>
 
@@ -191,25 +212,43 @@ export default function PaymentStructureTable() {
                   <tr
                     key={id}
                     className="bg-white cursor-pointer hover:bg-[#E8F1FD] transition"
-                    onClick={() => setView({ open: true, item: { ...s, id, role: itemRole } })}
+                    onClick={() =>
+                      setView({
+                        open: true,
+                        item: { ...s, id, role: itemRole },
+                      })
+                    }
                   >
                     {/* SERVICE */}
-                    <td className="p-2 text-center">{s.serviceType?? "-"}</td>
+                    <td className="p-2 text-center">{s.serviceType ?? "-"}</td>
 
                     {/* CHARGE */}
-                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">₹{s.basePrice ?? s.charge ?? "-"}</td>
+                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">
+                      ₹{s.basePrice ?? s.charge ?? "-"}
+                    </td>
 
                     {/* FINAL BILL */}
-                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">₹{s.finalBill ?? "-"}</td>
+                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">
+                      ₹{s.finalBill ?? "-"}
+                    </td>
 
                     {/* STAFF PAY */}
-                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">₹{s.staffPayment ?? s.staffPayAmount ?? "-"}</td>
+                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">
+                      ₹{s.staffPayment ?? s.staffPayAmount ?? "-"}
+                    </td>
 
                     {/* STAFF REFERRAL */}
-                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">₹{s.staffReferralPayment ?? s.staffReferralValue ?? "-"}</td>
+                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">
+                      ₹{s.staffReferralPayment ?? s.staffReferralValue ?? "-"}
+                    </td>
 
                     {/* PATIENT REFERRAL */}
-                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">₹{s.patientReferralPayment ?? s.patientReferralValue ?? "-"}</td>
+                    <td className="border-l-4 border-[#C0D8F6] p-2 text-center">
+                      ₹
+                      {s.patientReferralPayment ??
+                        s.patientReferralValue ??
+                        "-"}
+                    </td>
 
                     {/* (Optional) ACTIONS - commented out; if you re-enable, stopPropagation to avoid row click */}
                     {false && (
@@ -218,7 +257,10 @@ export default function PaymentStructureTable() {
                           className="mr-2 px-2 py-1 bg-[#3674B5] text-white rounded"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setView({ open: true, item: { ...s, id, role: itemRole } });
+                            setView({
+                              open: true,
+                              item: { ...s, id, role: itemRole },
+                            });
                           }}
                         >
                           View
@@ -263,7 +305,9 @@ export default function PaymentStructureTable() {
         </div>
 
         <div>
-          <span className="text-black font-semibold">{page} / {totalPages || 1}</span>
+          <span className="text-black font-semibold">
+            {page} / {totalPages || 1}
+          </span>
         </div>
       </div>
 
