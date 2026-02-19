@@ -1,10 +1,9 @@
-
-
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 import LocationPickerPopup from "./LocationPickerPopup";
+import { FaSortDown } from "react-icons/fa";
 
 function NurseExperienceDetails({ categoryByProfession, onComplete }) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -74,159 +73,95 @@ function NurseExperienceDetails({ categoryByProfession, onComplete }) {
       providerLocation: mapLocation,
     }));
   };
-// const handleSubmit = async () => {
-//   setErrorMessage("");
-//   setSuccessMessage("");
-//   setIsSubmitted(false);
 
-//   if (formData.skills.length === 0) {
-//     setErrorMessage("Please select at least one skill.");
-//     return;
-//   }
+  const handleSubmit = async () => {
+    if (isClicked) return; // prevent double click
 
-//   if (hasWorkExperience === "yes") {
-//     if (!formData.startDate || (!formData.onGoing && !formData.endDate)) {
-//       setErrorMessage("Please complete your experience dates.");
-//       return;
-//     }
-//     if (!formData.mapLocation) {
-//       setErrorMessage("Please set your hospital location.");
-//       return;
-//     }
-//     if (!formData.department) {
-//       setErrorMessage("Please select a department.");
-//       return;
-//     }
-//   }
-
-//   const payload = {
-//     isExperienced: hasWorkExperience === "yes",
-//     skillsIds: formData.skills,
-//     departmentId: hasWorkExperience === "yes" ? formData.department : undefined,
-//     yearsOfExperience:
-//       hasWorkExperience === "yes" ? parseInt(formData.yearsOfExperience) || 0 : undefined,
-//     monthsOfExperience:
-//       hasWorkExperience === "yes" ? parseInt(formData.monthsOfExperience) || 0 : undefined,
-//     providerName: hasWorkExperience === "yes" ? formData.providerName : undefined,
-//     providerLocation: hasWorkExperience === "yes" ? formData.providerLocation : undefined,
-//     providerStateId: hasWorkExperience === "yes" ? formData.providerState : undefined,
-//     latitude: hasWorkExperience === "yes" ? formData.latitude : undefined,
-//     longitude: hasWorkExperience === "yes" ? formData.longitude : undefined,
-//     // mapLocation: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
-//       providerAddress: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
-
-//     onGoing: hasWorkExperience === "yes" ? formData.onGoing : undefined,
-//     startDate:
-//       hasWorkExperience === "yes" && formData.startDate
-//         ? new Date(formData.startDate).toISOString()
-//         : undefined,
-//     endDate:
-//       hasWorkExperience === "yes"
-//         ? formData.onGoing
-//           ? new Date().toISOString()
-//           : formData.endDate
-//           ? new Date(formData.endDate).toISOString()
-//           : undefined
-//         : undefined,
-//   };
-
-//   try {
-//     await submitNursePageTwo(payload);
-
-//     setSuccessMessage("Experience details submitted successfully.");
-//     setErrorMessage("");
-//     setIsSubmitted(true);
-//   } catch (err) {
-//     console.error("Submit error:", err);
-//     setSuccessMessage("");
-//     setErrorMessage("Something went wrong. Please try again.");
-//     return;
-//   }
-
- 
-//   onComplete();
-// };
-
-
-const handleSubmit = async () => {
-  if (isClicked) return; // prevent double click
-
-  setIsClicked(true); // lock button
-  setErrorMessage("");
-  setSuccessMessage("");
-  setIsSubmitted(false);
-
-  if (formData.skills.length === 0) {
-    setErrorMessage("Please select at least one skill.");
-    setIsClicked(false); // unlock button if error
-    return;
-  }
-
-  if (hasWorkExperience === "yes") {
-    if (!formData.startDate || (!formData.onGoing && !formData.endDate)) {
-      setErrorMessage("Please complete your experience dates.");
-      setIsClicked(false);
-      return;
-    }
-    if (!formData.mapLocation) {
-      setErrorMessage("Please set your hospital location.");
-      setIsClicked(false);
-      return;
-    }
-    if (!formData.department) {
-      setErrorMessage("Please select a department.");
-      setIsClicked(false);
-      return;
-    }
-  }
-
-  const payload = {
-    isExperienced: hasWorkExperience === "yes",
-    skillsIds: formData.skills,
-    departmentId: hasWorkExperience === "yes" ? formData.department : undefined,
-    yearsOfExperience:
-      hasWorkExperience === "yes" ? parseInt(formData.yearsOfExperience) || 0 : undefined,
-    monthsOfExperience:
-      hasWorkExperience === "yes" ? parseInt(formData.monthsOfExperience) || 0 : undefined,
-    providerName: hasWorkExperience === "yes" ? formData.providerName : undefined,
-    providerLocation: hasWorkExperience === "yes" ? formData.providerLocation : undefined,
-    providerStateId: hasWorkExperience === "yes" ? formData.providerState : undefined,
-    latitude: hasWorkExperience === "yes" ? formData.latitude : undefined,
-    longitude: hasWorkExperience === "yes" ? formData.longitude : undefined,
-    providerAddress: hasWorkExperience === "yes" ? formData.mapLocation : undefined,
-    onGoing: hasWorkExperience === "yes" ? formData.onGoing : undefined,
-    startDate:
-      hasWorkExperience === "yes" && formData.startDate
-        ? new Date(formData.startDate).toISOString()
-        : undefined,
-    endDate:
-      hasWorkExperience === "yes"
-        ? formData.onGoing
-          ? new Date().toISOString()
-          : formData.endDate
-          ? new Date(formData.endDate).toISOString()
-          : undefined
-        : undefined,
-  };
-
-  try {
-    await submitNursePageTwo(payload);
-    setSuccessMessage("Experience details submitted successfully.");
+    setIsClicked(true); // lock button
     setErrorMessage("");
-    setIsSubmitted(true);
-
-    // Optional: keep the button disabled for 3 seconds to avoid accidental re-click
-    setTimeout(() => setIsClicked(false), 3000);
-  } catch (err) {
-    console.error("Submit error:", err);
     setSuccessMessage("");
-    setErrorMessage("Something went wrong. Please try again.");
-    setIsClicked(false); // unlock button if error
-    return;
-  }
+    setIsSubmitted(false);
 
-  onComplete();
-};
+    if (formData.skills.length === 0) {
+      setErrorMessage("Please select at least one skill.");
+      setIsClicked(false); // unlock button if error
+      return;
+    }
+
+    if (hasWorkExperience === "yes") {
+      if (!formData.startDate || (!formData.onGoing && !formData.endDate)) {
+        setErrorMessage("Please complete your experience dates.");
+        setIsClicked(false);
+        return;
+      }
+      if (!formData.mapLocation) {
+        setErrorMessage("Please set your hospital location.");
+        setIsClicked(false);
+        return;
+      }
+      if (!formData.department) {
+        setErrorMessage("Please select a department.");
+        setIsClicked(false);
+        return;
+      }
+    }
+
+    const payload = {
+      isExperienced: hasWorkExperience === "yes",
+      skillsIds: formData.skills,
+      departmentId:
+        hasWorkExperience === "yes" ? formData.department : undefined,
+      yearsOfExperience:
+        hasWorkExperience === "yes"
+          ? parseInt(formData.yearsOfExperience) || 0
+          : undefined,
+      monthsOfExperience:
+        hasWorkExperience === "yes"
+          ? parseInt(formData.monthsOfExperience) || 0
+          : undefined,
+      providerName:
+        hasWorkExperience === "yes" ? formData.providerName : undefined,
+      providerLocation:
+        hasWorkExperience === "yes" ? formData.providerLocation : undefined,
+      providerStateId:
+        hasWorkExperience === "yes" ? formData.providerState : undefined,
+      latitude: hasWorkExperience === "yes" ? formData.latitude : undefined,
+      longitude: hasWorkExperience === "yes" ? formData.longitude : undefined,
+      providerAddress:
+        hasWorkExperience === "yes" ? formData.mapLocation : undefined,
+      onGoing: hasWorkExperience === "yes" ? formData.onGoing : undefined,
+      startDate:
+        hasWorkExperience === "yes" && formData.startDate
+          ? new Date(formData.startDate).toISOString()
+          : undefined,
+      endDate:
+        hasWorkExperience === "yes"
+          ? formData.onGoing
+            ? new Date().toISOString()
+            : formData.endDate
+              ? new Date(formData.endDate).toISOString()
+              : undefined
+          : undefined,
+    };
+
+    try {
+      await submitNursePageTwo(payload);
+      setSuccessMessage("Experience details submitted successfully.");
+      setErrorMessage("");
+      setIsSubmitted(true);
+
+      // Optional: keep the button disabled for 3 seconds to avoid accidental re-click
+      setTimeout(() => setIsClicked(false), 3000);
+    } catch (err) {
+      console.error("Submit error:", err);
+      setSuccessMessage("");
+      setErrorMessage("Something went wrong. Please try again.");
+      setIsClicked(false); // unlock button if error
+      return;
+    }
+
+    onComplete();
+  };
   return (
     <div className="px-[39px] pt-[15px]">
       {/* Experience Selection */}
@@ -234,17 +169,23 @@ const handleSubmit = async () => {
         Do you have Work Experience?
       </h1>
       <div className="flex flex-col gap-[18px]">
-        <select
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black text-[14px] outline-none"
-          value={hasWorkExperience}
-          onChange={(e) => setHasWorkExperience(e.target.value)}
-        >
-          <option value="" disabled>
-            Previous Work Experience
-          </option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-        </select>
+        <div className="relative w-[328px]">
+          <select
+            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black text-[14px] outline-none appearance-none"
+            value={hasWorkExperience}
+            onChange={(e) => setHasWorkExperience(e.target.value)}
+          >
+            <option value="" disabled>
+              Previous Work Experience
+            </option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+          <FaSortDown
+            size={18}
+            className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+          />
+        </div>
       </div>
 
       {/* If Experienced */}
@@ -256,32 +197,44 @@ const handleSubmit = async () => {
 
           {/* Years / Months */}
           <div className="flex gap-3">
-            <select
-              name="yearsOfExperience"
-              value={formData.yearsOfExperience}
-              onChange={handleChange}
-              className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none"
-            >
-              <option value="">Year</option>
-              {Array.from({ length: 31 }, (_, i) => (
-                <option key={i} value={i}>
-                  {i} {i === 1 ? "Year" : "Years"}
-                </option>
-              ))}
-            </select>
-            <select
-              name="monthsOfExperience"
-              value={formData.monthsOfExperience}
-              onChange={handleChange}
-              className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none"
-            >
-              <option value="">Month</option>
-              {Array.from({ length: 12 }, (_, i) => (
-                <option key={i} value={i}>
-                  {i} {i === 1 ? "Month" : "Months"}
-                </option>
-              ))}
-            </select>
+            <div className="relative w-[328px]">
+              <select
+                name="yearsOfExperience"
+                value={formData.yearsOfExperience}
+                onChange={handleChange}
+                className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none appearance-none"
+              >
+                <option value="">Year</option>
+                {Array.from({ length: 31 }, (_, i) => (
+                  <option key={i} value={i}>
+                    {i} {i === 1 ? "Year" : "Years"}
+                  </option>
+                ))}
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
+            <div className="relative w-[328px]">
+              <select
+                name="monthsOfExperience"
+                value={formData.monthsOfExperience}
+                onChange={handleChange}
+                className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none appearance-none"
+              >
+                <option value="">Month</option>
+                {Array.from({ length: 12 }, (_, i) => (
+                  <option key={i} value={i}>
+                    {i} {i === 1 ? "Month" : "Months"}
+                  </option>
+                ))}
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           {/* Hospital */}
@@ -295,31 +248,36 @@ const handleSubmit = async () => {
           />
 
           {/* Location */}
-      <div>
+          <div>
             <button
-            type="button"
-            onClick={() => setShowLocationPopup(true)}
-            className="mt-4 w-[328px] min-h-[40px] border border-[#BBBBBB] rounded-[15px] px-3 text-left text-black bg-white"
-          >
-            {formData.mapLocation || "Set Hospital Location"}
-          </button>
-      </div>
+              type="button"
+              onClick={() => setShowLocationPopup(true)}
+              className="mt-4 w-[328px] min-h-[40px] border border-[#BBBBBB] rounded-[15px] px-3 text-left text-black bg-white"
+            >
+              {formData.mapLocation || "Set Hospital Location"}
+            </button>
+          </div>
 
           {/* Department */}
-          <select
-            name="department"
-            value={formData.department}
-            onChange={handleChange}
-            className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none"
-          >
-            <option value="">Department</option>
-            {departments.map((dept) => (
-              <option key={dept.id} value={dept.id}>
-                {dept.workingDepartment}
-              </option>
-            ))}
-          </select>
-
+          <div className="relative w-[328px]">
+            <select
+              name="department"
+              value={formData.department}
+              onChange={handleChange}
+              className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none appearance-none"
+            >
+              <option value="">Department</option>
+              {departments.map((dept) => (
+                <option key={dept.id} value={dept.id}>
+                  {dept.workingDepartment}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
           {/* Duration */}
           <div className="flex gap-3 mt-4 items-end">
             <div>
@@ -386,19 +344,22 @@ const handleSubmit = async () => {
         {isSubmitted ? "Submitted" : "Next"}
       </button> */}
       <button
-  onClick={handleSubmit}
-  disabled={isSubmitted || isClicked}
-  className={`mt-10 w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center ${
-    isSubmitted || isClicked ? "opacity-50 cursor-not-allowed" : ""
-  }`}
->
-  {isSubmitted ? "Submitted" : "Next"}
-</button>
-
+        onClick={handleSubmit}
+        disabled={isSubmitted || isClicked}
+        className={`mt-10 w-[328px] h-[40px] bg-[#3674B5] text-white rounded-[15px] flex justify-center items-center ${
+          isSubmitted || isClicked ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+      >
+        {isSubmitted ? "Submitted" : "Next"}
+      </button>
 
       {/* Messages */}
-      {errorMessage && <p className="text-red-600 text-sm mt-2">{errorMessage}</p>}
-      {successMessage && <p className="text-blue-600 text-sm mt-2">{successMessage}</p>}
+      {errorMessage && (
+        <p className="text-red-600 text-sm mt-2">{errorMessage}</p>
+      )}
+      {successMessage && (
+        <p className="text-blue-600 text-sm mt-2">{successMessage}</p>
+      )}
 
       {/* Location Popup */}
       {showLocationPopup && (
@@ -414,4 +375,3 @@ const handleSubmit = async () => {
 }
 
 export default NurseExperienceDetails;
-

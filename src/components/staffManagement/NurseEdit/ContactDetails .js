@@ -5,6 +5,7 @@ import useNurseStore from "@/app/lib/store/nurseStore";
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 import { AiOutlineClose } from "react-icons/ai";
 import LocationPickerPopup from "../addNewStaff/LocationPickerPopup";
+import { FaSortDown } from "react-icons/fa";
 
 const EditContactModal = ({ show, userId, onCancel, role, grading }) => {
   console.log(grading);
@@ -114,37 +115,7 @@ const EditContactModal = ({ show, userId, onCancel, role, grading }) => {
     }));
   };
 
-  // const handleSave = async () => {
-  //   if (!formData.fullName || !formData.email || !formData.mobileNumber) {
-  //     alert("Full Name, Email and Mobile Number are required");
-  //     return;
-  //   }
 
-  //   const payload = {
-  //     addressId: formData.address?.id || null,
-  //     fullName: formData.fullName,
-  //     gender: formData.gender,
-  //     dob: formData.dob || null,
-  //     email: formData.email,
-  //     mobileNumber: formData.mobileNumber,
-  //     educationQualifications: formData.educationQualifications,
-  //     specializations: formData.specializations,
-  //     workSchedule: formData.workSchedule,
-  //     ...(formData.grading ? { grading: formData.grading } : {}),
-
-  //     // Only send if address has been updated
-  //     latitude: formData.address?.latitude,
-  //     longitude: formData.address?.longitude,
-  //     mapLocation: formData.address?.fullAddress,
-  //   };
-
-  //   try {
-  //     await updateNurseDetails(userId, payload);
-  //     onCancel();
-  //   } catch (err) {
-  //     console.error(err.message || "Failed to update nurse");
-  //   }
-  // };
   const handleSave = async () => {
   if (!formData.fullName || !formData.email || !formData.mobileNumber) {
     alert("Full Name, Email and Mobile Number are required");
@@ -412,10 +383,11 @@ const InputField = ({
 const SelectField = ({ label, value, onChange, options }) => (
   <div className="flex flex-col">
     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
+     <div className="relative w-full">
     <select
       value={value}
       onChange={onChange}
-      className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
     >
       {options.map((opt) => (
         <option key={opt.value || opt.label} value={opt.value}>
@@ -423,6 +395,11 @@ const SelectField = ({ label, value, onChange, options }) => (
         </option>
       ))}
     </select>
+     <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+    </div>
   </div>
 );
 

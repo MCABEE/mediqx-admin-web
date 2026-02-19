@@ -4,6 +4,7 @@ import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistr
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 import useLanguageStore from "@/app/lib/store/languageStore";
 import LocationPickerPopup from "@/components/staffManagement/addNewStaff/LocationPickerPopup"; // adjust path
+import { FaSortDown } from "react-icons/fa";
 
 function SupervisorExperienceDetails({ categoryByProfession, onComplete }) {
   const [hasWorkExperience, setHasWorkExperience] = useState("no");
@@ -201,8 +202,9 @@ function SupervisorExperienceDetails({ categoryByProfession, onComplete }) {
     <div className="pt-[15px] px-4">
       <h1 className="text-[16px] font-semibold text-black py-[18px]">Do you have Work Experience?</h1>
       <div className="flex flex-col gap-[18px]">
+        <div className="relative w-[328px]">
         <select
-          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black text-[14px] outline-none"
+          className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black text-[14px] outline-none appearance-none"
           value={hasWorkExperience}
           onChange={(e) => setHasWorkExperience(e.target.value)}
         >
@@ -210,6 +212,11 @@ function SupervisorExperienceDetails({ categoryByProfession, onComplete }) {
           <option value="yes">Yes</option>
           <option value="no">No</option>
         </select>
+          <FaSortDown
+                                size={18}
+                                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+                              />
+                              </div>
       </div>
 
       {hasWorkExperience === "yes" && (
@@ -217,14 +224,26 @@ function SupervisorExperienceDetails({ categoryByProfession, onComplete }) {
           <h1 className="text-[16px] font-semibold text-black py-[18px]">Please provide your experience details</h1>
 
           <div className="flex gap-3">
-            <select name="yearsOfExperience" value={formData.yearsOfExperience} onChange={handleChange} className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none">
+            <div className="relative w-[129px]">
+            <select name="yearsOfExperience" value={formData.yearsOfExperience} onChange={handleChange} className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none appearance-none">
               <option value="">Year</option>
               {Array.from({ length: 31 }, (_, i) => (<option key={i} value={i}>{i} {i === 1 ? "Year" : "Years"}</option>))}
             </select>
-            <select name="monthsOfExperience" value={formData.monthsOfExperience} onChange={handleChange} className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none">
+              <FaSortDown
+                                size={18}
+                                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+                              />
+            </div>
+             <div className="relative w-[129px]">
+            <select name="monthsOfExperience" value={formData.monthsOfExperience} onChange={handleChange} className="w-[129px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none appearance-none">
               <option value="">Month</option>
               {Array.from({ length: 12 }, (_, i) => (<option key={i} value={i}>{i} {i === 1 ? "Month" : "Months"}</option>))}
             </select>
+             <FaSortDown
+                                size={18}
+                                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+                              />
+            </div>
           </div>
 
           <input type="text" name="providerName" placeholder="Hospital (Last working)" value={formData.providerName} onChange={handleChange} className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none" />
@@ -237,10 +256,16 @@ function SupervisorExperienceDetails({ categoryByProfession, onComplete }) {
 
           {/* Department - hide if role is OTHER */}
           {normalizedCategory !== "OTHER" && (
-            <select name="department" value={formData.department} onChange={handleChange} className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none">
+              <div className="relative w-[328px]">
+            <select name="department" value={formData.department} onChange={handleChange} className="mt-4 w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] px-2 text-black outline-none appearance-none">
               <option value="">Department</option>
               {departments.map((dept) => (<option key={dept.id} value={dept.id}>{dept.workingDepartment}</option>))}
             </select>
+             <FaSortDown
+                                size={18}
+                                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+                              />
+            </div>
           )}
 
           <div className="flex gap-3 mt-4 items-end">

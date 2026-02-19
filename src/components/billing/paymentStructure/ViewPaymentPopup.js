@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import usePaymentStructureStore from "@/app/lib/store/usePaymentStructureStore";
 import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
+import { FaSortDown } from "react-icons/fa";
 
 const ROLE_ENUM = [
   "REG_NURSES",
@@ -102,7 +103,11 @@ function ViewPaymentPopup({ payment, onClose }) {
     };
   }, [payment?.id]);
 
-  function mapIncomingToForm(data = {}, fallbackId = null, fallbackRole = null) {
+  function mapIncomingToForm(
+    data = {},
+    fallbackId = null,
+    fallbackRole = null,
+  ) {
     return {
       professional: data.role ?? data.professional ?? fallbackRole ?? "",
       category: data.category ?? data.grade ?? "",
@@ -132,7 +137,8 @@ function ViewPaymentPopup({ payment, onClose }) {
         String(data.patientReferralDiscountType).toUpperCase() === "PERCENTAGE"
           ? "Percentage"
           : "Amount",
-      patientReferralValue: data.patientReferralValue ?? data.patientReferral ?? 0,
+      patientReferralValue:
+        data.patientReferralValue ?? data.patientReferral ?? 0,
       staffReferralType:
         data.staffReferralDiscountType &&
         String(data.staffReferralDiscountType).toUpperCase() === "PERCENTAGE"
@@ -194,7 +200,8 @@ function ViewPaymentPopup({ payment, onClose }) {
       dutySchedule: form.dutySchedule,
       serviceTypeId: form.service,
       basePrice: Number(form.basicPrice) || 0,
-      discountType: form.discountType === "Percentage" ? "PERCENTAGE" : "AMOUNT",
+      discountType:
+        form.discountType === "Percentage" ? "PERCENTAGE" : "AMOUNT",
       discountValue: Number(form.discountValue) || 0,
       staffPayAmount: Number(form.staffPayValue) || 0,
       patientReferralDiscountType:
@@ -318,7 +325,9 @@ function ViewPaymentPopup({ payment, onClose }) {
           </div>
 
           {/* ERROR / LOADING */}
-          {loading && <div className="mb-3 text-sm text-gray-500">Loading...</div>}
+          {loading && (
+            <div className="mb-3 text-sm text-gray-500">Loading...</div>
+          )}
           {error && <div className="mb-3 text-sm text-red-600">{error}</div>}
 
           {/* FORM SECTIONS */}
@@ -462,37 +471,36 @@ function InputText({ label, name, value, onChange, disabled, type = "text" }) {
   );
 }
 
-function InputSelect({
-  label,
-  name,
-  value,
-  onChange,
-  disabled,
-  options = [],
-}) {
+function InputSelect({ label, name, value, onChange, disabled, options = [] }) {
   return (
     <div>
       <label className="block text-sm mb-1">{label}</label>
-      <select
-        name={name}
-        value={value ?? ""}
-        onChange={onChange}
-        disabled={disabled}
-        className="w-full border rounded-md px-3 py-2 text-sm disabled:bg-gray-100"
-      >
-        <option value="">Select</option>
-        {options.map((opt) =>
-          typeof opt === "string" ? (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ) : (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ),
-        )}
-      </select>
+      <div className="relative w-full">
+        <select
+          name={name}
+          value={value ?? ""}
+          onChange={onChange}
+          disabled={disabled}
+          className="w-full border rounded-md px-3 py-2 text-sm disabled:bg-gray-100 outline-none appearance-none"
+        >
+          <option value="">Select</option>
+          {options.map((opt) =>
+            typeof opt === "string" ? (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ) : (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ),
+          )}
+        </select>
+        <FaSortDown
+          size={18}
+          className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+        />
+      </div>
     </div>
   );
 }
@@ -548,7 +556,8 @@ function DeleteConfirmationModal({ onCancel, onConfirm, loading }) {
           Delete Payment Structure
         </h3>
         <p className="text-sm text-gray-700 mt-2">
-          Are you sure you want to delete this record? This action cannot be undone.
+          Are you sure you want to delete this record? This action cannot be
+          undone.
         </p>
 
         <div className="flex justify-center gap-4 mt-6">

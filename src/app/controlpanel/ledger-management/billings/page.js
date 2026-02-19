@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import Navlink from "@/components/ledgerManagement/Navlink";
 import useLedgerStore from "@/app/lib/store/useLedgerStore";
+import { FaSortDown } from "react-icons/fa";
 
 function Page() {
   const {
@@ -47,30 +48,44 @@ function Page() {
       <div className="w-full bg-white border border-[#8888888c]  flex justify-between items-center px-6 py-4 mt-2 rounded-[15px]">
         <div className="flex gap-3">
           {/* YEAR */}
-          <select
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
-            className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c]  px-4"
-          >
-            {[2023, 2024, 2025, 2026, 2027,2028,2029,230,2031,2032,2033,2034,2035].map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
-
+          <div className="relative w-[192px]">
+            <select
+              value={year}
+              onChange={(e) => setYear(Number(e.target.value))}
+              className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c]  px-4 appearance-none"
+            >
+              {[
+                2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032,
+                2033, 2034, 2035,
+              ].map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
           {/* MONTH */}
-          <select
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c]  px-4"
-          >
-            {monthNames.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-[192px]">
+            <select
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="w-[192px] h-[40px] rounded-[15px] border border-[#8888888c]  px-4 appearance-none"
+            >
+              {monthNames.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
         </div>
 
         <h1 className="font-semibold">

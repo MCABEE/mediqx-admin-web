@@ -3,6 +3,7 @@
 import useStaffPaymentsStore from "@/app/lib/store/useStaffPaymentsStore";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { FaSortDown } from "react-icons/fa";
 
 function StaffPaymentsTable() {
   const router = useRouter();
@@ -66,30 +67,42 @@ function StaffPaymentsTable() {
       <div className="w-full bg-white border border-[#8888888c] text-base text-black flex justify-between items-center px-6 py-4 mt-2 rounded-[15px]">
         <div className="flex gap-[10px]">
           {/* Year Select */}
-          <select
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
-            className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4"
-          >
-            {Array.from({ length: 13 }).map((_, i) => (
-              <option key={i} value={2023 + i}>
-                {2023 + i}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-[192px]">
+            <select
+              value={year}
+              onChange={(e) => setYear(Number(e.target.value))}
+              className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4 appearance-none"
+            >
+              {Array.from({ length: 13 }).map((_, i) => (
+                <option key={i} value={2023 + i}>
+                  {2023 + i}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
 
           {/* Month Select */}
-          <select
-            value={month}
-            onChange={(e) => setMonth(Number(e.target.value))}
-            className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4"
-          >
-            {monthNames.map((m, i) => (
-              <option key={i} value={i + 1}>
-                {m}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-[192px]">
+            <select
+              value={month}
+              onChange={(e) => setMonth(Number(e.target.value))}
+              className="w-[192px] h-[40px] rounded-[15px] text-[14px] border border-[#bbbbbb] outline-none px-4 appearance-none"
+            >
+              {monthNames.map((m, i) => (
+                <option key={i} value={i + 1}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
         </div>
 
         <h1 className="text-black text-[16px] font-semibold">
@@ -142,7 +155,7 @@ function StaffPaymentsTable() {
                   // }
                   onClick={() =>
                     router.push(
-                      `/controlpanel/billing/staff-payment-details/${row.staffId}?year=${year}&month=${month}`
+                      `/controlpanel/billing/staff-payment-details/${row.staffId}?year=${year}&month=${month}`,
                     )
                   }
                 >

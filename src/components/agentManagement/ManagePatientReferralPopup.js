@@ -1,12 +1,24 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import useAgentStore from "@/app/lib/store/agentManagementStore";
+import { FaSortDown } from "react-icons/fa";
 
-function ManagePatientReferralPopup({ referral, onClose, agentId, onSubmitSuccess }) {
-  const { updateAgentPatientReferralStatus, fetchStaffReferrals, staffReferralList, staffReferralLoading } =
-    useAgentStore();
+function ManagePatientReferralPopup({
+  referral,
+  onClose,
+  agentId,
+  onSubmitSuccess,
+}) {
+  const {
+    updateAgentPatientReferralStatus,
+    fetchStaffReferrals,
+    staffReferralList,
+    staffReferralLoading,
+  } = useAgentStore();
 
-  const [referralStatus, setReferralStatus] = useState(referral?.referralStatus || "");
+  const [referralStatus, setReferralStatus] = useState(
+    referral?.referralStatus || "",
+  );
   const [assignedPersonName, setAssignedPersonName] = useState("");
   const [referralSignupStaffId, setReferralSignupStaffId] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -29,7 +41,10 @@ function ManagePatientReferralPopup({ referral, onClose, agentId, onSubmitSucces
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (containerRef.current && !containerRef.current.contains(event.target)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
         setShowDropdown(false);
       }
     }
@@ -66,7 +81,11 @@ function ManagePatientReferralPopup({ referral, onClose, agentId, onSubmitSucces
     if (isSubmitDisabled) return;
     setSubmitLoading(true);
     try {
-      await updateAgentPatientReferralStatus(referral.id, referralStatus, referralSignupStaffId);
+      await updateAgentPatientReferralStatus(
+        referral.id,
+        referralStatus,
+        referralSignupStaffId,
+      );
       if (onSubmitSuccess)
         onSubmitSuccess({ ...referral, referralStatus, referralSignupStaffId });
       onClose();
@@ -92,7 +111,9 @@ function ManagePatientReferralPopup({ referral, onClose, agentId, onSubmitSucces
         </div>
 
         <div className="flex flex-col gap-4">
-          <h1 className="text-black font-semibold text-lg">Manage Referral Information</h1>
+          <h1 className="text-black font-semibold text-lg">
+            Manage Referral Information
+          </h1>
 
           {/* Readonly info */}
           <input
@@ -119,17 +140,22 @@ function ManagePatientReferralPopup({ referral, onClose, agentId, onSubmitSucces
 
           {/* Status selector */}
           <h1 className="text-black font-semibold text-lg">Referral Status</h1>
-
-          <select
-            value={referralStatus}
-            onChange={(e) => setReferralStatus(e.target.value)}
-            className="w-full h-[40px] border border-[#BBBBBB] rounded-[15px] px-4 outline-none"
-          >
-            <option value="">Select Status</option>
-            <option value="PENDING">Pending</option>
-            <option value="CONFIRMED">Confirmed</option>
-            <option value="CANCELLED">Rejected</option>
-          </select>
+          <div className="relative w-full">
+            <select
+              value={referralStatus}
+              onChange={(e) => setReferralStatus(e.target.value)}
+              className="w-full h-[40px] border border-[#BBBBBB] rounded-[15px] px-4 outline-none appearance-none"
+            >
+              <option value="">Select Status</option>
+              <option value="PENDING">Pending</option>
+              <option value="CONFIRMED">Confirmed</option>
+              <option value="CANCELLED">Rejected</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
 
           {/* Assign person if confirmed */}
           {referralStatus === "CONFIRMED" && (
@@ -156,7 +182,8 @@ function ManagePatientReferralPopup({ referral, onClose, agentId, onSubmitSucces
                       <div
                         key={person.id || person.userId}
                         className={`px-4 py-2 text-sm cursor-pointer hover:bg-blue-100 ${
-                          assignedPersonName === (person.fullName || person.name)
+                          assignedPersonName ===
+                          (person.fullName || person.name)
                             ? "bg-blue-50 font-medium"
                             : ""
                         }`}
@@ -175,7 +202,9 @@ function ManagePatientReferralPopup({ referral, onClose, agentId, onSubmitSucces
             onClick={handleSubmit}
             disabled={isSubmitDisabled}
             className={`w-full h-[40px] rounded-[15px] text-white mt-4 bg-[#3674B5] ${
-              isSubmitDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-[#19588f]"
+              isSubmitDisabled
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-[#19588f]"
             }`}
           >
             {submitLoading ? "Submitting..." : "Submit"}

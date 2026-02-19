@@ -890,6 +890,7 @@ import React, { useEffect, useRef, useState } from "react";
 import useProductStore from "@/app/lib/store/useProductStore";
 import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
 import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
+import { FaSortDown } from "react-icons/fa";
 
 export default function Page() {
   const {
@@ -1063,7 +1064,7 @@ export default function Page() {
   /* ---------------- UI ---------------- */
 
   const inputClass =
-    "w-full h-[42px] border border-gray-400 rounded-xl px-4 outline-none focus:ring-2 focus:ring-[#3674B5]";
+    "w-full h-[42px] border border-gray-400 rounded-xl px-4 outline-none focus:ring-2 focus:ring-[#3674B5] appearance-none";
   const textareaClass =
     "w-full h-[120px] border border-gray-400 rounded-xl px-4 pt-2 outline-none focus:ring-2 focus:ring-[#3674B5]";
 
@@ -1122,7 +1123,7 @@ export default function Page() {
             setForm({ ...form, mrpPrice: e.target.value })
           }
         />
-
+<div className="relative w-full">
         <select
           className={inputClass}
           value={form.gstTax}
@@ -1137,6 +1138,11 @@ export default function Page() {
             </option>
           ))}
         </select>
+        <FaSortDown
+                                size={18}
+                                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+                              />
+                              </div>
 
         <input
           type="number"
