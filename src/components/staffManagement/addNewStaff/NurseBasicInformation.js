@@ -1,16 +1,15 @@
-
-
 "use client";
 import React, { useState } from "react";
 import useNurseRegistrationStore from "@/app/lib/store/nurseRegistrationStore";
 import LocationPickerPopup from "./LocationPickerPopup";
+import { FaSortDown } from "react-icons/fa";
 
 const NurseBasicInformation = ({ setCategoryByProfession, onComplete }) => {
   // Form state
   const [formData, setFormData] = useState({
     categoryByProfession: "",
     fullName: "",
-    gender: "",  
+    gender: "",
     email: "",
     mobileNumber: "",
     referralCode: "",
@@ -90,39 +89,49 @@ const NurseBasicInformation = ({ setCategoryByProfession, onComplete }) => {
         </h1>
         <div className="flex flex-col gap-5 px-[39px] mb-12">
           {/* Gender */}
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
-          >
-            <option value="" disabled>
-              Gender
-            </option>
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-            <option value="OTHER">Other</option>
-          </select>
-
+          <div className="relative w-[328px]">
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none appearance-none"
+            >
+              <option value="" disabled>
+                Gender
+              </option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="OTHER">Other</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
           {/* Profession category */}
-          <select
-            name="categoryByProfession"
-            value={formData.categoryByProfession}
-            onChange={handleChange}
-            required
-            className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none"
-          >
-            <option value="" disabled>
-              Category by profession
-            </option>
-            <option value="REGISTERED_NURSE">Registered Nurse</option>
-            <option value="NURSING_ASSISTANTS">Nursing Assistants</option>
-            <option value="TECHNICIANS">Technicians</option>
-            <option value="THERAPY">Therapy</option>
-            <option value="ANCILLARY_PERSONAL">Ancillary Personal</option>
-          </select>
-
+          <div className="relative w-[328px]">
+            <select
+              name="categoryByProfession"
+              value={formData.categoryByProfession}
+              onChange={handleChange}
+              required
+              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 text-[14px] outline-none appearance-none"
+            >
+              <option value="" disabled>
+                Category by profession
+              </option>
+              <option value="REGISTERED_NURSE">Registered Nurse</option>
+              <option value="NURSING_ASSISTANTS">Nursing Assistants</option>
+              <option value="TECHNICIANS">Technicians</option>
+              <option value="THERAPY">Therapy</option>
+              <option value="ANCILLARY_PERSONAL">Ancillary Personal</option>
+            </select>
+            <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
           <input
             type="text"
             name="fullName"

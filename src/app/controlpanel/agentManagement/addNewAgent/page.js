@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import useAgentStore from "@/app/lib/store/agentManagementStore";
 import Navlink from "@/components/agentManagement/Navlink";
+import { FaSortDown } from "react-icons/fa";
 
 function Page() {
   const {
@@ -147,21 +148,27 @@ function Page() {
 
           <div className="flex flex-col gap-5 px-[39px]">
             {/* Type of Agent */}
-            <select
-              required
-              name="typeOfAgent"
-              value={formData.typeOfAgent}
-              onChange={handleChange}
-              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 pe-4 outline-none"
-            >
-              <option value="">Type of Agent</option>
-              <option value="INSTITUTION">Institution</option>
-              <option value="DOCTOR">Doctor</option>
-              <option value="HEALTHCARE_PROFESSIONAL">
-                Healthcare professional
-              </option>
-              <option value="PUBLIC">Public</option>
-            </select>
+            <div className="relative w-[328px]">
+              <select
+                required
+                name="typeOfAgent"
+                value={formData.typeOfAgent}
+                onChange={handleChange}
+                className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 pe-4 outline-none appearance-none"
+              >
+                <option value="">Type of Agent</option>
+                <option value="INSTITUTION">Institution</option>
+                <option value="DOCTOR">Doctor</option>
+                <option value="HEALTHCARE_PROFESSIONAL">
+                  Healthcare professional
+                </option>
+                <option value="PUBLIC">Public</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
 
             {/* Full Name */}
             <input
@@ -175,18 +182,24 @@ function Page() {
             />
 
             {/* Gender */}
-            <select
-              required
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 pe-4 outline-none"
-            >
-              <option value="">Gender</option>
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-              <option value="OTHER">Other</option>
-            </select>
+            <div className="relative w-[328px]">
+              <select
+                required
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 pe-4 outline-none appearance-none"
+              >
+                <option value="">Gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
 
             {/* DOB */}
             <div className="relative w-[328px]">
@@ -219,18 +232,24 @@ function Page() {
             </div>
 
             {/* Referral Type */}
-            <select
-              required
-              name="referralType"
-              value={formData.referralType}
-              onChange={handleChange}
-              className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 pe-4 outline-none"
-            >
-              <option value="">Referral Type</option>
-              <option value="STAFF">Staff</option>
-              <option value="PATIENT">Patient</option>
-              <option value="PATIENT_AND_STAFF">Both</option>
-            </select>
+            <div className="relative w-[328px]">
+              <select
+                required
+                name="referralType"
+                value={formData.referralType}
+                onChange={handleChange}
+                className="w-[328px] h-[40px] border border-[#BBBBBB] rounded-[15px] ps-8 pe-4 outline-none appearance-none"
+              >
+                <option value="">Referral Type</option>
+                <option value="STAFF">Staff</option>
+                <option value="PATIENT">Patient</option>
+                <option value="PATIENT_AND_STAFF">Both</option>
+              </select>
+              <FaSortDown
+                size={18}
+                className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+              />
+            </div>
 
             {/* Pincode Search */}
             <h1 className="text-[16px] font-semibold text-black">

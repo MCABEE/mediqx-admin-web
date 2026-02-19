@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { GoArrowUp } from "react-icons/go";
+import { GoArrowDown, GoArrowUp } from "react-icons/go";
 
 const PatientBookings = ({ data }) => {
   if (!data) return null;
@@ -12,7 +12,7 @@ const PatientBookings = ({ data }) => {
     ongoing = 0,
     completed = 0,
     percentageChange = 0,
-    pending=0,
+    pending = 0,
   } = data;
 
   return (
@@ -25,10 +25,24 @@ const PatientBookings = ({ data }) => {
         </div>
 
         <div className="flex justify-center items-center flex-col">
-          <div className="text-[#09B438] flex gap-1">
+          {/* <div className="text-[#09B438] flex gap-1">
             <GoArrowUp className="size-9" />
             <p className="text-2xl pt-2">{percentageChange}%</p>
+          </div> */}
+          <div
+            className={`flex gap-1 ${
+              percentageChange < 0 ? "text-red-500" : "text-[#09B438]"
+            }`}
+          >
+            {percentageChange < 0 ? (
+              <GoArrowDown className="size-9" />
+            ) : (
+              <GoArrowUp className="size-9" />
+            )}
+
+            <p className="text-2xl pt-2">{Math.abs(percentageChange)}%</p>
           </div>
+
           <div className="text-[#333333] text-base font-semibold">
             <p>Compared to last period</p>
           </div>
@@ -43,7 +57,6 @@ const PatientBookings = ({ data }) => {
           { label: "Ongoing", value: ongoing },
           { label: "Completed", value: completed },
           { label: "Pending", value: pending },
-
         ].map((item, index) => (
           <div key={index} className="flex flex-col text-[#333333] gap-3.5">
             <p className="text-base">{item.label}</p>

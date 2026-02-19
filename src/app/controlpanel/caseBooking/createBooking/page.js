@@ -7,6 +7,7 @@ import useDiagnosisStore from "@/app/lib/store/useDiagnosisStore";
 import useHealthStatusStore from "@/app/lib/store/useHealthStatusStore";
 import usePatientServiceStore from "@/app/lib/store/usePatientServiceStore";
 import useLanguageStore from "@/app/lib/store/languageStore";
+import { FaSortDown } from "react-icons/fa";
 
 const CaseBookingPage = () => {
   const { submitBooking } = useBookingStore();
@@ -269,12 +270,12 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
           />
 
           <div className="w-[328px] flex justify-between gap-4 ">
-            <select
+            {/* <select
               name="gender"
               value={form.gender}
               onChange={handleChange}
               required
-              className="w-1/2 h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+              className="w-1/2 h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
             >
               <option value="" disabled>
                 Gender
@@ -282,7 +283,32 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
               <option value="MALE">Male</option>
               <option value="FEMALE">Female</option>
               <option value="OTHER">Other</option>
-            </select>
+            </select> */}
+
+           <div className="relative w-1/2">
+  {/* Select */}
+  <select
+    name="gender"
+    value={form.gender}
+    onChange={handleChange}
+    required
+    className="w-full h-[40px] rounded-[15px] px-4 pr-10 border border-gray-300 outline-none appearance-none"
+  >
+    <option value="" disabled>
+      Gender
+    </option>
+    <option value="MALE">Male</option>
+    <option value="FEMALE">Female</option>
+    <option value="OTHER">Other</option>
+  </select>
+
+  {/* Dropdown Icon */}
+  <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
+
             <input
               name="age"
               type="number"
@@ -309,17 +335,18 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
               value={form.weight}
               onChange={handleChange}
               placeholder="Weight (kg)"
-              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
+              className="w-[160px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none "
             />
           </div>
 
           {/*  Patient Services dropdown */}
+          <div className="relative w-[328px]">
           <select
             name="serviceType"
             value={form.serviceType}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
           >
             <option value="" disabled>
               Select Service Type
@@ -336,14 +363,20 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
                 </option>
               ))}
           </select>
+           <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
 
           {/* Health Status */}
+            <div className="relative w-[328px]">
           <select
             name="healthStatus"
             value={form.healthStatus}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
           >
             <option value="" disabled>
               Current HealthStatus / Activity
@@ -360,13 +393,20 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
                 </option>
               ))}
           </select>
+           <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
+
+  <div className="relative w-[328px]">
 
           <select
             name="stayAt"
             value={form.stayAt}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
           >
             <option value="" disabled>
               Now Patient stayed at
@@ -381,6 +421,11 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
             <option value="OTHER">Other</option>
           </select>
 
+ <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
           <textarea
             name="location"
             value={form.location}
@@ -399,12 +444,13 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           />
 
+  <div className="relative w-[328px]">
           <select
             name="contactPersonRelation"
             value={form.contactPersonRelation}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
           >
             <option value="">Relationship with patient</option>
             <option value="SELF">Self</option>
@@ -434,6 +480,11 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
             <option value="Legal Guardian">Legal Guardian</option>
             <option value="Friend ">Friend </option>{" "}
           </select>
+           <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
 
           <input
             name="contactPersonEmail"
@@ -470,12 +521,13 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
           </h1>
 
           {/* Diagnoses dropdown */}
+            <div className="relative w-[328px]">
           <select
             name="diagnosis"
             required
             value={selectedDiagnosis}
             onChange={(e) => setSelectedDiagnosis(e.target.value)}
-            className="w-[328px] h-[40px] rounded-[15px] text-[14px] border border-[#BBBBBB] px-4 text-black outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] text-[14px] border border-[#BBBBBB] px-4 text-black outline-none appearance-none"
           >
             <option value="" disabled>
               Select Diagnosis
@@ -492,6 +544,11 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
                 </option>
               ))}
           </select>
+           <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
 
           <input
             name="startDate"
@@ -510,11 +567,12 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
             className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 placeholder:text-black outline-none"
           />
 
+  <div className="relative w-[328px]">
           <select
             value={visitType}
             onChange={(e) => setVisitType(e.target.value)}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
           >
             <option value="" disabled>
               Single Visit / Periodically
@@ -525,12 +583,18 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
             <option value="LONG_TERM">Long-term</option>
             <option value="OTHER">Other</option>
           </select>
+           <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
 
           {visitType && visitType !== "ONE_TIME_VISIT" && (
             <div>
               <div className="flex gap-2 items-center">
+                  <div className="relative w-[328px]">
                 <select
-                  className="h-[40px] w-[200px] bg-white rounded-[15px] px-4 border border-gray-300 outline-none "
+                  className="h-[40px] w-[200px] bg-white rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
                   name="durationValue"
                   value={form.durationValue}
                   onChange={handleChange}
@@ -544,6 +608,11 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
                     </option>
                   ))}
                 </select>
+                 <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
                 <span>
                   {
                     {
@@ -556,13 +625,14 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
               </div>
             </div>
           )}
+            <div className="relative w-[328px]">
 
           <select
             name="scheduleType"
             value={form.scheduleType}
             onChange={handleChange}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
           >
             <option value="" disabled>
               Daily Schedule Type
@@ -572,6 +642,12 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
             <option value="NIGHT_SHIFT_12_HOURS">Night shift(12Hrs)</option>
             <option value="CUSTOM_HOURS">Custom Hours</option>
           </select>
+
+           <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
 
           {visitType && visitType !== "ONE_TIME_VISIT" && (
             <div className="grid grid-cols-4 gap-2 mb-4">
@@ -665,16 +741,24 @@ const addHoursToTime = (timeStr, hoursToAdd) => {
             Staff Preferences
           </h1>
 
+            <div className="relative w-[328px]">
+
           <select
             value={preferredGender}
             onChange={(e) => setPreferredGender(e.target.value)}
             required
-            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none"
+            className="w-[328px] h-[40px] rounded-[15px] px-4 border border-gray-300 outline-none appearance-none"
           >
             <option value="">Preferred Gender</option>
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
           </select>
+
+           <FaSortDown
+    size={18}
+    className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+  />
+</div>
 
           <h1 className="text-[16px] font-semibold text-black">
             Preferred Languages

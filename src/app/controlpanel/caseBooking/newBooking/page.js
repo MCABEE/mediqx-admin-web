@@ -34,7 +34,7 @@ const Page = () => {
   const groupedBookings = groupBookingsByDate(bookings);
 
   return (
-    <div className="p-4">
+    <div className="">
       <Navlink />
 
       {/* Total count */}

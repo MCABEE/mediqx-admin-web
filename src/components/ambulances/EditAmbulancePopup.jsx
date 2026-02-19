@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import useAmbulanceStore from "@/app/lib/store/useAmbulanceStore";
 import LocationPickerPopup from "../staffManagement/addNewStaff/LocationPickerPopup";
+import { FaSortDown } from "react-icons/fa";
 
 function EditAmbulancePopup({ ambulance, onClose }) {
   const { updateAmbulance, fetchAmbulances } = useAmbulanceStore();
@@ -20,8 +21,7 @@ function EditAmbulancePopup({ ambulance, onClose }) {
     fullName: ambulance.fullName || "",
     email: ambulance.email || "",
     mobileNumber: ambulance.mobileNumber?.replace("+91", "") || "",
-    customerCareNumber:
-      ambulance.customerCareNumber?.replace("+91", "") || "",
+    customerCareNumber: ambulance.customerCareNumber?.replace("+91", "") || "",
   });
 
   const [location, setLocation] = useState({
@@ -50,7 +50,8 @@ function EditAmbulancePopup({ ambulance, onClose }) {
   const validate = () => {
     const newErrors = {};
 
-    if (!form.ambulanceName) newErrors.ambulanceName = "Ambulance name required";
+    if (!form.ambulanceName)
+      newErrors.ambulanceName = "Ambulance name required";
     if (!form.ambulanceType) newErrors.ambulanceType = "Select ambulance type";
     if (!form.vehicleType) newErrors.vehicleType = "Select vehicle type";
     if (!form.fullName) newErrors.fullName = "Driver name required";
@@ -58,10 +59,7 @@ function EditAmbulancePopup({ ambulance, onClose }) {
     if (!form.mobileNumber || form.mobileNumber.length !== 10)
       newErrors.mobileNumber = "Enter valid 10 digit number";
 
-    if (
-      form.customerCareNumber &&
-      form.customerCareNumber.length !== 10
-    )
+    if (form.customerCareNumber && form.customerCareNumber.length !== 10)
       newErrors.customerCareNumber = "Must be 10 digits";
 
     if (!location.latitude || !location.longitude)
@@ -92,7 +90,7 @@ function EditAmbulancePopup({ ambulance, onClose }) {
       await updateAmbulance(ambulance.id, payload);
 
       // Refresh list once
-    //   await fetchAmbulances(1, { filter: "ALL" });
+      //   await fetchAmbulances(1, { filter: "ALL" });
 
       onClose();
     } catch (err) {
@@ -107,7 +105,6 @@ function EditAmbulancePopup({ ambulance, onClose }) {
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
         <div className="relative bg-white w-full max-w-2xl rounded-2xl p-6 shadow-xl border border-gray-200">
-
           {/* CLOSE */}
           <button
             onClick={onClose}
@@ -121,7 +118,6 @@ function EditAmbulancePopup({ ambulance, onClose }) {
           </h2>
 
           <div className="grid grid-cols-2 gap-4">
-
             {/* Ambulance Name */}
             <Input
               label="Ambulance Name"
@@ -212,9 +208,7 @@ function EditAmbulancePopup({ ambulance, onClose }) {
                 {location.mapLocation || "Pick location on map"}
               </button>
               {errors.location && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.location}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.location}</p>
               )}
             </div>
           </div>
@@ -276,16 +270,22 @@ const Select = ({ label, options, error, ...props }) => (
     <label className="text-sm font-medium text-gray-700 mb-1 block">
       {label}
     </label>
-    <select
-      {...props}
-      className="w-full border border-gray-300 rounded-lg p-2 text-sm"
-    >
-      {options.map((o) => (
-        <option key={o.value} value={o.value}>
-          {o.label}
-        </option>
-      ))}
-    </select>
+    <div className="relative w-full">
+      <select
+        {...props}
+        className="w-full border border-gray-300 rounded-lg p-2 text-sm appearance-none"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+      <FaSortDown
+        size={18}
+        className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+      />
+    </div>
     {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
   </div>
 );

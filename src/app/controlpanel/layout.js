@@ -10,10 +10,10 @@ export default function RootLayout({ children }) {
           <Navbar />
         </div>
         <div className="w-full h-full flex">
-          <div className=" w-[28%] pr-[26px]">
+          <div className=" w-[270px] pr-[16px]">
             <Sidebar />
           </div>
-          <div className="h-full w-[72%]">{children}</div>
+          <div className="h-full w-full">{children}</div>
         </div>
       </div>
     </>
