@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistrationStore";
 import LocationPickerPopup from "../staffManagement/addNewStaff/LocationPickerPopup";
+import { FaSortDown } from "react-icons/fa";
 
 /* -------------------- Reusable Inputs (same as Nurse modal) -------------------- */
 const InputField = ({
@@ -30,11 +31,12 @@ const InputField = ({
 const SelectField = ({ label, value, onChange, options }) => (
   <div className="flex flex-col">
     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <div className="relative w-full">
     <select
       value={value || ""}
       onChange={onChange}
-      className="border border-gray-300 rounded-lg p-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="border border-gray-300 rounded-lg p-2 text-sm w-full
+                 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none" 
     >
       {options.map((opt) => (
         <option key={opt.value} value={opt.value}>
@@ -42,6 +44,11 @@ const SelectField = ({ label, value, onChange, options }) => (
         </option>
       ))}
     </select>
+       <FaSortDown
+                  size={18}
+                  className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+                />
+              </div>
   </div>
 );
 /* ----------------------------------------------------------------------------- */

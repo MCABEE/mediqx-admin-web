@@ -3,6 +3,7 @@
 import Navlink from "@/components/ambulances/Navlink";
 import React, { useEffect, useState } from "react";
 import useAmbulanceStore from "@/app/lib/store/useAmbulanceStore";
+import { FaSortDown } from "react-icons/fa";
 
 export default function Page() {
   const {
@@ -52,12 +53,13 @@ export default function Page() {
       {/* FILTERS */}
       <div className="w-full bg-white border border-[#8888888c] flex justify-between items-center px-6 py-4 mt-2 rounded-[15px]">
         <div className="flex gap-[10px]">
+          <div className="relative w-[300px]">
           <select
             value={filters.ambulanceType}
             onChange={(e) =>
               handleFilterChange("ambulanceType", e.target.value)
             }
-            className="w-[300px] h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4 text-[14px]"
+            className="w-[300px] h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4 text-[14px] appearance-none"
           >
             <option value="">Ambulance Type</option>
             <option value="BASIC_LIFE_SUPPORT">Basic Life Support</option>
@@ -66,11 +68,16 @@ export default function Page() {
             <option value="ICU_LEVEL_2">ICU Level 2</option>
             <option value="ICU_LEVEL_3">ICU Level 3</option>
           </select>
-
+             <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
+<div className="relative w-[300px]">
           <select
             value={filters.vehicleType}
             onChange={(e) => handleFilterChange("vehicleType", e.target.value)}
-            className="w-[300px] h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4 text-[14px]"
+            className="w-[300px] h-[40px] rounded-[15px] border border-[#8888888c] outline-none px-4 text-[14px] appearance-none"
           >
             <option value="">Vehicle Type</option>
             <option value="MARUTI_OMNI">Maruti Omni</option>
@@ -78,6 +85,11 @@ export default function Page() {
             <option value="TATA_WINGER_AMBULANCE">Tata Winger</option>
             <option value="TOYOTA_HIACE">Toyota Hiace</option>
           </select>
+             <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
 
           <button
             onClick={handleReset}
