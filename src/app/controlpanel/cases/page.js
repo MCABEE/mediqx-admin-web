@@ -13,6 +13,8 @@ const Page = () => {
     error,
     setPage,
     totalBookings,
+     filters,
+  setFilters,
   } = useBookingStore();
 
   const router = useRouter();
@@ -21,15 +23,19 @@ const Page = () => {
   const [selectedStatus, setSelectedStatus] = useState("COMPLETED"); // Default tab
 
   // Filters state
-  const [filters, setFilters] = useState({
-    name: "",
-    location: "",
-    date: "",
-  });
+  // const [filters, setFilters] = useState({
+  //   name: "",
+  //   location: "",
+  //   date: "",
+  // });
+
+  // useEffect(() => {
+  //   fetchBookings(page, 50, selectedStatus);
+  // }, [page, selectedStatus]);
 
   useEffect(() => {
-    fetchBookings(page, 50, selectedStatus);
-  }, [page, selectedStatus]);
+  fetchBookings(page, 50, selectedStatus);
+}, [page, selectedStatus, filters]);
 
   // Apply filters to bookings
   const filteredBookings = bookings.filter((b) => {
@@ -47,20 +53,33 @@ const Page = () => {
 
   const groupedBookings = groupBookingsByDate(filteredBookings);
 
-  const handleStatusClick = (status) => {
-    setSelectedStatus(status);
-    setPage(1); // Reset to page 1 on status change
-  };
+ const handleStatusClick = (status) => {
+  setSelectedStatus(status);
 
+  setFilters({
+    name: "",
+    location: "",
+    date: "",
+  });
+
+  setPage(1);
+};
   const handleStatusIconClick = (status, booking) => {
     setPopupStatus(status);
     setSelectedBooking(booking);
   };
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFilters((prev) => ({ ...prev, [name]: value }));
+  // };
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
+  const { name, value } = e.target;
+
+  setFilters({ [name]: value });
+  setPage(1); // reset to first page
+};
 
   const handleClearFilters = () => {
     setFilters({ name: "", location: "", date: "" });
