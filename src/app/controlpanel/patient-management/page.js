@@ -14,6 +14,8 @@ const Page = () => {
     error,
     setPage,
     totalBookings,
+    filters,
+    setFilters,
   } = useBookingStore();
 
   const router = useRouter();
@@ -22,39 +24,69 @@ const Page = () => {
   const [selectedStatus, setSelectedStatus] = useState("ONGOING");
 
   // Filters state
-  const [filters, setFilters] = useState({
-    name: "",
-    location: "",
-    date: "",
-  });
+  // const [filters, setFilters] = useState({
+  //   name: "",
+  //   location: "",
+  //   date: "",
+  // });
 
+  // useEffect(() => {
+  //   fetchBookings(page, 10, selectedStatus);
+  // }, [page, selectedStatus]);
   useEffect(() => {
     fetchBookings(page, 10, selectedStatus);
-  }, [page, selectedStatus]);
+  }, [page, selectedStatus, filters]);
 
+  // const handleStatusClick = (status) => {
+  //   setSelectedStatus(status);
+  //   setFilters({
+  //   name: "",
+  //   location: "",
+  //   date: "",
+  // });
+  //   setPage(1);
+  // };
   const handleStatusClick = (status) => {
     setSelectedStatus(status);
+
+    setFilters({
+      name: "",
+      location: "",
+      date: "",
+    });
+
     setPage(1);
   };
-
   const handleStatusIconClick = (status, booking) => {
     setPopupStatus(status);
     setSelectedBooking(booking);
   };
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFilters((prev) => ({ ...prev, [name]: value }));
+  //   setPage(1);
+  // };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
 
+    setFilters({ [name]: value });
+
+    setPage(1); // reset page
+  };
   const handleClearFilters = () => {
     setFilters({ name: "", location: "", date: "" });
+    setPage(1);
   };
 
   // Filtered bookings
   const filteredBookings = bookings.filter((b) => {
-    const matchName = b.fullName.toLowerCase().includes(filters.name.toLowerCase());
-    const matchLocation = b.location.toLowerCase().includes(filters.location.toLowerCase());
+    const matchName = b.fullName
+      .toLowerCase()
+      .includes(filters.name.toLowerCase());
+    const matchLocation = b.location
+      .toLowerCase()
+      .includes(filters.location.toLowerCase());
     const matchDate = filters.date
       ? new Date(b.startDate).toLocaleDateString("en-CA") === filters.date
       : true;
@@ -88,13 +120,12 @@ const Page = () => {
       {/* Total count */}
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[20px] pb-[17px] px-6 text-black font-semibold text-[32px] flex justify-between">
         <p>{filteredBookings.length}</p>
-         <button
-                onClick={handleClearFilters}
-                  className="bg-[#C0D8F6] px-4 py-1 rounded-md text-sm font-medium hover:bg-[#aac4ec]"
-
-              >
-                Clear Filters
-              </button>
+        <button
+          onClick={handleClearFilters}
+          className="bg-[#C0D8F6] px-4 py-1 rounded-md text-sm font-medium hover:bg-[#aac4ec]"
+        >
+          Clear Filters
+        </button>
       </div>
 
       {/* Bookings Table */}
@@ -102,46 +133,54 @@ const Page = () => {
         <thead className="bg-[#C0D8F6]">
           <tr>
             <th className="text-base border-[#F0F4F9] rounded-l-2xl p-2">No</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Patient Name</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Location</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] p-2">Service Date</th>
-            <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">Staff</th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+              Patient Name
+            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+              Location
+            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] p-2">
+              Service Date
+            </th>
+            <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
+              Staff
+            </th>
           </tr>
 
           {/* Search row */}
           <tr className="bg-[#F9FBFF] border-b border-[#E0E6EF]">
-  <th></th>
-  <th className="p-2">
-    <input
-      type="text"
-      name="name"
-      value={filters.name}
-      onChange={handleInputChange}
-      placeholder="Search by name"
-      className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150"
-    />
-  </th>
-  <th className="p-2">
-    <input
-      type="text"
-      name="location"
-      value={filters.location}
-      onChange={handleInputChange}
-      placeholder="Search by location"
-      className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150"
-    />
-  </th>
-  <th className="p-2">
-    <input
-      type="date"
-      name="date"
-      value={filters.date}
-      onChange={handleInputChange}
-      className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150 text-gray-600"
-    />
-  </th>
-  <th></th>
-</tr>
+            <th></th>
+            <th className="p-2">
+              <input
+                type="text"
+                name="name"
+                value={filters.name}
+                onChange={handleInputChange}
+                placeholder="Search by name"
+                className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150"
+              />
+            </th>
+            <th className="p-2">
+              <input
+                type="text"
+                name="location"
+                value={filters.location}
+                onChange={handleInputChange}
+                placeholder="Search by location"
+                className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150"
+              />
+            </th>
+            <th className="p-2">
+              <input
+                type="date"
+                name="date"
+                value={filters.date}
+                onChange={handleInputChange}
+                className="w-full bg-white rounded-lg px-3 py-2 text-sm border border-[#D1E3FF] shadow-sm focus:ring-2 focus:ring-[#C0D8F6] focus:border-[#C0D8F6] outline-none transition-all duration-150 text-gray-600"
+              />
+            </th>
+            <th></th>
+          </tr>
         </thead>
 
         <tbody>
@@ -180,7 +219,7 @@ const Page = () => {
                     className="text-black bg-white hover:bg-gray-100 cursor-pointer"
                     onClick={() =>
                       router.push(
-                        `/controlpanel/patient-management/patient-details/${booking.id}`
+                        `/controlpanel/patient-management/patient-details/${booking.id}`,
                       )
                     }
                   >
@@ -188,7 +227,9 @@ const Page = () => {
                     <td className="border-l-4 border-[#C0D8F6] p-2 hover:underline">
                       {booking.fullName}
                     </td>
-                    <td className="border-l-4 border-[#C0D8F6] p-2">{booking.location}</td>
+                    <td className="border-l-4 border-[#C0D8F6] p-2">
+                      {booking.location}
+                    </td>
                     <td className="border-l-4 border-[#C0D8F6] p-2">
                       {new Date(booking.startDate).toLocaleDateString("en-IN", {
                         day: "numeric",
@@ -235,15 +276,14 @@ export default Page;
 // Helper: Group bookings by formatted date
 const groupBookingsByDate = (bookings) => {
   return bookings.reduce((acc, booking) => {
-    const dateKey = new Date(booking.requestedAt || booking.startDate).toLocaleDateString(
-      "en-IN",
-      {
-        year: "numeric",
-        month: "long",
-        day: "2-digit",
-        weekday: "long",
-      }
-    );
+    const dateKey = new Date(
+      booking.requestedAt || booking.startDate,
+    ).toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+      weekday: "long",
+    });
     if (!acc[dateKey]) acc[dateKey] = [];
     acc[dateKey].push(booking);
     return acc;
