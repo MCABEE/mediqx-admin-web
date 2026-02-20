@@ -34,7 +34,7 @@ const handlePopupClose = () => {
     return (
       <div>
         <Navlink />
-        <div className="p-8 flex justify-end">
+        <div className=" flex justify-end">
           <button
             onClick={() => setServiceBookingPopup(true)}
             className="w-[220px] h-[40px] rounded-[15px] text-white bg-[#3674B5]"
