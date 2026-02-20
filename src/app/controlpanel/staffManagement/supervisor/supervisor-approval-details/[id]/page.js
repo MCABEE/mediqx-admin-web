@@ -47,7 +47,7 @@ export default function SupervisorApprovalDetailsPage() {
     return <p className="text-center text-gray-600">No data found.</p>;
 
   return (
-    <div className="px-[20px] py-[20px]">
+    <div className="">
       {/* Back Button */}
       <div className="w-full h-[48px] bg-[#C0D8F6] mt-2 rounded-[15px] flex items-center">
         <h1
