@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import useBookingStore from "@/app/lib/store/bookingStore";
 import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistrationStore";
+import { FaSortDown } from "react-icons/fa";
 
 const ConfirmPopup = ({
   bookingId,
@@ -230,10 +231,11 @@ const ConfirmPopup = ({
             <h3 className="text-xl font-semibold text-[#333333] mt-4 mb-2">
               Assign Supervisor (For Verification / Review)
             </h3>
+            <div className="relative w-full">
             <select
               value={verificationStatus}
               onChange={(e) => setVerificationStatus(e.target.value)}
-              className="border-[1px] border-[#BBBBBB] text-black rounded-[10px] p-3 outline-none"
+              className="border-[1px] border-[#BBBBBB] text-black rounded-[10px] p-3 outline-none w-full appearance-none"
             >
               <option value="" disabled>
                 Verification / Review
@@ -241,6 +243,11 @@ const ConfirmPopup = ({
               <option value="GENERAL_FOLLOW_UP">GENERAL_FOLLOW_UP</option>
               <option value="SERVICE_ASSESSMENT">SERVICE_ASSESSMENT</option>
             </select>
+               <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
             {errors.verificationStatus && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.verificationStatus}

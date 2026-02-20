@@ -6,6 +6,7 @@ import useSupervisorRegistrationStore from "@/app/lib/store/useSupervisorRegistr
 import useManageProfessionalsStore from "@/app/lib/store/useManageProfessionalsStore";
 import useLanguageStore from "@/app/lib/store/languageStore";
 import LocationPickerPopup from "@/components/staffManagement/addNewStaff/LocationPickerPopup";
+import { FaSortDown } from "react-icons/fa";
 
 /* ---------------- Inputs ---------------- */
 const InputField = ({ label, value, onChange, type = "text", disabled }) => (
@@ -29,10 +30,11 @@ const InputField = ({ label, value, onChange, type = "text", disabled }) => (
 const SelectField = ({ label, value, onChange, options }) => (
   <div className="flex flex-col w-full">
     <label className="text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <div className="relative w-full">
     <select
       value={value}
       onChange={onChange}
-      className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full appearance-none"
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>
@@ -40,6 +42,11 @@ const SelectField = ({ label, value, onChange, options }) => (
         </option>
       ))}
     </select>
+       <FaSortDown
+              size={18}
+              className="absolute right-4 top-1/2 -translate-y-[65%] text-gray-400 pointer-events-none"
+            />
+          </div>
   </div>
 );
 /* --------------------------------------- */
