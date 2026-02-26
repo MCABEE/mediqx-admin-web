@@ -145,7 +145,8 @@ export default function CreateServiceBookingPopup({ open, onClose }) {
       preferredLanguageId: languages,
       latitude: Number(form.latitude),
       longitude: Number(form.longitude),
-      startDate: new Date(form.startDate + "T00:00:00").toISOString(),
+      // startDate: new Date(form.startDate + "T00:00:00").toISOString(),
+      startDate: `${form.startDate}T00:00:00Z`,
     };
     // :white_tick: ONLY include duration fields when NOT one-time visit
     // if (form.durationType !== "ONE_TIME_VISIT") {
