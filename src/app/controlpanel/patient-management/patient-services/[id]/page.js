@@ -67,8 +67,8 @@ const handlePopupClose = () => {
     }
   };
   return (
-    <div>
-      <Navlink />
+    <div className="">
+    
       {/* HEADER */}
             <div className="w-full h-[48px] bg-[#C0D8F6] rounded-[15px] flex">
               <div
