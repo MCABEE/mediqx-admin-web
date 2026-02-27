@@ -8,7 +8,7 @@ export default function Navlink({ tabs, selectedStatus, onStatusChange }) {
       : "border-b-2 border-transparent";
 
   return (
-    <div className="flex gap-[48px]">
+    <div className="flex gap-[48px] pt-5">
       {tabs?.map((tab) => (
         <p
           key={tab.value}

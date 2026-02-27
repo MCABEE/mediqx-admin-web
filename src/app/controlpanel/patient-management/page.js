@@ -109,7 +109,7 @@ const Page = () => {
   return (
     <div>
       {/* Tabs Header */}
-      <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px] mt-2">
+      <div className="w-full bg-white border border-[#8888888c] text-base font-semibold flex justify-between px-6 rounded-[15px]">
         <Navlink
           tabs={statusTabs}
           selectedStatus={selectedStatus}
@@ -119,7 +119,7 @@ const Page = () => {
 
       {/* Total count */}
       <div className="w-full bg-white border border-[#8888888c] rounded-[15px] mt-2 pt-[20px] pb-[17px] px-6 text-black font-semibold text-[32px] flex justify-between">
-        <p>{filteredBookings.length}</p>
+        <p>{totalBookings}</p>
         <button
           onClick={handleClearFilters}
           className="bg-[#C0D8F6] px-4 py-1 rounded-md text-sm font-medium hover:bg-[#aac4ec]"
