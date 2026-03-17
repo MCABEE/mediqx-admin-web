@@ -57,7 +57,7 @@ function StaffDetailPage() {
   const [editAvailabilityPopup, setEditAvailabilityPopup] = useState(false);
   const [isEditExperincePopUp, setIsExperincePopUp] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [removeStaffPopup,setRemoveStaffPopup]= useState(false);
+  const [removeStaffPopup, setRemoveStaffPopup] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -78,7 +78,7 @@ function StaffDetailPage() {
         educationQualifications: nurseData.educationQualifications[0] || "",
         specializations: nurseData.specializations || [],
         workSchedule: nurseData.workSchedule || "",
-          grading: nurseData.grading || "",
+        grading: nurseData.grading || "",
         address: {
           addressId: selectedNurse.address?.id || "",
           state: selectedNurse.address?.state || "",
@@ -125,9 +125,15 @@ function StaffDetailPage() {
           <span className="text-[20px] font-semibold text-[#333333]">
             {selectedNurse.fullName}
           </span>
+          <span className="text-[16px] font-semibold text-[#333333]">
+            Referral Code : {selectedNurse?.referralCode ?? "-"}
+          </span>
           <button
-          className=" text-white font-semibold text-[16px] w-[162px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer"
-          onClick={()=>setRemoveStaffPopup(true)}>Remove Employee</button>
+            className=" text-white font-semibold text-[16px] w-[162px] h-[40px] bg-[#3674B5] rounded-[15px] cursor-pointer"
+            onClick={() => setRemoveStaffPopup(true)}
+          >
+            Remove Employee
+          </button>
         </div>
         <div className="flex justify-between px-[39px]">
           <h1 className="text-[16px] font-semibold text-black py-[18px]">
@@ -184,7 +190,7 @@ function StaffDetailPage() {
             <span className="w-[280px]">Fulltime / Part time</span>
             <span>{nurseData.workSchedule}</span>
           </div>
-           <div className="flex gap-[18px]">
+          <div className="flex gap-[18px]">
             <span className="w-[280px]">Grading</span>
             <span>{editedContact.grading}</span>
           </div>
@@ -399,7 +405,7 @@ function StaffDetailPage() {
       <EditContactModal
         show={isEditModalOpen}
         contact={editedContact}
-         grading={editedContact.grading} 
+        grading={editedContact.grading}
         userId={userId}
         role={selectedNurse.role}
         onChange={setEditedContact}
@@ -437,16 +443,13 @@ function StaffDetailPage() {
         />
       )}
 
-
-      {
-        removeStaffPopup && (
-          <RemoveStaffPopup
+      {removeStaffPopup && (
+        <RemoveStaffPopup
           staffName={selectedNurse.fullName}
           staffId={userId}
-          onClose={()=>setRemoveStaffPopup(false)}
-          />
-        )
-      }
+          onClose={() => setRemoveStaffPopup(false)}
+        />
+      )}
     </div>
   );
 }
