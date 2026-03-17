@@ -185,6 +185,8 @@ const Page = () => {
               <span>Email</span>
               <span>Phone Number</span>
               <span>Referral Type</span>
+              <span>Referral Code</span>
+
             </div>
             <div className="flex flex-col gap-[10px] text-[16px] text-black">
               <span>{agentDetails?.fullName || "-"}</span>
@@ -204,6 +206,8 @@ const Page = () => {
               <span>{agentDetails?.email || "-"}</span>
               <span>{agentDetails?.mobileNumber || "-"}</span>
               <span>{agentDetails?.referralType || "-"}</span>
+              <span>{agentDetails?.referralCode || "-"}</span>
+
             </div>
           </div>
           {/* ID Proof */}
