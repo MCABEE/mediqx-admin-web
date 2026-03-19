@@ -8,7 +8,7 @@ export default function Page() {
   const { id: serviceId } = useParams();
   const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
-  const limit = 50;
+  const limit = 20;
 
   const booking = {
     diagnosis: searchParams.get("diagnosis"),
@@ -209,6 +209,7 @@ export default function Page() {
 
           {/* Duty Logs */}
           {logsArray.map((log) => (
+            <>
             <div
               key={log.id}
               className="w-full bg-[#FEF2FF] border border-[#DDDDDD] rounded-[10px] mt-[10px] mb-10 divide-y divide-[#DDDDDD]"
@@ -276,7 +277,10 @@ export default function Page() {
                 {renderFiles(log.files, "FOLLOW_UP")}
               </div>
 
-              <div className="flex justify-center items-center gap-4 mb-10">
+             
+            </div>
+
+             <div className="flex justify-center items-center gap-4 mb-10">
                 <button
                   onClick={handlePrev}
                   disabled={page === 1}
@@ -303,7 +307,7 @@ export default function Page() {
                   Next
                 </button>
               </div>
-            </div>
+            </>
           ))}
         </>
       )}
