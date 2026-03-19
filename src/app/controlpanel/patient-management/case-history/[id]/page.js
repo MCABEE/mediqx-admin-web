@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import useBookingStore from "@/app/lib/store/bookingStore";
 
@@ -7,6 +7,8 @@ export default function Page() {
   const router = useRouter();
   const { id: serviceId } = useParams();
   const searchParams = useSearchParams();
+  const [page, setPage] = useState(1);
+  const limit = 50;
 
   const booking = {
     diagnosis: searchParams.get("diagnosis"),
@@ -44,11 +46,17 @@ export default function Page() {
 
   const { dutyLogs = {}, fetchDutyLogs, isLoading, error } = useBookingStore();
 
+  // useEffect(() => {
+  //   if (serviceId) {
+  //     fetchDutyLogs(serviceId, 1, 50);
+  //   }
+  // }, [serviceId, fetchDutyLogs]);
+
   useEffect(() => {
     if (serviceId) {
-      fetchDutyLogs(serviceId, 1, 10);
+      fetchDutyLogs(serviceId, page, limit);
     }
-  }, [serviceId, fetchDutyLogs]);
+  }, [serviceId, page, fetchDutyLogs]);
 
   if (isLoading) return <p className="p-4">Loading duty logs...</p>;
   if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
@@ -78,6 +86,17 @@ export default function Page() {
         })}
       </div>
     );
+  };
+  const handleNext = () => {
+    if (logsArray.length === limit) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
   };
 
   return (
@@ -126,7 +145,9 @@ export default function Page() {
 
               <div className="flex">
                 <span className="w-[250px] font-medium">Duration</span>
-                <span>{booking.durationType || "-"} ({booking.durationValue})</span>
+                <span>
+                  {booking.durationType || "-"} ({booking.durationValue})
+                </span>
               </div>
 
               <div className="flex">
@@ -213,21 +234,18 @@ export default function Page() {
                           hour: "2-digit",
                           minute: "2-digit",
                           hour12: true,
-                        }
+                        },
                       )
                     : "-"}
                 </div>
-                  <div className="flex px-[40px] py-[12px]">
+                <div className="flex px-[40px] py-[12px]">
                   <p className="w-[300px]">Completed</p>
                   {log.completedAt
-                    ? new Date(log.completedAt).toLocaleTimeString(
-                        "en-US",
-                        {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        }
-                      )
+                    ? new Date(log.completedAt).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
                     : "-"}
                 </div>
               </div>
@@ -256,6 +274,34 @@ export default function Page() {
                 <h2 className="text-[16px] font-semibold">Next Follow-Up</h2>
                 <p className="text-[14px]">{log.followUpNotes || "-"}</p>
                 {renderFiles(log.files, "FOLLOW_UP")}
+              </div>
+
+              <div className="flex justify-center items-center gap-4 mb-10">
+                <button
+                  onClick={handlePrev}
+                  disabled={page === 1}
+                  className={`px-4 py-2 rounded ${
+                    page === 1
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-blue-500 text-white"
+                  }`}
+                >
+                  Previous
+                </button>
+
+                <span className="font-medium">Page {page}</span>
+
+                <button
+                  onClick={handleNext}
+                  disabled={logsArray.length < limit}
+                  className={`px-4 py-2 rounded ${
+                    logsArray.length < limit
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-blue-500 text-white"
+                  }`}
+                >
+                  Next
+                </button>
               </div>
             </div>
           ))}
