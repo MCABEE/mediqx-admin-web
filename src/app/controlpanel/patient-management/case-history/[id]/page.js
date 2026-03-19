@@ -280,7 +280,10 @@ export default function Page() {
              
             </div>
 
-             <div className="flex justify-center items-center gap-4 mb-10">
+             
+            </>
+          ))}
+          <div className="flex justify-center items-center gap-4 mb-10">
                 <button
                   onClick={handlePrev}
                   disabled={page === 1}
@@ -307,8 +310,6 @@ export default function Page() {
                   Next
                 </button>
               </div>
-            </>
-          ))}
         </>
       )}
     </div>
