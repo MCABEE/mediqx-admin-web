@@ -222,7 +222,7 @@ const AssignStaffTable = ({
                 Gender
               </th>
               <th className="text-base border-l-4 border-[#F0F4F9] p-2">
-                Qualification
+                Grading
               </th>
               <th className="text-base border-l-4 border-[#F0F4F9] rounded-r-2xl p-2">
                 Action
@@ -261,7 +261,7 @@ const AssignStaffTable = ({
                     {nurse.gender}
                   </td>
                   <td className="border-l-4 border-[#C0D8F6] p-2">
-                    {nurse.educationQualifications}
+                    {nurse.grading}
                   </td>
                   <td
                     className="border-l-4 border-[#C0D8F6] p-2 cursor-pointer text-blue-600 hover:underline"
